@@ -188,6 +188,35 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
+      {/* Style Inspiration CTA */}
+      <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0" }}>
+        <div
+          className="glamora-card"
+          onClick={onInspiration}
+          style={{
+            padding: "16px 16px", cursor: "pointer",
+            background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08), hsl(var(--card)))`,
+            border: `1.5px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
+            display: "flex", alignItems: "center", gap: 14,
+          }}
+        >
+          <div style={{
+            width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+            background: `linear-gradient(135deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.2), hsla(var(--glamora-gold-light) / 0.1))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Star size={20} color={`hsl(${accent})`} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Style Inspiration</div>
+            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
+              Channel any celebrity's aesthetic
+            </div>
+          </div>
+          <ArrowRight size={16} color={`hsl(${accent})`} />
+        </div>
+      </div>
+
       {/* Saved & Tiers — compact inline row */}
       <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0", display: "flex", gap: 10 }}>
         <div className="glamora-card" onClick={onSaved} style={{
