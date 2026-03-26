@@ -56,7 +56,7 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
-const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect }: Props) => {
+const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const scrollRef = useRef<HTMLDivElement>(null);
