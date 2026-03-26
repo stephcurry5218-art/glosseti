@@ -49,6 +49,30 @@ serve(async (req) => {
         female: "with a complete glam makeup look: flawless dewy skin, soft rose eyeshadow, defined brows, winged eyeliner, volumizing mascara, highlighted cheekbones, and a satin rose lipstick.",
         male: "with a refined grooming look: even skin tone with light concealer, shaped and groomed brows, subtle lip balm, well-moisturized skin, and a clean, fresh appearance.",
       },
+      sexy: {
+        female: "wearing a sultry, body-confident outfit: a fitted bodycon mini dress with cut-out details, strappy stiletto heels, layered gold body chains, bold smoky eye makeup, and a sleek clutch.",
+        male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
+      },
+      swimwear: {
+        female: "wearing stylish beachwear: a trendy high-waisted bikini, a sheer cover-up kimono, strappy flat sandals, oversized sunglasses, and a woven beach tote.",
+        male: "wearing beach-ready style: well-fitted swim trunks, an open linen shirt, slide sandals, aviator sunglasses, and a waterproof watch.",
+      },
+      "urban-hiphop": {
+        female: "wearing urban hip-hop style: oversized graphic jersey, baggy low-rise jeans, chunky platform sneakers, layered gold chains, hoop earrings, and a designer belt bag.",
+        male: "wearing urban hip-hop style: oversized designer tee or jersey, baggy distressed jeans, fresh high-top sneakers, heavy gold chains, a fitted cap, and a crossbody designer bag.",
+      },
+      rugged: {
+        female: "wearing rugged workwear: fitted flannel shirt, high-waisted straight-leg jeans, leather ankle boots, a canvas belt, and minimal silver jewelry.",
+        male: "wearing rugged workwear style: heavy flannel shirt layered over a henley, raw selvedge denim, leather work boots, a thick leather belt, and a field watch.",
+      },
+      techwear: {
+        female: "wearing futuristic techwear: a black waterproof shell jacket, tapered cargo pants with straps, chunky trail running shoes, a tactical chest rig, and matte black accessories.",
+        male: "wearing futuristic techwear: a modular black technical jacket, cargo joggers with utility straps, trail running shoes, a tactical sling bag, and all-black accessories.",
+      },
+      "date-night": {
+        female: "wearing a date-night outfit: an elegant midi dress with a subtle slit, pointed-toe heels, delicate pendant necklace, a small clutch purse, and soft romantic makeup.",
+        male: "wearing a date-night outfit: a slim-fit dark blazer over a crew-neck tee, tailored dark trousers, clean leather dress shoes, a sleek watch, and fresh cologne-ready grooming.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
