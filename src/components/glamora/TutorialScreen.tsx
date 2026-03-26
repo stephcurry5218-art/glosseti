@@ -1,8 +1,46 @@
 import { useState } from "react";
-import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch } from "lucide-react";
+import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch, ExternalLink } from "lucide-react";
 import { lookData, categoryLabels, categoryOrder, tierInfo } from "./lookData";
 import type { Category, PriceTier } from "./lookData";
 import type { LucideIcon } from "lucide-react";
+
+const storeUrls: Record<string, (query: string) => string> = {
+  "Amazon": (q) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}`,
+  "Sephora": (q) => `https://www.sephora.com/search?keyword=${encodeURIComponent(q)}`,
+  "Ulta": (q) => `https://www.ulta.com/search?search=${encodeURIComponent(q)}`,
+  "Nordstrom": (q) => `https://www.nordstrom.com/sr?keyword=${encodeURIComponent(q)}`,
+  "Target": (q) => `https://www.target.com/s?searchTerm=${encodeURIComponent(q)}`,
+  "Zara": (q) => `https://www.zara.com/us/en/search?searchTerm=${encodeURIComponent(q)}`,
+  "H&M": (q) => `https://www2.hm.com/en_us/search-results.html?q=${encodeURIComponent(q)}`,
+  "Net-a-Porter": (q) => `https://www.net-a-porter.com/en-us/shop/search/${encodeURIComponent(q)}`,
+  "Mango": (q) => `https://shop.mango.com/us/search?kw=${encodeURIComponent(q)}`,
+  "DSW": (q) => `https://www.dsw.com/en/us/search/${encodeURIComponent(q)}/`,
+  "J.Crew": (q) => `https://www.jcrew.com/r/search/?N=0&Nloc=en&Ntrm=${encodeURIComponent(q)}`,
+  "Free People": (q) => `https://www.freepeople.com/search/?q=${encodeURIComponent(q)}`,
+  "Anthropologie": (q) => `https://www.anthropologie.com/search?q=${encodeURIComponent(q)}`,
+  "Madewell": (q) => `https://www.madewell.com/search?q=${encodeURIComponent(q)}`,
+  "Uniqlo": (q) => `https://www.uniqlo.com/us/en/search/?q=${encodeURIComponent(q)}`,
+  "Everlane": (q) => `https://www.everlane.com/search?q=${encodeURIComponent(q)}`,
+  "Reformation": (q) => `https://www.thereformation.com/search?q=${encodeURIComponent(q)}`,
+  "Ralph Lauren": (q) => `https://www.ralphlauren.com/search?q=${encodeURIComponent(q)}`,
+  "Cole Haan": (q) => `https://www.colehaan.com/search?q=${encodeURIComponent(q)}`,
+  "Coach Outlet": (q) => `https://www.coachoutlet.com/search?q=${encodeURIComponent(q)}`,
+  "Banana Republic": (q) => `https://bananarepublic.gap.com/browse/search.do?searchText=${encodeURIComponent(q)}`,
+  "AllSaints": (q) => `https://www.allsaints.com/search?q=${encodeURIComponent(q)}`,
+  "Urban Outfitters": (q) => `https://www.urbanoutfitters.com/search?q=${encodeURIComponent(q)}`,
+  "Levi's": (q) => `https://www.levi.com/US/en_US/search?q=${encodeURIComponent(q)}`,
+  "Brooks Brothers": (q) => `https://www.brooksbrothers.com/search?q=${encodeURIComponent(q)}`,
+  "& Other Stories": (q) => `https://www.stories.com/en/search.html?q=${encodeURIComponent(q)}`,
+  "Mejuri": (q) => `https://www.mejuri.com/search?q=${encodeURIComponent(q)}`,
+  "Gorjana": (q) => `https://gorjana.com/search?q=${encodeURIComponent(q)}`,
+  "Rebecca Minkoff": (q) => `https://www.rebeccaminkoff.com/search?q=${encodeURIComponent(q)}`,
+};
+
+const getShopUrl = (store: string, item: string): string => {
+  const builder = storeUrls[store];
+  if (builder) return builder(item);
+  return `https://www.google.com/search?q=${encodeURIComponent(`${store} ${item}`)}`;
+};
 
 interface Props {
   lookName: string;
@@ -189,12 +227,19 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                           const isCurrent = tier === activeTier;
                           const TIcon = tierIcons[tier];
                           return (
-                            <div key={tier} style={{
-                              padding: "12px 14px", borderRadius: 12,
-                              background: isCurrent ? t.bg : "hsla(var(--glamora-cream2) / 0.5)",
-                              border: isCurrent ? `1.5px solid ${t.color}33` : "1px solid hsla(var(--glamora-gray-light) / 0.15)",
-                              display: "flex", alignItems: "center", gap: 12,
-                            }}>
+                            <a
+                              key={tier}
+                              href={getShopUrl(item.store, item.item)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                padding: "12px 14px", borderRadius: 12,
+                                background: isCurrent ? t.bg : "hsla(var(--glamora-cream2) / 0.5)",
+                                border: isCurrent ? `1.5px solid ${t.color}33` : "1px solid hsla(var(--glamora-gray-light) / 0.15)",
+                                display: "flex", alignItems: "center", gap: 12,
+                                textDecoration: "none", cursor: "pointer", transition: "all 0.2s",
+                              }}
+                            >
                               <div style={{ width: 32, height: 32, borderRadius: 10, background: t.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                                 <TIcon size={16} color={t.color} />
                               </div>
@@ -202,8 +247,11 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                                 <div style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: t.color, fontWeight: 600, marginBottom: 2 }}>{t.label} · {item.store}</div>
                                 <div style={{ fontSize: 13, color: "hsl(var(--glamora-char))", fontWeight: 500, lineHeight: 1.35, overflow: "hidden", textOverflow: "ellipsis" }}>{item.item}</div>
                               </div>
-                              <div style={{ padding: "6px 12px", borderRadius: 100, background: t.bg, fontSize: 14, fontWeight: 700, color: t.color, whiteSpace: "nowrap", flexShrink: 0 }}>{item.price}</div>
-                            </div>
+                              <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                                <div style={{ padding: "6px 12px", borderRadius: 100, background: t.bg, fontSize: 14, fontWeight: 700, color: t.color, whiteSpace: "nowrap" }}>{item.price}</div>
+                                <ExternalLink size={14} color={t.color} />
+                              </div>
+                            </a>
                           );
                         })}
                       </div>
