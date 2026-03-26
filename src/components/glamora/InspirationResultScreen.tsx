@@ -253,7 +253,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
       </div>
 
       {showShare && styledImageUrl && (
-        <ShareMenu imageUrl={styledImageUrl} lookName={profile.styleName} onClose={() => setShowShare(false)} />
+        <ShareMenu text={`Check out my "${profile.styleName}" look on Glamora!`} imageUrl={styledImageUrl} />
       )}
     </div>
   );
