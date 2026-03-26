@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw } from "lucide-react";
-import type { UserPrefs } from "./GlamoraApp";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, Settings2 } from "lucide-react";
+import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import { getAmazonSearchUrl } from "./affiliateUrls";
