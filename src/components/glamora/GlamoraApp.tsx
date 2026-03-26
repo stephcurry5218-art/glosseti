@@ -13,6 +13,10 @@ import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 import StylistChat from "./StylistChat";
 import AuthScreen from "./AuthScreen";
+import InspirationScreen from "./InspirationScreen";
+import InspirationLoadingScreen from "./InspirationLoadingScreen";
+import InspirationResultScreen from "./InspirationResultScreen";
+import type { StyleProfile } from "./InspirationLoadingScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
@@ -21,7 +25,7 @@ export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | 
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "inspiration" | "inspiration-loading" | "inspiration-results";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -46,19 +50,15 @@ const GlamoraApp = () => {
     gender: "female",
   });
 
+  // Inspiration state
+  const [inspirationIcon, setInspirationIcon] = useState("");
+  const [inspirationImageUrl, setInspirationImageUrl] = useState<string | null>(null);
+  const [inspirationProfile, setInspirationProfile] = useState<StyleProfile | null>(null);
+
   const {
-    subscription,
-    canGenerate,
-    remainingGenerations,
-    showWatermark,
-    showPaywall,
-    setShowPaywall,
-    showUpgradePrompt,
-    setShowUpgradePrompt,
-    lockedFeature,
-    tryGenerate,
-    checkFeatureAccess,
-    upgradeTo,
+    subscription, canGenerate, remainingGenerations, showWatermark,
+    showPaywall, setShowPaywall, showUpgradePrompt, setShowUpgradePrompt,
+    lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
   } = useSubscription();
 
   useEffect(() => {
@@ -79,9 +79,7 @@ const GlamoraApp = () => {
     go("home");
   };
 
-  // Intercept generation: check limits, prompt sign-up after first use
   const handleStartGeneration = useCallback((file: File, photoType: PhotoType, base64: string) => {
-    // First generation is always free (even without sign-up)
     if (!hasGeneratedOnce) {
       setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
       setHasGeneratedOnce(true);
@@ -89,30 +87,33 @@ const GlamoraApp = () => {
       go("loading");
       return;
     }
-
-    // After first gen, prompt sign-up if not logged in
-    if (!user) {
-      go("auth");
-      return;
-    }
-
-    // Check daily limit for free users
+    if (!user) { go("auth"); return; }
     if (!tryGenerate()) return;
-
     setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
     go("loading");
   }, [hasGeneratedOnce, user, tryGenerate, go]);
 
+  const handleInspirationGenerate = useCallback((iconName: string, file: File, photoType: PhotoType, base64: string) => {
+    if (!hasGeneratedOnce) {
+      setInspirationIcon(iconName);
+      setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+      setHasGeneratedOnce(true);
+      localStorage.setItem("glamora_first_gen", "1");
+      go("inspiration-loading");
+      return;
+    }
+    if (!user) { go("auth"); return; }
+    if (!tryGenerate()) return;
+    setInspirationIcon(iconName);
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    go("inspiration-loading");
+  }, [hasGeneratedOnce, user, tryGenerate, go]);
+
   return (
     <div className="phone">
-      {screen === "splash" && (
-        <SplashScreen onDone={() => go("entrance")} />
-      )}
+      {screen === "splash" && <SplashScreen onDone={() => go("entrance")} />}
       {screen === "entrance" && (
-        <EntranceScreen onEnter={(gender) => {
-          setPrefs(p => ({ ...p, gender }));
-          go("home");
-        }} />
+        <EntranceScreen onEnter={(gender) => { setPrefs(p => ({ ...p, gender })); go("home"); }} />
       )}
       {screen === "home" && (
         <HomeScreen
@@ -128,116 +129,99 @@ const GlamoraApp = () => {
           subscription={subscription}
           remainingGenerations={remainingGenerations}
           onShowPaywall={() => setShowPaywall(true)}
+          onInspiration={() => go("inspiration")}
         />
       )}
-      {screen === "auth" && (
-        <AuthScreen
-          onBack={() => go("home")}
-          onSuccess={() => go("home")}
-        />
-      )}
+      {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
       {screen === "style-picker" && (
-        <StylePickerScreen
-          prefs={prefs}
-          onBack={() => go("home")}
-          onNext={(category: StyleCategory) => {
-            setPrefs(p => ({ ...p, styleCategory: category }));
-            go("upload");
-          }}
-        />
+        <StylePickerScreen prefs={prefs} onBack={() => go("home")}
+          onNext={(category: StyleCategory) => { setPrefs(p => ({ ...p, styleCategory: category })); go("upload"); }} />
       )}
       {screen === "upload" && (
-        <UploadScreen
-          prefs={prefs}
-          onBack={() => go("style-picker")}
-          onAnalyze={handleStartGeneration}
-        />
+        <UploadScreen prefs={prefs} onBack={() => go("style-picker")} onAnalyze={handleStartGeneration} />
       )}
       {screen === "loading" && (
-        <LoadingScreen
-          prefs={prefs}
-          onDone={(imageUrl: string | null) => {
-            setStyledImageUrl(imageUrl);
-            go("results");
-          }}
-        />
+        <LoadingScreen prefs={prefs} onDone={(imageUrl) => { setStyledImageUrl(imageUrl); go("results"); }} />
       )}
       {screen === "results" && (
         <StyledResultScreen
-          prefs={prefs}
-          styledImageUrl={styledImageUrl}
-          onBack={() => go("upload")}
-          onHome={() => go("home")}
-          onSave={(lookNames: string[]) => {
+          prefs={prefs} styledImageUrl={styledImageUrl}
+          onBack={() => go("upload")} onHome={() => go("home")}
+          onSave={(lookNames) => {
             if (!checkFeatureAccess("Save & organize looks")) return;
-            setSavedStyles(prev => [...new Set([...prev, ...lookNames])]);
-            go("home");
+            setSavedStyles(prev => [...new Set([...prev, ...lookNames])]); go("home");
           }}
-          onLookSelect={(name: string) => {
+          onLookSelect={(name) => {
             if (subscription.tier === "free" && !checkFeatureAccess("Full tutorials")) return;
-            setSelectedLook(name);
-            go("tutorial");
+            setSelectedLook(name); go("tutorial");
           }}
           onRegenerate={(tweakedCategory) => {
             if (!tryGenerate()) return;
             if (tweakedCategory) setPrefs(p => ({ ...p, styleCategory: tweakedCategory }));
-            setStyledImageUrl(null);
-            go("loading");
+            setStyledImageUrl(null); go("loading");
           }}
           showWatermark={showWatermark}
         />
       )}
-      {screen === "tutorial" && (
-        <TutorialScreen
-          lookName={selectedLook}
-          onBack={() => go("results")}
-          onHome={() => go("home")}
-        />
-      )}
+      {screen === "tutorial" && <TutorialScreen lookName={selectedLook} onBack={() => go("results")} onHome={() => go("home")} />}
       {screen === "profile" && (
-        <ProfileScreen
-          onBack={() => go("home")}
-          savedCount={savedStyles.length}
-          onSaved={() => go("saved")}
-          onGetStyled={() => go("style-picker")}
-          gender={prefs.gender}
-          user={user}
-          onSignOut={handleSignOut}
-          onSignIn={() => go("auth")}
-          subscription={subscription}
-          onShowPaywall={() => setShowPaywall(true)}
-        />
+        <ProfileScreen onBack={() => go("home")} savedCount={savedStyles.length} onSaved={() => go("saved")}
+          onGetStyled={() => go("style-picker")} gender={prefs.gender} user={user}
+          onSignOut={handleSignOut} onSignIn={() => go("auth")}
+          subscription={subscription} onShowPaywall={() => setShowPaywall(true)} />
       )}
       {screen === "saved" && (
-        <SavedLooksScreen
-          onBack={() => go("home")}
-          savedStyles={savedStyles}
-          onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
-          onGetStyled={() => go("style-picker")}
+        <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
+          onLookSelect={(name) => { setSelectedLook(name); go("tutorial"); }}
+          onGetStyled={() => go("style-picker")} gender={prefs.gender} />
+      )}
+
+      {/* Inspiration flow */}
+      {screen === "inspiration" && (
+        <InspirationScreen prefs={prefs} onBack={() => go("home")} onGenerate={handleInspirationGenerate} />
+      )}
+      {screen === "inspiration-loading" && prefs.photoBase64 && (
+        <InspirationLoadingScreen
+          iconName={inspirationIcon}
+          photoBase64={prefs.photoBase64}
+          photoType={prefs.photoType}
           gender={prefs.gender}
+          onDone={(imageUrl, styleProfile) => {
+            setInspirationImageUrl(imageUrl);
+            setInspirationProfile(styleProfile);
+            go("inspiration-results");
+          }}
         />
       )}
-      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && (
-        <StylistChat gender={prefs.gender} />
+      {screen === "inspiration-results" && (
+        <InspirationResultScreen
+          prefs={prefs}
+          styledImageUrl={inspirationImageUrl}
+          styleProfile={inspirationProfile}
+          onBack={() => go("inspiration")}
+          onHome={() => go("home")}
+          onSave={(lookName) => {
+            if (!checkFeatureAccess("Save & organize looks")) return;
+            setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
+          }}
+          onRegenerate={() => {
+            if (!tryGenerate()) return;
+            setInspirationImageUrl(null); setInspirationProfile(null);
+            go("inspiration-loading");
+          }}
+          showWatermark={showWatermark}
+        />
       )}
 
-      {/* Paywall overlay */}
+      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat gender={prefs.gender} />}
+
       {showPaywall && (
-        <PaywallScreen
-          onClose={() => setShowPaywall(false)}
-          onUpgrade={upgradeTo}
-          remainingGenerations={remainingGenerations}
-          lockedFeature={lockedFeature}
-        />
+        <PaywallScreen onClose={() => setShowPaywall(false)} onUpgrade={upgradeTo}
+          remainingGenerations={remainingGenerations} lockedFeature={lockedFeature} />
       )}
-
-      {/* Upgrade prompt for locked features */}
       {showUpgradePrompt && lockedFeature && (
-        <UpgradePrompt
-          feature={lockedFeature}
-          onClose={() => setShowUpgradePrompt(false)}
-          onUpgrade={(tier) => upgradeTo(tier, tier === "premium")}
-        />
+        <UpgradePrompt feature={lockedFeature} onClose={() => setShowUpgradePrompt(false)}
+          onUpgrade={(tier) => upgradeTo(tier, tier === "premium")} />
       )}
     </div>
   );

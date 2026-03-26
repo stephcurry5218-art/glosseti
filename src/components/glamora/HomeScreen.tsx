@@ -17,7 +17,7 @@ interface Props {
   onInspiration: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall }: Props) => {
+const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
