@@ -10,7 +10,7 @@ import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 
-export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only";
+export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure";
 export type PhotoType = "selfie" | "full-body";
 
 type Screen = "splash" | "onboarding" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";

@@ -16,7 +16,22 @@ const categories: { id: StyleCategory; label: string; emoji: string; desc: strin
   {
     id: "streetwear", label: "Streetwear", emoji: "🔥",
     desc: "Urban-inspired looks with sneakers, hoodies, and statement pieces",
-    includes: ["Hoodies & Tees", "Joggers & Cargo", "Sneakers", "Caps & Chains", "Backpacks"],
+    includes: ["Graphic Tees & Hoodies", "Cargos & Baggy Jeans", "Sneakers & Boots", "Caps & Chains", "Backpacks & Slings"],
+  },
+  {
+    id: "minimalist", label: "Minimalist", emoji: "🤍",
+    desc: "Clean, intentional, timeless — quality over quantity, neutrals over noise",
+    includes: ["Essential Tees & Knits", "Tailored Trousers", "Clean Sneakers & Loafers", "Minimal Watches", "Structured Bags"],
+  },
+  {
+    id: "vintage", label: "Vintage / Retro", emoji: "🕺",
+    desc: "60s mod, 70s boho, 90s grunge — pull from the best eras",
+    includes: ["Printed Blouses", "Flare Jeans & A-Line Skirts", "Platform Shoes & Mary Janes", "Headscarves", "Oversized Sunglasses"],
+  },
+  {
+    id: "athleisure", label: "Athleisure", emoji: "🏃",
+    desc: "Gym-to-street style — performance fabrics meet fashion-forward design",
+    includes: ["Performance Tees & Bras", "Joggers & Bike Shorts", "Running Sneakers & Slides", "Smart Watches", "Belt Bags"],
   },
   {
     id: "formal", label: "Formal / Business", emoji: "🤵",
@@ -37,7 +52,6 @@ const categories: { id: StyleCategory; label: string; emoji: string; desc: strin
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory>(prefs.styleCategory);
-
   const current = categories.find(c => c.id === selected)!;
 
   return (
@@ -51,7 +65,6 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
       </div>
 
       <div style={{ padding: "0 22px" }}>
-        {/* Category cards */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
           {categories.map((cat, i) => {
             const isSelected = selected === cat.id;
@@ -61,61 +74,37 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 className={`glamora-card anim-fadeUp d${Math.min(i + 1, 6)}`}
                 onClick={() => setSelected(cat.id)}
                 style={{
-                  padding: "18px 18px",
-                  display: "flex", alignItems: "center", gap: 16,
-                  cursor: "pointer",
-                  border: isSelected
-                    ? "2px solid hsl(var(--glamora-rose-dark))"
-                    : "1.5px solid hsla(var(--glamora-gold) / 0.12)",
-                  background: isSelected
-                    ? "linear-gradient(135deg, hsla(var(--glamora-rose) / 0.08), hsla(var(--glamora-gold) / 0.05))"
-                    : "hsl(var(--card))",
+                  padding: "16px 16px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer",
+                  border: isSelected ? "2px solid hsl(var(--glamora-rose-dark))" : "1.5px solid hsla(var(--glamora-gold) / 0.12)",
+                  background: isSelected ? "linear-gradient(135deg, hsla(var(--glamora-rose) / 0.08), hsla(var(--glamora-gold) / 0.05))" : "hsl(var(--card))",
                   transition: "all 0.2s",
                 }}
               >
                 <div style={{
-                  width: 52, height: 52, borderRadius: 16,
-                  background: isSelected
-                    ? "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))"
-                    : "hsla(var(--glamora-cream2))",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 26, flexShrink: 0,
-                  transition: "all 0.2s",
-                }}>
-                  {cat.emoji}
-                </div>
+                  width: 48, height: 48, borderRadius: 14,
+                  background: isSelected ? "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))" : "hsla(var(--glamora-cream2))",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0, transition: "all 0.2s",
+                }}>{cat.emoji}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{cat.label}</div>
-                  <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 3, lineHeight: 1.4 }}>{cat.desc}</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{cat.label}</div>
+                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2, lineHeight: 1.4 }}>{cat.desc}</div>
                 </div>
                 {isSelected && (
-                  <div style={{
-                    width: 24, height: 24, borderRadius: "50%",
-                    background: "hsl(var(--glamora-success))",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 14, color: "white", flexShrink: 0,
-                  }}>✓</div>
+                  <div style={{ width: 22, height: 22, borderRadius: "50%", background: "hsl(var(--glamora-success))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "white", flexShrink: 0 }}>✓</div>
                 )}
               </div>
             );
           })}
         </div>
 
-        {/* What's Included */}
-        <div className="glamora-card anim-fadeUp" style={{ padding: "18px 18px", marginBottom: 28 }}>
-          <div className="section-label" style={{ marginBottom: 12 }}>
-            {current.emoji} What's Included in {current.label}
-          </div>
+        <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 24 }}>
+          <div className="section-label" style={{ marginBottom: 10 }}>{current.emoji} What's Included in {current.label}</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {current.includes.map(item => (
-              <span key={item} className="pill-tag">{item}</span>
-            ))}
+            {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
           </div>
         </div>
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(selected)}>
-          Continue — Upload Photo 📸
-        </button>
+        <button className="btn-primary btn-rose" onClick={() => onNext(selected)}>Continue — Upload Photo 📸</button>
       </div>
     </div>
   );

@@ -10,8 +10,11 @@ interface Props {
 const styleCategories = [
   { name: "Full Style", emoji: "👗", color: "hsla(12 52% 85% / 0.4)" },
   { name: "Streetwear", emoji: "🔥", color: "hsla(36 72% 88% / 0.6)" },
+  { name: "Minimalist", emoji: "🤍", color: "hsla(16 20% 11% / 0.08)" },
+  { name: "Vintage", emoji: "🕺", color: "hsla(36 50% 53% / 0.2)" },
+  { name: "Athleisure", emoji: "🏃", color: "hsla(140 24% 58% / 0.2)" },
   { name: "Formal", emoji: "🤵", color: "hsla(16 20% 11% / 0.12)" },
-  { name: "Casual", emoji: "😎", color: "hsla(140 24% 58% / 0.2)" },
+  { name: "Casual", emoji: "😎", color: "hsla(0 60% 70% / 0.15)" },
   { name: "Makeup", emoji: "💄", color: "hsla(0 60% 70% / 0.3)" },
 ];
 
