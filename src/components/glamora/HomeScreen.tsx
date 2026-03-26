@@ -1,9 +1,9 @@
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
-import type { Gender } from "./GlamoraApp";
+import type { Gender, StyleCategory } from "./GlamoraApp";
 
 interface Props {
-  onGetStyled: () => void;
+  onGetStyled: (initialCategory?: StyleCategory) => void;
   onProfile: () => void;
   onSaved: () => void;
   savedCount: number;
