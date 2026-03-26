@@ -125,6 +125,9 @@ const GlamoraApp = () => {
           onGetStyled={() => go("style-picker")}
         />
       )}
+      {screen !== "splash" && screen !== "onboarding" && (
+        <StylistChat gender={prefs.gender} />
+      )}
     </div>
   );
 };
