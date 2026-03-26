@@ -58,6 +58,7 @@ const GlamoraApp = () => {
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
           gender={prefs.gender}
+          onGenderToggle={(g) => setPrefs(p => ({ ...p, gender: g }))}
         />
       )}
       {screen === "style-picker" && (
