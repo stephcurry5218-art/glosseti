@@ -271,4 +271,29 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Golden Hour", desc: "Warm bronze with gold highlights", match: 93 },
     { name: "Berry Chic", desc: "Deep berry lips, minimal eyes", match: 89 },
   ],
+  bohemian: [
+    { name: "Desert Wanderer", desc: "Earthy layers, flowing fabrics, turquoise accents", match: 95 },
+    { name: "Golden Hour", desc: "Warm boho tones with golden jewelry", match: 91 },
+    { name: "Soft Glam", desc: "Romantic bohemian with soft makeup", match: 87 },
+  ],
+  preppy: [
+    { name: "Ivy League", desc: "Blazers, loafers, clean patterns", match: 96 },
+    { name: "Clean Slate", desc: "Polished minimalism with preppy edge", match: 90 },
+    { name: "Soft Glam", desc: "Classic elegance with soft accents", match: 86 },
+  ],
+  edgy: [
+    { name: "Rebel Noir", desc: "Leather, studs, dark palette, combat boots", match: 95 },
+    { name: "Urban Edge", desc: "Streetwear with punk influence", match: 91 },
+    { name: "Berry Chic", desc: "Dark berry tones with edgy styling", match: 87 },
+  ],
+  resort: [
+    { name: "Coastal Luxe", desc: "Linen, sandals, straw — relaxed elegance", match: 96 },
+    { name: "Golden Hour", desc: "Warm sunset tones for vacation vibes", match: 92 },
+    { name: "Desert Wanderer", desc: "Earthy resort with boho touches", match: 87 },
+  ],
+  grooming: [
+    { name: "Sharp & Clean", desc: "Precision cut, fresh skin, subtle fragrance", match: 96 },
+    { name: "Rugged Refined", desc: "Textured beard, natural skincare, woodsy scent", match: 92 },
+    { name: "Modern Minimal", desc: "No-fuss grooming with quality basics", match: 88 },
+  ],
 };
