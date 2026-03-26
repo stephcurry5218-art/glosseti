@@ -86,20 +86,11 @@ const GlamoraApp = () => {
   }, [tryGenerate, go]);
 
   const handleInspirationGenerate = useCallback((iconName: string, file: File, photoType: PhotoType, base64: string) => {
-    if (!hasGeneratedOnce) {
-      setInspirationIcon(iconName);
-      setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
-      setHasGeneratedOnce(true);
-      localStorage.setItem("glamora_first_gen", "1");
-      go("inspiration-loading");
-      return;
-    }
-    if (!user) { go("auth"); return; }
     if (!tryGenerate()) return;
     setInspirationIcon(iconName);
     setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
     go("inspiration-loading");
-  }, [hasGeneratedOnce, user, tryGenerate, go]);
+  }, [tryGenerate, go]);
 
   return (
     <div className="phone">
