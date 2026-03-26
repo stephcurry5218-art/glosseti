@@ -60,6 +60,12 @@
     --sidebar-border: 20 12% 20%;
     --sidebar-ring: 24 38% 48%;
   }
+
+
+  @keyframes gold-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
 @layer base {
