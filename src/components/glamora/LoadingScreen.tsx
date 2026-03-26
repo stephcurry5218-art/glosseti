@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { DEMO_MODE, getDemoStyledImage } from "./demoMode";
 import type { UserPrefs } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
@@ -44,6 +45,13 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
     const generateImage = async () => {
       try {
+        if (DEMO_MODE) {
+          // Simulate network delay for realistic feel
+          await new Promise(r => setTimeout(r, 2000));
+          generatedUrlRef.current = getDemoStyledImage(prefs.gender);
+          setAiDone(true);
+          return;
+        }
         console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {

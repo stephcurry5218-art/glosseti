@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { DEMO_MODE, getDemoInspirationResult } from "./demoMode";
 import type { PhotoType, Gender } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
@@ -48,6 +49,13 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, on
 
     const generate = async () => {
       try {
+        if (DEMO_MODE) {
+          await new Promise(r => setTimeout(r, 2500));
+          const demo = getDemoInspirationResult(gender);
+          resultRef.current = { imageUrl: demo.imageUrl, styleProfile: demo.styleProfile };
+          setAiDone(true);
+          return;
+        }
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
           body: { iconName, imageBase64: photoBase64, photoType, gender },
         });
