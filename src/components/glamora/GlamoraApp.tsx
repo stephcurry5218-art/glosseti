@@ -104,7 +104,7 @@ const GlamoraApp = () => {
             if (initialCategory) setPrefs(p => ({ ...p, styleCategory: initialCategory }));
             go("style-picker");
           }}
-          onProfile={() => user ? go("profile") : go("auth")}
+          onProfile={() => go("profile")}
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
           gender={prefs.gender}
