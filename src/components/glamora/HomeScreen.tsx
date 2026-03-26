@@ -14,6 +14,7 @@ interface Props {
   subscription: SubscriptionState;
   remainingGenerations: number;
   onShowPaywall: () => void;
+  onInspiration: () => void;
 }
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall }: Props) => {
