@@ -49,6 +49,13 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, on
 
     const generate = async () => {
       try {
+        if (DEMO_MODE) {
+          await new Promise(r => setTimeout(r, 2500));
+          const demo = getDemoInspirationResult(gender);
+          resultRef.current = { imageUrl: demo.imageUrl, styleProfile: demo.styleProfile };
+          setAiDone(true);
+          return;
+        }
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
           body: { iconName, imageBase64: photoBase64, photoType, gender },
         });

@@ -45,6 +45,13 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
     const generateImage = async () => {
       try {
+        if (DEMO_MODE) {
+          // Simulate network delay for realistic feel
+          await new Promise(r => setTimeout(r, 2000));
+          generatedUrlRef.current = getDemoStyledImage(prefs.gender);
+          setAiDone(true);
+          return;
+        }
         console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
