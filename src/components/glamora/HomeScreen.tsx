@@ -1,5 +1,4 @@
-import looksImg from "@/assets/glamora-looks.jpg";
-import productsImg from "@/assets/glamora-products.jpg";
+import DynamicVisual from "./DynamicVisual";
 
 interface Props {
   onUpload: () => void;
@@ -95,24 +94,24 @@ const HomeScreen = ({ onUpload, onProfile, onSaved }: Props) => (
       </div>
     </div>
 
-    {/* For You */}
+    {/* For You — dynamic visual */}
     <div style={{ padding: "0 22px", marginTop: 28 }}>
       <div className="section-label">For You</div>
       <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden" }}>
-        <img src={looksImg} alt="Looks" loading="lazy" width={960} height={640} style={{ width: "100%", height: 160, objectFit: "cover" }} />
+        <DynamicVisual height={160} variant="card" borderRadius={0} />
         <div style={{ padding: "16px 18px" }}>
           <div className="serif" style={{ fontSize: 18, fontWeight: 500, color: "hsl(var(--glamora-char))" }}>Today's Curated Looks</div>
           <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 6, lineHeight: 1.5 }}>
-            Personalized makeup inspiration based on the latest trends.
+            Personalized style inspiration — refreshed every visit.
           </p>
         </div>
       </div>
     </div>
 
-    {/* Products */}
+    {/* Products — dynamic visual */}
     <div style={{ padding: "0 22px", marginTop: 20 }}>
       <div className="glamora-card anim-fadeUp d3" style={{ overflow: "hidden" }}>
-        <img src={productsImg} alt="Products" loading="lazy" width={640} height={640} style={{ width: "100%", height: 140, objectFit: "cover" }} />
+        <DynamicVisual height={140} variant="card" borderRadius={0} />
         <div style={{ padding: "16px 18px" }}>
           <div className="serif" style={{ fontSize: 18, fontWeight: 500, color: "hsl(var(--glamora-char))" }}>Recommended Products</div>
           <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 6, lineHeight: 1.5 }}>
