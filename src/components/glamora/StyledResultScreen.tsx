@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2 } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen } from "lucide-react";
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -290,6 +290,22 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
 
         {/* Actions */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Prominent tutorial CTA for makeup looks */}
+          {isMakeup && hasStyled && (
+            <button
+              className="btn-primary"
+              onClick={() => onLookSelect(looks[0]?.name || "Soft Glam")}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                background: "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
+                padding: "16px 24px", fontSize: 15, fontWeight: 700,
+                boxShadow: "0 6px 24px hsla(20 35% 55% / 0.35)",
+                animation: "pulse2 3s ease-in-out infinite",
+              }}
+            >
+              <BookOpen size={20} /> Get Step-by-Step Makeup Tutorial
+            </button>
+          )}
           {hasStyled && (
             <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8 }}>
               Download Styled Image <Download size={16} />
@@ -304,6 +320,17 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               </button>
             }
           />
+          {/* Style tutorial shortcuts for non-makeup */}
+          {!isMakeup && (
+            <div style={{ display: "flex", gap: 8 }}>
+              {looks.slice(0, 2).map((look) => (
+                <button key={look.name} className="btn-primary btn-ghost" onClick={() => onLookSelect(look.name)}
+                  style={{ flex: 1, fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                  <BookOpen size={14} /> {look.name}
+                </button>
+              ))}
+            </div>
+          )}
           <button className="btn-primary btn-rose" onClick={() => onSave(looks.map(l => l.name))} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Save All Styles <Bookmark size={16} />
           </button>

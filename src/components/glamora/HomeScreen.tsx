@@ -1,4 +1,4 @@
-import { Home, Scissors, Bookmark, User, ArrowRight, MessageCircle, TrendingUp, Star, Zap, Eye } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import type { Gender } from "./GlamoraApp";
 
@@ -10,180 +10,195 @@ interface Props {
   gender: Gender;
 }
 
-const maleInspo = [
-  { title: "Sharp & Polished", sub: "Tailored fits, clean sneakers", emoji: "🔥" },
-  { title: "Street Edge", sub: "Oversized layers, bold kicks", emoji: "⚡" },
-  { title: "Weekend Easy", sub: "Relaxed denim, henley vibes", emoji: "🎯" },
-];
-
-const femaleInspo = [
-  { title: "Effortless Glam", sub: "Silk textures, gold accents", emoji: "✨" },
-  { title: "Bold & Beautiful", sub: "Statement colors, fierce looks", emoji: "💎" },
-  { title: "Soft Feminine", sub: "Flowy fabrics, pastel tones", emoji: "🌸" },
-];
-
-const maleStats = [
-  { label: "Fits Generated", value: "10K+", color: "var(--glamora-gold)" },
-  { label: "Brands", value: "200+", color: "var(--glamora-gold-light)" },
-  { label: "Avg Match", value: "94%", color: "var(--glamora-success)" },
-];
-
-const femaleStats = [
-  { label: "Looks Created", value: "25K+", color: "var(--glamora-rose-dark)" },
-  { label: "Brands", value: "350+", color: "var(--glamora-gold)" },
-  { label: "Avg Match", value: "96%", color: "var(--glamora-success)" },
-];
-
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender }: Props) => {
   const isMale = gender === "male";
-  const inspo = isMale ? maleInspo : femaleInspo;
-  const stats = isMale ? maleStats : femaleStats;
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 100 }}>
-      {/* Header */}
-      <div style={{ padding: "48px 22px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div>
-          <div className="serif" style={{ fontSize: 28, fontWeight: 400, letterSpacing: 3 }}>
-            GLAMORA<span style={{ color: `hsl(${accent})` }}>.</span>
-          </div>
-          <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 2, letterSpacing: 0.5 }}>
-            {isMale ? "Men's Style Studio" : "Women's Style Studio"}
-          </div>
-        </div>
-        <button
-          onClick={onProfile}
-          style={{
-            width: 44, height: 44, borderRadius: "50%",
-            background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", border: "none",
-            boxShadow: `0 4px 14px hsla(${isMale ? "28 40% 52%" : "18 32% 42%"} / 0.3)`,
-          }}
-        >
-          <User size={18} color="white" />
-        </button>
-      </div>
-
-      {/* Hero — large visual CTA */}
-      <div
-        className="anim-fadeUp"
-        onClick={onGetStyled}
-        style={{ margin: "20px 22px", borderRadius: 28, overflow: "hidden", position: "relative", height: 240, cursor: "pointer" }}
-      >
+      {/* Full-bleed hero */}
+      <div style={{ position: "relative", height: 320, overflow: "hidden" }}>
         <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
         <div style={{
           position: "absolute", inset: 0, zIndex: 2,
           background: isMale
-            ? "linear-gradient(180deg, hsla(20 18% 6% / 0.2) 0%, hsla(20 18% 6% / 0.9) 100%)"
-            : "linear-gradient(180deg, hsla(18 28% 12% / 0.15) 0%, hsla(18 28% 12% / 0.9) 100%)",
+            ? "linear-gradient(180deg, hsla(20 18% 6% / 0.1) 0%, hsla(20 18% 6% / 0.95) 100%)"
+            : "linear-gradient(180deg, hsla(18 28% 12% / 0.05) 0%, hsla(18 28% 12% / 0.95) 100%)",
         }} />
-        <div style={{ position: "relative", zIndex: 4, padding: "24px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-          <div style={{ fontSize: 10, letterSpacing: 2.5, textTransform: "uppercase", color: `hsl(${accent})`, fontWeight: 600, marginBottom: 6 }}>
-            {isMale ? "AI Menswear Studio" : "AI Beauty & Style"}
+
+        {/* Top bar */}
+        <div style={{ position: "relative", zIndex: 5, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "48px 22px 0" }}>
+          <div>
+            <div className="serif" style={{ fontSize: 26, fontWeight: 400, letterSpacing: 4, color: "white" }}>
+              GLAMORA<span style={{ color: `hsl(${accent})` }}>.</span>
+            </div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.6)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 2 }}>
+              {isMale ? "Men's Style Studio" : "Women's Style Studio"}
+            </div>
           </div>
-          <div className="serif" style={{ fontSize: 30, lineHeight: 1.1, color: "white", marginBottom: 14 }}>
-            {isMale
-              ? <>Discover Your <em style={{ fontStyle: "italic", color: `hsl(${accent})` }}>Signature</em> Style</>
-              : <>Get Your <em style={{ fontStyle: "italic", color: `hsl(${accent})` }}>Complete</em> Look</>
-            }
-          </div>
-          <button
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 24px",
-              background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
-              borderRadius: 16, color: "white", fontSize: 14, fontWeight: 600,
-              cursor: "pointer", border: "none", fontFamily: "'Jost', sans-serif",
-              letterSpacing: 0.5, boxShadow: "0 6px 20px hsla(0 0% 0% / 0.3)", alignSelf: "flex-start",
-            }}
-          >
-            Start Styling <ArrowRight size={16} />
+          <button onClick={onProfile} style={{
+            width: 42, height: 42, borderRadius: "50%",
+            background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", border: "2px solid hsla(0 0% 100% / 0.2)",
+            boxShadow: "0 4px 20px hsla(0 0% 0% / 0.4)",
+          }}>
+            <User size={18} color="white" />
           </button>
         </div>
-      </div>
 
-      {/* Live stats banner — unique to home */}
-      <div className="anim-fadeUp d1" style={{ padding: "0 22px", marginTop: 4 }}>
-        <div style={{
-          display: "flex", gap: 0, borderRadius: 18, overflow: "hidden",
-          border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
-        }}>
-          {stats.map((s, i) => (
-            <div key={s.label} style={{
-              flex: 1, padding: "14px 8px", textAlign: "center",
-              background: `hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / ${0.03 + i * 0.02})`,
-              borderRight: i < 2 ? `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.1)` : "none",
-            }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: `hsl(${s.color})` }}>{s.value}</div>
-              <div style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: 1.2, color: "hsl(var(--glamora-gray))", marginTop: 2, fontWeight: 600 }}>{s.label}</div>
-            </div>
-          ))}
+        {/* Hero text overlay */}
+        <div className="anim-fadeUp" style={{ position: "relative", zIndex: 5, padding: "32px 22px 0" }}>
+          <div className="serif" style={{ fontSize: 34, lineHeight: 1.05, color: "white" }}>
+            {isMale
+              ? <>Your <em style={{ fontStyle: "italic", color: `hsl(${accent})` }}>Signature</em><br />Style Awaits</>
+              : <>Discover Your<br /><em style={{ fontStyle: "italic", color: `hsl(${accent})` }}>Perfect</em> Look</>
+            }
+          </div>
         </div>
       </div>
 
-      {/* Trending Inspiration */}
-      <div style={{ padding: "0 22px", marginTop: 22 }}>
-        <div className="section-label" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <TrendingUp size={14} color={`hsl(${accent})`} /> Trending For You
+      {/* Main CTA card — overlaps hero */}
+      <div style={{ padding: "0 22px", marginTop: -40, position: "relative", zIndex: 10 }}>
+        <div
+          className="glamora-card anim-fadeUp d1"
+          onClick={onGetStyled}
+          style={{
+            padding: "24px 20px", cursor: "pointer",
+            background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08))`,
+            border: `1.5px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.2)`,
+            display: "flex", alignItems: "center", gap: 16,
+            boxShadow: "0 8px 32px hsla(0 0% 0% / 0.25)",
+          }}
+        >
+          <div style={{
+            width: 56, height: 56, borderRadius: 18, flexShrink: 0,
+            background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 4px 16px hsla(${isMale ? "28 40% 52%" : "20 35% 55%"} / 0.3)`,
+          }}>
+            <Camera size={26} color="white" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 17, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+              {isMale ? "Get Your Style" : "Get Styled Now"}
+            </div>
+            <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 3 }}>
+              Upload a photo · AI generates your look
+            </div>
+          </div>
+          <ArrowRight size={20} color={`hsl(${accent})`} />
+        </div>
+      </div>
+
+      {/* Quick action grid — 2x2 */}
+      <div className="anim-fadeUp d2" style={{ padding: "20px 22px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div className="glamora-card" onClick={onGetStyled} style={{
+          padding: "20px 16px", cursor: "pointer", textAlign: "center",
+          background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), hsl(var(--card)))`,
+          border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, margin: "0 auto 10px",
+            background: `linear-gradient(135deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15), hsla(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"} / 0.1))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Eye size={22} color={`hsl(${accent})`} />
+          </div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>AI Vision</div>
+          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Scan & style you</div>
+        </div>
+
+        <div className="glamora-card" onClick={onGetStyled} style={{
+          padding: "20px 16px", cursor: "pointer", textAlign: "center",
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsl(var(--card)))`,
+          border: "1px solid hsla(var(--glamora-gold) / 0.12)",
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, margin: "0 auto 10px",
+            background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.15), hsla(var(--glamora-gold-light) / 0.1))",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Palette size={22} color="hsl(var(--glamora-gold))" />
+          </div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+            {isMale ? "Grooming" : "Makeup"}
+          </div>
+          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
+            {isMale ? "Hair & skincare" : "Beauty looks"}
+          </div>
+        </div>
+
+        <div className="glamora-card" onClick={onSaved} style={{
+          padding: "20px 16px", cursor: "pointer", textAlign: "center", position: "relative",
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, margin: "0 auto 10px",
+            background: `linear-gradient(135deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15), hsla(var(--glamora-gold) / 0.08))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Bookmark size={22} color={`hsl(${accent})`} />
+          </div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Saved</div>
+          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>{savedCount} look{savedCount !== 1 ? "s" : ""}</div>
+          {savedCount > 0 && (
+            <div style={{
+              position: "absolute", top: 10, right: 10, width: 20, height: 20, borderRadius: "50%",
+              background: `hsl(${accent})`, fontSize: 10, fontWeight: 700, color: "white",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>{savedCount}</div>
+          )}
+        </div>
+
+        <div className="glamora-card" onClick={onGetStyled} style={{
+          padding: "20px 16px", cursor: "pointer", textAlign: "center",
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, margin: "0 auto 10px",
+            background: "linear-gradient(135deg, hsla(var(--glamora-success) / 0.15), hsla(var(--glamora-gold) / 0.08))",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Zap size={22} color="hsl(var(--glamora-success))" />
+          </div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>3 Price Tiers</div>
+          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Luxury to budget</div>
+        </div>
+      </div>
+
+      {/* Trending section */}
+      <div style={{ padding: "24px 22px 0" }}>
+        <div className="section-label anim-fadeUp d3" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <TrendingUp size={14} color={`hsl(${accent})`} /> Trending Styles
         </div>
         <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 8, scrollbarWidth: "none" }}>
-          {inspo.map((item, i) => (
+          {(isMale
+            ? [
+                { title: "Sharp & Polished", sub: "Tailored fits, clean kicks", icon: Crown },
+                { title: "Street Edge", sub: "Oversized layers, bold sneakers", icon: Zap },
+                { title: "Weekend Easy", sub: "Relaxed denim, henley vibes", icon: Scissors },
+              ]
+            : [
+                { title: "Effortless Glam", sub: "Silk textures, gold accents", icon: Crown },
+                { title: "Bold & Beautiful", sub: "Statement colors, fierce looks", icon: Zap },
+                { title: "Soft Feminine", sub: "Flowy fabrics, pastel tones", icon: Palette },
+              ]
+          ).map((item, i) => (
             <div
               key={item.title}
-              className={`glamora-card anim-fadeUp d${i + 2}`}
+              className={`glamora-card anim-fadeUp d${i + 4}`}
               onClick={onGetStyled}
               style={{
-                minWidth: 150, padding: "16px 14px", cursor: "pointer",
+                minWidth: 160, padding: "18px 14px", cursor: "pointer",
                 border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
                 background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), transparent)`,
               }}
             >
-              <div style={{ fontSize: 22, marginBottom: 6 }}>{item.emoji}</div>
+              <item.icon size={20} color={`hsl(${accent})`} style={{ marginBottom: 8 }} />
               <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{item.title}</div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>{item.sub}</div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Feature highlights — unique cards */}
-      <div style={{ padding: "0 22px", marginTop: 20 }}>
-        <div style={{ display: "flex", gap: 10 }}>
-          <div className="glamora-card anim-fadeUp d3" onClick={onGetStyled} style={{
-            flex: 1, padding: "18px 14px", cursor: "pointer", textAlign: "center",
-            background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08), hsl(var(--card)))`,
-            border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
-          }}>
-            <Eye size={24} color={`hsl(${accent})`} style={{ marginBottom: 8 }} />
-            <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>AI Vision</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Scan & style you</div>
-          </div>
-          <div className="glamora-card anim-fadeUp d4" onClick={onGetStyled} style={{
-            flex: 1, padding: "18px 14px", cursor: "pointer", textAlign: "center",
-            background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"} / 0.08), hsl(var(--card)))`,
-            border: `1px solid hsla(var(--glamora-gold) / 0.12)`,
-          }}>
-            <Zap size={24} color="hsl(var(--glamora-gold))" style={{ marginBottom: 8 }} />
-            <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>3 Price Tiers</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Luxury to budget</div>
-          </div>
-          <div className="glamora-card anim-fadeUp d5" onClick={onSaved} style={{
-            flex: 1, padding: "18px 14px", cursor: "pointer", textAlign: "center",
-            position: "relative",
-          }}>
-            <Bookmark size={24} color={`hsl(${accent})`} style={{ marginBottom: 8 }} />
-            <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Saved</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>{savedCount} look{savedCount !== 1 ? "s" : ""}</div>
-            {savedCount > 0 && (
-              <div style={{
-                position: "absolute", top: 8, right: 8, width: 18, height: 18, borderRadius: "50%",
-                background: `hsl(${accent})`, fontSize: 10, fontWeight: 700, color: "white",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>{savedCount}</div>
-            )}
-          </div>
         </div>
       </div>
 
