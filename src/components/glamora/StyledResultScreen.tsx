@@ -311,20 +311,58 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               <BookOpen size={20} /> Get Step-by-Step Makeup Tutorial
             </button>
           )}
+          {/* Style Tweaker */}
+          {onRegenerate && (
+            <div className="glamora-card" style={{ padding: "16px", border: "1.5px solid hsla(var(--glamora-gold) / 0.2)" }}>
+              <button onClick={() => setShowTweaker(!showTweaker)} style={{
+                display: "flex", alignItems: "center", gap: 8, width: "100%",
+                background: "none", border: "none", cursor: "pointer",
+                fontFamily: "'Jost', sans-serif", color: "hsl(var(--glamora-char))",
+                fontSize: 14, fontWeight: 600, padding: 0,
+              }}>
+                <Settings2 size={18} color="hsl(var(--glamora-gold))" />
+                Tweak Style & Regenerate
+                <ChevronDown size={16} style={{
+                  marginLeft: "auto", transition: "transform 0.2s",
+                  transform: showTweaker ? "rotate(180deg)" : "rotate(0)",
+                  color: "hsl(var(--glamora-gray))",
+                }} />
+              </button>
+              {showTweaker && (
+                <div style={{ marginTop: 14 }}>
+                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
+                    Style Category
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
+                    {(["full-style", "streetwear", "formal", "casual", "makeup-only", "minimalist", "vintage", "athleisure", "bohemian", "preppy", "edgy", "resort", "grooming"] as StyleCategory[]).map((cat) => (
+                      <button key={cat} onClick={() => setTweakedCategory(cat)} style={{
+                        padding: "7px 14px", borderRadius: 100, fontSize: 12, fontWeight: 600,
+                        fontFamily: "'Jost', sans-serif", cursor: "pointer",
+                        border: tweakedCategory === cat ? "1.5px solid hsl(var(--glamora-gold))" : "1.5px solid hsla(var(--glamora-gray-light) / 0.2)",
+                        background: tweakedCategory === cat ? "hsla(var(--glamora-gold) / 0.15)" : "transparent",
+                        color: tweakedCategory === cat ? "hsl(var(--glamora-gold))" : "hsl(var(--glamora-gray))",
+                        transition: "all 0.2s", textTransform: "capitalize",
+                      }}>
+                        {cat.replace("-", " ")}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="btn-primary btn-rose" onClick={() => onRegenerate(tweakedCategory)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%" }}>
+                    <RefreshCw size={16} /> Regenerate with {tweakedCategory.replace("-", " ")}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           {hasStyled && (
             <div style={{ display: "flex", gap: 10 }}>
               <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
                 Download <Download size={16} />
               </button>
-              {onRegenerate && (
-                <button className="btn-primary btn-ghost" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
-                  <RefreshCw size={16} /> Regenerate
-                </button>
-              )}
             </div>
           )}
           {!hasStyled && onRegenerate && (
-            <button className="btn-primary btn-rose" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button className="btn-primary btn-rose" onClick={() => onRegenerate()} style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <RefreshCw size={16} /> Generate AI Image
             </button>
           )}
