@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 import type { SubscriptionState } from "./subscription/types";
 
@@ -26,14 +27,55 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   const accentLight = "var(--glamora-gold-light)";
 
   const [displayName, setDisplayName] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("display_name, gender").eq("id", user.id).single()
+    supabase.from("profiles").select("display_name, gender, avatar_url").eq("id", user.id).single()
       .then(({ data }) => {
         if (data?.display_name) setDisplayName(data.display_name);
+        if (data?.avatar_url) setAvatarUrl(data.avatar_url);
       });
   }, [user]);
+
+  const handleSaveName = async () => {
+    if (!user || !editValue.trim()) return;
+    const { error } = await supabase.from("profiles").update({ display_name: editValue.trim() }).eq("id", user.id);
+    if (error) {
+      toast.error("Failed to update name");
+    } else {
+      setDisplayName(editValue.trim());
+      toast.success("Name updated");
+    }
+    setIsEditingName(false);
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}/avatar.${ext}`;
+
+    const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+    if (uploadError) {
+      toast.error("Upload failed");
+      setUploading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
+    const url = `${urlData.publicUrl}?t=${Date.now()}`;
+
+    await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
+    setAvatarUrl(url);
+    setUploading(false);
+    toast.success("Avatar updated");
+  };
 
   const userName = displayName || user?.email?.split("@")[0] || "Glamora User";
 
@@ -64,16 +106,80 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
       <div style={{ padding: "0 22px" }}>
         {/* Avatar */}
         <div className="anim-fadeUp" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}>
-          <div style={{
-            width: 90, height: 90, borderRadius: "50%",
-            background: `linear-gradient(135deg, hsl(${accentLight}) 0%, hsl(${accent}) 100%)`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            marginBottom: 14,
-            boxShadow: `0 8px 30px hsla(28 40% 52% / 0.3)`,
-          }}>
-            <User size={40} color="hsl(var(--glamora-char))" strokeWidth={1.2} />
+          <div style={{ position: "relative", marginBottom: 14 }}>
+            <div style={{
+              width: 90, height: 90, borderRadius: "50%",
+              background: avatarUrl ? "none" : `linear-gradient(135deg, hsl(${accentLight}) 0%, hsl(${accent}) 100%)`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              overflow: "hidden",
+              boxShadow: `0 8px 30px hsla(28 40% 52% / 0.3)`,
+            }}>
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : (
+                <User size={40} color="hsl(var(--glamora-char))" strokeWidth={1.2} />
+              )}
+            </div>
+            {user && (
+              <>
+                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} style={{ display: "none" }} />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  style={{
+                    position: "absolute", bottom: 0, right: -4,
+                    width: 30, height: 30, borderRadius: "50%",
+                    background: `hsl(${accent})`,
+                    border: "2px solid hsl(var(--glamora-cream))",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Camera size={14} color="hsl(var(--glamora-char))" />
+                </button>
+              </>
+            )}
           </div>
-          <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>{userName}</div>
+
+          {/* Editable name */}
+          {isEditingName ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <input
+                autoFocus
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
+                style={{
+                  fontSize: 20, fontFamily: "inherit",
+                  background: "hsla(var(--glamora-gray-light) / 0.1)",
+                  border: `1px solid hsl(${accent})`,
+                  borderRadius: 8, padding: "6px 12px",
+                  color: "hsl(var(--glamora-char))",
+                  textAlign: "center", width: 180,
+                  outline: "none",
+                }}
+              />
+              <button onClick={handleSaveName} style={{ color: `hsl(${accent})`, background: "none", border: "none", cursor: "pointer" }}>
+                <Check size={20} />
+              </button>
+              <button onClick={() => setIsEditingName(false)} style={{ color: "hsl(var(--glamora-gray))", background: "none", border: "none", cursor: "pointer" }}>
+                <X size={20} />
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>{userName}</div>
+              {user && (
+                <button
+                  onClick={() => { setEditValue(displayName || ""); setIsEditingName(true); }}
+                  style={{ color: `hsl(${accent})`, background: "none", border: "none", cursor: "pointer" }}
+                >
+                  <Pencil size={16} />
+                </button>
+              )}
+            </div>
+          )}
+
           <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
             {user ? user.email : "Not signed in"}
           </div>
