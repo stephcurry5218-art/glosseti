@@ -1,7 +1,7 @@
 // Demo mode: set DEMO_MODE = true to skip AI calls and return mock results.
 // Toggle this flag to test the full UI without consuming AI credits.
 
-export const DEMO_MODE = true;
+export const DEMO_MODE = false;
 
 // A curated set of high-quality sample images (royalty-free fashion/beauty stock photos)
 const DEMO_IMAGES = {
