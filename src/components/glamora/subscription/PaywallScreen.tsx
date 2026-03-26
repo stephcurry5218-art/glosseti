@@ -51,8 +51,8 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             {lockedFeature
               ? `"${lockedFeature}" requires a Premium or Pro plan`
               : remainingGenerations <= 0
-                ? "You've used all your free looks today"
-                : "Get unlimited AI generations and premium features"}
+                ? "You've used all your free looks this month"
+                : "Get more AI generations and premium features"}
           </div>
         </div>
 
