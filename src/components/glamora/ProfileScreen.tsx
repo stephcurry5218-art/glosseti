@@ -1,6 +1,9 @@
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
+import type { User as SupaUser } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Props {
   onBack: () => void;
@@ -8,12 +11,27 @@ interface Props {
   onSaved: () => void;
   onGetStyled: () => void;
   gender: Gender;
+  user: SupaUser | null;
+  onSignOut: () => void;
+  onSignIn: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn }: Props) => {
   const isMale = gender === "male";
-  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
-  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
+  const accent = "var(--glamora-gold)";
+  const accentLight = "var(--glamora-gold-light)";
+
+  const [displayName, setDisplayName] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("display_name, gender").eq("id", user.id).single()
+      .then(({ data }) => {
+        if (data?.display_name) setDisplayName(data.display_name);
+      });
+  }, [user]);
+
+  const userName = displayName || user?.email?.split("@")[0] || "Glamora User";
 
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
@@ -22,6 +40,12 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender }: Pro
     { Icon: MessageCircle, label: "Support", action: undefined },
     { Icon: Star, label: "Rate Glamora", action: undefined },
   ];
+
+  if (user) {
+    menuItems.push({ Icon: LogOut, label: "Sign Out", action: onSignOut });
+  } else {
+    menuItems.unshift({ Icon: LogIn, label: "Sign In / Sign Up", action: onSignIn });
+  }
 
   return (
     <div className="screen enter" style={{ minHeight: "100%" }}>
@@ -41,13 +65,13 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender }: Pro
             background: `linear-gradient(135deg, hsl(${accentLight}) 0%, hsl(${accent}) 100%)`,
             display: "flex", alignItems: "center", justifyContent: "center",
             marginBottom: 14,
-            boxShadow: `0 8px 30px hsla(${isMale ? "28 40% 52%" : "18 32% 42%"} / 0.3)`,
+            boxShadow: `0 8px 30px hsla(28 40% 52% / 0.3)`,
           }}>
             <User size={40} color="hsl(var(--glamora-char))" strokeWidth={1.2} />
           </div>
-          <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>Glamora User</div>
+          <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>{userName}</div>
           <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
-            {isMale ? "Style Connoisseur" : "Style Enthusiast"}
+            {user ? user.email : "Not signed in"}
           </div>
         </div>
 
