@@ -45,7 +45,10 @@ const GlamoraApp = () => {
         <SplashScreen onDone={() => go("onboarding")} />
       )}
       {screen === "onboarding" && (
-        <OnboardingScreen onStart={() => go("home")} />
+        <OnboardingScreen onStart={(gender: Gender) => {
+          setPrefs(p => ({ ...p, gender }));
+          go("home");
+        }} />
       )}
       {screen === "home" && (
         <HomeScreen
