@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw } from "lucide-react";
-import type { UserPrefs } from "./GlamoraApp";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, Settings2 } from "lucide-react";
+import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import { getAmazonSearchUrl } from "./affiliateUrls";
@@ -14,7 +14,7 @@ interface Props {
   onHome: () => void;
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
-  onRegenerate?: () => void;
+  onRegenerate?: (tweakedCategory?: StyleCategory) => void;
 }
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
@@ -59,6 +59,8 @@ const handleDownload = async (imageUrl: string) => {
 const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
+  const [showTweaker, setShowTweaker] = useState(false);
+  const [tweakedCategory, setTweakedCategory] = useState<StyleCategory>(prefs.styleCategory);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isMale = prefs.gender === "male";
   const isMakeup = prefs.styleCategory === "makeup-only";
