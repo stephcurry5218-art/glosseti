@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { DEMO_MODE, getDemoStyledImage } from "./demoMode";
 import type { UserPrefs } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
