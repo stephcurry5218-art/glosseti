@@ -45,7 +45,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
                 { id: "male" as Gender, label: "♂", full: "Him" },
               ]).map((opt) => {
                 const isActive = gender === opt.id;
-                const activeColor = opt.id === "male" ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+                const activeColor = "var(--glamora-gold)";
                 return (
                   <button
                     key={opt.id}
