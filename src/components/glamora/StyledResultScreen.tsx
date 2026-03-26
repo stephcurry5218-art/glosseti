@@ -295,6 +295,15 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               Download Styled Image <Download size={16} />
             </button>
           )}
+          <ShareMenu
+            text={`Check out my AI-styled ${isMakeup ? "beauty" : "fashion"} look from Glamora! ✨`}
+            imageUrl={styledImageUrl || undefined}
+            trigger={
+              <button className="btn-primary btn-rose" style={{ display: "flex", alignItems: "center", gap: 8, width: "100%" }}>
+                Share My Look <Share2 size={16} />
+              </button>
+            }
+          />
           <button className="btn-primary btn-rose" onClick={() => onSave(looks.map(l => l.name))} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Save All Styles <Bookmark size={16} />
           </button>
