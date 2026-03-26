@@ -11,6 +11,9 @@ const BeforeAfterSlider = ({ beforeSrc, afterSrc, height = 420 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const dragging = useRef(false);
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const directionLocked = useRef<"horizontal" | "vertical" | null>(null);
 
   const updatePosition = useCallback((clientX: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -20,18 +23,37 @@ const BeforeAfterSlider = ({ beforeSrc, afterSrc, height = 420 }: Props) => {
   }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
-    dragging.current = true;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    updatePosition(e.clientX);
-  }, [updatePosition]);
+    startX.current = e.clientX;
+    startY.current = e.clientY;
+    directionLocked.current = null;
+    // Don't capture yet — wait to determine direction
+  }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    updatePosition(e.clientX);
+    if (directionLocked.current === "vertical") return;
+
+    const dx = Math.abs(e.clientX - startX.current);
+    const dy = Math.abs(e.clientY - startY.current);
+
+    if (!directionLocked.current && (dx > 5 || dy > 5)) {
+      if (dy > dx) {
+        directionLocked.current = "vertical";
+        return; // let the page scroll
+      }
+      directionLocked.current = "horizontal";
+      dragging.current = true;
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    }
+
+    if (dragging.current) {
+      e.preventDefault();
+      updatePosition(e.clientX);
+    }
   }, [updatePosition]);
 
   const onPointerUp = useCallback(() => {
     dragging.current = false;
+    directionLocked.current = null;
   }, []);
 
   // Quick-jump buttons
@@ -51,7 +73,7 @@ const BeforeAfterSlider = ({ beforeSrc, afterSrc, height = 420 }: Props) => {
           borderRadius: 22,
           overflow: "hidden",
           cursor: "ew-resize",
-          touchAction: "none",
+          touchAction: "pan-y",
           userSelect: "none",
         }}
       >
