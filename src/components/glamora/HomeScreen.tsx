@@ -94,7 +94,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
       <div style={{ padding: "0 22px", marginTop: -40, position: "relative", zIndex: 10 }}>
         <div
           className="glamora-card anim-fadeUp d1"
-          onClick={onGetStyled}
+          onClick={() => onGetStyled()}
           style={{
             padding: "24px 20px", cursor: "pointer",
             background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08))`,
