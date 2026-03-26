@@ -146,7 +146,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                       border: "1px solid hsla(var(--glamora-gold) / 0.1)",
                       display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
                     }}>
-                      <span style={{ fontSize: 22 }}>{look.emoji}</span>
+                      <Sparkles size={22} color="hsl(var(--glamora-rose-dark))" />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{look.name}</div>
                         <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{look.desc}</div>
