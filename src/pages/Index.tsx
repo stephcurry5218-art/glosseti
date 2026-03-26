@@ -6,6 +6,7 @@ const Index = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("reset") === "1") {
       localStorage.removeItem("glamora_subscription");
+      localStorage.removeItem("glamora_monthly_usage");
       localStorage.removeItem("glamora_daily_usage");
       localStorage.removeItem("glamora_first_gen");
       window.history.replaceState({}, "", window.location.pathname);
