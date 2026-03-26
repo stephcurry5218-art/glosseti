@@ -8,20 +8,20 @@ export type Step = {
   shop?: Record<PriceTier, ShopOption>;
 };
 
-export const categoryLabels: Record<Category, { label: string; icon: string }> = {
-  makeup: { label: "Makeup", icon: "💄" },
-  top: { label: "Top & Layers", icon: "👔" },
-  bottom: { label: "Bottoms", icon: "👖" },
-  shoes: { label: "Shoes & Socks", icon: "👟" },
-  accessories: { label: "Accessories", icon: "⌚" },
+export const categoryLabels: Record<Category, { label: string }> = {
+  makeup: { label: "Makeup" },
+  top: { label: "Top & Layers" },
+  bottom: { label: "Bottoms" },
+  shoes: { label: "Shoes & Socks" },
+  accessories: { label: "Accessories" },
 };
 
 export const categoryOrder: Category[] = ["makeup", "top", "bottom", "shoes", "accessories"];
 
-export const tierInfo: Record<PriceTier, { label: string; icon: string; color: string; bg: string }> = {
-  luxury: { label: "Luxury", icon: "👑", color: "hsl(var(--glamora-gold))", bg: "hsla(var(--glamora-gold) / 0.1)" },
-  mid: { label: "Moderate", icon: "✨", color: "hsl(var(--glamora-rose-dark))", bg: "hsla(var(--glamora-rose) / 0.1)" },
-  budget: { label: "Budget", icon: "💰", color: "hsl(var(--glamora-success))", bg: "hsla(var(--glamora-success) / 0.1)" },
+export const tierInfo: Record<PriceTier, { label: string; color: string; bg: string }> = {
+  luxury: { label: "Luxury", color: "hsl(var(--glamora-gold))", bg: "hsla(var(--glamora-gold) / 0.1)" },
+  mid: { label: "Moderate", color: "hsl(var(--glamora-rose-dark))", bg: "hsla(var(--glamora-rose) / 0.1)" },
+  budget: { label: "Budget", color: "hsl(var(--glamora-success))", bg: "hsla(var(--glamora-success) / 0.1)" },
 };
 
 export const lookData: Record<string, Record<Category, Step[]>> = {

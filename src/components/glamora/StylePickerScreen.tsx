@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
+import type { LucideIcon } from "lucide-react";
 
 interface Props {
   prefs: { styleCategory: StyleCategory };
@@ -7,44 +9,44 @@ interface Props {
   onNext: (category: StyleCategory) => void;
 }
 
-const categories: { id: StyleCategory; label: string; emoji: string; desc: string; includes: string[] }[] = [
+const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: string; includes: string[] }[] = [
   {
-    id: "full-style", label: "Full Style", emoji: "👗",
+    id: "full-style", label: "Full Style", Icon: Shirt,
     desc: "Complete head-to-toe outfit with accessories, shoes, and optional makeup",
     includes: ["Tops & Layers", "Bottoms", "Shoes & Socks", "Watches & Jewelry", "Bags & Purses", "Makeup (optional)"],
   },
   {
-    id: "streetwear", label: "Streetwear", emoji: "🔥",
+    id: "streetwear", label: "Streetwear", Icon: Flame,
     desc: "Urban-inspired looks with sneakers, hoodies, and statement pieces",
     includes: ["Graphic Tees & Hoodies", "Cargos & Baggy Jeans", "Sneakers & Boots", "Caps & Chains", "Backpacks & Slings"],
   },
   {
-    id: "minimalist", label: "Minimalist", emoji: "🤍",
+    id: "minimalist", label: "Minimalist", Icon: Heart,
     desc: "Clean, intentional, timeless — quality over quantity, neutrals over noise",
     includes: ["Essential Tees & Knits", "Tailored Trousers", "Clean Sneakers & Loafers", "Minimal Watches", "Structured Bags"],
   },
   {
-    id: "vintage", label: "Vintage / Retro", emoji: "🕺",
+    id: "vintage", label: "Vintage / Retro", Icon: Clock,
     desc: "60s mod, 70s boho, 90s grunge — pull from the best eras",
     includes: ["Printed Blouses", "Flare Jeans & A-Line Skirts", "Platform Shoes & Mary Janes", "Headscarves", "Oversized Sunglasses"],
   },
   {
-    id: "athleisure", label: "Athleisure", emoji: "🏃",
+    id: "athleisure", label: "Athleisure", Icon: Dumbbell,
     desc: "Gym-to-street style — performance fabrics meet fashion-forward design",
     includes: ["Performance Tees & Bras", "Joggers & Bike Shorts", "Running Sneakers & Slides", "Smart Watches", "Belt Bags"],
   },
   {
-    id: "formal", label: "Formal / Business", emoji: "🤵",
+    id: "formal", label: "Formal / Business", Icon: Briefcase,
     desc: "Professional and elegant looks for work, events, and special occasions",
     includes: ["Suits & Blazers", "Dress Shirts", "Dress Shoes", "Ties & Cufflinks", "Watches & Bags"],
   },
   {
-    id: "casual", label: "Casual Everyday", emoji: "😎",
+    id: "casual", label: "Casual Everyday", Icon: Smile,
     desc: "Effortless daily outfits that look put-together without trying too hard",
     includes: ["Tees & Knits", "Jeans & Chinos", "Sneakers & Loafers", "Sunglasses & Hats"],
   },
   {
-    id: "makeup-only", label: "Makeup & Grooming", emoji: "💄",
+    id: "makeup-only", label: "Makeup & Grooming", Icon: Palette,
     desc: "Focus on beauty — foundation, eyes, lips, skincare routine",
     includes: ["Primer & Base", "Eyes & Brows", "Lips", "Setting & Skincare"],
   },
@@ -83,14 +85,18 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 <div style={{
                   width: 48, height: 48, borderRadius: 14,
                   background: isSelected ? "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))" : "hsla(var(--glamora-cream2))",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0, transition: "all 0.2s",
-                }}>{cat.emoji}</div>
+                  display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s",
+                }}>
+                  <cat.Icon size={22} color={isSelected ? "white" : "hsl(var(--glamora-rose-dark))"} />
+                </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{cat.label}</div>
                   <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2, lineHeight: 1.4 }}>{cat.desc}</div>
                 </div>
                 {isSelected && (
-                  <div style={{ width: 22, height: 22, borderRadius: "50%", background: "hsl(var(--glamora-success))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "white", flexShrink: 0 }}>✓</div>
+                  <div style={{ width: 22, height: 22, borderRadius: "50%", background: "hsl(var(--glamora-success))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Check size={14} color="white" />
+                  </div>
                 )}
               </div>
             );
@@ -98,13 +104,18 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
         </div>
 
         <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 24 }}>
-          <div className="section-label" style={{ marginBottom: 10 }}>{current.emoji} What's Included in {current.label}</div>
+          <div className="section-label" style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+            <current.Icon size={14} color="hsl(var(--glamora-gray))" />
+            What's Included in {current.label}
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
           </div>
         </div>
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(selected)}>Continue — Upload Photo 📸</button>
+        <button className="btn-primary btn-rose" onClick={() => onNext(selected)} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          Continue — Upload Photo <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   );

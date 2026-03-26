@@ -1,28 +1,30 @@
+import { Shirt, ShoppingBag, Sparkles, ScanFace } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 
 interface Props { onStart: () => void; }
 
 const features = [
-  { icon: "👗", bg: "hsla(12 52% 85% / 0.4)", title: "Complete Style Guide", sub: "Head-to-toe outfit recommendations" },
-  { icon: "🛍️", bg: "hsla(36 72% 88% / 0.6)", title: "Shop by Budget", sub: "Luxury, moderate & budget options" },
-  { icon: "💄", bg: "hsla(12 39% 54% / 0.2)", title: "Makeup & Grooming", sub: "Optional beauty breakdown included" },
-  { icon: "✨", bg: "hsla(140 24% 58% / 0.2)", title: "AI Analysis", sub: "Personalized to your body & features" },
+  { Icon: Shirt, title: "Complete Style Guide", sub: "Head-to-toe outfit recommendations" },
+  { Icon: ShoppingBag, title: "Shop by Budget", sub: "Luxury, moderate & budget options" },
+  { Icon: ScanFace, title: "Makeup & Grooming", sub: "Optional beauty breakdown included" },
+  { Icon: Sparkles, title: "AI Analysis", sub: "Personalized to your body & features" },
 ];
 
 const OnboardingScreen = ({ onStart }: Props) => (
   <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 100 }}>
     <div style={{ height: 340, position: "relative", overflow: "hidden", borderRadius: "0 0 36px 36px" }}>
-      <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
+      <DynamicVisual width="100%" height="100%" variant="onboarding" style={{ position: "absolute", inset: 0 }} />
       <div
         className="anim-fadeIn"
         style={{
           position: "absolute", top: 54, right: 20, padding: "8px 16px",
-          background: "rgba(255,255,255,0.25)", backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,255,255,0.4)", borderRadius: 100,
+          background: "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255,255,255,0.25)", borderRadius: 100,
           fontSize: 12, color: "white", fontWeight: 500, letterSpacing: 0.5, zIndex: 10,
+          display: "flex", alignItems: "center", gap: 6,
         }}
       >
-        ✨ AI Powered
+        <Sparkles size={14} /> AI Powered
       </div>
     </div>
 
@@ -39,9 +41,9 @@ const OnboardingScreen = ({ onStart }: Props) => (
 
       <div className="anim-fadeUp d3" style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
         {features.map((f) => (
-          <div key={f.title} className="glamora-card" style={{ display: "flex", gap: 14, alignItems: "center", padding: "14px 16px", border: "1px solid hsla(36 50% 53% / 0.12)" }}>
-            <div style={{ width: 44, height: 44, borderRadius: 13, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, background: f.bg, flexShrink: 0 }}>
-              {f.icon}
+          <div key={f.title} className="glamora-card" style={{ display: "flex", gap: 14, alignItems: "center", padding: "14px 16px", border: "1px solid hsla(24 38% 48% / 0.12)" }}>
+            <div style={{ width: 44, height: 44, borderRadius: 13, display: "flex", alignItems: "center", justifyContent: "center", background: "hsla(var(--glamora-rose) / 0.12)", flexShrink: 0 }}>
+              <f.Icon size={20} color="hsl(var(--glamora-rose-dark))" />
             </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{f.title}</div>
@@ -52,7 +54,7 @@ const OnboardingScreen = ({ onStart }: Props) => (
       </div>
 
       <button className="btn-primary btn-rose anim-fadeUp d4" onClick={onStart}>
-        Get Styled ✨
+        Get Styled
       </button>
     </div>
   </div>
