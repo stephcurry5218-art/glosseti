@@ -15,6 +15,7 @@ interface Props {
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
   onRegenerate?: (tweakedCategory?: StyleCategory) => void;
+  showWatermark?: boolean;
 }
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";

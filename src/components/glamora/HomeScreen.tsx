@@ -1,6 +1,8 @@
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import type { Gender, StyleCategory } from "./GlamoraApp";
+import type { SubscriptionState } from "./subscription/types";
+import UsageBadge from "./subscription/UsageBadge";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
@@ -9,9 +11,12 @@ interface Props {
   savedCount: number;
   gender: Gender;
   onGenderToggle: (g: Gender) => void;
+  subscription: SubscriptionState;
+  remainingGenerations: number;
+  onShowPaywall: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle }: Props) => {
+const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";

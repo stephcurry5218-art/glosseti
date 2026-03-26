@@ -5,6 +5,8 @@ import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+import type { SubscriptionState } from "./subscription/types";
+
 interface Props {
   onBack: () => void;
   savedCount: number;
@@ -14,9 +16,11 @@ interface Props {
   user: SupaUser | null;
   onSignOut: () => void;
   onSignIn: () => void;
+  subscription?: SubscriptionState;
+  onShowPaywall?: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
