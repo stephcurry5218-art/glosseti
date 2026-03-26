@@ -30,23 +30,53 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
 
         {/* Top bar */}
         <div style={{ position: "relative", zIndex: 5, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "48px 22px 0" }}>
-          <div>
-            <div className="serif" style={{ fontSize: 26, fontWeight: 400, letterSpacing: 4, color: "white" }}>
-              GLAMORA<span style={{ color: `hsl(${accent})` }}>.</span>
-            </div>
-            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.6)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 2 }}>
-              {isMale ? "Men's Style Studio" : "Women's Style Studio"}
-            </div>
+          <div className="serif" style={{ fontSize: 26, fontWeight: 400, letterSpacing: 4, color: "white" }}>
+            GLAMORA<span style={{ color: `hsl(${accent})` }}>.</span>
           </div>
-          <button onClick={onProfile} style={{
-            width: 42, height: 42, borderRadius: "50%",
-            background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", border: "2px solid hsla(0 0% 100% / 0.2)",
-            boxShadow: "0 4px 20px hsla(0 0% 0% / 0.4)",
-          }}>
-            <User size={18} color="white" />
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Gender toggle pill */}
+            <div style={{
+              display: "flex", borderRadius: 100, overflow: "hidden",
+              background: "hsla(0 0% 0% / 0.4)", backdropFilter: "blur(10px)",
+              border: "1.5px solid hsla(0 0% 100% / 0.12)",
+              padding: 3,
+            }}>
+              {([
+                { id: "female" as Gender, label: "♀", full: "Her" },
+                { id: "male" as Gender, label: "♂", full: "Him" },
+              ]).map((opt) => {
+                const isActive = gender === opt.id;
+                const activeColor = opt.id === "male" ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => onGenderToggle(opt.id)}
+                    style={{
+                      padding: "6px 14px", borderRadius: 100, border: "none", cursor: "pointer",
+                      background: isActive
+                        ? `linear-gradient(135deg, hsl(${activeColor}), hsl(${opt.id === "male" ? "var(--glamora-gold-light)" : "var(--glamora-rose)"}))`
+                        : "transparent",
+                      color: isActive ? "white" : "hsla(0 0% 100% / 0.5)",
+                      fontSize: 12, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+                      transition: "all 0.3s ease",
+                      display: "flex", alignItems: "center", gap: 4,
+                    }}
+                  >
+                    <span style={{ fontSize: 14 }}>{opt.label}</span> {opt.full}
+                  </button>
+                );
+              })}
+            </div>
+            <button onClick={onProfile} style={{
+              width: 38, height: 38, borderRadius: "50%",
+              background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", border: "2px solid hsla(0 0% 100% / 0.2)",
+              boxShadow: "0 4px 20px hsla(0 0% 0% / 0.4)",
+            }}>
+              <User size={16} color="white" />
+            </button>
+          </div>
         </div>
 
         {/* Hero text overlay */}
