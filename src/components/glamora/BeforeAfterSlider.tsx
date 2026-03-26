@@ -73,7 +73,7 @@ const BeforeAfterSlider = ({ beforeSrc, afterSrc, height = 420 }: Props) => {
           borderRadius: 22,
           overflow: "hidden",
           cursor: "ew-resize",
-          touchAction: "none",
+          touchAction: "pan-y",
           userSelect: "none",
         }}
       >
