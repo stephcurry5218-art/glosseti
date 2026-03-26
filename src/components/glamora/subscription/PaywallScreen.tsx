@@ -184,7 +184,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
             fontSize: 13, textDecoration: "underline",
           }}>
-            Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left today` : "resets tomorrow"})
+            Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left this month` : "resets next month"})
           </button>
         </div>
       </div>
