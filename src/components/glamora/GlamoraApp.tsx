@@ -12,6 +12,7 @@ import SavedLooksScreen from "./SavedLooksScreen";
 
 export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure";
 export type PhotoType = "selfie" | "full-body";
+export type Gender = "male" | "female";
 
 type Screen = "splash" | "onboarding" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
 
@@ -20,6 +21,7 @@ export interface UserPrefs {
   photoType: PhotoType;
   photoFile: File | null;
   photoBase64: string | null;
+  gender: Gender;
 }
 
 const GlamoraApp = () => {
@@ -32,6 +34,7 @@ const GlamoraApp = () => {
     photoType: "selfie",
     photoFile: null,
     photoBase64: null,
+    gender: "female",
   });
 
   const go = useCallback((s: Screen) => setScreen(s), []);
@@ -42,7 +45,10 @@ const GlamoraApp = () => {
         <SplashScreen onDone={() => go("onboarding")} />
       )}
       {screen === "onboarding" && (
-        <OnboardingScreen onStart={() => go("home")} />
+        <OnboardingScreen onStart={(gender: Gender) => {
+          setPrefs(p => ({ ...p, gender }));
+          go("home");
+        }} />
       )}
       {screen === "home" && (
         <HomeScreen

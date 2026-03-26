@@ -50,6 +50,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             imageBase64: prefs.photoBase64,
             styleCategory: prefs.styleCategory,
             photoType: prefs.photoType,
+            gender: prefs.gender,
           },
         });
         if (error) {
