@@ -3,6 +3,7 @@ import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
+import { getAmazonSearchUrl } from "./affiliateUrls";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -33,8 +34,7 @@ const analysis = {
 };
 
 const openShopLink = (searchTerm: string) => {
-  const url = `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(getAmazonSearchUrl(searchTerm), "_blank", "noopener,noreferrer");
 };
 
 const handleDownload = async (imageUrl: string) => {

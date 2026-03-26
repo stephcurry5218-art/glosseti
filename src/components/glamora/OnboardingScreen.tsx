@@ -51,8 +51,8 @@ const OnboardingScreen = ({ onStart }: Props) => {
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             {([
-              { id: "female" as Gender, label: "Women's", desc: "Feminine styles" },
-              { id: "male" as Gender, label: "Men's", desc: "Masculine styles" },
+              { id: "female" as Gender, label: "Women's", desc: "Feminine styles", accent: "var(--glamora-rose-dark)" },
+              { id: "male" as Gender, label: "Men's", desc: "Masculine styles", accent: "var(--glamora-gold)" },
             ]).map(opt => (
               <button
                 key={opt.id}
@@ -60,17 +60,17 @@ const OnboardingScreen = ({ onStart }: Props) => {
                 style={{
                   flex: 1, padding: "16px 12px", borderRadius: 16,
                   border: gender === opt.id
-                    ? "2px solid hsl(var(--glamora-rose-dark))"
+                    ? `2px solid hsl(${opt.accent})`
                     : "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
                   background: gender === opt.id
-                    ? "hsla(var(--glamora-rose) / 0.08)"
+                    ? `hsla(${opt.accent} / 0.1)`
                     : "hsl(var(--card))",
                   cursor: "pointer", fontFamily: "'Jost', sans-serif",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
                   transition: "all 0.2s",
                 }}
               >
-                <User size={28} color={gender === opt.id ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />
+                <User size={28} color={gender === opt.id ? `hsl(${opt.accent})` : "hsl(var(--glamora-gray))"} />
                 <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{opt.label}</span>
                 <span style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{opt.desc}</span>
               </button>
