@@ -18,13 +18,13 @@ interface Props {
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
 
-const hotspotPositions: Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> = {
-  makeup: { top: "8%", left: "62%", label: "Makeup", Icon: Palette, searchTerm: "makeup kit set" },
-  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt, searchTerm: "women top blouse" },
-  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch, searchTerm: "fashion accessories jewelry" },
-  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot, searchTerm: "women pants trousers" },
-  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints, searchTerm: "women shoes heels" },
-};
+const getHotspotPositions = (isMale: boolean): Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> => ({
+  makeup: { top: "8%", left: "62%", label: isMale ? "Grooming" : "Makeup", Icon: Palette, searchTerm: isMale ? "men grooming kit skincare" : "makeup kit set" },
+  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt, searchTerm: isMale ? "men shirt top" : "women top blouse" },
+  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch, searchTerm: isMale ? "men accessories watch" : "women fashion accessories jewelry" },
+  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot, searchTerm: isMale ? "men pants trousers" : "women pants trousers" },
+  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints, searchTerm: isMale ? "men shoes sneakers" : "women shoes heels" },
+});
 
 const analysis = {
   bodyType: "Athletic",
