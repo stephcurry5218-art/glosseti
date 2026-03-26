@@ -115,6 +115,7 @@ const GlamoraApp = () => {
           savedCount={savedStyles.length}
           onSaved={() => go("saved")}
           onGetStyled={() => go("style-picker")}
+          gender={prefs.gender}
         />
       )}
       {screen === "saved" && (
