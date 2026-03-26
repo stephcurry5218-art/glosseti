@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw } from "lucide-react";
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -14,6 +14,7 @@ interface Props {
   onHome: () => void;
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
+  onRegenerate?: () => void;
 }
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
@@ -55,7 +56,7 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
-const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect }: Props) => {
+const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -309,8 +310,20 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             </button>
           )}
           {hasStyled && (
-            <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              Download Styled Image <Download size={16} />
+            <div style={{ display: "flex", gap: 10 }}>
+              <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+                Download <Download size={16} />
+              </button>
+              {onRegenerate && (
+                <button className="btn-primary btn-ghost" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+                  <RefreshCw size={16} /> Regenerate
+                </button>
+              )}
+            </div>
+          )}
+          {!hasStyled && onRegenerate && (
+            <button className="btn-primary btn-rose" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <RefreshCw size={16} /> Generate AI Image
             </button>
           )}
           <ShareMenu
