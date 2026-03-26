@@ -124,6 +124,7 @@ const GlamoraApp = () => {
           savedStyles={savedStyles}
           onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
           onGetStyled={() => go("style-picker")}
+          gender={prefs.gender}
         />
       )}
       {screen !== "splash" && screen !== "onboarding" && (
