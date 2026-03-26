@@ -160,7 +160,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             )}
 
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 14 }}>
-              👆 Tap the hotspots on the image to shop each piece
+              Tap the hotspots on the image to shop each piece
             </div>
           </>
         ) : (
