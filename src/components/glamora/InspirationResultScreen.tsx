@@ -37,7 +37,6 @@ const handleDownload = async (imageUrl: string) => {
 
 const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, onHome, onSave, onRegenerate, showWatermark }: Props) => {
   const [viewMode, setViewMode] = useState<"compare" | "image">("compare");
-  const [showShare, setShowShare] = useState(false);
   const isMale = prefs.gender === "male";
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const hasOriginal = !!prefs.photoBase64;
