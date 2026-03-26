@@ -8,6 +8,7 @@ interface Props {
   onSaved: () => void;
   savedCount: number;
   gender: Gender;
+  onGenderToggle: (g: Gender) => void;
 }
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender }: Props) => {
