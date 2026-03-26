@@ -9,6 +9,7 @@ import StyledResultScreen from "./StyledResultScreen";
 import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
+import StylistChat from "./StylistChat";
 
 export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming";
 export type PhotoType = "selfie" | "full-body";
@@ -123,6 +124,9 @@ const GlamoraApp = () => {
           onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
           onGetStyled={() => go("style-picker")}
         />
+      )}
+      {screen !== "splash" && screen !== "onboarding" && (
+        <StylistChat gender={prefs.gender} />
       )}
     </div>
   );
