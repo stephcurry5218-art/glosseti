@@ -1,9 +1,9 @@
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
-import type { Gender } from "./GlamoraApp";
+import type { Gender, StyleCategory } from "./GlamoraApp";
 
 interface Props {
-  onGetStyled: () => void;
+  onGetStyled: (initialCategory?: StyleCategory) => void;
   onProfile: () => void;
   onSaved: () => void;
   savedCount: number;
@@ -94,7 +94,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
       <div style={{ padding: "0 22px", marginTop: -40, position: "relative", zIndex: 10 }}>
         <div
           className="glamora-card anim-fadeUp d1"
-          onClick={onGetStyled}
+          onClick={() => onGetStyled()}
           style={{
             padding: "24px 20px", cursor: "pointer",
             background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08))`,
@@ -125,7 +125,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
 
       {/* Quick action grid — 2x2 */}
       <div className="anim-fadeUp d2" style={{ padding: "20px 22px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
           background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), hsl(var(--card)))`,
           border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
@@ -141,7 +141,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Scan & style you</div>
         </div>
 
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled(isMale ? "grooming" : "makeup-only")} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
           background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsl(var(--card)))`,
           border: "1px solid hsla(var(--glamora-gold) / 0.12)",
@@ -182,7 +182,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           )}
         </div>
 
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled()} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
         }}>
           <div style={{
@@ -218,7 +218,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <div
               key={item.title}
               className={`glamora-card anim-fadeUp d${i + 4}`}
-              onClick={onGetStyled}
+              onClick={() => onGetStyled()}
               style={{
                 minWidth: 160, padding: "18px 14px", cursor: "pointer",
                 border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
@@ -236,7 +236,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
       {/* Bottom Nav */}
       <div className="bottom-nav">
         <button className="nav-btn active"><span className="nav-icon"><Home size={22} /></span><span className="nav-label">Home</span></button>
-        <button className="nav-btn" onClick={onGetStyled}><span className="nav-icon"><Scissors size={22} /></span><span className="nav-label">Style</span></button>
+        <button className="nav-btn" onClick={() => onGetStyled()}><span className="nav-icon"><Scissors size={22} /></span><span className="nav-label">Style</span></button>
         <button className="nav-btn" onClick={onSaved}><span className="nav-icon"><Bookmark size={22} /></span><span className="nav-label">Saved</span></button>
         <button className="nav-btn" onClick={onProfile}><span className="nav-icon"><User size={22} /></span><span className="nav-label">Profile</span></button>
       </div>

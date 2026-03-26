@@ -53,7 +53,10 @@ const GlamoraApp = () => {
       )}
       {screen === "home" && (
         <HomeScreen
-          onGetStyled={() => go("style-picker")}
+          onGetStyled={(initialCategory?: StyleCategory) => {
+            if (initialCategory) setPrefs(p => ({ ...p, styleCategory: initialCategory }));
+            go("style-picker");
+          }}
           onProfile={() => go("profile")}
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
