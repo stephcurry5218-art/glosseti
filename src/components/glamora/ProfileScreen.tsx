@@ -1,14 +1,20 @@
 import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import type { Gender } from "./GlamoraApp";
 
 interface Props {
   onBack: () => void;
   savedCount: number;
   onSaved: () => void;
   onGetStyled: () => void;
+  gender: Gender;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender }: Props) => {
+  const isMale = gender === "male";
+  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
+
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
@@ -23,7 +29,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => {
         <button className="back-btn" onClick={onBack}>←</button>
         <div>
           <div className="header-title">Profile</div>
-          <div className="header-sub">Your style journey</div>
+          <div className="header-sub">{isMale ? "Your style journey" : "Your beauty journey"}</div>
         </div>
       </div>
 
@@ -32,15 +38,17 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => {
         <div className="anim-fadeUp" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}>
           <div style={{
             width: 90, height: 90, borderRadius: "50%",
-            background: "linear-gradient(135deg, hsl(var(--glamora-rose)) 0%, hsl(var(--glamora-gold)) 100%)",
+            background: `linear-gradient(135deg, hsl(${accentLight}) 0%, hsl(${accent}) 100%)`,
             display: "flex", alignItems: "center", justifyContent: "center",
             marginBottom: 14,
-            boxShadow: "0 8px 30px hsla(18 32% 42% / 0.3)",
+            boxShadow: `0 8px 30px hsla(${isMale ? "28 40% 52%" : "18 32% 42%"} / 0.3)`,
           }}>
             <User size={40} color="hsl(var(--glamora-char))" strokeWidth={1.2} />
           </div>
           <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>Glamora User</div>
-          <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Style Enthusiast</div>
+          <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
+            {isMale ? "Style Connoisseur" : "Style Enthusiast"}
+          </div>
         </div>
 
         {/* Stats */}
@@ -51,7 +59,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => {
             { label: "Styles", value: savedCount > 0 ? "3" : "0" },
           ].map((s) => (
             <div key={s.label} className="glamora-card" style={{ padding: "18px 12px", textAlign: "center" }}>
-              <div className="serif" style={{ fontSize: 28, color: "hsl(var(--glamora-rose-dark))" }}>{s.value}</div>
+              <div className="serif" style={{ fontSize: 28, color: `hsl(${accent})` }}>{s.value}</div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", textTransform: "uppercase", letterSpacing: 1, marginTop: 4 }}>{s.label}</div>
             </div>
           ))}
@@ -72,7 +80,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => {
                 opacity: item.action ? 1 : 0.5,
               }}
             >
-              <item.Icon size={20} color="hsl(var(--glamora-gray))" />
+              <item.Icon size={20} color={`hsl(${accent})`} />
               {item.label}
               <ChevronRight size={14} color="hsl(var(--glamora-gray-light))" style={{ marginLeft: "auto" }} />
             </div>

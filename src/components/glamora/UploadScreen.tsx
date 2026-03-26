@@ -149,7 +149,10 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <button
             className={`btn-primary ${file ? "btn-rose" : ""}`}
             disabled={!file}
-            style={{ opacity: file ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8 }}
+            style={{
+              opacity: file ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8,
+              ...(file && isMale ? { background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))" } : {}),
+            }}
             onClick={() => file && base64 && onAnalyze(file, photoType, base64)}
           >
             {file ? (<>Analyze My Style <Sparkles size={16} /></>) : "Upload a Photo First"}
