@@ -182,7 +182,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           )}
         </div>
 
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled()} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
         }}>
           <div style={{
