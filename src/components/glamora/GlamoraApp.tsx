@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import SplashScreen from "./SplashScreen";
 import OnboardingScreen from "./OnboardingScreen";
 import HomeScreen from "./HomeScreen";
+import StylePickerScreen from "./StylePickerScreen";
 import UploadScreen from "./UploadScreen";
 import LoadingScreen from "./LoadingScreen";
 import ResultsScreen from "./ResultsScreen";
@@ -9,12 +10,26 @@ import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 
-type Screen = "splash" | "onboarding" | "home" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
+export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only";
+export type PhotoType = "selfie" | "full-body";
+
+type Screen = "splash" | "onboarding" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
+
+export interface UserPrefs {
+  styleCategory: StyleCategory;
+  photoType: PhotoType;
+  photoFile: File | null;
+}
 
 const GlamoraApp = () => {
   const [screen, setScreen] = useState<Screen>("splash");
-  const [hasSaved, setHasSaved] = useState(false);
+  const [savedStyles, setSavedStyles] = useState<string[]>([]);
   const [selectedLook, setSelectedLook] = useState("Soft Glam");
+  const [prefs, setPrefs] = useState<UserPrefs>({
+    styleCategory: "full-style",
+    photoType: "selfie",
+    photoFile: null,
+  });
 
   const go = useCallback((s: Screen) => setScreen(s), []);
 
@@ -28,25 +43,44 @@ const GlamoraApp = () => {
       )}
       {screen === "home" && (
         <HomeScreen
-          onUpload={() => go("upload")}
+          onGetStyled={() => go("style-picker")}
           onProfile={() => go("profile")}
           onSaved={() => go("saved")}
+          savedCount={savedStyles.length}
+        />
+      )}
+      {screen === "style-picker" && (
+        <StylePickerScreen
+          prefs={prefs}
+          onBack={() => go("home")}
+          onNext={(category: StyleCategory) => {
+            setPrefs(p => ({ ...p, styleCategory: category }));
+            go("upload");
+          }}
         />
       )}
       {screen === "upload" && (
         <UploadScreen
-          onBack={() => go("home")}
-          onAnalyze={() => go("loading")}
+          prefs={prefs}
+          onBack={() => go("style-picker")}
+          onAnalyze={(file: File, photoType: PhotoType) => {
+            setPrefs(p => ({ ...p, photoFile: file, photoType }));
+            go("loading");
+          }}
         />
       )}
       {screen === "loading" && (
-        <LoadingScreen onDone={() => go("results")} />
+        <LoadingScreen prefs={prefs} onDone={() => go("results")} />
       )}
       {screen === "results" && (
         <ResultsScreen
+          prefs={prefs}
           onBack={() => go("upload")}
           onHome={() => go("home")}
-          onSave={() => { setHasSaved(true); go("home"); }}
+          onSave={(lookNames: string[]) => {
+            setSavedStyles(prev => [...new Set([...prev, ...lookNames])]);
+            go("home");
+          }}
           onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
         />
       )}
@@ -60,13 +94,17 @@ const GlamoraApp = () => {
       {screen === "profile" && (
         <ProfileScreen
           onBack={() => go("home")}
-          savedCount={hasSaved ? 3 : 0}
+          savedCount={savedStyles.length}
+          onSaved={() => go("saved")}
+          onGetStyled={() => go("style-picker")}
         />
       )}
       {screen === "saved" && (
         <SavedLooksScreen
           onBack={() => go("home")}
-          hasSaved={hasSaved}
+          savedStyles={savedStyles}
+          onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
+          onGetStyled={() => go("style-picker")}
         />
       )}
     </div>

@@ -1,15 +1,17 @@
 interface Props {
   onBack: () => void;
   savedCount: number;
+  onSaved: () => void;
+  onGetStyled: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount }: Props) => (
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled }: Props) => (
   <div className="screen enter" style={{ minHeight: "100%" }}>
     <div className="screen-header">
       <button className="back-btn" onClick={onBack}>←</button>
       <div>
         <div className="header-title">Profile</div>
-        <div className="header-sub">Your beauty journey</div>
+        <div className="header-sub">Your style journey</div>
       </div>
     </div>
 
@@ -26,7 +28,7 @@ const ProfileScreen = ({ onBack, savedCount }: Props) => (
           👤
         </div>
         <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))" }}>Glamora User</div>
-        <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Beauty Enthusiast</div>
+        <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Style Enthusiast</div>
       </div>
 
       {/* Stats */}
@@ -34,7 +36,7 @@ const ProfileScreen = ({ onBack, savedCount }: Props) => (
         {[
           { label: "Scans", value: savedCount > 0 ? "1" : "0" },
           { label: "Saved", value: String(savedCount) },
-          { label: "Looks", value: savedCount > 0 ? "3" : "0" },
+          { label: "Styles", value: savedCount > 0 ? "3" : "0" },
         ].map((s) => (
           <div key={s.label} className="glamora-card" style={{ padding: "18px 12px", textAlign: "center" }}>
             <div className="serif" style={{ fontSize: 28, color: "hsl(var(--glamora-rose-dark))" }}>{s.value}</div>
@@ -43,21 +45,25 @@ const ProfileScreen = ({ onBack, savedCount }: Props) => (
         ))}
       </div>
 
-      {/* Menu */}
+      {/* Actions */}
       <div className="anim-fadeUp d3" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {[
-          { icon: "⚙️", label: "Settings" },
-          { icon: "🔔", label: "Notifications" },
-          { icon: "💬", label: "Support" },
-          { icon: "⭐", label: "Rate Glamora" },
+          { icon: "👗", label: "Get Styled", action: onGetStyled },
+          { icon: "💾", label: "Saved Styles", action: onSaved },
+          { icon: "⚙️", label: "Settings", action: undefined },
+          { icon: "💬", label: "Support", action: undefined },
+          { icon: "⭐", label: "Rate Glamora", action: undefined },
         ].map((item) => (
           <div
             key={item.label}
+            onClick={item.action}
             style={{
               display: "flex", alignItems: "center", gap: 14,
               padding: "16px 4px",
               borderBottom: "1px solid hsla(16 20% 11% / 0.06)",
-              cursor: "pointer", fontSize: 15, color: "hsl(var(--glamora-char))",
+              cursor: item.action ? "pointer" : "default",
+              fontSize: 15, color: "hsl(var(--glamora-char))",
+              opacity: item.action ? 1 : 0.5,
             }}
           >
             <span style={{ fontSize: 20 }}>{item.icon}</span>

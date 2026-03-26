@@ -1,14 +1,17 @@
 import { useRef, useState } from "react";
+import type { UserPrefs, PhotoType } from "./GlamoraApp";
 
 interface Props {
+  prefs: UserPrefs;
   onBack: () => void;
-  onAnalyze: (file: File) => void;
+  onAnalyze: (file: File, photoType: PhotoType) => void;
 }
 
-const UploadScreen = ({ onBack, onAnalyze }: Props) => {
+const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
 
   const handleFile = (f: File) => {
     setFile(f);
@@ -17,23 +20,58 @@ const UploadScreen = ({ onBack, onAnalyze }: Props) => {
     reader.readAsDataURL(f);
   };
 
+  const isMakeup = prefs.styleCategory === "makeup-only";
+
   return (
     <div className="screen enter" style={{ minHeight: "100%" }}>
       <div className="screen-header">
         <button className="back-btn" onClick={onBack}>←</button>
         <div>
-          <div className="header-title">Upload</div>
-          <div className="header-sub">Take or upload a selfie</div>
+          <div className="header-title">Upload Photo</div>
+          <div className="header-sub">
+            {isMakeup ? "Upload a selfie for makeup analysis" : "Selfie or full body for best styling"}
+          </div>
         </div>
       </div>
 
-      <div style={{ padding: "0 22px", marginTop: 20 }}>
+      <div style={{ padding: "0 22px", marginTop: 16 }}>
+        {/* Photo Type Toggle */}
+        {!isMakeup && (
+          <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+            {([
+              { id: "selfie" as PhotoType, label: "Selfie", emoji: "🤳", desc: "Face & upper body" },
+              { id: "full-body" as PhotoType, label: "Full Body", emoji: "🧍", desc: "Head to toe" },
+            ]).map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => setPhotoType(opt.id)}
+                style={{
+                  flex: 1, padding: "14px 12px", borderRadius: 16,
+                  border: photoType === opt.id
+                    ? "2px solid hsl(var(--glamora-rose-dark))"
+                    : "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
+                  background: photoType === opt.id
+                    ? "hsla(var(--glamora-rose) / 0.08)"
+                    : "hsl(var(--card))",
+                  cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                  transition: "all 0.2s",
+                }}
+              >
+                <span style={{ fontSize: 28 }}>{opt.emoji}</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{opt.label}</span>
+                <span style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{opt.desc}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Upload zone */}
         <div
-          className="glamora-card anim-fadeUp"
+          className="glamora-card anim-fadeUp d1"
           onClick={() => fileRef.current?.click()}
           style={{
-            minHeight: 320, display: "flex", flexDirection: "column",
+            minHeight: 280, display: "flex", flexDirection: "column",
             alignItems: "center", justifyContent: "center", gap: 16,
             cursor: "pointer",
             border: preview ? "none" : "2px dashed hsla(36 50% 53% / 0.4)",
@@ -42,15 +80,17 @@ const UploadScreen = ({ onBack, onAnalyze }: Props) => {
           }}
         >
           {preview ? (
-            <img src={preview} alt="Preview" style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 22 }} />
+            <img src={preview} alt="Preview" style={{ width: "100%", height: 280, objectFit: "cover", borderRadius: 22 }} />
           ) : (
             <>
-              <div style={{ fontSize: 56 }}>📸</div>
+              <div style={{ fontSize: 56 }}>{photoType === "full-body" ? "🧍" : "📸"}</div>
               <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", textAlign: "center" }}>
-                Tap to Upload
+                Tap to Upload {photoType === "full-body" ? "Full Body Shot" : "Selfie"}
               </div>
               <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", textAlign: "center", lineHeight: 1.6 }}>
-                Upload a front-facing selfie with good lighting for the best results.
+                {photoType === "full-body"
+                  ? "Stand straight, good lighting, full outfit visible for best results."
+                  : "Front-facing with good lighting for the best analysis."}
               </p>
             </>
           )}
@@ -64,12 +104,33 @@ const UploadScreen = ({ onBack, onAnalyze }: Props) => {
           onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
         />
 
+        {/* Style badge */}
+        <div className="anim-fadeUp d2" style={{
+          marginTop: 20, padding: "12px 16px", borderRadius: 14,
+          background: "hsla(var(--glamora-gold-pale) / 0.5)",
+          border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+          display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <span style={{ fontSize: 18 }}>🎯</span>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+              Styling for: {prefs.styleCategory === "full-style" ? "Full Style" : prefs.styleCategory === "makeup-only" ? "Makeup & Grooming" : prefs.styleCategory.charAt(0).toUpperCase() + prefs.styleCategory.slice(1)}
+            </div>
+            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+              {photoType === "full-body" ? "Full body analysis" : "Face & features analysis"}
+            </div>
+          </div>
+        </div>
+
         {/* Tips */}
-        <div className="anim-fadeUp d2" style={{ marginTop: 24 }}>
+        <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
           <div className="section-label">Tips for Best Results</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {["☀️ Good, natural lighting", "🙂 Face the camera directly", "🚫 No filters or heavy edits"].map((tip) => (
-              <div key={tip} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "hsl(var(--glamora-gray))" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {(photoType === "full-body"
+              ? ["☀️ Good, natural lighting", "🧍 Stand straight, arms relaxed", "👕 Show your current outfit or neutral clothing"]
+              : ["☀️ Good, natural lighting", "🙂 Face the camera directly", "🚫 No heavy filters"]
+            ).map((tip) => (
+              <div key={tip} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "hsl(var(--glamora-gray))" }}>
                 {tip}
               </div>
             ))}
@@ -77,14 +138,14 @@ const UploadScreen = ({ onBack, onAnalyze }: Props) => {
         </div>
 
         {/* Analyze button */}
-        <div style={{ marginTop: 32, paddingBottom: 40 }}>
+        <div style={{ marginTop: 28, paddingBottom: 40 }}>
           <button
             className={`btn-primary ${file ? "btn-rose" : ""}`}
             disabled={!file}
             style={{ opacity: file ? 1 : 0.5 }}
-            onClick={() => file && onAnalyze(file)}
+            onClick={() => file && onAnalyze(file, photoType)}
           >
-            {file ? "Analyze My Face ✨" : "Upload a Photo First"}
+            {file ? "Analyze My Style ✨" : "Upload a Photo First"}
           </button>
         </div>
       </div>
