@@ -5,6 +5,7 @@ import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import { getAmazonSearchUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
+import Watermark from "./subscription/Watermark";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
