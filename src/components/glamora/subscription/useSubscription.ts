@@ -1,27 +1,28 @@
 import { useState, useCallback } from "react";
 import type { SubscriptionTier, SubscriptionState } from "./types";
-import { FREE_DAILY_LIMIT } from "./types";
+import { MONTHLY_CAPS } from "./types";
 
 const STORAGE_KEY = "glamora_subscription";
-const USAGE_KEY = "glamora_daily_usage";
+const USAGE_KEY = "glamora_monthly_usage";
 
-function getToday(): string {
-  return new Date().toISOString().split("T")[0];
+function getCurrentMonth(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
-function loadUsage(): { count: number; date: string } {
+function loadUsage(): { count: number; month: string } {
   try {
     const raw = localStorage.getItem(USAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (parsed.date === getToday()) return parsed;
+      if (parsed.month === getCurrentMonth()) return parsed;
     }
   } catch {}
-  return { count: 0, date: getToday() };
+  return { count: 0, month: getCurrentMonth() };
 }
 
 function saveUsage(count: number) {
-  localStorage.setItem(USAGE_KEY, JSON.stringify({ count, date: getToday() }));
+  localStorage.setItem(USAGE_KEY, JSON.stringify({ count, month: getCurrentMonth() }));
 }
 
 function loadSubscription(): SubscriptionState {
@@ -38,7 +39,14 @@ function loadSubscription(): SubscriptionState {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
         }
       }
-      return parsed;
+      // Migrate from old daily format or reset if new month
+      const usage = loadUsage();
+      return {
+        ...parsed,
+        monthlyGenerations: usage.count,
+        maxMonthlyGenerations: MONTHLY_CAPS[parsed.tier as SubscriptionTier] || MONTHLY_CAPS.free,
+        billingMonth: usage.month,
+      };
     }
   } catch {}
   const usage = loadUsage();
@@ -46,9 +54,9 @@ function loadSubscription(): SubscriptionState {
     tier: "free",
     trialEndsAt: null,
     isTrialing: false,
-    dailyGenerations: usage.count,
-    maxDailyGenerations: FREE_DAILY_LIMIT,
-    lastGenerationDate: usage.date,
+    monthlyGenerations: usage.count,
+    maxMonthlyGenerations: MONTHLY_CAPS.free,
+    billingMonth: usage.month,
   };
 }
 
@@ -59,25 +67,23 @@ export function useSubscription() {
   const [lockedFeature, setLockedFeature] = useState<string | null>(null);
 
   const usage = loadUsage();
+  const cap = MONTHLY_CAPS[state.tier];
 
-  const canGenerate = state.tier !== "free" || usage.count < FREE_DAILY_LIMIT;
-  const remainingGenerations = state.tier === "free" ? Math.max(0, FREE_DAILY_LIMIT - usage.count) : Infinity;
+  const canGenerate = usage.count < cap;
+  const remainingGenerations = Math.max(0, cap - usage.count);
   const showWatermark = state.tier === "free";
 
   const recordGeneration = useCallback(() => {
     const u = loadUsage();
     const newCount = u.count + 1;
     saveUsage(newCount);
-    setState(prev => ({ ...prev, dailyGenerations: newCount }));
+    setState(prev => ({ ...prev, monthlyGenerations: newCount }));
   }, []);
 
   const tryGenerate = useCallback((): boolean => {
-    if (state.tier !== "free") {
-      recordGeneration();
-      return true;
-    }
     const u = loadUsage();
-    if (u.count >= FREE_DAILY_LIMIT) {
+    const tierCap = MONTHLY_CAPS[state.tier];
+    if (u.count >= tierCap) {
       setShowPaywall(true);
       return false;
     }
@@ -98,9 +104,9 @@ export function useSubscription() {
       tier,
       trialEndsAt: startTrial ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() : null,
       isTrialing: startTrial,
-      dailyGenerations: loadUsage().count,
-      maxDailyGenerations: tier === "free" ? FREE_DAILY_LIMIT : Infinity,
-      lastGenerationDate: getToday(),
+      monthlyGenerations: loadUsage().count,
+      maxMonthlyGenerations: MONTHLY_CAPS[tier],
+      billingMonth: getCurrentMonth(),
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
     setState(newState);
