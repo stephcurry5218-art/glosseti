@@ -96,21 +96,29 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           onClick={() => onGetStyled()}
           style={{
             padding: "18px 16px", cursor: "pointer",
-            background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08))`,
-            border: `1.5px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.2)`,
+            background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(var(--glamora-gold) / 0.08))`,
+            border: `1.5px solid hsla(var(--glamora-gold) / 0.2)`,
             display: "flex", alignItems: "center", gap: 14,
             boxShadow: "0 6px 24px hsla(0 0% 0% / 0.2)",
+            position: "relative", overflow: "hidden",
           }}
         >
+          {/* Shimmer overlay */}
           <div style={{
-            width: 48, height: 48, borderRadius: 14, flexShrink: 0,
+            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+            background: "linear-gradient(105deg, transparent 40%, hsla(28 40% 52% / 0.12) 45%, hsla(30 45% 62% / 0.2) 50%, hsla(28 40% 52% / 0.12) 55%, transparent 60%)",
+            backgroundSize: "200% 100%",
+            animation: "gold-shimmer 3s ease-in-out infinite",
+          }} />
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, flexShrink: 0, position: "relative", zIndex: 2,
             background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 4px 12px hsla(${isMale ? "28 40% 52%" : "20 35% 55%"} / 0.25)`,
+            boxShadow: "0 4px 12px hsla(28 40% 52% / 0.25)",
           }}>
             <Camera size={22} color="white" />
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
               {isMale ? "Get Your Style" : "Get Styled Now"}
             </div>
@@ -118,7 +126,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
               Upload a photo · AI generates your look
             </div>
           </div>
-          <ArrowRight size={18} color={`hsl(${accent})`} />
+          <ArrowRight size={18} color={`hsl(${accent})`} style={{ position: "relative", zIndex: 2 }} />
         </div>
       </div>
 
