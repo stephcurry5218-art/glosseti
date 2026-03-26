@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond } from "lucide-react";
+import { useState, useRef } from "react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink } from "lucide-react";
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -16,12 +16,12 @@ interface Props {
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
 
-const hotspotPositions: Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon }> = {
-  makeup: { top: "8%", left: "62%", label: "Makeup", Icon: Palette },
-  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt },
-  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch },
-  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot },
-  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints },
+const hotspotPositions: Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> = {
+  makeup: { top: "8%", left: "62%", label: "Makeup", Icon: Palette, searchTerm: "makeup kit set" },
+  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt, searchTerm: "women top blouse" },
+  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch, searchTerm: "fashion accessories jewelry" },
+  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot, searchTerm: "women pants trousers" },
+  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints, searchTerm: "women shoes heels" },
 };
 
 const analysis = {
@@ -32,9 +32,32 @@ const analysis = {
   features: ["High cheekbones", "Broad shoulders", "Proportional waist"],
 };
 
+const openShopLink = (searchTerm: string) => {
+  const url = `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+
+const handleDownload = async (imageUrl: string) => {
+  try {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = `glamora-styled-look-${Date.now()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    window.open(imageUrl, "_blank");
+  }
+};
+
 const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
+  const scrollRef = useRef<HTMLDivElement>(null);
   const isMakeup = prefs.styleCategory === "makeup-only";
   const looks = styleLooks[prefs.styleCategory] || styleLooks["full-style"];
 
@@ -51,8 +74,39 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const hasOriginal = !!prefs.photoBase64;
   const hasStyled = !!styledImageUrl;
 
+  const scrollTo = (direction: "top" | "bottom") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ top: direction === "top" ? 0 : el.scrollHeight, behavior: "smooth" });
+  };
+
   return (
-    <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
+    <div className="screen enter" ref={scrollRef} style={{ minHeight: "100%", paddingBottom: 40, overflowY: "auto", position: "relative" }}>
+      {/* Floating scroll buttons */}
+      <div style={{
+        position: "sticky", top: 8, zIndex: 50, display: "flex", justifyContent: "flex-end",
+        paddingRight: 12, gap: 6, pointerEvents: "none",
+      }}>
+        <button onClick={() => scrollTo("top")} style={{
+          pointerEvents: "auto", width: 36, height: 36, borderRadius: "50%",
+          background: "hsla(var(--glamora-char) / 0.7)", backdropFilter: "blur(8px)",
+          border: "1.5px solid hsla(var(--glamora-gold) / 0.2)", display: "flex",
+          alignItems: "center", justifyContent: "center", cursor: "pointer",
+          boxShadow: "0 2px 10px hsla(0 0% 0% / 0.3)",
+        }}>
+          <ChevronUp size={18} color="hsl(var(--glamora-cream))" />
+        </button>
+        <button onClick={() => scrollTo("bottom")} style={{
+          pointerEvents: "auto", width: 36, height: 36, borderRadius: "50%",
+          background: "hsla(var(--glamora-char) / 0.7)", backdropFilter: "blur(8px)",
+          border: "1.5px solid hsla(var(--glamora-gold) / 0.2)", display: "flex",
+          alignItems: "center", justifyContent: "center", cursor: "pointer",
+          boxShadow: "0 2px 10px hsla(0 0% 0% / 0.3)",
+        }}>
+          <ChevronDown size={18} color="hsl(var(--glamora-cream))" />
+        </button>
+      </div>
+
       <div className="screen-header">
         <button className="back-btn" onClick={onBack}>←</button>
         <div style={{ flex: 1 }}>
@@ -128,13 +182,20 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 </div>
               )}
 
-              {/* Hotspot overlays */}
+              {/* Hotspot overlays — tap to shop on Amazon */}
               {Object.entries(hotspotPositions).map(([id, pos]) => {
                 const isActive = activeHotspot === id;
                 return (
                   <button
                     key={id}
-                    onClick={(e) => { e.stopPropagation(); setActiveHotspot(isActive ? null : id as HotspotId); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isActive) {
+                        openShopLink(pos.searchTerm);
+                      } else {
+                        setActiveHotspot(id as HotspotId);
+                      }
+                    }}
                     style={{
                       position: "absolute", top: pos.top, left: pos.left, transform: "translate(-50%, -50%)",
                       width: isActive ? 48 : 36, height: isActive ? 48 : 36, borderRadius: "50%",
@@ -149,7 +210,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                       animation: isActive ? "none" : "pulse2 2.5s ease-in-out infinite",
                     }}
                   >
-                    <pos.Icon size={isActive ? 20 : 16} color="white" />
+                    {isActive ? <ExternalLink size={20} color="white" /> : <pos.Icon size={16} color="white" />}
                   </button>
                 );
               })}
@@ -160,10 +221,18 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               <div className="glamora-card anim-fadeUp" style={{ padding: "16px", marginTop: 14, border: "1.5px solid hsla(var(--glamora-gold) / 0.2)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                   {(() => { const HIcon = hotspotPositions[activeHotspot].Icon; return <HIcon size={22} color="hsl(var(--glamora-rose-dark))" />; })()}
-                  <div>
+                  <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{hotspotPositions[activeHotspot].label}</div>
-                    <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Tap a style below for full guide + shopping</div>
+                    <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Tap hotspot again to shop on Amazon</div>
                   </div>
+                  <button onClick={() => openShopLink(hotspotPositions[activeHotspot].searchTerm)} style={{
+                    padding: "6px 14px", borderRadius: 100, border: "none", cursor: "pointer",
+                    background: "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
+                    color: "white", fontSize: 11, fontWeight: 600, display: "flex", alignItems: "center", gap: 4,
+                    fontFamily: "'Jost', sans-serif",
+                  }}>
+                    Shop <ExternalLink size={12} />
+                  </button>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {looks.map((look) => (
@@ -186,7 +255,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             )}
 
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 14 }}>
-              Tap the hotspots on the image to shop each piece
+              Tap a hotspot once to preview · tap again to shop on Amazon
             </div>
           </>
         )}
@@ -220,6 +289,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
 
         {/* Actions */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {hasStyled && (
+            <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              Download Styled Image <Download size={16} />
+            </button>
+          )}
           <button className="btn-primary btn-rose" onClick={() => onSave(looks.map(l => l.name))} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Save All Styles <Bookmark size={16} />
           </button>
