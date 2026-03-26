@@ -125,7 +125,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
 
       {/* Quick action grid — 2x2 */}
       <div className="anim-fadeUp d2" style={{ padding: "20px 22px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
           background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), hsl(var(--card)))`,
           border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
