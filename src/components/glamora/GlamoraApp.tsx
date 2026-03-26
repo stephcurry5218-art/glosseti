@@ -34,6 +34,7 @@ const GlamoraApp = () => {
     photoType: "selfie",
     photoFile: null,
     photoBase64: null,
+    gender: "female",
   });
 
   const go = useCallback((s: Screen) => setScreen(s), []);
