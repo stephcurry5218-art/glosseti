@@ -174,6 +174,20 @@ const StylistChat = ({ gender }: Props) => {
               <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Gio — Master Stylist</div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>AI Fashion & Beauty Advisor</div>
             </div>
+            {messages.length > 1 && (
+              <ShareMenu
+                text={formatChatForShare(messages)}
+                trigger={
+                  <button style={{
+                    width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer",
+                    background: "hsla(var(--glamora-gray-light) / 0.2)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <Share2 size={14} color="hsl(var(--glamora-gray))" />
+                  </button>
+                }
+              />
+            )}
             <button onClick={() => setOpen(false)} style={{
               width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer",
               background: "hsla(var(--glamora-gray-light) / 0.2)",
