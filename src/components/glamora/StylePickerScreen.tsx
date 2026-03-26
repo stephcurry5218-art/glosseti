@@ -114,6 +114,10 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
 
   const filtered = categories.filter(c => {
     if (c.id === "grooming") return isMale;
+    if (c.id === "rugged") return isMale;
+    if (c.id === "urban-hiphop") return isMale;
+    if (c.id === "sexy") return !isMale;
+    if (c.id === "swimwear") return !isMale;
     return true;
   });
 
