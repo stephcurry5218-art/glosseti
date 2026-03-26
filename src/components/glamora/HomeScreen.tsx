@@ -141,7 +141,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Scan & style you</div>
         </div>
 
-        <div className="glamora-card" onClick={onGetStyled} style={{
+        <div className="glamora-card" onClick={() => onGetStyled(isMale ? "grooming" : "makeup-only")} style={{
           padding: "20px 16px", cursor: "pointer", textAlign: "center",
           background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsl(var(--card)))`,
           border: "1px solid hsla(var(--glamora-gold) / 0.12)",
