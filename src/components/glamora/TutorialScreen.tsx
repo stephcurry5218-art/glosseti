@@ -227,12 +227,19 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                           const isCurrent = tier === activeTier;
                           const TIcon = tierIcons[tier];
                           return (
-                            <div key={tier} style={{
-                              padding: "12px 14px", borderRadius: 12,
-                              background: isCurrent ? t.bg : "hsla(var(--glamora-cream2) / 0.5)",
-                              border: isCurrent ? `1.5px solid ${t.color}33` : "1px solid hsla(var(--glamora-gray-light) / 0.15)",
-                              display: "flex", alignItems: "center", gap: 12,
-                            }}>
+                            <a
+                              key={tier}
+                              href={getShopUrl(item.store, item.item)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                padding: "12px 14px", borderRadius: 12,
+                                background: isCurrent ? t.bg : "hsla(var(--glamora-cream2) / 0.5)",
+                                border: isCurrent ? `1.5px solid ${t.color}33` : "1px solid hsla(var(--glamora-gray-light) / 0.15)",
+                                display: "flex", alignItems: "center", gap: 12,
+                                textDecoration: "none", cursor: "pointer", transition: "all 0.2s",
+                              }}
+                            >
                               <div style={{ width: 32, height: 32, borderRadius: 10, background: t.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                                 <TIcon size={16} color={t.color} />
                               </div>
@@ -240,8 +247,11 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                                 <div style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: t.color, fontWeight: 600, marginBottom: 2 }}>{t.label} · {item.store}</div>
                                 <div style={{ fontSize: 13, color: "hsl(var(--glamora-char))", fontWeight: 500, lineHeight: 1.35, overflow: "hidden", textOverflow: "ellipsis" }}>{item.item}</div>
                               </div>
-                              <div style={{ padding: "6px 12px", borderRadius: 100, background: t.bg, fontSize: 14, fontWeight: 700, color: t.color, whiteSpace: "nowrap", flexShrink: 0 }}>{item.price}</div>
-                            </div>
+                              <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                                <div style={{ padding: "6px 12px", borderRadius: 100, background: t.bg, fontSize: 14, fontWeight: 700, color: t.color, whiteSpace: "nowrap" }}>{item.price}</div>
+                                <ExternalLink size={14} color={t.color} />
+                              </div>
+                            </a>
                           );
                         })}
                       </div>
