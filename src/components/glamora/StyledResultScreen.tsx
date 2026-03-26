@@ -177,6 +177,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           <>
             {/* Styled Image with Hotspots */}
             <div className="glamora-card anim-fadeUp d2" style={{ position: "relative", overflow: "hidden", borderRadius: 22 }}>
+              {showWatermark && <Watermark />}
               {styledImageUrl ? (
                 <img src={styledImageUrl} alt="Your styled look" style={{ width: "100%", height: 420, objectFit: "cover", borderRadius: 22, display: "block" }} />
               ) : (
