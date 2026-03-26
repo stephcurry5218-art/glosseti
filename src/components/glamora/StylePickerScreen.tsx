@@ -76,6 +76,36 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Hair, beard, skincare — the complete grooming playbook",
     includes: ["Haircut Styles", "Beard & Shave", "Skincare Routine", "Fragrance"],
   },
+  {
+    id: "sexy", label: "Sexy & Sultry", Icon: Flame,
+    desc: "Bold, body-confident looks that turn heads",
+    includes: ["Bodycon Dresses", "Cut-Out Tops", "Strappy Heels", "Statement Jewelry"],
+  },
+  {
+    id: "swimwear", label: "Swimwear & Beach", Icon: Umbrella,
+    desc: "Bikinis, cover-ups, and beach-ready accessories",
+    includes: ["Bikinis & One-Pieces", "Cover-Ups & Sarongs", "Sandals & Slides", "Sunglasses & Hats"],
+  },
+  {
+    id: "urban-hiphop", label: "Urban / Hip-Hop", Icon: Zap,
+    desc: "Bold streetwear with hip-hop flair — drip and swagger",
+    includes: ["Designer Tees & Jerseys", "Baggy Denim & Cargos", "Fresh Kicks", "Chains & Grillz"],
+  },
+  {
+    id: "rugged", label: "Rugged / Workwear", Icon: Briefcase,
+    desc: "Tough, utilitarian style — built to last and look good",
+    includes: ["Flannels & Henleys", "Raw Denim & Work Pants", "Boots", "Leather Belts"],
+  },
+  {
+    id: "techwear", label: "Techwear", Icon: Zap,
+    desc: "Futuristic utility — tech fabrics, modular gear, dark tones",
+    includes: ["Technical Jackets", "Cargo Joggers", "Trail Runners", "Tactical Bags"],
+  },
+  {
+    id: "date-night", label: "Date Night", Icon: Heart,
+    desc: "Polished and alluring — dress to impress",
+    includes: ["Fitted Blazers & Dresses", "Heels & Dress Shoes", "Fragrance", "Accessories"],
+  },
 ];
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
