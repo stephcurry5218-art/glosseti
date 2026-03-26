@@ -13,6 +13,9 @@ import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 import StylistChat from "./StylistChat";
 import AuthScreen from "./AuthScreen";
+import PaywallScreen from "./subscription/PaywallScreen";
+import UpgradePrompt from "./subscription/UpgradePrompt";
+import { useSubscription } from "./subscription/useSubscription";
 
 export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming";
 export type PhotoType = "selfie" | "full-body";
@@ -34,6 +37,7 @@ const GlamoraApp = () => {
   const [selectedLook, setSelectedLook] = useState("Soft Glam");
   const [styledImageUrl, setStyledImageUrl] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [hasGeneratedOnce, setHasGeneratedOnce] = useState(() => !!localStorage.getItem("glamora_first_gen"));
   const [prefs, setPrefs] = useState<UserPrefs>({
     styleCategory: "full-style",
     photoType: "selfie",
@@ -42,14 +46,29 @@ const GlamoraApp = () => {
     gender: "female",
   });
 
+  const {
+    subscription,
+    canGenerate,
+    remainingGenerations,
+    showWatermark,
+    showPaywall,
+    setShowPaywall,
+    showUpgradePrompt,
+    setShowUpgradePrompt,
+    lockedFeature,
+    tryGenerate,
+    checkFeatureAccess,
+    upgradeTo,
+  } = useSubscription();
+
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
-    return () => subscription.unsubscribe();
+    return () => authSub.unsubscribe();
   }, []);
 
   const go = useCallback((s: Screen) => setScreen(s), []);
@@ -59,6 +78,30 @@ const GlamoraApp = () => {
     setUser(null);
     go("home");
   };
+
+  // Intercept generation: check limits, prompt sign-up after first use
+  const handleStartGeneration = useCallback((file: File, photoType: PhotoType, base64: string) => {
+    // First generation is always free (even without sign-up)
+    if (!hasGeneratedOnce) {
+      setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+      setHasGeneratedOnce(true);
+      localStorage.setItem("glamora_first_gen", "1");
+      go("loading");
+      return;
+    }
+
+    // After first gen, prompt sign-up if not logged in
+    if (!user) {
+      go("auth");
+      return;
+    }
+
+    // Check daily limit for free users
+    if (!tryGenerate()) return;
+
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    go("loading");
+  }, [hasGeneratedOnce, user, tryGenerate, go]);
 
   return (
     <div className="phone">
@@ -82,12 +125,15 @@ const GlamoraApp = () => {
           savedCount={savedStyles.length}
           gender={prefs.gender}
           onGenderToggle={(g) => setPrefs(p => ({ ...p, gender: g }))}
+          subscription={subscription}
+          remainingGenerations={remainingGenerations}
+          onShowPaywall={() => setShowPaywall(true)}
         />
       )}
       {screen === "auth" && (
         <AuthScreen
           onBack={() => go("home")}
-          onSuccess={() => go("profile")}
+          onSuccess={() => go("home")}
         />
       )}
       {screen === "style-picker" && (
@@ -104,10 +150,7 @@ const GlamoraApp = () => {
         <UploadScreen
           prefs={prefs}
           onBack={() => go("style-picker")}
-          onAnalyze={(file: File, photoType: PhotoType, base64: string) => {
-            setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
-            go("loading");
-          }}
+          onAnalyze={handleStartGeneration}
         />
       )}
       {screen === "loading" && (
@@ -126,15 +169,22 @@ const GlamoraApp = () => {
           onBack={() => go("upload")}
           onHome={() => go("home")}
           onSave={(lookNames: string[]) => {
+            if (!checkFeatureAccess("Save & organize looks")) return;
             setSavedStyles(prev => [...new Set([...prev, ...lookNames])]);
             go("home");
           }}
-          onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
+          onLookSelect={(name: string) => {
+            if (subscription.tier === "free" && !checkFeatureAccess("Full tutorials")) return;
+            setSelectedLook(name);
+            go("tutorial");
+          }}
           onRegenerate={(tweakedCategory) => {
+            if (!tryGenerate()) return;
             if (tweakedCategory) setPrefs(p => ({ ...p, styleCategory: tweakedCategory }));
             setStyledImageUrl(null);
             go("loading");
           }}
+          showWatermark={showWatermark}
         />
       )}
       {screen === "tutorial" && (
@@ -154,6 +204,8 @@ const GlamoraApp = () => {
           user={user}
           onSignOut={handleSignOut}
           onSignIn={() => go("auth")}
+          subscription={subscription}
+          onShowPaywall={() => setShowPaywall(true)}
         />
       )}
       {screen === "saved" && (
@@ -167,6 +219,25 @@ const GlamoraApp = () => {
       )}
       {screen !== "splash" && screen !== "entrance" && screen !== "auth" && (
         <StylistChat gender={prefs.gender} />
+      )}
+
+      {/* Paywall overlay */}
+      {showPaywall && (
+        <PaywallScreen
+          onClose={() => setShowPaywall(false)}
+          onUpgrade={upgradeTo}
+          remainingGenerations={remainingGenerations}
+          lockedFeature={lockedFeature}
+        />
+      )}
+
+      {/* Upgrade prompt for locked features */}
+      {showUpgradePrompt && lockedFeature && (
+        <UpgradePrompt
+          feature={lockedFeature}
+          onClose={() => setShowUpgradePrompt(false)}
+          onUpgrade={(tier) => upgradeTo(tier, tier === "premium")}
+        />
       )}
     </div>
   );

@@ -5,6 +5,7 @@ import { styleLooks } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import { getAmazonSearchUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
+import Watermark from "./subscription/Watermark";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
   onRegenerate?: (tweakedCategory?: StyleCategory) => void;
+  showWatermark?: boolean;
 }
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
@@ -56,7 +58,7 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
-const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
+const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate, showWatermark }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const [showTweaker, setShowTweaker] = useState(false);
@@ -175,6 +177,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           <>
             {/* Styled Image with Hotspots */}
             <div className="glamora-card anim-fadeUp d2" style={{ position: "relative", overflow: "hidden", borderRadius: 22 }}>
+              {showWatermark && <Watermark />}
               {styledImageUrl ? (
                 <img src={styledImageUrl} alt="Your styled look" style={{ width: "100%", height: 420, objectFit: "cover", borderRadius: 22, display: "block" }} />
               ) : (
