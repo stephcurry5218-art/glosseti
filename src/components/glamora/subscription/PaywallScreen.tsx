@@ -51,8 +51,8 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             {lockedFeature
               ? `"${lockedFeature}" requires a Premium or Pro plan`
               : remainingGenerations <= 0
-                ? "You've used all your free looks today"
-                : "Get unlimited AI generations and premium features"}
+                ? "You've used all your free looks this month"
+                : "Get more AI generations and premium features"}
           </div>
         </div>
 
@@ -184,7 +184,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
             fontSize: 13, textDecoration: "underline",
           }}>
-            Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left today` : "resets tomorrow"})
+            Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left this month` : "resets next month"})
           </button>
         </div>
       </div>
