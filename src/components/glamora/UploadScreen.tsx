@@ -14,6 +14,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [base64, setBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
+  const isMale = prefs.gender === "male";
+  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
   const handleFile = (f: File) => {
     setFile(f);
