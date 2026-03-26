@@ -218,6 +218,174 @@ export const lookData: Record<string, Record<Category, Step[]>> = {
       { title: "Jewelry", detail: "Minimal — small studs or a thin chain that won't snag. Or skip it entirely.", shop: { luxury: { store: "Mejuri", item: "Tiny Studs 14K Gold", price: "$78" }, mid: { store: "Amazon", item: "PAVOI 14K Gold Plated Studs", price: "$12" }, budget: { store: "Amazon", item: "Amazon Essentials Sterling Silver Studs", price: "$8" } } },
     ],
   },
+  "Desert Wanderer": {
+    makeup: [
+      { title: "Sun-Kissed Base", detail: "Use a tinted moisturizer for a natural, dewy finish. Dust bronzer across cheeks and nose.", shop: { luxury: { store: "Sephora", item: "NARS Pure Radiant Tinted Moisturizer", price: "$47" }, mid: { store: "Ulta", item: "Maybelline Dream Fresh BB Cream", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Camo CC Cream", price: "$7" } } },
+      { title: "Earthy Eyes", detail: "Sweep a warm terracotta shade across lids. Add gold shimmer to inner corners.", shop: { luxury: { store: "Sephora", item: "Natasha Denona Bronze Palette", price: "$65" }, mid: { store: "Ulta", item: "ColourPop Going Coconuts Palette", price: "$14" }, budget: { store: "Amazon", item: "Maybelline Nudes of New York Palette", price: "$10" } } },
+      { title: "Nude Lips", detail: "A warm nude lip balm or tinted gloss. Keep it natural and hydrated.", shop: { luxury: { store: "Sephora", item: "Dior Lip Glow in Nude", price: "$38" }, mid: { store: "Ulta", item: "Burt's Bees Tinted Lip Balm", price: "$7" }, budget: { store: "Amazon", item: "Nivea Shimmer Lip Care", price: "$3" } } },
+    ],
+    top: [
+      { title: "Flowy Blouse", detail: "A loose, embroidered peasant top in cream, rust, or sage. Bell sleeves add movement.", tip: "Look for crochet or embroidery details", shop: { luxury: { store: "Free People", item: "Embroidered Peasant Top", price: "$128" }, mid: { store: "Anthropologie", item: "Embroidered Swing Top", price: "$58" }, budget: { store: "Amazon", item: "KIRUNDO Boho Embroidered Blouse", price: "$22" } } },
+      { title: "Kimono Layer", detail: "A printed kimono or duster in earthy florals. Perfect for layering over tanks.", shop: { luxury: { store: "Free People", item: "Spell Oasis Kimono", price: "$189" }, mid: { store: "Zara", item: "Printed Long Kimono", price: "$50" }, budget: { store: "Amazon", item: "SweatyRocks Floral Kimono", price: "$18" } } },
+    ],
+    bottom: [
+      { title: "Wide-Leg Pants", detail: "Flowy wide-leg pants in linen or rayon. Earthy tones — olive, sand, terracotta.", shop: { luxury: { store: "Reformation", item: "Petites Linen Wide Leg", price: "$148" }, mid: { store: "Zara", item: "Flowing Wide Leg Trousers", price: "$46" }, budget: { store: "Amazon", item: "Dokotoo Wide Leg Linen Pants", price: "$25" } } },
+      { title: "Alternative: Maxi Skirt", detail: "A tiered maxi skirt in a warm print or solid earth tone.", shop: { luxury: { store: "Free People", item: "Lydia Tiered Maxi Skirt", price: "$128" }, mid: { store: "Anthropologie", item: "Tiered Maxi Skirt in Rust", price: "$68" }, budget: { store: "Amazon", item: "MEROKEETY Boho Tiered Maxi Skirt", price: "$28" } } },
+    ],
+    shoes: [
+      { title: "Gladiator Sandals", detail: "Leather gladiator sandals in tan or cognac. Flat or low block heel.", shop: { luxury: { store: "Nordstrom", item: "Stuart Weitzman Gladiator Sandal", price: "$395" }, mid: { store: "DSW", item: "Sam Edelman Gladiator Sandal", price: "$90" }, budget: { store: "Amazon", item: "DREAM PAIRS Gladiator Flat Sandal", price: "$25" } } },
+      { title: "Alternative: Ankle Boots", detail: "Suede ankle boots in tan with western-inspired stitching.", shop: { luxury: { store: "Nordstrom", item: "Isabel Marant Dicker Boot", price: "$690" }, mid: { store: "DSW", item: "Dolce Vita Silma Boot", price: "$130" }, budget: { store: "Target", item: "Universal Thread Western Boot", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Layered Jewelry", detail: "Turquoise pendant necklaces layered with gold chains. Stacked bangles and rings.", shop: { luxury: { store: "Gorjana", item: "Turquoise Layering Set", price: "$175" }, mid: { store: "Nordstrom", item: "BaubleBar Layered Necklace Set", price: "$48" }, budget: { store: "Amazon", item: "FIBO STEEL Boho Jewelry Set", price: "$16" } } },
+      { title: "Woven Bag", detail: "A rattan crossbody or woven straw tote with leather trim.", shop: { luxury: { store: "Net-a-Porter", item: "Loewe Basket Bag", price: "$690" }, mid: { store: "Madewell", item: "Straw Crossbody Bag", price: "$78" }, budget: { store: "Amazon", item: "Handwoven Rattan Crossbody", price: "$22" } } },
+      { title: "Hat & Scarf", detail: "A floppy wide-brim hat in natural straw. A lightweight printed scarf for the hair or neck.", shop: { luxury: { store: "Lack of Color", item: "Rancher Straw Hat", price: "$120" }, mid: { store: "Free People", item: "Wide Brim Straw Hat", price: "$48" }, budget: { store: "Amazon", item: "Lanzom Wide Brim Straw Hat", price: "$16" } } },
+    ],
+  },
+  "Ivy League": {
+    makeup: [
+      { title: "Polished Base", detail: "Even-toned matte foundation with a light powder. Clean, groomed brows.", shop: { luxury: { store: "Sephora", item: "Laura Mercier Flawless Lumière Foundation", price: "$48" }, mid: { store: "Ulta", item: "IT Cosmetics CC+ Cream", price: "$22" }, budget: { store: "Amazon", item: "Covergirl Clean Matte BB Cream", price: "$7" } } },
+      { title: "Classic Eyes", detail: "Neutral matte shadow, defined brows, one coat of black mascara. Clean and sharp.", shop: { luxury: { store: "Sephora", item: "Tom Ford Eye Color Quad in Nude Dip", price: "$90" }, mid: { store: "Ulta", item: "Too Faced Natural Eyes Palette", price: "$38" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
+      { title: "Nude Lip", detail: "A classic nude or soft pink lipstick. Satin finish for a polished look.", shop: { luxury: { store: "Nordstrom", item: "Chanel Rouge Coco in Mademoiselle", price: "$42" }, mid: { store: "Ulta", item: "Clinique Almost Lipstick in Black Honey", price: "$24" }, budget: { store: "Target", item: "Revlon Super Lustrous in Pink in the Afternoon", price: "$8" } } },
+    ],
+    top: [
+      { title: "Oxford Shirt", detail: "A crisp button-down oxford in white, light blue, or pink stripe.", tip: "Roll sleeves twice for a relaxed prep look", shop: { luxury: { store: "Ralph Lauren", item: "Classic Fit Oxford Shirt", price: "$110" }, mid: { store: "J.Crew", item: "Slim-Fit Oxford Shirt", price: "$60" }, budget: { store: "Amazon", item: "Amazon Essentials Oxford Shirt", price: "$20" } } },
+      { title: "Blazer", detail: "A navy or camel single-breasted blazer with gold buttons. Structured shoulders.", shop: { luxury: { store: "Ralph Lauren", item: "Knit Double-Breasted Blazer", price: "$398" }, mid: { store: "J.Crew", item: "Schoolboy Blazer in Navy", price: "$168" }, budget: { store: "Amazon", item: "Allegra K Notched Lapel Blazer", price: "$40" } } },
+      { title: "V-Neck Sweater", detail: "A cable-knit V-neck sweater in navy, burgundy, or forest green.", shop: { luxury: { store: "Brooks Brothers", item: "Merino Wool V-Neck Sweater", price: "$128" }, mid: { store: "J.Crew", item: "Cotton Cable-Knit V-Neck", price: "$78" }, budget: { store: "Amazon", item: "Amazon Essentials V-Neck Sweater", price: "$22" } } },
+    ],
+    bottom: [
+      { title: "Chinos", detail: "Well-fitted chinos in khaki, navy, or olive. Tapered leg, no break.", shop: { luxury: { store: "Ralph Lauren", item: "Stretch Straight Fit Chino", price: "$98" }, mid: { store: "J.Crew", item: "484 Slim-Fit Stretch Chino", price: "$80" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Chino", price: "$25" } } },
+      { title: "Alternative: Pleated Trousers", detail: "High-waisted pleated trousers in charcoal or navy for a dressier prep look.", shop: { luxury: { store: "Brooks Brothers", item: "Milano Fit Gabardine Trousers", price: "$198" }, mid: { store: "Banana Republic", item: "Slim Italian Wool Suit Trouser", price: "$120" }, budget: { store: "H&M", item: "Slim Fit Dress Pants", price: "$28" } } },
+    ],
+    shoes: [
+      { title: "Loafers", detail: "Penny loafers or tassel loafers in brown leather or burgundy suede.", shop: { luxury: { store: "Nordstrom", item: "Gucci Horsebit Loafer", price: "$890" }, mid: { store: "Cole Haan", item: "Pinch Grand Penny Loafer", price: "$130" }, budget: { store: "Amazon", item: "Bruno Marc Penny Loafers", price: "$30" } } },
+      { title: "Socks", detail: "Patterned dress socks — argyle, stripes, or dots in complementary colors.", tip: "Fun socks are the preppy secret weapon", shop: { luxury: { store: "Nordstrom", item: "Pantherella Merino Wool Socks", price: "$30" }, mid: { store: "J.Crew", item: "Patterned Dress Socks 3-Pack", price: "$24" }, budget: { store: "Amazon", item: "Marino Avenue Patterned Socks 6pk", price: "$15" } } },
+      { title: "Alternative: Boat Shoes", detail: "Classic leather boat shoes in tan or navy for a casual prep look.", shop: { luxury: { store: "Nordstrom", item: "Sperry Gold Cup Authentic Original", price: "$150" }, mid: { store: "Sperry", item: "Authentic Original Boat Shoe", price: "$95" }, budget: { store: "Amazon", item: "Amazon Essentials Boat Shoe", price: "$30" } } },
+    ],
+    accessories: [
+      { title: "Watch", detail: "A classic round-face watch with a leather strap — brown or navy.", shop: { luxury: { store: "Nordstrom", item: "TAG Heuer Carrera Calibre 5", price: "$2,750" }, mid: { store: "Amazon", item: "Seiko Presage Automatic", price: "$325" }, budget: { store: "Amazon", item: "Timex Weekender Fairfield", price: "$40" } } },
+      { title: "Belt", detail: "A woven or leather belt in brown with a classic brass or silver buckle.", shop: { luxury: { store: "Ralph Lauren", item: "Braided Leather Belt", price: "$95" }, mid: { store: "J.Crew", item: "Braided Leather Belt", price: "$50" }, budget: { store: "Amazon", item: "Braided Stretch Belt", price: "$14" } } },
+      { title: "Bag", detail: "A structured leather tote or briefcase in cognac or navy.", shop: { luxury: { store: "Nordstrom", item: "Tumi Harrison Briefcase", price: "$495" }, mid: { store: "Banana Republic", item: "Italian Leather Tote", price: "$198" }, budget: { store: "Amazon", item: "Estarer Canvas Messenger Bag", price: "$28" } } },
+    ],
+  },
+  "Rebel Noir": {
+    makeup: [
+      { title: "Matte Base", detail: "Full-coverage matte foundation. Contour sharply under cheekbones and jawline.", shop: { luxury: { store: "Sephora", item: "Fenty Beauty Pro Filt'r Matte Foundation", price: "$40" }, mid: { store: "Ulta", item: "NYX Can't Stop Won't Stop Foundation", price: "$15" }, budget: { store: "Amazon", item: "Maybelline Fit Me Matte Foundation", price: "$8" } } },
+      { title: "Smoky Eyes", detail: "Black and charcoal smoky eye. Smudge liner along upper and lower lash lines. Heavy mascara.", tip: "Use a small brush to smoke out the lower lash line", shop: { luxury: { store: "Sephora", item: "Urban Decay Naked Smoky Palette", price: "$54" }, mid: { store: "Ulta", item: "NYX Ultimate Shadow Palette Smokey", price: "$18" }, budget: { store: "Amazon", item: "Rimmel Magnif'Eyes Smoke Edition", price: "$7" } } },
+      { title: "Dark Lip", detail: "Matte black, deep oxblood, or dark plum lip. Line and fill with precision.", shop: { luxury: { store: "Nordstrom", item: "MAC Matte Lipstick in Diva", price: "$22" }, mid: { store: "Ulta", item: "NYX Suede Matte in Alien", price: "$8" }, budget: { store: "Amazon", item: "Wet n Wild MegaLast in Vamp It Up", price: "$3" } } },
+    ],
+    top: [
+      { title: "Leather Jacket", detail: "A fitted moto leather jacket in black. Silver hardware, asymmetrical zip.", shop: { luxury: { store: "AllSaints", item: "Balfern Leather Biker Jacket", price: "$499" }, mid: { store: "Zara", item: "Faux Leather Biker Jacket", price: "$70" }, budget: { store: "Amazon", item: "Fahsyee Faux Leather Moto Jacket", price: "$40" } } },
+      { title: "Band Tee or Black Tank", detail: "A vintage band tee or ribbed black tank top. Slightly oversized or cropped.", shop: { luxury: { store: "Nordstrom", item: "R13 Vintage Band Tee", price: "$195" }, mid: { store: "Urban Outfitters", item: "Graphic Band Tee", price: "$39" }, budget: { store: "Amazon", item: "Goodthreads Vintage Wash Tee", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Ripped Skinny Jeans", detail: "Black skinny jeans with distressed knees. High-waisted for a sharp silhouette.", shop: { luxury: { store: "Nordstrom", item: "AGOLDE Riley High Rise in Paradigm", price: "$188" }, mid: { store: "Levi's", item: "Mile High Super Skinny in Black", price: "$70" }, budget: { store: "Amazon", item: "Levi's 721 High Rise Skinny", price: "$35" } } },
+      { title: "Alternative: Leather Pants", detail: "Faux leather straight-leg pants in black for maximum edge.", shop: { luxury: { store: "Nordstrom", item: "Stand Studio Leather Pants", price: "$495" }, mid: { store: "Zara", item: "Faux Leather Straight Pants", price: "$50" }, budget: { store: "Amazon", item: "HDE Faux Leather Pants", price: "$28" } } },
+    ],
+    shoes: [
+      { title: "Combat Boots", detail: "Black leather combat boots with chunky soles. Lace-up, silver hardware.", shop: { luxury: { store: "Nordstrom", item: "Dr. Martens Jadon Platform Boot", price: "$200" }, mid: { store: "DSW", item: "Steve Madden Troopa Combat Boot", price: "$90" }, budget: { store: "Amazon", item: "DREAM PAIRS Combat Ankle Boots", price: "$35" } } },
+      { title: "Alternative: Platform Creepers", detail: "Black platform creepers or chunky sole loafers for a punk edge.", shop: { luxury: { store: "Nordstrom", item: "Prada Monolith Loafer", price: "$1,250" }, mid: { store: "Dr. Martens", item: "1461 Quad Platform Oxford", price: "$140" }, budget: { store: "Amazon", item: "T.U.K. Creeper Sneaker", price: "$45" } } },
+    ],
+    accessories: [
+      { title: "Chain Jewelry", detail: "Chunky silver chains, layered chokers, safety-pin earrings, stacked rings.", shop: { luxury: { store: "Nordstrom", item: "Alexander McQueen Skull Chain Necklace", price: "$490" }, mid: { store: "Nordstrom", item: "AllSaints Layered Chain Necklace", price: "$78" }, budget: { store: "Amazon", item: "MOROTOLE Punk Chain Necklace Set", price: "$14" } } },
+      { title: "Studded Belt", detail: "A black leather belt with silver studs or pyramid hardware.", shop: { luxury: { store: "Nordstrom", item: "Saint Laurent Studded Belt", price: "$595" }, mid: { store: "Urban Outfitters", item: "Studded Leather Belt", price: "$39" }, budget: { store: "Amazon", item: "Punk Studded Leather Belt", price: "$12" } } },
+      { title: "Bag", detail: "A black crossbody with chain strap or a studded clutch.", shop: { luxury: { store: "Nordstrom", item: "Saint Laurent Kate Chain Bag", price: "$2,150" }, mid: { store: "Rebecca Minkoff", item: "Mini MAC Crossbody", price: "$198" }, budget: { store: "Amazon", item: "CLUCI Chain Crossbody Bag", price: "$24" } } },
+    ],
+  },
+  "Coastal Luxe": {
+    makeup: [
+      { title: "Glowing Base", detail: "Light, dewy tinted sunscreen or skin tint. A touch of cream bronzer on the cheeks.", shop: { luxury: { store: "Sephora", item: "Saie Slip Tint Dewy Foundation", price: "$36" }, mid: { store: "Ulta", item: "Supergoop Glowscreen SPF 40", price: "$22" }, budget: { store: "Amazon", item: "CeraVe Tinted Sunscreen SPF 30", price: "$12" } } },
+      { title: "Beach-Ready Eyes", detail: "Champagne shimmer on lids. Waterproof brown mascara. Brushed-up brows.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Eyes to Mesmerize in Champagne", price: "$34" }, mid: { store: "Ulta", item: "Maybelline Color Tattoo in Barely Branded", price: "$8" }, budget: { store: "Amazon", item: "e.l.f. Liquid Glitter Eyeshadow", price: "$5" } } },
+      { title: "Glossy Lips", detail: "A sheer coral or peach lip gloss. Hydrating and beachy.", shop: { luxury: { store: "Sephora", item: "Dior Addict Lip Maximizer in Coral", price: "$38" }, mid: { store: "Ulta", item: "NYX Butter Gloss in Tiramisu", price: "$6" }, budget: { store: "Amazon", item: "Burt's Bees Lip Shimmer in Peony", price: "$5" } } },
+    ],
+    top: [
+      { title: "Linen Shirt", detail: "A relaxed-fit linen shirt in white, sky blue, or sand. Roll the sleeves up.", tip: "Leave a couple buttons undone for resort ease", shop: { luxury: { store: "Net-a-Porter", item: "Loro Piana Linen Shirt", price: "$695" }, mid: { store: "Banana Republic", item: "Oversized Linen Shirt", price: "$80" }, budget: { store: "H&M", item: "Linen-Blend Resort Shirt", price: "$20" } } },
+      { title: "Breezy Tank", detail: "A silk or linen camisole in cream or coral for layering under a cover-up.", shop: { luxury: { store: "Vince", item: "Silk Satin Camisole", price: "$195" }, mid: { store: "Mango", item: "Linen Blend Strappy Top", price: "$36" }, budget: { store: "Amazon", item: "Amazon Essentials Relaxed Fit Tank", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Linen Pants", detail: "Wide-leg linen trousers in white, sand, or seafoam. Elastic waist for comfort.", shop: { luxury: { store: "Reformation", item: "Olina Linen Wide Leg Pant", price: "$148" }, mid: { store: "Zara", item: "Linen Blend Palazzo Pants", price: "$46" }, budget: { store: "Amazon", item: "ANRABESS Linen Wide Leg Pants", price: "$28" } } },
+      { title: "Alternative: Midi Skirt", detail: "A flowy midi skirt in a tropical print or solid white.", shop: { luxury: { store: "Zimmermann", item: "Printed Midi Skirt", price: "$450" }, mid: { store: "& Other Stories", item: "Printed Midi Wrap Skirt", price: "$79" }, budget: { store: "Amazon", item: "Floerns Floral Print Midi Skirt", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Espadrilles", detail: "Leather or canvas espadrille wedges or flats in tan or white.", shop: { luxury: { store: "Nordstrom", item: "Castañer Carina Espadrille Wedge", price: "$165" }, mid: { store: "DSW", item: "Marc Fisher Alida Espadrille Wedge", price: "$80" }, budget: { store: "Amazon", item: "VISCATA Canvas Espadrille Flat", price: "$30" } } },
+      { title: "Alternative: Flat Sandals", detail: "Minimalist leather sandals with a thin sole in gold or nude.", shop: { luxury: { store: "Nordstrom", item: "Ancient Greek Sandals Eleftheria", price: "$200" }, mid: { store: "Madewell", item: "The Boardwalk Post Slide Sandal", price: "$55" }, budget: { store: "Amazon", item: "Amazon Essentials Flat Strap Sandal", price: "$18" } } },
+    ],
+    accessories: [
+      { title: "Straw Hat", detail: "A wide-brim straw sun hat for beach or brunch. Natural or cream color.", shop: { luxury: { store: "Lack of Color", item: "Palma Wide Fedora", price: "$130" }, mid: { store: "J.Crew", item: "Packable Straw Hat", price: "$48" }, budget: { store: "Amazon", item: "Lanzom Straw Sun Hat", price: "$16" } } },
+      { title: "Sunglasses", detail: "Oversized cat-eye or aviator sunglasses. Tortoiseshell or gold frame.", shop: { luxury: { store: "Nordstrom", item: "Ray-Ban Aviator Classic", price: "$163" }, mid: { store: "Nordstrom", item: "Quay Australia Cat Eye", price: "$55" }, budget: { store: "Amazon", item: "SOJOS Cat Eye Sunglasses", price: "$15" } } },
+      { title: "Tote Bag", detail: "An oversized woven tote or raffia bag in natural fibers.", shop: { luxury: { store: "Net-a-Porter", item: "Loewe Basket Bag", price: "$690" }, mid: { store: "Anthropologie", item: "Straw Circle Tote", price: "$68" }, budget: { store: "Amazon", item: "Straw Woven Beach Tote", price: "$20" } } },
+    ],
+  },
+  "Sharp & Clean": {
+    makeup: [
+      { title: "Fresh Face", detail: "Clean, moisturized skin. Mattifying primer on T-zone. Concealer only where needed.", shop: { luxury: { store: "Sephora", item: "Lab Series Daily Moisturizer SPF 35", price: "$48" }, mid: { store: "Ulta", item: "Cetaphil Daily Moisturizer SPF 30", price: "$16" }, budget: { store: "Amazon", item: "CeraVe AM Facial Moisturizer SPF 30", price: "$12" } } },
+      { title: "Groomed Brows", detail: "Trim and brush brows into shape. Use a clear brow gel to set.", shop: { luxury: { store: "Sephora", item: "Boy Brow by Glossier", price: "$18" }, mid: { store: "Ulta", item: "NYX Control Freak Clear Brow Gel", price: "$6" }, budget: { store: "Amazon", item: "e.l.f. Brow Lift Gel", price: "$4" } } },
+      { title: "Lip Care", detail: "Exfoliate and apply a quality lip balm. Keep lips hydrated and clean.", shop: { luxury: { store: "Sephora", item: "Laneige Lip Sleeping Mask", price: "$24" }, mid: { store: "Ulta", item: "Jack Black Lip Balm SPF 25", price: "$8" }, budget: { store: "Amazon", item: "Burt's Bees Original Lip Balm", price: "$4" } } },
+    ],
+    top: [
+      { title: "Crisp Dress Shirt", detail: "A perfectly fitted white or light blue dress shirt. Pressed, no wrinkles.", tip: "Invest in tailoring — fit is everything", shop: { luxury: { store: "Nordstrom", item: "Charles Tyrwhitt Slim Fit Shirt", price: "$90" }, mid: { store: "Banana Republic", item: "Slim-Fit Non-Iron Dress Shirt", price: "$65" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Dress Shirt", price: "$20" } } },
+      { title: "Fitted Crew Tee", detail: "A premium fitted crew-neck tee in black, white, or navy.", shop: { luxury: { store: "Nordstrom", item: "James Perse Short Sleeve Crew", price: "$60" }, mid: { store: "Nordstrom", item: "Reigning Champ Ringspun Jersey Tee", price: "$45" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Crew Tee", price: "$10" } } },
+    ],
+    bottom: [
+      { title: "Slim Chinos", detail: "Tailored slim-fit chinos in navy, charcoal, or khaki.", shop: { luxury: { store: "Bonobos", item: "Stretch Washed Chinos Slim", price: "$98" }, mid: { store: "J.Crew", item: "484 Slim-Fit Stretch Chino", price: "$80" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Chino", price: "$25" } } },
+      { title: "Dark Denim", detail: "Dark indigo slim or straight jeans. No distressing, clean finish.", shop: { luxury: { store: "Nordstrom", item: "A.P.C. Petit Standard Jean", price: "$220" }, mid: { store: "Levi's", item: "511 Slim Fit in Clean Dark", price: "$70" }, budget: { store: "Amazon", item: "Levi's 511 Slim Fit Dark Wash", price: "$35" } } },
+    ],
+    shoes: [
+      { title: "Clean Sneakers", detail: "White leather minimalist sneakers. No logos, clean sole.", shop: { luxury: { store: "Nordstrom", item: "Common Projects Original Achilles Low", price: "$425" }, mid: { store: "Nordstrom", item: "Koio Capri Triple White", price: "$248" }, budget: { store: "Amazon", item: "New Republic Kurt Leather Sneaker", price: "$88" } } },
+      { title: "Alternative: Oxford Shoes", detail: "Brown or black leather cap-toe oxfords for a sharper look.", shop: { luxury: { store: "Nordstrom", item: "Allen Edmonds Park Avenue", price: "$395" }, mid: { store: "Cole Haan", item: "Grand Ambition Cap Toe Oxford", price: "$160" }, budget: { store: "Amazon", item: "Bruno Marc Oxford Dress Shoes", price: "$30" } } },
+    ],
+    accessories: [
+      { title: "Watch", detail: "A clean-dial dress watch in silver or black with a leather strap.", shop: { luxury: { store: "Nordstrom", item: "Tissot PRX 35mm", price: "$350" }, mid: { store: "Amazon", item: "Seiko Presage Cocktail Time", price: "$295" }, budget: { store: "Amazon", item: "Timex Marlin Automatic", price: "$130" } } },
+      { title: "Belt", detail: "A slim leather belt in dark brown or black. Simple brushed buckle.", shop: { luxury: { store: "Nordstrom", item: "Anderson's Leather Belt", price: "$180" }, mid: { store: "Banana Republic", item: "Italian Leather Belt", price: "$55" }, budget: { store: "Amazon", item: "Amazon Essentials Classic Belt", price: "$15" } } },
+      { title: "Fragrance", detail: "A fresh, clean fragrance — citrus and white musk notes.", shop: { luxury: { store: "Sephora", item: "Bleu de Chanel EDT", price: "$105" }, mid: { store: "Ulta", item: "Versace Pour Homme", price: "$65" }, budget: { store: "Amazon", item: "Nautica Voyage EDT", price: "$15" } } },
+    ],
+  },
+  "Rugged Refined": {
+    makeup: [
+      { title: "Beard Care", detail: "Trim beard to a clean shape. Apply beard oil for softness and sheen.", shop: { luxury: { store: "Nordstrom", item: "Aesop Shine Hair & Beard Oil", price: "$40" }, mid: { store: "Amazon", item: "Honest Amish Classic Beard Oil", price: "$13" }, budget: { store: "Amazon", item: "Viking Revolution Beard Oil", price: "$8" } } },
+      { title: "Skincare", detail: "Cleanse, moisturize, and apply SPF. Use an eye cream if needed.", shop: { luxury: { store: "Sephora", item: "Kiehl's Facial Fuel Moisturizer", price: "$38" }, mid: { store: "Ulta", item: "Bulldog Original Moisturizer", price: "$8" }, budget: { store: "Amazon", item: "Nivea Men Creme", price: "$5" } } },
+      { title: "Hair Styling", detail: "Use a matte clay or paste for textured, natural-looking hold.", shop: { luxury: { store: "Nordstrom", item: "Baxter of California Clay Pomade", price: "$23" }, mid: { store: "Amazon", item: "Hanz de Fuko Claymation", price: "$18" }, budget: { store: "Amazon", item: "Every Man Jack Matte Fiber Cream", price: "$8" } } },
+    ],
+    top: [
+      { title: "Flannel Shirt", detail: "A heavyweight flannel in plaid — red/black, green/navy, or earth tones.", shop: { luxury: { store: "Nordstrom", item: "Filson Vintage Flannel Shirt", price: "$145" }, mid: { store: "L.L.Bean", item: "Scotch Plaid Flannel Shirt", price: "$55" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Flannel", price: "$20" } } },
+      { title: "Henley", detail: "A waffle-knit henley in charcoal, olive, or burgundy. Roll sleeves up.", shop: { luxury: { store: "Nordstrom", item: "Rag & Bone Classic Henley", price: "$125" }, mid: { store: "J.Crew", item: "Garment-Dyed Henley", price: "$45" }, budget: { store: "Amazon", item: "Hanes Beefy-T Long Sleeve Henley", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Rugged Jeans", detail: "Straight-fit dark wash jeans. Heavyweight denim, minimal distressing.", shop: { luxury: { store: "Nordstrom", item: "Iron Heart 21oz Selvedge Denim", price: "$375" }, mid: { store: "Levi's", item: "501 Original Fit in Dark Wash", price: "$70" }, budget: { store: "Amazon", item: "Wrangler Authentics Classic Regular Fit", price: "$22" } } },
+      { title: "Alternative: Canvas Pants", detail: "Heavy canvas work pants in khaki or olive.", shop: { luxury: { store: "Filson", item: "Dry Tin Cloth Work Pants", price: "$195" }, mid: { store: "Carhartt", item: "Rugged Flex Canvas Work Pant", price: "$50" }, budget: { store: "Amazon", item: "Wrangler Workwear Canvas Pant", price: "$25" } } },
+    ],
+    shoes: [
+      { title: "Work Boots", detail: "Leather work boots in brown or tan. Goodyear welt, quality sole.", shop: { luxury: { store: "Nordstrom", item: "Red Wing Iron Ranger", price: "$350" }, mid: { store: "Amazon", item: "Thursday Boot Company Captain", price: "$199" }, budget: { store: "Amazon", item: "EVER BOOTS Tank Work Boot", price: "$45" } } },
+      { title: "Alternative: Chelsea Boots", detail: "Suede or leather Chelsea boots in dark brown.", shop: { luxury: { store: "Nordstrom", item: "R.M. Williams Comfort Craftsman", price: "$495" }, mid: { store: "Nordstrom", item: "Blundstone Classic Chelsea Boot", price: "$200" }, budget: { store: "Amazon", item: "Bruno Marc Chelsea Boot", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Watch", detail: "A field watch or diver with a canvas or leather strap.", shop: { luxury: { store: "Nordstrom", item: "Hamilton Khaki Field Mechanical", price: "$495" }, mid: { store: "Amazon", item: "Seiko 5 Sports Field Watch", price: "$275" }, budget: { store: "Amazon", item: "Casio Duro Diver MDV-106", price: "$45" } } },
+      { title: "Belt & Wallet", detail: "A thick leather belt with brass buckle. Matching leather bi-fold wallet.", shop: { luxury: { store: "Nordstrom", item: "Filson Bridle Leather Belt", price: "$95" }, mid: { store: "Amazon", item: "Carhartt Saddle Leather Belt", price: "$30" }, budget: { store: "Amazon", item: "Dickies Industrial Belt", price: "$12" } } },
+      { title: "Fragrance", detail: "Woody, leathery scent — cedarwood, sandalwood, vetiver notes.", shop: { luxury: { store: "Sephora", item: "Tom Ford Oud Wood EDP", price: "$160" }, mid: { store: "Ulta", item: "Dolce & Gabbana The One EDP", price: "$80" }, budget: { store: "Amazon", item: "Guess Seductive Homme EDT", price: "$20" } } },
+    ],
+  },
+  "Modern Minimal": {
+    makeup: [
+      { title: "Basic Skincare", detail: "Gentle cleanser, lightweight moisturizer, SPF. Nothing more, nothing less.", shop: { luxury: { store: "Sephora", item: "Aesop In Two Minds Facial Cleanser", price: "$43" }, mid: { store: "Ulta", item: "CeraVe Foaming Facial Cleanser", price: "$15" }, budget: { store: "Amazon", item: "Cetaphil Gentle Skin Cleanser", price: "$8" } } },
+      { title: "Brow & Lip", detail: "Trim stray brow hairs. Apply a simple lip balm. Keep things clean.", shop: { luxury: { store: "Sephora", item: "Kiehl's Lip Balm #1", price: "$12" }, mid: { store: "Amazon", item: "Jack Black Lip Balm SPF 25", price: "$8" }, budget: { store: "Amazon", item: "Aquaphor Lip Repair", price: "$4" } } },
+    ],
+    top: [
+      { title: "Essential Tee", detail: "A quality crew or V-neck tee in black, white, grey, or navy. Zero logos.", shop: { luxury: { store: "Nordstrom", item: "Sunspel Classic Crew Neck Tee", price: "$75" }, mid: { store: "Everlane", item: "The Organic Cotton Crew Tee", price: "$30" }, budget: { store: "Amazon", item: "Goodthreads Slim-Fit Cotton Tee", price: "$10" } } },
+      { title: "Lightweight Jacket", detail: "A minimal harrington or bomber in black or navy. Clean zippers, no patches.", shop: { luxury: { store: "Nordstrom", item: "A.P.C. Sutherland Bomber Jacket", price: "$495" }, mid: { store: "Uniqlo", item: "Harrington Jacket", price: "$60" }, budget: { store: "Amazon", item: "Amazon Essentials Lightweight Bomber", price: "$30" } } },
+    ],
+    bottom: [
+      { title: "Slim Trousers", detail: "Tailored slim trousers in black, charcoal, or navy. Minimal design.", shop: { luxury: { store: "Nordstrom", item: "Theory Zaine Precision Pant", price: "$245" }, mid: { store: "Uniqlo", item: "Smart Ankle Pants", price: "$40" }, budget: { store: "Amazon", item: "Amazon Essentials Slim-Fit Dress Pant", price: "$25" } } },
+      { title: "Dark Jeans", detail: "Slim dark indigo jeans with no distressing. Raw or clean finish.", shop: { luxury: { store: "Nordstrom", item: "A.P.C. Petit New Standard", price: "$220" }, mid: { store: "Levi's", item: "512 Slim Taper in Clean Dark", price: "$70" }, budget: { store: "Amazon", item: "Lee Extreme Motion Slim Jean", price: "$30" } } },
+    ],
+    shoes: [
+      { title: "White Sneakers", detail: "Minimal white leather sneakers. No branding, clean silhouette.", shop: { luxury: { store: "Nordstrom", item: "Common Projects Original Achilles", price: "$425" }, mid: { store: "Nordstrom", item: "Veja Campo Chromefree Leather", price: "$160" }, budget: { store: "Amazon", item: "New Republic Kurt Sneaker", price: "$88" } } },
+      { title: "Alternative: Black Derbies", detail: "Sleek black leather derby shoes for a slightly dressier minimal look.", shop: { luxury: { store: "Nordstrom", item: "Church's Shannon Derby", price: "$620" }, mid: { store: "Cole Haan", item: "Original Grand Plain Oxford", price: "$140" }, budget: { store: "Amazon", item: "Bruno Marc Oxford Derby Shoes", price: "$30" } } },
+    ],
+    accessories: [
+      { title: "Watch", detail: "A thin, clean-dial watch with a mesh or leather strap.", shop: { luxury: { store: "Nordstrom", item: "Junghans Max Bill Automatic", price: "$1,195" }, mid: { store: "Amazon", item: "Skagen Signatur Slim Watch", price: "$95" }, budget: { store: "Amazon", item: "CIVO Ultra Thin Watch", price: "$20" } } },
+      { title: "Bag", detail: "A simple black or grey backpack with minimal branding.", shop: { luxury: { store: "Nordstrom", item: "Troubadour Apex Backpack", price: "$475" }, mid: { store: "Everlane", item: "The Modern Zip Backpack", price: "$68" }, budget: { store: "Amazon", item: "Matein Slim Laptop Backpack", price: "$25" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
@@ -228,6 +396,13 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Clean Slate": { match: 95, desc: "Minimalist essentials — neutrals, clean lines, no logos" },
   "Retro Revival": { match: 91, desc: "Vintage vibes — flares, prints, platforms" },
   "Sport Luxe": { match: 92, desc: "Athletic meets fashion — joggers, sneakers, tech" },
+  "Desert Wanderer": { match: 95, desc: "Free-spirited boho — earthy layers, turquoise accents" },
+  "Ivy League": { match: 96, desc: "Preppy polish — blazers, loafers, clean patterns" },
+  "Rebel Noir": { match: 95, desc: "Dark & edgy — leather, studs, combat boots" },
+  "Coastal Luxe": { match: 96, desc: "Resort elegance — linen, sandals, straw" },
+  "Sharp & Clean": { match: 96, desc: "Precision grooming — clean skin, quality basics" },
+  "Rugged Refined": { match: 92, desc: "Textured beard, work boots, woodsy scent" },
+  "Modern Minimal": { match: 88, desc: "No-fuss grooming — essentials only" },
 };
 
 export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
