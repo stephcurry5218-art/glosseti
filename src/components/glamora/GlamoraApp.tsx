@@ -56,6 +56,7 @@ const GlamoraApp = () => {
           onProfile={() => go("profile")}
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
+          gender={prefs.gender}
         />
       )}
       {screen === "style-picker" && (
