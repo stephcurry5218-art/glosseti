@@ -79,6 +79,34 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
           </div>
         </div>
 
+        {/* Subscription tier */}
+        {subscription && (
+          <div className="anim-fadeUp d1" style={{ marginBottom: 20 }}>
+            <div className="glamora-card" onClick={onShowPaywall} style={{
+              padding: "16px", cursor: "pointer",
+              background: subscription.tier !== "free"
+                ? "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.12), hsla(var(--glamora-gold-light) / 0.08))"
+                : undefined,
+              border: subscription.tier !== "free"
+                ? "1.5px solid hsla(var(--glamora-gold) / 0.25)"
+                : undefined,
+              display: "flex", alignItems: "center", gap: 12,
+            }}>
+              <Crown size={20} color="hsl(var(--glamora-gold))" />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                  {subscription.tier === "free" ? "Free Plan" : subscription.tier === "premium" ? "Premium" : "Pro"}
+                  {subscription.isTrialing && <span style={{ fontSize: 11, color: "hsl(var(--glamora-gold))", marginLeft: 8 }}>Trial</span>}
+                </div>
+                <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+                  {subscription.tier === "free" ? "Tap to upgrade" : "Manage subscription"}
+                </div>
+              </div>
+              <ChevronRight size={16} color="hsl(var(--glamora-gray-light))" />
+            </div>
+          </div>
+        )}
+
         {/* Stats */}
         <div className="anim-fadeUp d2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 28 }}>
           {[

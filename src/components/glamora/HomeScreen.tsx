@@ -83,6 +83,11 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           </div>
         </div>
 
+        {/* Usage badge */}
+        <div style={{ position: "relative", zIndex: 5, padding: "8px 20px 0", display: "flex", justifyContent: "flex-end" }}>
+          <UsageBadge tier={subscription.tier} remaining={remainingGenerations} onUpgrade={onShowPaywall} />
+        </div>
+
         {/* Hero text */}
         <div className="anim-fadeUp" style={{ position: "relative", zIndex: 5, padding: "24px 20px 0" }}>
           <div className="serif" style={{ fontSize: 30, lineHeight: 1.1, color: "white" }}>
