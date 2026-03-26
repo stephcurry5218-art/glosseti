@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import SplashScreen from "./SplashScreen";
-import OnboardingScreen from "./OnboardingScreen";
+import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
 import StylePickerScreen from "./StylePickerScreen";
 import UploadScreen from "./UploadScreen";
@@ -15,7 +15,7 @@ export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | 
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 
-type Screen = "splash" | "onboarding" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -43,13 +43,10 @@ const GlamoraApp = () => {
   return (
     <div className="phone">
       {screen === "splash" && (
-        <SplashScreen onDone={() => go("onboarding")} />
+        <SplashScreen onDone={() => go("entrance")} />
       )}
-      {screen === "onboarding" && (
-        <OnboardingScreen onStart={(gender: Gender) => {
-          setPrefs(p => ({ ...p, gender }));
-          go("home");
-        }} />
+      {screen === "entrance" && (
+        <EntranceScreen onEnter={() => go("home")} />
       )}
       {screen === "home" && (
         <HomeScreen
@@ -129,7 +126,7 @@ const GlamoraApp = () => {
           gender={prefs.gender}
         />
       )}
-      {screen !== "splash" && screen !== "onboarding" && (
+      {screen !== "splash" && screen !== "entrance" && (
         <StylistChat gender={prefs.gender} />
       )}
     </div>
