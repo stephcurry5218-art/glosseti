@@ -13,8 +13,8 @@ interface Props {
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle }: Props) => {
   const isMale = gender === "male";
-  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
-  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
+  const accent = "var(--glamora-gold)";
+  const accentLight = "var(--glamora-gold-light)";
 
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 90 }}>
@@ -45,7 +45,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
                 { id: "male" as Gender, label: "♂", full: "Him" },
               ]).map((opt) => {
                 const isActive = gender === opt.id;
-                const activeColor = opt.id === "male" ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+                const activeColor = "var(--glamora-gold)";
                 return (
                   <button
                     key={opt.id}
