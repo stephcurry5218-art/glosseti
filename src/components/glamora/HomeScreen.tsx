@@ -1,3 +1,4 @@
+import { Home, Scissors, Bookmark, User, Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, ArrowRight } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 
 interface Props {
@@ -8,14 +9,14 @@ interface Props {
 }
 
 const styleCategories = [
-  { name: "Full Style", emoji: "👗", color: "hsla(12 52% 85% / 0.4)" },
-  { name: "Streetwear", emoji: "🔥", color: "hsla(36 72% 88% / 0.6)" },
-  { name: "Minimalist", emoji: "🤍", color: "hsla(16 20% 11% / 0.08)" },
-  { name: "Vintage", emoji: "🕺", color: "hsla(36 50% 53% / 0.2)" },
-  { name: "Athleisure", emoji: "🏃", color: "hsla(140 24% 58% / 0.2)" },
-  { name: "Formal", emoji: "🤵", color: "hsla(16 20% 11% / 0.12)" },
-  { name: "Casual", emoji: "😎", color: "hsla(0 60% 70% / 0.15)" },
-  { name: "Makeup", emoji: "💄", color: "hsla(0 60% 70% / 0.3)" },
+  { name: "Full Style", Icon: Shirt },
+  { name: "Streetwear", Icon: Flame },
+  { name: "Minimalist", Icon: Heart },
+  { name: "Vintage", Icon: Clock },
+  { name: "Athleisure", Icon: Dumbbell },
+  { name: "Formal", Icon: Briefcase },
+  { name: "Casual", Icon: Smile },
+  { name: "Makeup", Icon: Palette },
 ];
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
@@ -31,11 +32,11 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
           width: 42, height: 42, borderRadius: "50%",
           background: "linear-gradient(135deg, hsl(var(--glamora-rose)) 0%, hsl(var(--glamora-rose-dark)) 100%)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 18, cursor: "pointer", border: "none",
-          boxShadow: "0 4px 14px hsla(12 39% 54% / 0.3)",
+          cursor: "pointer", border: "none",
+          boxShadow: "0 4px 14px hsla(18 32% 42% / 0.3)",
         }}
       >
-        👤
+        <User size={18} color="hsl(var(--glamora-char))" />
       </button>
     </div>
 
@@ -45,10 +46,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
       onClick={onGetStyled}
       style={{ margin: "20px 22px", borderRadius: 26, overflow: "hidden", position: "relative", height: 220, cursor: "pointer" }}
     >
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, hsl(var(--glamora-char)) 0%, hsl(var(--glamora-char2)) 100%)" }} />
-      <div className="absolute rounded-full" style={{ width: 160, height: 160, top: -30, right: -20, background: "hsla(12 39% 54% / 0.3)", filter: "blur(40px)" }} />
-      <div className="absolute rounded-full" style={{ width: 120, height: 120, bottom: -20, left: 20, background: "hsla(36 50% 53% / 0.2)", filter: "blur(40px)" }} />
-      <div style={{ position: "relative", zIndex: 2, padding: "28px 24px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
+      <div style={{ position: "relative", zIndex: 4, padding: "28px 24px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
         <div>
           <div style={{ fontSize: 10, letterSpacing: 2.5, textTransform: "uppercase", color: "hsl(var(--glamora-gold-light))", fontWeight: 600 }}>
             AI Style Studio
@@ -63,10 +62,10 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
             background: "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
             borderRadius: 14, color: "white", fontSize: 13, fontWeight: 600,
             cursor: "pointer", border: "none", fontFamily: "'Jost', sans-serif",
-            letterSpacing: 0.5, boxShadow: "0 6px 20px hsla(12 39% 54% / 0.4)", alignSelf: "flex-start",
+            letterSpacing: 0.5, boxShadow: "0 6px 20px hsla(18 32% 42% / 0.4)", alignSelf: "flex-start",
           }}
         >
-          Start Styling 👗
+          Start Styling <ArrowRight size={14} />
         </button>
       </div>
     </div>
@@ -83,11 +82,11 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
             style={{
               minWidth: 110, padding: "16px 14px",
               display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-              cursor: "pointer", border: "1px solid hsla(36 50% 53% / 0.1)",
+              cursor: "pointer", border: "1px solid hsla(24 38% 48% / 0.1)",
             }}
           >
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: cat.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>
-              {cat.emoji}
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: "hsla(var(--glamora-rose) / 0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <cat.Icon size={22} color="hsl(var(--glamora-rose-dark))" />
             </div>
             <span style={{ fontSize: 12, fontWeight: 500, color: "hsl(var(--glamora-char))" }}>{cat.name}</span>
           </div>
@@ -113,12 +112,16 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
     <div style={{ padding: "0 22px", marginTop: 20 }}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         <div className="glamora-card anim-fadeUp d3" onClick={onSaved} style={{ padding: "20px 16px", cursor: "pointer", textAlign: "center" }}>
-          <div style={{ fontSize: 28, marginBottom: 8 }}>💾</div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+            <Bookmark size={28} color="hsl(var(--glamora-rose-dark))" />
+          </div>
           <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Saved Styles</div>
           <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>{savedCount} look{savedCount !== 1 ? "s" : ""}</div>
         </div>
         <div className="glamora-card anim-fadeUp d4" onClick={onProfile} style={{ padding: "20px 16px", cursor: "pointer", textAlign: "center" }}>
-          <div style={{ fontSize: 28, marginBottom: 8 }}>👤</div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+            <User size={28} color="hsl(var(--glamora-rose-dark))" />
+          </div>
           <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>My Profile</div>
           <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Style journey</div>
         </div>
@@ -127,10 +130,10 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount }: Props) => (
 
     {/* Bottom Nav */}
     <div className="bottom-nav">
-      <button className="nav-btn active"><span className="nav-icon">🏠</span><span className="nav-label">Home</span></button>
-      <button className="nav-btn" onClick={onGetStyled}><span className="nav-icon">👗</span><span className="nav-label">Style</span></button>
-      <button className="nav-btn" onClick={onSaved}><span className="nav-icon">💾</span><span className="nav-label">Saved</span></button>
-      <button className="nav-btn" onClick={onProfile}><span className="nav-icon">👤</span><span className="nav-label">Profile</span></button>
+      <button className="nav-btn active"><span className="nav-icon"><Home size={22} /></span><span className="nav-label">Home</span></button>
+      <button className="nav-btn" onClick={onGetStyled}><span className="nav-icon"><Scissors size={22} /></span><span className="nav-label">Style</span></button>
+      <button className="nav-btn" onClick={onSaved}><span className="nav-icon"><Bookmark size={22} /></span><span className="nav-label">Saved</span></button>
+      <button className="nav-btn" onClick={onProfile}><span className="nav-icon"><User size={22} /></span><span className="nav-label">Profile</span></button>
     </div>
   </div>
 );
