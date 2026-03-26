@@ -4,19 +4,24 @@ import type { UserPrefs, PhotoType } from "./GlamoraApp";
 interface Props {
   prefs: UserPrefs;
   onBack: () => void;
-  onAnalyze: (file: File, photoType: PhotoType) => void;
+  onAnalyze: (file: File, photoType: PhotoType, base64: string) => void;
 }
 
 const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [base64, setBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
 
   const handleFile = (f: File) => {
     setFile(f);
     const reader = new FileReader();
-    reader.onload = (e) => setPreview(e.target?.result as string);
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      setPreview(result);
+      setBase64(result);
+    };
     reader.readAsDataURL(f);
   };
 
@@ -35,7 +40,6 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
       </div>
 
       <div style={{ padding: "0 22px", marginTop: 16 }}>
-        {/* Photo Type Toggle */}
         {!isMakeup && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             {([
@@ -66,7 +70,6 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         )}
 
-        {/* Upload zone */}
         <div
           className="glamora-card anim-fadeUp d1"
           onClick={() => fileRef.current?.click()}
@@ -74,9 +77,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
             minHeight: 280, display: "flex", flexDirection: "column",
             alignItems: "center", justifyContent: "center", gap: 16,
             cursor: "pointer",
-            border: preview ? "none" : "2px dashed hsla(36 50% 53% / 0.4)",
-            padding: preview ? 0 : 40,
-            overflow: "hidden",
+            border: preview ? "none" : "2px dashed hsla(var(--glamora-gold) / 0.4)",
+            padding: preview ? 0 : 40, overflow: "hidden",
           }}
         >
           {preview ? (
@@ -96,15 +98,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           )}
         </div>
 
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-        />
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
+          onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
 
-        {/* Style badge */}
         <div className="anim-fadeUp d2" style={{
           marginTop: 20, padding: "12px 16px", borderRadius: 14,
           background: "hsla(var(--glamora-gold-pale) / 0.5)",
@@ -122,7 +118,6 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
 
-        {/* Tips */}
         <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
           <div className="section-label">Tips for Best Results</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -137,13 +132,12 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
 
-        {/* Analyze button */}
         <div style={{ marginTop: 28, paddingBottom: 40 }}>
           <button
             className={`btn-primary ${file ? "btn-rose" : ""}`}
             disabled={!file}
             style={{ opacity: file ? 1 : 0.5 }}
-            onClick={() => file && onAnalyze(file, photoType)}
+            onClick={() => file && base64 && onAnalyze(file, photoType, base64)}
           >
             {file ? "Analyze My Style ✨" : "Upload a Photo First"}
           </button>
