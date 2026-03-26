@@ -138,7 +138,9 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Eye size={22} color={`hsl(${accent})`} />
           </div>
           <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>AI Vision</div>
-          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>Scan & style you</div>
+          <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
+            {isMale ? "Full outfit & hair analysis" : "Head-to-toe style scan"}
+          </div>
         </div>
 
         <div className="glamora-card" onClick={() => onGetStyled(isMale ? "grooming" : "makeup-only")} style={{
@@ -151,13 +153,13 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.15), hsla(var(--glamora-gold-light) / 0.1))",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <Palette size={22} color="hsl(var(--glamora-gold))" />
+            {isMale ? <Scissors size={22} color="hsl(var(--glamora-gold))" /> : <Palette size={22} color="hsl(var(--glamora-gold))" />}
           </div>
           <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
             {isMale ? "Grooming" : "Makeup"}
           </div>
           <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
-            {isMale ? "Hair & skincare" : "Beauty looks"}
+            {isMale ? "Beard, hair & skincare tips" : "Curated beauty & color picks"}
           </div>
         </div>
 
