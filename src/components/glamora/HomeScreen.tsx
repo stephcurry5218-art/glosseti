@@ -13,8 +13,8 @@ interface Props {
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle }: Props) => {
   const isMale = gender === "male";
-  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
-  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
+  const accent = "var(--glamora-gold)";
+  const accentLight = "var(--glamora-gold-light)";
 
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 90 }}>
