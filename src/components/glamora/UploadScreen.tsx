@@ -56,10 +56,10 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
                 style={{
                   flex: 1, padding: "14px 12px", borderRadius: 16,
                   border: photoType === opt.id
-                    ? "2px solid hsl(var(--glamora-rose-dark))"
+                    ? `2px solid hsl(${accent})`
                     : "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
                   background: photoType === opt.id
-                    ? "hsla(var(--glamora-rose) / 0.08)"
+                    ? `hsla(${accentLight} / 0.08)`
                     : "hsl(var(--card))",
                   cursor: "pointer", fontFamily: "'Jost', sans-serif",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
