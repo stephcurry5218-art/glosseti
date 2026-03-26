@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond } from "lucide-react";
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
+import BeforeAfterSlider from "./BeforeAfterSlider";
+import type { LucideIcon } from "lucide-react";
 
 interface Props {
   prefs: UserPrefs;
@@ -14,12 +16,12 @@ interface Props {
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
 
-const hotspotPositions: Record<HotspotId, { top: string; left: string; label: string; emoji: string }> = {
-  makeup: { top: "8%", left: "62%", label: "Makeup", emoji: "💄" },
-  top: { top: "28%", left: "18%", label: "Top", emoji: "👔" },
-  accessories: { top: "22%", left: "78%", label: "Accessories", emoji: "⌚" },
-  bottom: { top: "58%", left: "22%", label: "Bottoms", emoji: "👖" },
-  shoes: { top: "82%", left: "55%", label: "Shoes", emoji: "👟" },
+const hotspotPositions: Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon }> = {
+  makeup: { top: "8%", left: "62%", label: "Makeup", Icon: Palette },
+  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt },
+  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch },
+  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot },
+  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints },
 };
 
 const analysis = {
@@ -32,19 +34,22 @@ const analysis = {
 
 const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
-  const [viewMode, setViewMode] = useState<"image" | "list">("image");
+  const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const isMakeup = prefs.styleCategory === "makeup-only";
   const looks = styleLooks[prefs.styleCategory] || styleLooks["full-style"];
 
-  const analysisCards = isMakeup
+  const analysisCards: { label: string; value: string; Icon: LucideIcon }[] = isMakeup
     ? [
-        { label: "Face Shape", value: analysis.faceShape, icon: "💎" },
-        { label: "Skin Tone", value: analysis.skinTone, icon: "🎨" },
+        { label: "Face Shape", value: analysis.faceShape, Icon: Diamond },
+        { label: "Skin Tone", value: analysis.skinTone, Icon: Palette },
       ]
     : [
-        { label: "Body Type", value: analysis.bodyType, icon: "📐" },
-        { label: "Color Season", value: analysis.colorSeason, icon: "🎨" },
+        { label: "Body Type", value: analysis.bodyType, Icon: Ruler },
+        { label: "Color Season", value: analysis.colorSeason, Icon: Palette },
       ];
+
+  const hasOriginal = !!prefs.photoBase64;
+  const hasStyled = !!styledImageUrl;
 
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
@@ -61,7 +66,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
         <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 16 }}>
           {analysisCards.map((c) => (
             <div key={c.label} className="glamora-card" style={{ flex: 1, padding: "12px", textAlign: "center" }}>
-              <div style={{ fontSize: 18 }}>{c.icon}</div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+                <c.Icon size={18} color="hsl(var(--glamora-rose-dark))" />
+              </div>
               <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", textTransform: "uppercase", letterSpacing: 1, marginTop: 4 }}>{c.label}</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginTop: 2 }}>{c.value}</div>
             </div>
@@ -69,22 +76,42 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
         </div>
 
         {/* View mode toggle */}
-        <div className="anim-fadeUp d1" style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          {(["image", "list"] as const).map((mode) => (
-            <button key={mode} onClick={() => setViewMode(mode)} style={{
-              flex: 1, padding: "10px", borderRadius: 12, border: "1.5px solid",
-              borderColor: viewMode === mode ? "hsl(var(--glamora-rose-dark))" : "hsla(var(--glamora-gray-light) / 0.2)",
-              background: viewMode === mode ? "hsla(var(--glamora-rose-dark) / 0.12)" : "transparent",
-              cursor: "pointer", fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 600,
-              color: viewMode === mode ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))",
-              transition: "all 0.2s",
+        <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+          {([
+            { id: "compare" as const, label: "Compare", Icon: Sparkles, show: hasOriginal && hasStyled },
+            { id: "image" as const, label: "Shop Image", Icon: Image, show: true },
+            { id: "list" as const, label: "Style List", Icon: List, show: true },
+          ]).filter(m => m.show).map((mode) => (
+            <button key={mode.id} onClick={() => setViewMode(mode.id)} style={{
+              flex: 1, padding: "10px 6px", borderRadius: 12, border: "1.5px solid",
+              borderColor: viewMode === mode.id ? "hsl(var(--glamora-rose-dark))" : "hsla(var(--glamora-gray-light) / 0.2)",
+              background: viewMode === mode.id ? "hsla(var(--glamora-rose-dark) / 0.12)" : "transparent",
+              cursor: "pointer", fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 600,
+              color: viewMode === mode.id ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))",
+              transition: "all 0.2s", display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
             }}>
-              {mode === "image" ? "📸 Shop from Image" : "📋 Style List"}
+              <mode.Icon size={14} /> {mode.label}
             </button>
           ))}
         </div>
 
-        {viewMode === "image" ? (
+        {/* Before/After Compare */}
+        {viewMode === "compare" && hasOriginal && hasStyled && (
+          <>
+            <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22 }}>
+              <BeforeAfterSlider
+                beforeSrc={prefs.photoBase64!}
+                afterSrc={styledImageUrl!}
+                height={420}
+              />
+            </div>
+            <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 10 }}>
+              Drag the slider to compare your original with the AI-styled version
+            </div>
+          </>
+        )}
+
+        {viewMode === "image" && (
           <>
             {/* Styled Image with Hotspots */}
             <div className="glamora-card anim-fadeUp d2" style={{ position: "relative", overflow: "hidden", borderRadius: 22 }}>
@@ -96,7 +123,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                   background: "linear-gradient(160deg, hsl(var(--glamora-char)) 0%, hsl(var(--glamora-char2)) 100%)",
                   display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12,
                 }}>
-                  <div style={{ fontSize: 64 }}>👗</div>
+                  <Sparkles size={56} color="hsl(var(--glamora-gray))" strokeWidth={1} />
                   <div style={{ fontSize: 14, color: "hsl(var(--glamora-gray-light))" }}>AI-styled image</div>
                 </div>
               )}
@@ -110,20 +137,19 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     onClick={(e) => { e.stopPropagation(); setActiveHotspot(isActive ? null : id as HotspotId); }}
                     style={{
                       position: "absolute", top: pos.top, left: pos.left, transform: "translate(-50%, -50%)",
-                      width: isActive ? 52 : 40, height: isActive ? 52 : 40, borderRadius: "50%",
+                      width: isActive ? 48 : 36, height: isActive ? 48 : 36, borderRadius: "50%",
                       background: isActive
                         ? "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))"
                         : "hsla(0 0% 0% / 0.55)",
                       backdropFilter: "blur(8px)",
                       border: isActive ? "2px solid hsl(var(--glamora-gold-light))" : "2px solid hsla(255 255 255 / 0.4)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: isActive ? 22 : 18,
                       cursor: "pointer", transition: "all 0.25s ease",
                       boxShadow: isActive ? "0 4px 20px hsla(12 39% 54% / 0.5)" : "0 2px 10px hsla(0 0% 0% / 0.3)",
                       animation: isActive ? "none" : "pulse2 2.5s ease-in-out infinite",
                     }}
                   >
-                    {pos.emoji}
+                    <pos.Icon size={isActive ? 20 : 16} color="white" />
                   </button>
                 );
               })}
@@ -133,7 +159,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             {activeHotspot && (
               <div className="glamora-card anim-fadeUp" style={{ padding: "16px", marginTop: 14, border: "1.5px solid hsla(var(--glamora-gold) / 0.2)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  <span style={{ fontSize: 22 }}>{hotspotPositions[activeHotspot].emoji}</span>
+                  {(() => { const HIcon = hotspotPositions[activeHotspot].Icon; return <HIcon size={22} color="hsl(var(--glamora-rose-dark))" />; })()}
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{hotspotPositions[activeHotspot].label}</div>
                     <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Tap a style below for full guide + shopping</div>
@@ -163,12 +189,13 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               Tap the hotspots on the image to shop each piece
             </div>
           </>
-        ) : (
+        )}
+
+        {viewMode === "list" && (
           <>
-            {/* List view */}
             <div className="section-label anim-fadeUp d2">Recommended Styles</div>
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 12, marginTop: -8 }}>
-              Tap a style for the complete guide with shopping links →
+              Tap a style for the complete guide with shopping links
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 16 }}>
               {looks.map((look, i) => (
@@ -193,7 +220,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
 
         {/* Actions */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <button className="btn-primary btn-rose" onClick={() => onSave(looks.map(l => l.name))}>Save All Styles 💾</button>
+          <button className="btn-primary btn-rose" onClick={() => onSave(looks.map(l => l.name))} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            Save All Styles <Bookmark size={16} />
+          </button>
           <button className="btn-primary btn-ghost" onClick={onHome}>Back to Home</button>
         </div>
       </div>
