@@ -66,7 +66,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
                   transition: "all 0.2s",
                 }}
               >
-                <opt.Icon size={28} color={photoType === opt.id ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />
+                <opt.Icon size={28} color={photoType === opt.id ? `hsl(${accent})` : "hsl(var(--glamora-gray))"} />
                 <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{opt.label}</span>
                 <span style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{opt.desc}</span>
               </button>
