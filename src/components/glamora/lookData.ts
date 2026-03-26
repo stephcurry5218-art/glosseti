@@ -108,7 +108,6 @@ export const lookData: Record<string, Record<Category, Step[]>> = {
       { title: "Finishing", detail: "A dark berry nail polish. A bold, moody perfume with black cherry and cedar notes.", shop: { luxury: { store: "Sephora", item: "Tom Ford Lost Cherry EDP", price: "$190" }, mid: { store: "Ulta", item: "Viktor & Rolf Bon Bon EDP", price: "$65" }, budget: { store: "Amazon", item: "Zara Red Temptation EDP", price: "$20" } } },
     ],
   },
-  // ═══ NEW LOOKS ═══
   "Urban Edge": {
     makeup: [
       { title: "Clean Base", detail: "Skip heavy foundation. Use a tinted moisturizer or BB cream for a natural, unfussy base.", shop: { luxury: { store: "Sephora", item: "Laura Mercier Tinted Moisturizer", price: "$49" }, mid: { store: "Ulta", item: "Maybelline Dream Fresh BB Cream", price: "$9" }, budget: { store: "Amazon", item: "e.l.f. Camo CC Cream", price: "$7" } } },
@@ -221,57 +220,55 @@ export const lookData: Record<string, Record<Category, Step[]>> = {
   },
 };
 
-// Metadata for saved looks display
-export const lookMeta: Record<string, { emoji: string; match: number; desc: string }> = {
-  "Soft Glam": { emoji: "🌸", match: 96, desc: "Elegant & refined — silk, rose gold, satin" },
-  "Golden Hour": { emoji: "🌅", match: 93, desc: "Warm earth tones — suede, bronze, cognac" },
-  "Berry Chic": { emoji: "🍇", match: 89, desc: "Bold & polished — black, berry, silver" },
-  "Urban Edge": { emoji: "🔥", match: 94, desc: "Streetwear staples — sneakers, cargos, hoodies" },
-  "Clean Slate": { emoji: "🤍", match: 95, desc: "Minimalist essentials — neutrals, clean lines, no logos" },
-  "Retro Revival": { emoji: "🕺", match: 91, desc: "Vintage vibes — flares, prints, platforms" },
-  "Sport Luxe": { emoji: "🏃", match: 92, desc: "Athletic meets fashion — joggers, sneakers, tech" },
+export const lookMeta: Record<string, { match: number; desc: string }> = {
+  "Soft Glam": { match: 96, desc: "Elegant & refined — silk, rose gold, satin" },
+  "Golden Hour": { match: 93, desc: "Warm earth tones — suede, bronze, cognac" },
+  "Berry Chic": { match: 89, desc: "Bold & polished — black, berry, silver" },
+  "Urban Edge": { match: 94, desc: "Streetwear staples — sneakers, cargos, hoodies" },
+  "Clean Slate": { match: 95, desc: "Minimalist essentials — neutrals, clean lines, no logos" },
+  "Retro Revival": { match: 91, desc: "Vintage vibes — flares, prints, platforms" },
+  "Sport Luxe": { match: 92, desc: "Athletic meets fashion — joggers, sneakers, tech" },
 };
 
-// Recommended looks per style category
-export const styleLooks: Record<string, { name: string; desc: string; emoji: string; match: number }[]> = {
+export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
   "full-style": [
-    { name: "Soft Glam", desc: "Elegant & refined — silk, rose gold, satin", emoji: "🌸", match: 96 },
-    { name: "Golden Hour", desc: "Warm earth tones — suede, bronze, cognac", emoji: "🌅", match: 93 },
-    { name: "Berry Chic", desc: "Bold & polished — black, berry, silver", emoji: "🍇", match: 89 },
+    { name: "Soft Glam", desc: "Elegant & refined — silk, rose gold, satin", match: 96 },
+    { name: "Golden Hour", desc: "Warm earth tones — suede, bronze, cognac", match: 93 },
+    { name: "Berry Chic", desc: "Bold & polished — black, berry, silver", match: 89 },
   ],
   streetwear: [
-    { name: "Urban Edge", desc: "Cargos, sneakers, graphic tees — street ready", emoji: "🔥", match: 94 },
-    { name: "Berry Chic", desc: "Dark-toned street style with edge", emoji: "🍇", match: 87 },
-    { name: "Sport Luxe", desc: "Athletic streetwear crossover", emoji: "🏃", match: 85 },
+    { name: "Urban Edge", desc: "Cargos, sneakers, graphic tees — street ready", match: 94 },
+    { name: "Berry Chic", desc: "Dark-toned street style with edge", match: 87 },
+    { name: "Sport Luxe", desc: "Athletic streetwear crossover", match: 85 },
   ],
   minimalist: [
-    { name: "Clean Slate", desc: "Neutrals, clean lines, zero logos", emoji: "🤍", match: 95 },
-    { name: "Soft Glam", desc: "Soft tones with minimal jewelry", emoji: "🌸", match: 90 },
-    { name: "Golden Hour", desc: "Warm minimalism with earthy neutrals", emoji: "🌅", match: 88 },
+    { name: "Clean Slate", desc: "Neutrals, clean lines, zero logos", match: 95 },
+    { name: "Soft Glam", desc: "Soft tones with minimal jewelry", match: 90 },
+    { name: "Golden Hour", desc: "Warm minimalism with earthy neutrals", match: 88 },
   ],
   vintage: [
-    { name: "Retro Revival", desc: "70s flares, prints, platforms, cat-eye", emoji: "🕺", match: 91 },
-    { name: "Golden Hour", desc: "Warm vintage-inspired bohemian style", emoji: "🌅", match: 89 },
-    { name: "Berry Chic", desc: "90s dark-toned retro with edge", emoji: "🍇", match: 86 },
+    { name: "Retro Revival", desc: "70s flares, prints, platforms, cat-eye", match: 91 },
+    { name: "Golden Hour", desc: "Warm vintage-inspired bohemian style", match: 89 },
+    { name: "Berry Chic", desc: "90s dark-toned retro with edge", match: 86 },
   ],
   athleisure: [
-    { name: "Sport Luxe", desc: "Joggers, sneakers, belt bags — gym to street", emoji: "🏃", match: 92 },
-    { name: "Urban Edge", desc: "Sporty streetwear with sneaker culture", emoji: "🔥", match: 88 },
-    { name: "Clean Slate", desc: "Minimal athletic — clean sneakers, neutral tones", emoji: "🤍", match: 85 },
+    { name: "Sport Luxe", desc: "Joggers, sneakers, belt bags — gym to street", match: 92 },
+    { name: "Urban Edge", desc: "Sporty streetwear with sneaker culture", match: 88 },
+    { name: "Clean Slate", desc: "Minimal athletic — clean sneakers, neutral tones", match: 85 },
   ],
   formal: [
-    { name: "Soft Glam", desc: "Soft sophistication for events", emoji: "🌸", match: 97 },
-    { name: "Berry Chic", desc: "Power dressing in dark tones", emoji: "🍇", match: 90 },
-    { name: "Clean Slate", desc: "Modern minimalist business wear", emoji: "🤍", match: 88 },
+    { name: "Soft Glam", desc: "Soft sophistication for events", match: 97 },
+    { name: "Berry Chic", desc: "Power dressing in dark tones", match: 90 },
+    { name: "Clean Slate", desc: "Modern minimalist business wear", match: 88 },
   ],
   casual: [
-    { name: "Golden Hour", desc: "Relaxed earthy casual look", emoji: "🌅", match: 93 },
-    { name: "Clean Slate", desc: "Effortless everyday minimalism", emoji: "🤍", match: 91 },
-    { name: "Urban Edge", desc: "Casual streetwear for the weekend", emoji: "🔥", match: 87 },
+    { name: "Golden Hour", desc: "Relaxed earthy casual look", match: 93 },
+    { name: "Clean Slate", desc: "Effortless everyday minimalism", match: 91 },
+    { name: "Urban Edge", desc: "Casual streetwear for the weekend", match: 87 },
   ],
   "makeup-only": [
-    { name: "Soft Glam", desc: "Natural glow with rose tones", emoji: "🌸", match: 96 },
-    { name: "Golden Hour", desc: "Warm bronze with gold highlights", emoji: "🌅", match: 93 },
-    { name: "Berry Chic", desc: "Deep berry lips, minimal eyes", emoji: "🍇", match: 89 },
+    { name: "Soft Glam", desc: "Natural glow with rose tones", match: 96 },
+    { name: "Golden Hour", desc: "Warm bronze with gold highlights", match: 93 },
+    { name: "Berry Chic", desc: "Deep berry lips, minimal eyes", match: 89 },
   ],
 };
