@@ -218,7 +218,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <div
               key={item.title}
               className={`glamora-card anim-fadeUp d${i + 4}`}
-              onClick={onGetStyled}
+              onClick={() => onGetStyled()}
               style={{
                 minWidth: 160, padding: "18px 14px", cursor: "pointer",
                 border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
