@@ -3,7 +3,6 @@ import { MessageCircle, X, Send, Sparkles, Loader2, Share2 } from "lucide-react"
 import ReactMarkdown from "react-markdown";
 import ShareMenu from "./ShareMenu";
 import { formatChatForShare } from "./shareUtils";
-import ReactMarkdown from "react-markdown";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
