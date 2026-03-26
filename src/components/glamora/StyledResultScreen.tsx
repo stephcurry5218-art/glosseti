@@ -58,7 +58,7 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
-const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
+const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate, showWatermark }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const [showTweaker, setShowTweaker] = useState(false);
