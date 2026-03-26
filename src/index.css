@@ -6,51 +6,52 @@
 
 @layer base {
   :root {
-    --background: 30 33% 96%;
-    --foreground: 16 20% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 16 20% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 16 20% 11%;
-    --primary: 16 20% 11%;
-    --primary-foreground: 30 33% 96%;
-    --secondary: 24 28% 90%;
-    --secondary-foreground: 16 20% 11%;
-    --muted: 24 28% 90%;
-    --muted-foreground: 14 14% 47%;
+    /* ═══ SOFT DARK MODE ═══ */
+    --background: 20 14% 11%;
+    --foreground: 30 20% 88%;
+    --card: 20 12% 15%;
+    --card-foreground: 30 20% 88%;
+    --popover: 20 12% 15%;
+    --popover-foreground: 30 20% 88%;
+    --primary: 30 20% 88%;
+    --primary-foreground: 20 14% 11%;
+    --secondary: 20 10% 20%;
+    --secondary-foreground: 30 20% 88%;
+    --muted: 20 10% 20%;
+    --muted-foreground: 20 12% 55%;
     --accent: 36 50% 53%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --accent-foreground: 20 14% 11%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 24 20% 88%;
-    --input: 24 20% 88%;
+    --border: 20 10% 22%;
+    --input: 20 10% 22%;
     --ring: 36 50% 53%;
     --radius: 1rem;
 
-    /* GLAMORA palette */
-    --glamora-cream: 28 42% 96%;
-    --glamora-cream2: 28 34% 93%;
-    --glamora-blush: 12 52% 85%;
-    --glamora-rose: 12 50% 67%;
-    --glamora-rose-dark: 12 39% 54%;
-    --glamora-nude: 20 24% 69%;
-    --glamora-gold: 36 48% 53%;
-    --glamora-gold-light: 40 58% 68%;
-    --glamora-gold-pale: 36 72% 88%;
-    --glamora-char: 16 20% 11%;
-    --glamora-char2: 16 18% 19%;
-    --glamora-gray: 14 14% 47%;
-    --glamora-gray-light: 14 17% 68%;
-    --glamora-success: 140 24% 58%;
+    /* GLAMORA palette — soft dark */
+    --glamora-cream: 20 14% 11%;
+    --glamora-cream2: 20 12% 15%;
+    --glamora-blush: 12 30% 28%;
+    --glamora-rose: 12 40% 55%;
+    --glamora-rose-dark: 12 45% 62%;
+    --glamora-nude: 20 18% 45%;
+    --glamora-gold: 36 55% 58%;
+    --glamora-gold-light: 40 60% 68%;
+    --glamora-gold-pale: 36 30% 22%;
+    --glamora-char: 30 20% 88%;
+    --glamora-char2: 25 15% 78%;
+    --glamora-gray: 20 10% 55%;
+    --glamora-gray-light: 20 8% 40%;
+    --glamora-success: 150 30% 50%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 20 14% 11%;
+    --sidebar-foreground: 30 20% 88%;
+    --sidebar-primary: 30 20% 88%;
+    --sidebar-primary-foreground: 20 14% 11%;
+    --sidebar-accent: 20 10% 20%;
+    --sidebar-accent-foreground: 30 20% 88%;
+    --sidebar-border: 20 10% 22%;
+    --sidebar-ring: 36 50% 53%;
   }
 }
 
@@ -67,7 +68,7 @@
   }
   body {
     font-family: 'Jost', sans-serif;
-    background: hsl(16 20% 8%);
+    background: hsl(20 14% 6%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,7 +119,7 @@
   width: 100%;
   padding: 17px 24px;
   background: hsl(var(--glamora-char));
-  color: hsl(0 0% 100%);
+  color: hsl(var(--glamora-cream));
   border: none;
   border-radius: 18px;
   font-family: 'Jost', sans-serif;
@@ -127,23 +128,24 @@
   letter-spacing: 0.8px;
   cursor: pointer;
   transition: transform 0.12s, box-shadow 0.12s;
-  box-shadow: 0 6px 28px hsla(16 20% 11% / 0.22);
+  box-shadow: 0 6px 28px hsla(36 50% 53% / 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
-.btn-primary:active { transform: scale(0.975); box-shadow: 0 2px 12px hsla(16 20% 11% / 0.15); }
+.btn-primary:active { transform: scale(0.975); box-shadow: 0 2px 12px hsla(36 50% 53% / 0.1); }
 
 .btn-rose {
   background: linear-gradient(135deg, hsl(var(--glamora-rose-dark)) 0%, hsl(var(--glamora-gold)) 100%);
-  box-shadow: 0 8px 28px hsla(12 39% 54% / 0.38);
+  color: hsl(20 14% 8%);
+  box-shadow: 0 8px 28px hsla(12 45% 62% / 0.25);
 }
 
 .btn-ghost {
   background: transparent;
   color: hsl(var(--glamora-char));
-  border: 1.5px solid hsla(16 20% 11% / 0.14);
+  border: 1.5px solid hsla(30 20% 88% / 0.14);
   box-shadow: none;
 }
 
@@ -159,9 +161,9 @@
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 78px;
-  background: hsla(30 33% 96% / 0.96);
+  background: hsla(20 14% 11% / 0.96);
   backdrop-filter: blur(16px);
-  border-top: 1px solid hsla(36 50% 53% / 0.15);
+  border-top: 1px solid hsla(36 50% 53% / 0.1);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -181,7 +183,7 @@
   border-radius: 14px;
   transition: background 0.15s;
 }
-.nav-btn:active { background: hsla(36 50% 53% / 0.1); }
+.nav-btn:active { background: hsla(36 50% 53% / 0.08); }
 .nav-icon { font-size: 22px; line-height: 1; transition: transform 0.15s; }
 .nav-btn.active .nav-icon { transform: scale(1.1); }
 .nav-label {
@@ -204,15 +206,15 @@
 .back-btn {
   width: 42px; height: 42px;
   border-radius: 13px;
-  background: hsla(16 20% 11% / 0.07);
+  background: hsla(30 20% 88% / 0.07);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; border: none;
   font-size: 18px; color: hsl(var(--glamora-char));
   transition: background 0.15s;
   flex-shrink: 0;
 }
-.back-btn:active { background: hsla(16 20% 11% / 0.14); }
-.header-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; }
+.back-btn:active { background: hsla(30 20% 88% / 0.14); }
+.header-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; color: hsl(var(--glamora-char)); }
 .header-sub { font-size: 13px; color: hsl(var(--glamora-gray)); margin-top: 1px; }
 
 .section-label {
@@ -230,17 +232,17 @@
   gap: 5px;
   padding: 7px 14px;
   border-radius: 100px;
-  background: hsla(12 52% 85% / 0.35);
-  border: 1px solid hsla(12 50% 67% / 0.25);
+  background: hsla(var(--glamora-rose) / 0.15);
+  border: 1px solid hsla(var(--glamora-rose-dark) / 0.2);
   font-size: 12px;
   color: hsl(var(--glamora-rose-dark));
   font-weight: 500;
 }
 
 .glamora-card {
-  background: hsl(0 0% 100%);
+  background: hsl(var(--card));
   border-radius: 22px;
-  box-shadow: 0 2px 16px hsla(16 20% 11% / 0.07);
+  box-shadow: 0 2px 16px hsla(0 0% 0% / 0.2);
 }
 
 /* Animations */

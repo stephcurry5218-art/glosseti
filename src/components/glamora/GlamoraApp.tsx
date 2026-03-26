@@ -5,7 +5,7 @@ import HomeScreen from "./HomeScreen";
 import StylePickerScreen from "./StylePickerScreen";
 import UploadScreen from "./UploadScreen";
 import LoadingScreen from "./LoadingScreen";
-import ResultsScreen from "./ResultsScreen";
+import StyledResultScreen from "./StyledResultScreen";
 import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
@@ -19,16 +19,19 @@ export interface UserPrefs {
   styleCategory: StyleCategory;
   photoType: PhotoType;
   photoFile: File | null;
+  photoBase64: string | null;
 }
 
 const GlamoraApp = () => {
   const [screen, setScreen] = useState<Screen>("splash");
   const [savedStyles, setSavedStyles] = useState<string[]>([]);
   const [selectedLook, setSelectedLook] = useState("Soft Glam");
+  const [styledImageUrl, setStyledImageUrl] = useState<string | null>(null);
   const [prefs, setPrefs] = useState<UserPrefs>({
     styleCategory: "full-style",
     photoType: "selfie",
     photoFile: null,
+    photoBase64: null,
   });
 
   const go = useCallback((s: Screen) => setScreen(s), []);
@@ -63,18 +66,25 @@ const GlamoraApp = () => {
         <UploadScreen
           prefs={prefs}
           onBack={() => go("style-picker")}
-          onAnalyze={(file: File, photoType: PhotoType) => {
-            setPrefs(p => ({ ...p, photoFile: file, photoType }));
+          onAnalyze={(file: File, photoType: PhotoType, base64: string) => {
+            setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
             go("loading");
           }}
         />
       )}
       {screen === "loading" && (
-        <LoadingScreen prefs={prefs} onDone={() => go("results")} />
+        <LoadingScreen
+          prefs={prefs}
+          onDone={(imageUrl: string | null) => {
+            setStyledImageUrl(imageUrl);
+            go("results");
+          }}
+        />
       )}
       {screen === "results" && (
-        <ResultsScreen
+        <StyledResultScreen
           prefs={prefs}
+          styledImageUrl={styledImageUrl}
           onBack={() => go("upload")}
           onHome={() => go("home")}
           onSave={(lookNames: string[]) => {
