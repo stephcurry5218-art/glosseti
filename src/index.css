@@ -131,29 +131,66 @@
   border-radius: 18px;
   font-family: 'Jost', sans-serif;
   font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: transform 0.12s, box-shadow 0.12s;
-  box-shadow: 0 6px 28px hsla(24 38% 48% / 0.15);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.3s ease;
+  box-shadow: 0 6px 28px hsla(24 38% 48% / 0.2), inset 0 1px 0 hsla(0 0% 100% / 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
 }
-.btn-primary:active { transform: scale(0.975); box-shadow: 0 2px 12px hsla(24 38% 48% / 0.1); }
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, hsla(0 0% 100% / 0.08) 50%, transparent 100%);
+  transition: left 0.5s ease;
+}
+.btn-primary:hover::before {
+  left: 100%;
+}
+.btn-primary:active {
+  transform: scale(0.96) translateY(1px);
+  box-shadow: 0 2px 10px hsla(24 38% 48% / 0.15);
+}
 
 .btn-rose {
-  background: linear-gradient(135deg, hsl(var(--glamora-rose-dark)) 0%, hsl(var(--glamora-gold)) 100%);
-  color: hsl(20 18% 8%);
-  box-shadow: 0 8px 28px hsla(20 35% 55% / 0.25);
+  background: linear-gradient(135deg, hsl(var(--glamora-rose-dark)) 0%, hsl(var(--glamora-gold)) 50%, hsl(var(--glamora-gold-light)) 100%);
+  background-size: 200% 200%;
+  animation: btnShimmer 4s ease-in-out infinite;
+  color: hsl(20 18% 6%);
+  font-weight: 700;
+  box-shadow: 0 8px 32px hsla(20 35% 55% / 0.35), 0 2px 8px hsla(28 40% 52% / 0.2);
+  border: 1px solid hsla(var(--glamora-gold-light) / 0.3);
+  text-shadow: 0 1px 2px hsla(0 0% 100% / 0.15);
+}
+.btn-rose:active {
+  box-shadow: 0 3px 16px hsla(20 35% 55% / 0.25);
 }
 
 .btn-ghost {
-  background: transparent;
+  background: hsla(var(--glamora-char) / 0.04);
   color: hsl(var(--glamora-char));
-  border: 1.5px solid hsla(28 18% 88% / 0.14);
-  box-shadow: none;
+  border: 1.5px solid hsla(28 18% 88% / 0.18);
+  box-shadow: 0 2px 12px hsla(0 0% 0% / 0.08);
+  backdrop-filter: blur(4px);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+.btn-ghost:hover {
+  border-color: hsla(var(--glamora-gold) / 0.3);
+  background: hsla(var(--glamora-gold) / 0.06);
+}
+.btn-ghost:active {
+  background: hsla(var(--glamora-gold) / 0.1);
+  transform: scale(0.97);
 }
 
 .btn-sm {
@@ -161,6 +198,13 @@
   border-radius: 12px;
   font-size: 13px;
   width: auto;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+@keyframes btnShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* Bottom nav */
