@@ -32,8 +32,11 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const steps = getSteps(prefs);
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [aiDone, setAiDone] = useState(false);
+  const [animDone, setAnimDone] = useState(false);
   const generatedUrlRef = useRef<string | null>(null);
   const aiCalledRef = useRef(false);
+  const navigatedRef = useRef(false);
 
   useEffect(() => {
     if (aiCalledRef.current || !prefs.photoBase64) return;
@@ -41,6 +44,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
     const generateImage = async () => {
       try {
+        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
@@ -50,36 +54,50 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         });
         if (error) {
           console.error("AI generation error:", error);
-          setAiError("Could not generate styled image");
+          setAiError("Could not generate styled image. Tap to retry.");
+          setAiDone(true);
           return;
         }
+        console.log("AI response received, has imageUrl:", !!data?.imageUrl);
         if (data?.imageUrl) {
           generatedUrlRef.current = data.imageUrl;
         } else {
-          setAiError("No image returned");
+          console.warn("No image in response:", JSON.stringify(data).slice(0, 200));
+          setAiError("No image returned. Tap to retry.");
         }
+        setAiDone(true);
       } catch (err) {
         console.error("AI call failed:", err);
-        setAiError("Failed to connect to AI");
+        setAiError("Failed to connect to AI. Tap to retry.");
+        setAiDone(true);
       }
     };
 
     generateImage();
   }, [prefs]);
 
+  // Navigate when BOTH animation and AI are done
+  useEffect(() => {
+    if (aiDone && animDone && !navigatedRef.current) {
+      navigatedRef.current = true;
+      onDone(generatedUrlRef.current);
+    }
+  }, [aiDone, animDone, onDone]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((s) => {
         if (s >= steps.length - 1) {
           clearInterval(interval);
-          setTimeout(() => onDone(generatedUrlRef.current), 1200);
+          // If AI is already done, proceed. Otherwise mark anim done and wait.
+          setTimeout(() => setAnimDone(true), 1200);
           return s;
         }
         return s + 1;
       });
     }, 1200);
     return () => clearInterval(interval);
-  }, [onDone, steps.length]);
+  }, [steps.length]);
 
   const CurrentIcon = steps[step].Icon;
 
