@@ -14,7 +14,7 @@ const palettes = [
 ];
 
 const emojis = ["💅", "👗", "✨", "🌸", "💎", "🦋", "🌺", "💄", "👠", "🌙", "🔮", "🪩", "💫", "🧿", "🌷"];
-const shapes = ["circle", "blob1", "blob2"] as const;
+const shapes: string[] = ["circle", "blob1", "blob2"];
 
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
