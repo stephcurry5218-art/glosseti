@@ -8,16 +8,23 @@ export interface SubscriptionPlan {
   features: string[];
   highlighted?: boolean;
   badge?: string;
+  monthlyGenerationCap: number;
 }
 
 export interface SubscriptionState {
   tier: SubscriptionTier;
   trialEndsAt: string | null;
   isTrialing: boolean;
-  dailyGenerations: number;
-  maxDailyGenerations: number;
-  lastGenerationDate: string;
+  monthlyGenerations: number;
+  maxMonthlyGenerations: number;
+  billingMonth: string; // YYYY-MM format
 }
+
+export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
+  free: 3,
+  premium: 30,
+  pro: 75,
+};
 
 export const PLANS: SubscriptionPlan[] = [
   {
@@ -25,8 +32,9 @@ export const PLANS: SubscriptionPlan[] = [
     name: "Free",
     monthlyPrice: null,
     yearlyPrice: null,
+    monthlyGenerationCap: 3,
     features: [
-      "3 AI looks per day",
+      "3 AI looks per month",
       "Basic outfit & makeup suggestions",
       "Watermarked images",
       "Limited customization",
@@ -39,8 +47,9 @@ export const PLANS: SubscriptionPlan[] = [
     yearlyPrice: 99,
     highlighted: true,
     badge: "Most Popular",
+    monthlyGenerationCap: 30,
     features: [
-      "Unlimited AI generations",
+      "30 AI generations per month",
       "No watermark on images",
       "Advanced personalization",
       "Full makeup & outfit tutorials",
@@ -55,7 +64,9 @@ export const PLANS: SubscriptionPlan[] = [
     monthlyPrice: 24.99,
     yearlyPrice: null,
     badge: "Creator",
+    monthlyGenerationCap: 75,
     features: [
+      "75 AI generations per month",
       "Everything in Premium",
       "Priority AI processing",
       "Exclusive styles & early access",
@@ -65,4 +76,4 @@ export const PLANS: SubscriptionPlan[] = [
   },
 ];
 
-export const FREE_DAILY_LIMIT = 3;
+export const FREE_DAILY_LIMIT = 3; // kept for backward compat
