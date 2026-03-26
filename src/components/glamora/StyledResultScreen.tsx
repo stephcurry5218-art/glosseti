@@ -14,6 +14,7 @@ interface Props {
   onHome: () => void;
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
+  onRegenerate?: () => void;
 }
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
