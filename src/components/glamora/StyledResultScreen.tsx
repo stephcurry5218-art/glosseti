@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 import type { UserPrefs } from "./GlamoraApp";
 import { styleLooks } from "./lookData";
 
