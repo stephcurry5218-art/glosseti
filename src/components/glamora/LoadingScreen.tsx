@@ -119,7 +119,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         {prefs.styleCategory === "makeup-only" ? "Analyzing Beauty..." : "Building Your Style..."}
       </div>
       <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginBottom: 28, textAlign: "center" }}>
-        {aiError || (prefs.styleCategory === "makeup-only" ? "Personalizing your beauty profile" : "AI is generating your styled look")}
+        {aiError || (animDone && !aiDone ? "Almost there, finalizing your look..." : (prefs.styleCategory === "makeup-only" ? "Personalizing your beauty profile" : "AI is generating your styled look"))}
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
