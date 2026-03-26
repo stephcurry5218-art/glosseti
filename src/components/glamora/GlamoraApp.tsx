@@ -5,14 +5,16 @@ import HomeScreen from "./HomeScreen";
 import UploadScreen from "./UploadScreen";
 import LoadingScreen from "./LoadingScreen";
 import ResultsScreen from "./ResultsScreen";
+import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 
-type Screen = "splash" | "onboarding" | "home" | "upload" | "loading" | "results" | "profile" | "saved";
+type Screen = "splash" | "onboarding" | "home" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved";
 
 const GlamoraApp = () => {
   const [screen, setScreen] = useState<Screen>("splash");
   const [hasSaved, setHasSaved] = useState(false);
+  const [selectedLook, setSelectedLook] = useState("Soft Glam");
 
   const go = useCallback((s: Screen) => setScreen(s), []);
 
@@ -45,6 +47,14 @@ const GlamoraApp = () => {
           onBack={() => go("upload")}
           onHome={() => go("home")}
           onSave={() => { setHasSaved(true); go("home"); }}
+          onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
+        />
+      )}
+      {screen === "tutorial" && (
+        <TutorialScreen
+          lookName={selectedLook}
+          onBack={() => go("results")}
+          onHome={() => go("home")}
         />
       )}
       {screen === "profile" && (

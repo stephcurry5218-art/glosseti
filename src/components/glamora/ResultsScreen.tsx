@@ -2,6 +2,7 @@ interface Props {
   onBack: () => void;
   onHome: () => void;
   onSave: () => void;
+  onLookSelect: (name: string) => void;
 }
 
 const analysis = {
@@ -17,7 +18,7 @@ const recommendedLooks = [
   { name: "Berry Chic", desc: "Deep berry lips, minimal eyes", emoji: "🍇", match: 89 },
 ];
 
-const ResultsScreen = ({ onBack, onHome, onSave }: Props) => (
+const ResultsScreen = ({ onBack, onHome, onSave, onLookSelect }: Props) => (
   <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
     <div className="screen-header">
       <button className="back-btn" onClick={onBack}>←</button>
@@ -61,13 +62,17 @@ const ResultsScreen = ({ onBack, onHome, onSave }: Props) => (
         ))}
       </div>
 
-      {/* Recommended looks */}
+      {/* Recommended looks — now clickable */}
       <div className="section-label anim-fadeUp d3">Recommended Looks</div>
+      <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 12, marginTop: -8 }}>
+        Tap a look for the full style guide →
+      </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
         {recommendedLooks.map((look, i) => (
           <div
             key={look.name}
             className={`glamora-card anim-fadeUp d${i + 3}`}
+            onClick={() => onLookSelect(look.name)}
             style={{
               padding: "18px 18px", display: "flex", alignItems: "center", gap: 16,
               border: "1px solid hsla(36 50% 53% / 0.12)", cursor: "pointer",
