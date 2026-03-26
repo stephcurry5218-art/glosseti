@@ -14,6 +14,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [base64, setBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
+  const isMale = prefs.gender === "male";
+  const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
+  const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
   const handleFile = (f: File) => {
     setFile(f);
@@ -53,17 +56,17 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
                 style={{
                   flex: 1, padding: "14px 12px", borderRadius: 16,
                   border: photoType === opt.id
-                    ? "2px solid hsl(var(--glamora-rose-dark))"
+                    ? `2px solid hsl(${accent})`
                     : "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
                   background: photoType === opt.id
-                    ? "hsla(var(--glamora-rose) / 0.08)"
+                    ? `hsla(${accentLight} / 0.08)`
                     : "hsl(var(--card))",
                   cursor: "pointer", fontFamily: "'Jost', sans-serif",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
                   transition: "all 0.2s",
                 }}
               >
-                <opt.Icon size={28} color={photoType === opt.id ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />
+                <opt.Icon size={28} color={photoType === opt.id ? `hsl(${accent})` : "hsl(var(--glamora-gray))"} />
                 <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{opt.label}</span>
                 <span style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{opt.desc}</span>
               </button>
@@ -146,7 +149,10 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <button
             className={`btn-primary ${file ? "btn-rose" : ""}`}
             disabled={!file}
-            style={{ opacity: file ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8 }}
+            style={{
+              opacity: file ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8,
+              ...(file && isMale ? { background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))" } : {}),
+            }}
             onClick={() => file && base64 && onAnalyze(file, photoType, base64)}
           >
             {file ? (<>Analyze My Style <Sparkles size={16} /></>) : "Upload a Photo First"}
