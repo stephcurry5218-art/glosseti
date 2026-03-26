@@ -59,6 +59,8 @@ const handleDownload = async (imageUrl: string) => {
 const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
+  const [showTweaker, setShowTweaker] = useState(false);
+  const [tweakedCategory, setTweakedCategory] = useState<StyleCategory>(prefs.styleCategory);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isMale = prefs.gender === "male";
   const isMakeup = prefs.styleCategory === "makeup-only";
