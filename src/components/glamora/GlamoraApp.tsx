@@ -101,6 +101,7 @@ const GlamoraApp = () => {
             go("home");
           }}
           onLookSelect={(name: string) => { setSelectedLook(name); go("tutorial"); }}
+          onRegenerate={() => { setStyledImageUrl(null); go("loading"); }}
         />
       )}
       {screen === "tutorial" && (

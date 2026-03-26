@@ -310,8 +310,20 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             </button>
           )}
           {hasStyled && (
-            <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              Download Styled Image <Download size={16} />
+            <div style={{ display: "flex", gap: 10 }}>
+              <button className="btn-primary btn-rose" onClick={() => handleDownload(styledImageUrl!)} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+                Download <Download size={16} />
+              </button>
+              {onRegenerate && (
+                <button className="btn-primary btn-ghost" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+                  <RefreshCw size={16} /> Regenerate
+                </button>
+              )}
+            </div>
+          )}
+          {!hasStyled && onRegenerate && (
+            <button className="btn-primary btn-rose" onClick={onRegenerate} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <RefreshCw size={16} /> Generate AI Image
             </button>
           )}
           <ShareMenu
