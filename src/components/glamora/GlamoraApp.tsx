@@ -10,7 +10,7 @@ import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 
-export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure";
+export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming";
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 
@@ -56,6 +56,7 @@ const GlamoraApp = () => {
           onProfile={() => go("profile")}
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
+          gender={prefs.gender}
         />
       )}
       {screen === "style-picker" && (
