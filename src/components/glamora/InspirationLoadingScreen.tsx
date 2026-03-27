@@ -35,14 +35,18 @@ const steps: { label: string; Icon: LucideIcon }[] = [
   { label: "Generating your inspired look...", Icon: Sparkles },
 ];
 
+const ESTIMATED_TIME = 45; // inspiration has 2 API calls so takes longer
+
 const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, generationMode, onDone }: Props) => {
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
   const [animDone, setAnimDone] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const resultRef = useRef<{ imageUrl: string | null; styleProfile: StyleProfile | null }>({ imageUrl: null, styleProfile: null });
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
+  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
     if (aiCalledRef.current) return;
