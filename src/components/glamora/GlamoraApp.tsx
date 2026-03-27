@@ -50,6 +50,7 @@ const GlamoraApp = () => {
     photoFile: null,
     photoBase64: null,
     gender: "female",
+    generationMode: "on-me",
   });
 
   // Inspiration state
