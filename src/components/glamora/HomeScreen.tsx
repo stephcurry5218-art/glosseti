@@ -162,7 +162,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           </div>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>AI Vision</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>
               {isMale ? "Full outfit analysis" : "Head-to-toe scan"}
             </div>
           </div>
