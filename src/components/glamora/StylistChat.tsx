@@ -368,6 +368,26 @@ const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender, onRegenerate
                     msg.content
                   )}
                 </div>
+                {/* Regenerate button on last assistant message */}
+                {msg.role === "assistant" && i === messages.length - 1 && i > 0 && !isLoading && onRegenerate && (
+                  <button
+                    onClick={() => onRegenerate(msg.content)}
+                    style={{
+                      marginTop: 8, padding: "8px 14px", borderRadius: 100,
+                      border: "none", cursor: "pointer", display: "flex",
+                      alignItems: "center", gap: 6, width: "100%",
+                      background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
+                      color: "white", fontSize: 12, fontWeight: 600,
+                      fontFamily: "'Jost', sans-serif", justifyContent: "center",
+                      boxShadow: "0 2px 10px hsla(0 0% 0% / 0.2)",
+                      transition: "transform 0.15s",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                  >
+                    <RefreshCw size={14} /> Apply & Regenerate Look
+                  </button>
+                )}
               </div>
             ))}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
