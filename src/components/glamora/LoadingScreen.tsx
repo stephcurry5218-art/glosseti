@@ -11,6 +11,14 @@ interface Props {
 }
 
 const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
+  if (prefs.generationMode === "mannequin") {
+    return [
+      { label: "Selecting style elements...", Icon: Shirt },
+      { label: "Matching color palette...", Icon: Palette },
+      { label: "Styling the mannequin...", Icon: Sparkles },
+      { label: "Finalizing the look...", Icon: ShoppingBag },
+    ];
+  }
   if (prefs.styleCategory === "makeup-only") {
     return [
       { label: "Analyzing facial features...", Icon: Search },
@@ -40,25 +48,27 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const navigatedRef = useRef(false);
 
   useEffect(() => {
-    if (aiCalledRef.current || !prefs.photoBase64) return;
+    if (aiCalledRef.current) return;
+    // For mannequin mode, no photo needed
+    if (prefs.generationMode !== "mannequin" && !prefs.photoBase64) return;
     aiCalledRef.current = true;
 
     const generateImage = async () => {
       try {
         if (DEMO_MODE) {
-          // Simulate network delay for realistic feel
           await new Promise(r => setTimeout(r, 2000));
           generatedUrlRef.current = getDemoStyledImage(prefs.gender);
           setAiDone(true);
           return;
         }
-        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType });
+        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
             styleCategory: prefs.styleCategory,
             photoType: prefs.photoType,
             gender: prefs.gender,
+            generationMode: prefs.generationMode,
           },
         });
         if (error) {

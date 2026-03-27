@@ -24,6 +24,7 @@ import { useSubscription } from "./subscription/useSubscription";
 export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night";
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
+export type GenerationMode = "on-me" | "mannequin";
 
 type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "inspiration" | "inspiration-loading" | "inspiration-results";
 
@@ -33,6 +34,7 @@ export interface UserPrefs {
   photoFile: File | null;
   photoBase64: string | null;
   gender: Gender;
+  generationMode: GenerationMode;
 }
 
 const GlamoraApp = () => {
@@ -48,6 +50,7 @@ const GlamoraApp = () => {
     photoFile: null,
     photoBase64: null,
     gender: "female",
+    generationMode: "on-me",
   });
 
   // Inspiration state
@@ -79,9 +82,9 @@ const GlamoraApp = () => {
     go("home");
   };
 
-  const handleStartGeneration = useCallback((file: File, photoType: PhotoType, base64: string) => {
+  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
     go("loading");
   }, [tryGenerate, go]);
 
