@@ -110,11 +110,12 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           onClick={() => onGetStyled()}
           style={{
             padding: "18px 16px", cursor: "pointer",
-            background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(var(--glamora-gold) / 0.08))`,
+            background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.1), hsla(0 0% 100% / 0.04))`,
             border: `1.5px solid hsla(var(--glamora-gold) / 0.2)`,
             display: "flex", alignItems: "center", gap: 14,
-            boxShadow: "0 6px 24px hsla(0 0% 0% / 0.2)",
+            boxShadow: "0 6px 24px hsla(0 0% 0% / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
             position: "relative", overflow: "hidden",
+            backdropFilter: "blur(12px)",
           }}
         >
           {/* Shimmer overlay */}
