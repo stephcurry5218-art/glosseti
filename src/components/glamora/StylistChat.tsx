@@ -17,7 +17,11 @@ interface Props {
   gender: "male" | "female";
 }
 
-const StylistChat = ({ gender }: Props) => {
+export interface StylistChatHandle {
+  openWithPrompt: (prompt: string) => void;
+}
+
+const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender }, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([GREETING]);
   const [input, setInput] = useState("");
