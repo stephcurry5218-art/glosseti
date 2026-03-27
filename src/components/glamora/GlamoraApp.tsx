@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import SplashScreen from "./SplashScreen";
@@ -11,7 +11,7 @@ import StyledResultScreen from "./StyledResultScreen";
 import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
-import StylistChat from "./StylistChat";
+import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
 import InspirationScreen from "./InspirationScreen";
 import InspirationLoadingScreen from "./InspirationLoadingScreen";
@@ -39,6 +39,7 @@ export interface UserPrefs {
 }
 
 const GlamoraApp = () => {
+  const chatRef = useRef<StylistChatHandle>(null);
   const [screen, setScreen] = useState<Screen>("splash");
   const [savedStyles, setSavedStyles] = useState<string[]>([]);
   const [selectedLook, setSelectedLook] = useState("Soft Glam");
@@ -151,9 +152,9 @@ const GlamoraApp = () => {
             setSelectedLook(name); go("tutorial");
           }}
           onRegenerate={(tweakedCategory) => {
-            if (!tryGenerate()) return;
-            if (tweakedCategory) setPrefs(p => ({ ...p, styleCategory: tweakedCategory }));
-            setStyledImageUrl(null); go("loading");
+            const category = tweakedCategory || prefs.styleCategory;
+            const prompt = `I just generated a ${category.replace("-", " ")} look and I'd like to refine it. Can you help me tweak the style? What changes would make it better — different colors, fits, or vibes? Give me specific suggestions I can try.`;
+            chatRef.current?.openWithPrompt(prompt);
           }}
           showWatermark={showWatermark}
         />
@@ -201,15 +202,15 @@ const GlamoraApp = () => {
             setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
           }}
           onRegenerate={() => {
-            if (!tryGenerate()) return;
-            setInspirationImageUrl(null); setInspirationProfile(null);
-            go("inspiration-loading");
+            const styleName = inspirationProfile?.styleName || "inspired";
+            const prompt = `I just generated a "${styleName}" inspiration look and I want to refine it. What tweaks would you suggest — different clothing pieces, color palette changes, or accessory swaps? Give me specific ideas to make the look even better.`;
+            chatRef.current?.openWithPrompt(prompt);
           }}
           showWatermark={showWatermark}
         />
       )}
 
-      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat gender={prefs.gender} />}
+      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat ref={chatRef} gender={prefs.gender} />}
 
       {showPaywall && (
         <PaywallScreen onClose={() => setShowPaywall(false)} onUpgrade={upgradeTo}

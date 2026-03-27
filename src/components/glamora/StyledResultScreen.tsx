@@ -334,8 +334,8 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 fontFamily: "'Jost', sans-serif", color: "hsl(var(--glamora-char))",
                 fontSize: 14, fontWeight: 600, padding: 0,
               }}>
-                <Settings2 size={18} color="hsl(var(--glamora-gold))" />
-                Tweak Style & Regenerate
+                <Sparkles size={18} color="hsl(var(--glamora-gold))" />
+                Refine Look with Gio AI
                 <ChevronDown size={16} style={{
                   marginLeft: "auto", transition: "transform 0.2s",
                   transform: showTweaker ? "rotate(180deg)" : "rotate(0)",
@@ -362,7 +362,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     ))}
                   </div>
                   <button className="btn-primary btn-rose" onClick={() => onRegenerate(tweakedCategory)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%" }}>
-                    <RefreshCw size={16} /> Regenerate with {tweakedCategory.replace("-", " ")}
+                    <Sparkles size={16} /> Ask Gio about {tweakedCategory.replace("-", " ")}
                   </button>
                 </div>
               )}
