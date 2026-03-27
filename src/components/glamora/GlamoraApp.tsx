@@ -119,6 +119,8 @@ const GlamoraApp = () => {
           remainingGenerations={remainingGenerations}
           onShowPaywall={() => setShowPaywall(true)}
           onInspiration={() => go("inspiration")}
+          isLoggedIn={!!user}
+          onSignIn={() => go("auth")}
         />
       )}
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
