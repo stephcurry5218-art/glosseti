@@ -185,7 +185,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>
               {isMale ? "Grooming" : "Makeup"}
             </div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>
               {isMale ? "Hair & skincare" : "Beauty & color picks"}
             </div>
           </div>
