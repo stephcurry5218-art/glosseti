@@ -54,8 +54,8 @@ serve(async (req) => {
         male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
       },
       swimwear: {
-        female: "wearing ONLY a bikini swimsuit — a high-cut two-piece bikini set showing midriff and legs. NO regular clothes, NO pants, NO shirt. Beach setting with sand and ocean. Include a sheer sarong loosely tied at waist, strappy sandals, oversized sunglasses, sun hat, and woven beach tote. Sun-kissed skin, confident beach pose.",
-        male: "wearing ONLY swim trunks — fitted board shorts with no shirt on, showing bare chest. Beach setting with sand and ocean. Open linen shirt draped on shoulders (not buttoned), slide sandals, aviator sunglasses, waterproof watch.",
+        female: "in a professional fashion editorial beach photoshoot, wearing a stylish two-piece swimsuit set with a matching sarong wrap at the waist, strappy sandals, oversized designer sunglasses, a wide-brim sun hat, and a woven beach tote bag. Tropical beach resort setting with palm trees and turquoise water. Professional fashion photography, editorial lighting.",
+        male: "in a professional fashion editorial beach photoshoot, wearing tailored swim shorts with a relaxed open linen shirt draped over shoulders, slide sandals, aviator sunglasses, and a waterproof sport watch. Tropical beach resort setting. Professional fashion photography, editorial lighting.",
       },
       "urban-hiphop": {
         female: "wearing urban hip-hop style: oversized graphic jersey, baggy low-rise jeans, chunky platform sneakers, layered gold chains, hoop earrings, and a designer belt bag.",
@@ -74,8 +74,8 @@ serve(async (req) => {
         male: "wearing a date-night outfit: a slim-fit dark blazer over a crew-neck tee, tailored dark trousers, clean leather dress shoes, a sleek watch, and fresh cologne-ready grooming.",
       },
       lingerie: {
-        female: "wearing ONLY lingerie — a delicate lace bralette and matching lace briefs/thong, NO regular clothes, NO pants, NO shirt over it. Include a sheer silk robe draped open (not covering the lingerie), satin mule slippers, dainty gold body chain jewelry. Boudoir setting with soft warm lighting and luxurious velvet/silk backdrop. Elegant and tasteful.",
-        male: "wearing ONLY luxury loungewear — fitted silk boxer shorts and an open silk robe showing bare chest, NO regular clothes. Bedroom setting with soft warm lighting and elegant decor. Minimal accessories.",
+        female: "in a high-end fashion editorial for a luxury sleepwear and loungewear brand. Wearing an elegant lace-trimmed silk camisole set with a matching flowing silk robe, satin house slippers, and delicate gold jewelry. Luxurious bedroom setting with soft warm lighting, silk sheets, and velvet furnishings. Professional fashion photography, tasteful and sophisticated editorial style.",
+        male: "in a high-end fashion editorial for a luxury loungewear brand. Wearing premium silk pajama set with an elegant open robe, leather house slippers, and a classic watch. Luxurious bedroom setting with warm ambient lighting and designer furnishings. Professional fashion photography, editorial style.",
       },
       y2k: {
         female: "wearing Y2K early-2000s fashion: low-rise flare jeans or a pleated mini skirt, a sparkly butterfly crop top or halter top, platform flip-flops or chunky sneakers, tinted rectangular sunglasses, layered belly chains, a tiny baguette bag, and frosted lip gloss with shimmery eyeshadow.",
@@ -132,11 +132,11 @@ serve(async (req) => {
       const isLingerie = styleCategory === "lingerie";
       const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
       const keepNote = isSwimwear
-        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described bikini or swimwear pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a clear beach or pool setting."
+        ? "Keep the person's face and body shape. Restyle their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style."
         : isLingerie
-          ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described lingerie pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a tasteful indoor boudoir or bedroom setting."
+          ? "Keep the person's face and body shape. Restyle their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style."
           : isRevealing
-            ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
+            ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
