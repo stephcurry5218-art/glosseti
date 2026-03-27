@@ -206,7 +206,13 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
             <div className="section-label">Tips for Best Results</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {(photoType === "full-body"
+              {(isFaceCategory
+                ? [
+                    { Icon: Sun, text: "Good, natural lighting" },
+                    { Icon: Camera, text: "Clear face shot — selfie, portrait, or headshot" },
+                    { Icon: CircleOff, text: "No heavy filters or sunglasses" },
+                  ]
+                : photoType === "full-body"
                 ? [
                     { Icon: Sun, text: "Good, natural lighting" },
                     { Icon: UserRound, text: "Stand straight, arms relaxed" },
