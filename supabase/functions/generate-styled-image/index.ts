@@ -90,7 +90,7 @@ serve(async (req) => {
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      editPrompt = `Create a professional fashion photography image of a ${isMale ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleDesc} The mannequin should be a clean, modern, matte ${isMale ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures.`;
+      editPrompt = `Create a professional fashion photography image of a ${isMale ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleDesc} The mannequin should be a clean, modern, matte ${isMale ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures.${refinementNote}`;
 
       messages = [
         {
