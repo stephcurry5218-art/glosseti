@@ -213,7 +213,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>Style Inspiration</div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
+            <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.45)", marginTop: 2 }}>
               Channel any celebrity's aesthetic
             </div>
           </div>
