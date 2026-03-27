@@ -54,8 +54,8 @@ serve(async (req) => {
         male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
       },
       swimwear: {
-        female: "wearing stylish swimwear: a fashionable high-cut bikini set in a flattering color, a sheer sarong wrap, strappy flat sandals, oversized sunglasses, a wide-brim sun hat, and a woven beach tote. Confident beach-ready pose.",
-        male: "wearing beach-ready style: well-fitted swim trunks, an open linen shirt, slide sandals, aviator sunglasses, and a waterproof watch.",
+        female: "wearing ONLY a bikini swimsuit — a high-cut two-piece bikini set showing midriff and legs. NO regular clothes, NO pants, NO shirt. Beach setting with sand and ocean. Include a sheer sarong loosely tied at waist, strappy sandals, oversized sunglasses, sun hat, and woven beach tote. Sun-kissed skin, confident beach pose.",
+        male: "wearing ONLY swim trunks — fitted board shorts with no shirt on, showing bare chest. Beach setting with sand and ocean. Open linen shirt draped on shoulders (not buttoned), slide sandals, aviator sunglasses, waterproof watch.",
       },
       "urban-hiphop": {
         female: "wearing urban hip-hop style: oversized graphic jersey, baggy low-rise jeans, chunky platform sneakers, layered gold chains, hoop earrings, and a designer belt bag.",
@@ -74,8 +74,8 @@ serve(async (req) => {
         male: "wearing a date-night outfit: a slim-fit dark blazer over a crew-neck tee, tailored dark trousers, clean leather dress shoes, a sleek watch, and fresh cologne-ready grooming.",
       },
       lingerie: {
-        female: "wearing elegant lingerie: a delicate lace bralette and matching high-waisted briefs in a rich jewel tone, a flowing sheer silk robe draped open, satin mule slippers, and dainty gold body chain jewelry. Soft boudoir lighting with a luxurious velvet backdrop.",
-        male: "wearing luxury loungewear: fitted silk boxer shorts, an open silk robe, and minimal accessories. Soft warm lighting with an elegant bedroom setting.",
+        female: "wearing ONLY lingerie — a delicate lace bralette and matching lace briefs/thong, NO regular clothes, NO pants, NO shirt over it. Include a sheer silk robe draped open (not covering the lingerie), satin mule slippers, dainty gold body chain jewelry. Boudoir setting with soft warm lighting and luxurious velvet/silk backdrop. Elegant and tasteful.",
+        male: "wearing ONLY luxury loungewear — fitted silk boxer shorts and an open silk robe showing bare chest, NO regular clothes. Bedroom setting with soft warm lighting and elegant decor. Minimal accessories.",
       },
     };
 
@@ -109,9 +109,13 @@ serve(async (req) => {
       ];
     } else {
       // On-me mode: restyle the user's photo
+      const isRevealing = styleCategory === "swimwear" || styleCategory === "lingerie" || styleCategory === "sexy";
+      const keepNote = isRevealing
+        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
+        : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} Keep face, body, background. Realistic clothing, warm lighting.${celebrityNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} Keep face and background. Realistic, warm lighting.${celebrityNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`;
 
       messages = [
         {
