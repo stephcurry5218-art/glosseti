@@ -139,8 +139,9 @@ const StylistChat = ({ gender }: Props) => {
         zIndex: 100,
         display: "flex",
         flexDirection: "column",
-        transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-        maxHeight: expanded ? "75%" : "auto",
+        transition: "max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease",
+        maxHeight: expanded ? "75vh" : "72px",
+        overflow: "hidden",
         background: expanded ? "hsl(var(--glamora-cream))" : "transparent",
         borderTopLeftRadius: expanded ? 22 : 0,
         borderTopRightRadius: expanded ? 22 : 0,
@@ -148,8 +149,16 @@ const StylistChat = ({ gender }: Props) => {
       }}
     >
       {/* Expanded chat header + messages */}
-      {expanded && (
-        <>
+      <div style={{
+        opacity: expanded ? 1 : 0,
+        transform: expanded ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s",
+        pointerEvents: expanded ? "auto" : "none",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        minHeight: 0,
+      }}>
           {/* Header */}
           <div
             style={{
@@ -287,8 +296,7 @@ const StylistChat = ({ gender }: Props) => {
               </div>
             )}
           </div>
-        </>
-      )}
+      </div>
 
       {/* Prompt bar — always visible */}
       <div
