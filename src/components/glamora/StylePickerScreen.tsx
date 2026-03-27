@@ -123,6 +123,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
     if (c.id === "urban-hiphop") return isMale;
     if (c.id === "sexy") return !isMale;
     if (c.id === "swimwear") return !isMale;
+    if (c.id === "lingerie") return !isMale;
     return true;
   });
 
