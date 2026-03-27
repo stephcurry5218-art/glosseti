@@ -14,6 +14,8 @@ export const categoryLabels: Record<Category, { label: string }> = {
   bottom: { label: "Bottoms" },
   shoes: { label: "Shoes & Socks" },
   accessories: { label: "Accessories" },
+  swimwear: { label: "Swimwear" },
+  lingerie: { label: "Lingerie & Intimates" },
 };
 
 export const categoryOrder: Category[] = ["makeup", "top", "bottom", "shoes", "accessories"];
