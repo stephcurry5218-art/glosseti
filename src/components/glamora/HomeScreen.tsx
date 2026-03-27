@@ -252,6 +252,14 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
+      {/* AI Style Suggestions */}
+      <StyleSuggestions
+        gender={gender}
+        isLoggedIn={isLoggedIn}
+        onSelectStyle={(cat) => onGetStyled(cat)}
+        onSignIn={onSignIn}
+      />
+
       {/* Trending section */}
       <div style={{ padding: "18px 20px 0" }}>
         <div className="section-label anim-fadeUp d3" style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
