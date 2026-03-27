@@ -199,8 +199,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           onClick={onInspiration}
           style={{
             padding: "16px 16px", cursor: "pointer",
-            background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08), hsl(var(--card)))`,
-            border: `1.5px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
+            background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
+            border: `1.5px solid hsla(0 0% 100% / 0.08)`,
             display: "flex", alignItems: "center", gap: 14,
           }}
         >
