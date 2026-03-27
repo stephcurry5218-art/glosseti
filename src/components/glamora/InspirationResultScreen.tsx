@@ -86,6 +86,47 @@ const accessoryStoreMap: Record<string, { luxury: { store: string; item: string;
   tote:         { luxury: { store: "Nordstrom", item: "Tory Burch Perry Tote", price: "$348" }, mid: { store: "Madewell", item: "The Transport Tote", price: "$178" }, budget: { store: "Amazon", item: "Dreubea Faux Leather Tote", price: "$15" } },
 };
 
+const beautyStoreMap: Record<string, { luxury: { store: string; item: string; price: string }; mid: { store: string; item: string; price: string }; budget: { store: string; item: string; price: string } }> = {
+  foundation:   { luxury: { store: "Sephora", item: "Armani Luminous Silk Foundation", price: "$65" }, mid: { store: "Ulta", item: "L'Oréal True Match Serum Foundation", price: "$17" }, budget: { store: "Target", item: "Maybelline Fit Me Dewy Foundation", price: "$9" } },
+  concealer:    { luxury: { store: "Sephora", item: "NARS Radiant Creamy Concealer", price: "$32" }, mid: { store: "Ulta", item: "Maybelline Instant Age Rewind", price: "$12" }, budget: { store: "Amazon", item: "e.l.f. 16HR Camo Concealer", price: "$7" } },
+  primer:       { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } },
+  powder:       { luxury: { store: "Sephora", item: "Laura Mercier Translucent Powder", price: "$44" }, mid: { store: "Ulta", item: "Maybelline Fit Me Loose Powder", price: "$9" }, budget: { store: "Amazon", item: "Coty Airspun Loose Face Powder", price: "$8" } },
+  blush:        { luxury: { store: "Sephora", item: "NARS Orgasm Blush", price: "$34" }, mid: { store: "Ulta", item: "Milani Baked Blush Luminoso", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Baked Blush", price: "$6" } },
+  bronzer:      { luxury: { store: "Sephora", item: "Tom Ford Shade & Illuminate Glow", price: "$90" }, mid: { store: "Ulta", item: "Physician's Formula Butter Bronzer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Putty Bronzer", price: "$7" } },
+  highlighter:  { luxury: { store: "Sephora", item: "Fenty Beauty Killawatt Highlighter", price: "$38" }, mid: { store: "Ulta", item: "Becca Shimmering Skin Perfector", price: "$20" }, budget: { store: "Target", item: "e.l.f. Liquid Highlighter", price: "$5" } },
+  contour:      { luxury: { store: "Sephora", item: "Charlotte Tilbury Contour Wand", price: "$40" }, mid: { store: "Ulta", item: "NYX Wonder Stick Contour", price: "$12" }, budget: { store: "Amazon", item: "e.l.f. Contour Palette", price: "$8" } },
+  lipstick:     { luxury: { store: "Nordstrom", item: "Tom Ford Lip Color", price: "$58" }, mid: { store: "Ulta", item: "MAC Matte Lipstick", price: "$22" }, budget: { store: "Target", item: "Revlon Super Lustrous Lipstick", price: "$8" } },
+  lipgloss:     { luxury: { store: "Sephora", item: "Dior Addict Lip Maximizer Gloss", price: "$38" }, mid: { store: "Ulta", item: "NYX Butter Gloss", price: "$6" }, budget: { store: "Amazon", item: "Revlon Super Lustrous Lip Gloss", price: "$5" } },
+  lipliner:     { luxury: { store: "Sephora", item: "Charlotte Tilbury Lip Cheat Liner", price: "$25" }, mid: { store: "Ulta", item: "NYX Slim Lip Pencil", price: "$5" }, budget: { store: "Amazon", item: "e.l.f. Lip Liner", price: "$3" } },
+  eyeshadow:    { luxury: { store: "Sephora", item: "Pat McGrath Mothership Palette", price: "$128" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } },
+  eyeliner:     { luxury: { store: "Sephora", item: "Stila Stay All Day Liquid Liner", price: "$24" }, mid: { store: "Ulta", item: "NYX Epic Ink Liner", price: "$9" }, budget: { store: "Amazon", item: "e.l.f. Intense Ink Eyeliner", price: "$4" } },
+  mascara:      { luxury: { store: "Sephora", item: "Lancôme Lash Idôle Mascara", price: "$28" }, mid: { store: "Ulta", item: "Maybelline Lash Sensational", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Lash 'N Roll Mascara", price: "$5" } },
+  brow:         { luxury: { store: "Sephora", item: "Anastasia Brow Wiz", price: "$25" }, mid: { store: "Ulta", item: "NYX Micro Brow Pencil", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Ultra Precise Brow Pencil", price: "$3" } },
+  setting:      { luxury: { store: "Sephora", item: "Charlotte Tilbury Setting Spray", price: "$38" }, mid: { store: "Ulta", item: "NYX Matte Finish Setting Spray", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Makeup Mist & Set", price: "$6" } },
+  skincare:     { luxury: { store: "Sephora", item: "La Mer Moisturizing Cream", price: "$200" }, mid: { store: "Ulta", item: "CeraVe Moisturizing Cream", price: "$19" }, budget: { store: "Amazon", item: "Neutrogena Hydro Boost Gel", price: "$15" } },
+  moisturizer:  { luxury: { store: "Sephora", item: "Tatcha Dewy Skin Cream", price: "$72" }, mid: { store: "Ulta", item: "CeraVe Daily Moisturizer", price: "$16" }, budget: { store: "Target", item: "Cetaphil Moisturizing Lotion", price: "$10" } },
+  serum:        { luxury: { store: "Sephora", item: "Drunk Elephant C-Firma Serum", price: "$78" }, mid: { store: "Ulta", item: "The Ordinary Niacinamide 10%", price: "$6" }, budget: { store: "Amazon", item: "TruSkin Vitamin C Serum", price: "$20" } },
+  sunscreen:    { luxury: { store: "Sephora", item: "Supergoop Unseen Sunscreen", price: "$38" }, mid: { store: "Ulta", item: "La Roche-Posay Anthelios SPF 60", price: "$28" }, budget: { store: "Amazon", item: "Neutrogena Ultra Sheer SPF 70", price: "$10" } },
+  palette:      { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Urban Decay Naked Palette", price: "$27" }, budget: { store: "Amazon", item: "Maybelline The 24K Nudes Palette", price: "$10" } },
+  lip:          { luxury: { store: "Nordstrom", item: "YSL Tatouage Couture Lip Stain", price: "$40" }, mid: { store: "Ulta", item: "MAC Retro Matte Lipstick", price: "$22" }, budget: { store: "Target", item: "NYX Suede Matte Lip", price: "$8" } },
+  eye:          { luxury: { store: "Sephora", item: "Pat McGrath Labs Eye Palette", price: "$128" }, mid: { store: "Ulta", item: "ColourPop Eyeshadow Palette", price: "$14" }, budget: { store: "Amazon", item: "e.l.f. Bite Size Eyeshadow", price: "$3" } },
+  makeup:       { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Set", price: "$75" }, mid: { store: "Ulta", item: "NYX Professional Makeup Set", price: "$25" }, budget: { store: "Amazon", item: "e.l.f. Flawless Face Kit", price: "$12" } },
+  hair:         { luxury: { store: "Sephora", item: "Oribe Gold Lust Shampoo & Conditioner", price: "$92" }, mid: { store: "Ulta", item: "Moroccanoil Treatment", price: "$38" }, budget: { store: "Amazon", item: "OGX Argan Oil of Morocco Shampoo", price: "$8" } },
+  perfume:      { luxury: { store: "Sephora", item: "Le Labo Santal 33 EDP", price: "$310" }, mid: { store: "Ulta", item: "Sol de Janeiro Cheirosa '62", price: "$35" }, budget: { store: "Amazon", item: "Raw Spirit Wild Fire Rollerball", price: "$15" } },
+  nails:        { luxury: { store: "Nordstrom", item: "Chanel Le Vernis Nail Colour", price: "$30" }, mid: { store: "Ulta", item: "OPI Infinite Shine", price: "$13" }, budget: { store: "Amazon", item: "Essie Nail Polish", price: "$8" } },
+  lashes:       { luxury: { store: "Sephora", item: "Lilly Lashes 3D Mink Lashes", price: "$30" }, mid: { store: "Ulta", item: "Ardell Demi Wispies", price: "$5" }, budget: { store: "Amazon", item: "KISS Lash Couture Faux Mink", price: "$5" } },
+  brush:        { luxury: { store: "Sephora", item: "Artis Elite Oval 7 Brush", price: "$75" }, mid: { store: "Ulta", item: "Real Techniques Everyday Essentials Set", price: "$20" }, budget: { store: "Amazon", item: "BS-MALL Makeup Brush Set 14pc", price: "$10" } },
+  sponge:       { luxury: { store: "Sephora", item: "Beautyblender Original", price: "$20" }, mid: { store: "Ulta", item: "Real Techniques Miracle Sponge", price: "$6" }, budget: { store: "Amazon", item: "AOA Studio Paw Paw Sponge", price: "$1" } },
+};
+
+const getBeautyStores = (item: string) => {
+  return findMatch(item, beautyStoreMap) || {
+    luxury: { store: "Sephora", item, price: "$30+" },
+    mid: { store: "Ulta", item, price: "$10–20" },
+    budget: { store: "Amazon", item, price: "$5–12" },
+  };
+};
+
 const findMatch = (item: string, map: Record<string, any>) => {
   const lower = item.toLowerCase();
   for (const [key, val] of Object.entries(map)) {
@@ -95,7 +136,8 @@ const findMatch = (item: string, map: Record<string, any>) => {
 };
 
 const getClothingStores = (item: string) => {
-  return findMatch(item, clothingStoreMap) || {
+  // Check beauty map first (some clothing items might be beauty-related)
+  return findMatch(item, clothingStoreMap) || findMatch(item, beautyStoreMap) || {
     luxury: { store: "Nordstrom", item, price: "$150+" },
     mid: { store: "Zara", item, price: "$40–80" },
     budget: { store: "H&M", item, price: "$15–30" },
@@ -103,7 +145,7 @@ const getClothingStores = (item: string) => {
 };
 
 const getAccessoryStores = (item: string) => {
-  return findMatch(item, accessoryStoreMap) || {
+  return findMatch(item, accessoryStoreMap) || findMatch(item, beautyStoreMap) || {
     luxury: { store: "Nordstrom", item, price: "$150+" },
     mid: { store: "Mango", item, price: "$40–80" },
     budget: { store: "Amazon", item, price: "$10–25" },
