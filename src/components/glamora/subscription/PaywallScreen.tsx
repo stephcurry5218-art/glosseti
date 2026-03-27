@@ -139,7 +139,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       <div style={{ fontSize: 24, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
                         ${price}
                         <span style={{ fontSize: 12, fontWeight: 400, color: "hsl(var(--glamora-gray))" }}>
-                          /{billingCycle === "yearly" && plan.yearlyPrice ? "yr" : "mo"}
+                          /{periodLabel}
                         </span>
                       </div>
                       {perMonth && (
