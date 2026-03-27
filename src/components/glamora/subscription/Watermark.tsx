@@ -8,7 +8,7 @@ const Watermark = () => (
     textTransform: "uppercase", pointerEvents: "none",
     userSelect: "none",
   }}>
-    GLAMORA FREE
+    GLOSSETI FREE
   </div>
 );
 

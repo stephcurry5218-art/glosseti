@@ -43,7 +43,7 @@ export const shareToSocial = async (platform: SharePlatform, data: ShareData): P
   if (platform === "native" && navigator.share) {
     try {
       await navigator.share({
-        title: "My Glamora Style",
+        title: "My Glosseti Style",
         text: data.text,
         url: data.url || APP_URL,
       });

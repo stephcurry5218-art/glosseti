@@ -320,7 +320,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
           textTransform: "uppercase", color: `hsla(${accent} / 0.7)`,
           fontWeight: 500, transition: "color 0.6s ease",
         }}>
-          Tap to Glam
+          Tap to Style
         </div>
       </div>
     </div>

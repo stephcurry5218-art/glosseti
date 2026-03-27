@@ -40,7 +40,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         {/* Top bar */}
         <div style={{ position: "relative", zIndex: 5, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "44px 20px 0" }}>
           <div className="serif" style={{ fontSize: 24, fontWeight: 400, letterSpacing: 4, color: "white" }}>
-            GLAMORA<span style={{ color: `hsl(${accent})` }}>.</span>
+            GLOSSETI<span style={{ color: `hsl(${accent})` }}>.</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{

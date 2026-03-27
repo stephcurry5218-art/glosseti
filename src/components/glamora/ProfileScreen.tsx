@@ -84,7 +84,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
     { Icon: Settings, label: "Settings", action: undefined },
     { Icon: MessageCircle, label: "Support", action: undefined },
-    { Icon: Star, label: "Rate Glamora", action: undefined },
+    { Icon: Star, label: "Rate Glosseti", action: undefined },
   ];
 
   if (user) {

@@ -25,7 +25,7 @@ const handleDownload = async (imageUrl: string) => {
     const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = blobUrl;
-    a.download = `glamora-inspired-look-${Date.now()}.png`;
+    a.download = `glosseti-inspired-look-${Date.now()}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
