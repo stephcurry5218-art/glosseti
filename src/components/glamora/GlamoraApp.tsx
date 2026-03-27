@@ -39,6 +39,7 @@ export interface UserPrefs {
 }
 
 const GlamoraApp = () => {
+  const chatRef = useRef<StylistChatHandle>(null);
   const [screen, setScreen] = useState<Screen>("splash");
   const [savedStyles, setSavedStyles] = useState<string[]>([]);
   const [selectedLook, setSelectedLook] = useState("Soft Glam");
