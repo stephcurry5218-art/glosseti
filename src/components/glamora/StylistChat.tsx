@@ -382,6 +382,6 @@ const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender }, ref) => {
       </div>
     </div>
   );
-};
+});
 
 export default StylistChat;
