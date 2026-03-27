@@ -229,8 +229,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         }}>
           <Bookmark size={16} color={`hsl(${accent})`} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Saved Looks</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>{savedCount} saved</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>Saved Looks</div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)" }}>{savedCount} saved</div>
           </div>
           {savedCount > 0 && (
             <div style={{
