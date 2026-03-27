@@ -163,23 +163,14 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
 
         {/* Shop This Look */}
         {hasStyled && profile.clothingTypes.length > 0 && (() => {
-          // Build shop items from the style profile's clothing + accessories
           const shopItems: ShopItem[] = [
             ...profile.clothingTypes.map((item) => ({
               label: item,
-              stores: {
-                luxury: { store: "Nordstrom", item: `${item} designer`, price: "$$$$" },
-                mid: { store: "Zara", item: `${item}`, price: "$$" },
-                budget: { store: "H&M", item: `${item}`, price: "$" },
-              },
+              stores: getClothingStores(item),
             })),
             ...profile.accessories.map((item) => ({
               label: item,
-              stores: {
-                luxury: { store: "Net-a-Porter", item: `${item} luxury`, price: "$$$$" },
-                mid: { store: "Mango", item: `${item}`, price: "$$" },
-                budget: { store: "Amazon", item: `${item}`, price: "$" },
-              },
+              stores: getAccessoryStores(item),
             })),
           ];
           return (
