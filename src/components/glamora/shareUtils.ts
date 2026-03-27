@@ -3,7 +3,7 @@
 const APP_URL = "https://glosseti.app";
 const HASHTAGS = "Glosseti,AIStyle,FashionAI";
 
-export type SharePlatform = "twitter" | "facebook" | "pinterest" | "whatsapp" | "copy" | "native";
+export type SharePlatform = "twitter" | "facebook" | "pinterest" | "whatsapp" | "instagram" | "tiktok" | "snapchat" | "telegram" | "linkedin" | "reddit" | "email" | "copy" | "native";
 
 interface ShareData {
   text: string;
@@ -25,6 +25,19 @@ const getShareUrl = (platform: SharePlatform, data: ShareData): string => {
       return `https://pinterest.com/pin/create/button/?url=${url}&description=${text}${data.imageUrl ? `&media=${encodeURIComponent(data.imageUrl)}` : ""}`;
     case "whatsapp":
       return `https://api.whatsapp.com/send?text=${text}%20${url}`;
+    case "telegram":
+      return `https://t.me/share/url?url=${url}&text=${text}`;
+    case "linkedin":
+      return `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+    case "reddit":
+      return `https://www.reddit.com/submit?url=${url}&title=${text}`;
+    case "email":
+      return `mailto:?subject=${encodeURIComponent("Check out my AI-styled look on Glosseti!")}&body=${text}%0A%0A${url}`;
+    case "instagram":
+    case "tiktok":
+    case "snapchat":
+      // These platforms don't support web-based sharing — handled via native share or copy
+      return "";
     default:
       return "";
   }

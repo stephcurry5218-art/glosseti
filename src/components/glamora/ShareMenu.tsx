@@ -10,20 +10,40 @@ interface Props {
 
 const platforms: { id: SharePlatform; label: string; icon: string; color: string }[] = [
   { id: "twitter", label: "X / Twitter", icon: "𝕏", color: "#000" },
+  { id: "instagram", label: "Instagram", icon: "📷", color: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)" },
+  { id: "tiktok", label: "TikTok", icon: "♪", color: "#000" },
+  { id: "snapchat", label: "Snapchat", icon: "👻", color: "#FFFC00" },
   { id: "facebook", label: "Facebook", icon: "f", color: "#1877F2" },
   { id: "pinterest", label: "Pinterest", icon: "P", color: "#E60023" },
   { id: "whatsapp", label: "WhatsApp", icon: "W", color: "#25D366" },
+  { id: "telegram", label: "Telegram", icon: "✈", color: "#0088cc" },
+  { id: "linkedin", label: "LinkedIn", icon: "in", color: "#0A66C2" },
+  { id: "reddit", label: "Reddit", icon: "R", color: "#FF4500" },
+  { id: "email", label: "Email", icon: "✉", color: "#666" },
 ];
 
 const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedLabel, setCopiedLabel] = useState("");
 
   const handleShare = async (platform: SharePlatform) => {
+    // Instagram, TikTok, Snapchat don't have web share URLs — copy link instead
+    const copyOnlyPlatforms: SharePlatform[] = ["instagram", "tiktok", "snapchat"];
+    if (copyOnlyPlatforms.includes(platform)) {
+      const success = await shareToSocial("copy", { text: text + `\n\nStyled with #Glosseti ✨`, imageUrl });
+      if (success) {
+        setCopied(true);
+        setCopiedLabel(`Copied! Paste in ${platforms.find(p => p.id === platform)?.label}`);
+        setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 3000);
+      }
+      return;
+    }
     const success = await shareToSocial(platform, { text, imageUrl });
     if (platform === "copy" && success) {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedLabel("Copied!");
+      setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 2000);
     }
     if (platform !== "copy") setOpen(false);
   };
@@ -47,13 +67,13 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
 
       {open && (
         <>
-          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 300 }} />
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 300, background: "hsla(0 0% 0% / 0.4)" }} />
           <div style={{
-            position: "absolute", bottom: "calc(100% + 8px)", right: 0, zIndex: 301,
-            background: "hsl(var(--glamora-cream))", borderRadius: 18, padding: 14,
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 301,
+            background: "hsl(var(--glamora-cream))", borderRadius: "20px 20px 0 0", padding: "16px 18px 24px",
             border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",
-            boxShadow: "0 8px 32px hsla(0 0% 0% / 0.18)",
-            minWidth: 200, animation: "fadeUp 0.2s ease both",
+            boxShadow: "0 -8px 32px hsla(0 0% 0% / 0.18)",
+            animation: "fadeUp 0.25s ease both", maxHeight: "70vh", overflowY: "auto",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", fontFamily: "'Jost', sans-serif" }}>
@@ -68,11 +88,12 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
               </button>
             </div>
 
-            <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 12 }}>
               {platforms.map((p) => (
                 <button key={p.id} onClick={() => handleShare(p.id)} style={{
                   width: 44, height: 44, borderRadius: 12, border: "none", cursor: "pointer",
-                  background: p.color, color: "white", fontSize: 18, fontWeight: 700,
+                  background: p.color, color: p.id === "snapchat" ? "#000" : "white",
+                  fontSize: p.icon.length > 1 ? 13 : 18, fontWeight: 700,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontFamily: "sans-serif", transition: "transform 0.15s",
                 }} title={p.label}>
@@ -81,17 +102,29 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
               ))}
             </div>
 
+            {copied && copiedLabel && (
+              <div style={{
+                padding: "8px 12px", borderRadius: 10, marginBottom: 10,
+                background: "hsla(var(--glamora-success) / 0.1)",
+                border: "1px solid hsla(var(--glamora-success) / 0.3)",
+                fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-success))",
+                textAlign: "center", fontFamily: "'Jost', sans-serif",
+              }}>
+                ✅ {copiedLabel}
+              </div>
+            )}
+
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={() => handleShare("copy")} style={{
                 flex: 1, padding: "10px 12px", borderRadius: 12,
                 border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",
-                background: copied ? "hsla(var(--glamora-success) / 0.1)" : "hsl(var(--glamora-cream2))",
+                background: copied && !copiedLabel.includes("Paste") ? "hsla(var(--glamora-success) / 0.1)" : "hsl(var(--glamora-cream2))",
                 cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 fontSize: 12, fontWeight: 600, fontFamily: "'Jost', sans-serif",
-                color: copied ? "hsl(var(--glamora-success))" : "hsl(var(--glamora-char))",
+                color: copied && !copiedLabel.includes("Paste") ? "hsl(var(--glamora-success))" : "hsl(var(--glamora-char))",
                 transition: "all 0.2s",
               }}>
-                {copied ? <><Check size={14} /> Copied!</> : <><Copy size={14} /> Copy Link</>}
+                {copied && !copiedLabel.includes("Paste") ? <><Check size={14} /> Copied!</> : <><Copy size={14} /> Copy Link</>}
               </button>
               {typeof navigator !== "undefined" && navigator.share && (
                 <button onClick={handleNative} style={{
