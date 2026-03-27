@@ -247,8 +247,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         }}>
           <Zap size={16} color="hsl(var(--glamora-success))" />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>3 Price Tiers</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>Luxury to budget</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>3 Price Tiers</div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)" }}>Luxury to budget</div>
           </div>
         </div>
       </div>
