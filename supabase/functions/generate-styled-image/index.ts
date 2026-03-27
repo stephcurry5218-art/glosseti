@@ -109,9 +109,13 @@ serve(async (req) => {
       ];
     } else {
       // On-me mode: restyle the user's photo
+      const isRevealing = styleCategory === "swimwear" || styleCategory === "lingerie" || styleCategory === "sexy";
+      const keepNote = isRevealing
+        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
+        : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} Keep face, body, background. Realistic clothing, warm lighting.${celebrityNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} Keep face and background. Realistic, warm lighting.${celebrityNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`;
 
       messages = [
         {
