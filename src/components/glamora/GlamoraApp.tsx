@@ -31,6 +31,7 @@ type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "load
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
+  styleSubcategory?: string;
   photoType: PhotoType;
   photoFile: File | null;
   photoBase64: string | null;
@@ -132,11 +133,12 @@ const GlamoraApp = () => {
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
       {screen === "style-picker" && (
         <StylePickerScreen prefs={prefs} onBack={() => go("home")}
-          onNext={(category: StyleCategory, celebrityGuide?: string) => {
+          onNext={(category: StyleCategory, celebrityGuide?: string, subcategory?: string) => {
             const needsCelebrityGuide = category === "celebrity-makeup" || category === "celebrity-hair";
             setPrefs(p => ({
               ...p,
               styleCategory: category,
+              styleSubcategory: subcategory,
               celebrityGuide: needsCelebrityGuide ? celebrityGuide : undefined,
             }));
             go("upload");

@@ -86,6 +86,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
           body: {
             imageBase64: prefs.photoBase64,
             styleCategory: prefs.styleCategory,
+            styleSubcategory: prefs.styleSubcategory || undefined,
             photoType: prefs.photoType,
             gender: prefs.gender,
             generationMode: prefs.generationMode,
