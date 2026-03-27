@@ -270,12 +270,12 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const toggleCategory = (id: StyleCategory) => {
     setSelected(prev => {
       if (prev.includes(id)) {
-        // Don't allow deselecting the last one
         if (prev.length <= 1) return prev;
         return prev.filter(c => c !== id);
       }
       return [...prev, id];
     });
+    setSelectedSub(null);
   };
 
   // Show detail for the most recently selected and use it as the primary generation style
