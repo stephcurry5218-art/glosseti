@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star } from "lucide-react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2 } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
@@ -110,6 +110,16 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     id: "lingerie", label: "Lingerie & Intimates", Icon: Heart,
     desc: "Elegant intimate wear — lace, silk, and delicate details",
     includes: ["Bralettes & Corsets", "Silk Robes & Slips", "Lace Sets", "Loungewear"],
+  },
+  {
+    id: "y2k", label: "Y2K", Icon: Sparkles,
+    desc: "Early 2000s nostalgia — low-rise, butterfly tops, frosted lips",
+    includes: ["Crop Tops & Halters", "Mini Skirts & Low-Rise Jeans", "Platform Shoes", "Tinted Sunglasses & Belly Chains"],
+  },
+  {
+    id: "cottagecore", label: "Cottagecore", Icon: Flower2,
+    desc: "Romantic countryside aesthetic — florals, linen, wicker",
+    includes: ["Floral Dresses", "Puff-Sleeve Blouses", "Mary Janes & Leather Boots", "Straw Hats & Wicker Bags"],
   },
 ];
 

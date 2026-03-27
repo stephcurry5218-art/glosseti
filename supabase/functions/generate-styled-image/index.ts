@@ -77,6 +77,14 @@ serve(async (req) => {
         female: "wearing ONLY lingerie — a delicate lace bralette and matching lace briefs/thong, NO regular clothes, NO pants, NO shirt over it. Include a sheer silk robe draped open (not covering the lingerie), satin mule slippers, dainty gold body chain jewelry. Boudoir setting with soft warm lighting and luxurious velvet/silk backdrop. Elegant and tasteful.",
         male: "wearing ONLY luxury loungewear — fitted silk boxer shorts and an open silk robe showing bare chest, NO regular clothes. Bedroom setting with soft warm lighting and elegant decor. Minimal accessories.",
       },
+      y2k: {
+        female: "wearing Y2K early-2000s fashion: low-rise flare jeans or a pleated mini skirt, a sparkly butterfly crop top or halter top, platform flip-flops or chunky sneakers, tinted rectangular sunglasses, layered belly chains, a tiny baguette bag, and frosted lip gloss with shimmery eyeshadow.",
+        male: "wearing Y2K early-2000s fashion: baggy bootcut jeans with a studded belt, a fitted graphic baby tee or mesh tank, chunky skate shoes, frosted tips or spiky hair, layered chain necklaces, and a trucker hat.",
+      },
+      cottagecore: {
+        female: "wearing cottagecore aesthetic: a flowing floral midi dress with puff sleeves and smocked bodice, a woven straw sun hat, brown leather mary-jane shoes, a wicker basket purse, dainty daisy chain jewelry, and natural dewy makeup with rosy cheeks. Countryside meadow setting with wildflowers.",
+        male: "wearing cottagecore aesthetic: a relaxed linen button-up shirt in cream or sage, high-waisted brown corduroy trousers, brown leather boots, a woven straw hat, a canvas crossbody bag, and a simple leather-strap watch. Countryside setting with fields and greenery.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
