@@ -44,6 +44,42 @@ export type Database = {
         }
         Relationships: []
       }
+      style_history: {
+        Row: {
+          celebrity_inspiration: string | null
+          created_at: string
+          gender: string
+          generation_mode: string
+          id: string
+          metadata: Json | null
+          style_category: string
+          style_name: string | null
+          user_id: string
+        }
+        Insert: {
+          celebrity_inspiration?: string | null
+          created_at?: string
+          gender?: string
+          generation_mode?: string
+          id?: string
+          metadata?: Json | null
+          style_category: string
+          style_name?: string | null
+          user_id: string
+        }
+        Update: {
+          celebrity_inspiration?: string | null
+          created_at?: string
+          gender?: string
+          generation_mode?: string
+          id?: string
+          metadata?: Json | null
+          style_category?: string
+          style_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
