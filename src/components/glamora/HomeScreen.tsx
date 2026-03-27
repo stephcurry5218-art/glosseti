@@ -182,7 +182,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             {isMale ? <Scissors size={18} color="hsl(var(--glamora-gold))" /> : <Palette size={18} color="hsl(var(--glamora-gold))" />}
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>
               {isMale ? "Grooming" : "Makeup"}
             </div>
             <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
