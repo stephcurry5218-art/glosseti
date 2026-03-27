@@ -324,57 +324,33 @@ const StylistChat = ({ gender }: Props) => {
           </div>
       </div>
 
-      {/* Prompt bar — always visible */}
+      {/* Prompt bar */}
       <div
         style={{
-          padding: expanded ? "10px 14px 14px" : "10px 14px 18px",
+          padding: "10px 14px 14px",
           display: "flex",
           gap: 8,
           alignItems: "center",
-          background: expanded
-            ? "hsl(var(--glamora-cream))"
-            : "linear-gradient(to top, hsla(var(--background) / 1) 60%, hsla(var(--background) / 0))",
-          borderTop: expanded ? "1px solid hsla(var(--glamora-gold) / 0.1)" : "none",
+          background: "hsl(var(--glamora-cream))",
+          borderTop: "1px solid hsla(var(--glamora-gold) / 0.1)",
         }}
       >
-        {!expanded && (
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: "50%",
-              background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Sparkles size={16} color="white" />
-          </div>
-        )}
         <input
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          onFocus={() => {
-            if (messages.length > 1 && !expanded) setExpanded(true);
-          }}
           placeholder="Ask Gio anything about style..."
           style={{
             flex: 1,
             padding: "11px 16px",
             borderRadius: 22,
-            background: expanded
-              ? "hsl(var(--glamora-cream2))"
-              : "hsla(0 0% 100% / 0.08)",
+            background: "hsl(var(--glamora-cream2))",
             border: "1.5px solid hsla(var(--glamora-gold) / 0.15)",
             color: "hsl(var(--glamora-char))",
             fontSize: 13,
             fontFamily: "'Jost', sans-serif",
             outline: "none",
-            backdropFilter: expanded ? "none" : "blur(12px)",
           }}
         />
         <button
