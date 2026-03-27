@@ -253,6 +253,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
+  const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const [celebrityGuide, setCelebrityGuide] = useState("");
   const isMale = prefs.gender === "male";
 
