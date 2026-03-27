@@ -161,7 +161,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Eye size={18} color={`hsl(${accent})`} />
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>AI Vision</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>AI Vision</div>
             <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
               {isMale ? "Full outfit analysis" : "Head-to-toe scan"}
             </div>
