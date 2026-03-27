@@ -36,6 +36,80 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
+// Smart store mapping for AI-generated clothing items
+const clothingStoreMap: Record<string, { luxury: { store: string; item: string; price: string }; mid: { store: string; item: string; price: string }; budget: { store: string; item: string; price: string } }> = {
+  blazer:       { luxury: { store: "Nordstrom", item: "Theory Etiennette Blazer", price: "$455" }, mid: { store: "Zara", item: "Double-Breasted Blazer", price: "$90" }, budget: { store: "H&M", item: "Single-Button Blazer", price: "$35" } },
+  jacket:       { luxury: { store: "AllSaints", item: "Dalby Leather Biker Jacket", price: "$549" }, mid: { store: "Mango", item: "Faux Leather Biker Jacket", price: "$120" }, budget: { store: "Amazon", item: "Levi's Faux Leather Moto Jacket", price: "$45" } },
+  coat:         { luxury: { store: "Nordstrom", item: "Max Mara Madame Wool Coat", price: "$3,690" }, mid: { store: "& Other Stories", item: "Belted Wool Coat", price: "$249" }, budget: { store: "H&M", item: "Double-Breasted Coat", price: "$60" } },
+  dress:        { luxury: { store: "Net-a-Porter", item: "Reformation Midi Dress", price: "$278" }, mid: { store: "& Other Stories", item: "Belted Midi Dress", price: "$119" }, budget: { store: "H&M", item: "Crêpe Dress", price: "$30" } },
+  jeans:        { luxury: { store: "Nordstrom", item: "Citizens of Humanity Horseshoe Jeans", price: "$238" }, mid: { store: "Madewell", item: "Perfect Vintage Jean", price: "$138" }, budget: { store: "Amazon", item: "Levi's 501 Original Fit", price: "$45" } },
+  pants:        { luxury: { store: "Nordstrom", item: "Vince Tailored Trousers", price: "$345" }, mid: { store: "Banana Republic", item: "Slim Italian Wool Pant", price: "$140" }, budget: { store: "Uniqlo", item: "Smart Ankle Pants", price: "$40" } },
+  trousers:     { luxury: { store: "Nordstrom", item: "Theory Good Wool Trousers", price: "$295" }, mid: { store: "Zara", item: "High-Waist Trousers", price: "$50" }, budget: { store: "H&M", item: "Tailored Trousers", price: "$28" } },
+  skirt:        { luxury: { store: "Net-a-Porter", item: "Vince Satin Slip Skirt", price: "$265" }, mid: { store: "& Other Stories", item: "Satin Midi Skirt", price: "$79" }, budget: { store: "Amazon", item: "SheIn High Waist Midi Skirt", price: "$18" } },
+  shirt:        { luxury: { store: "Ralph Lauren", item: "Oxford Button-Down Shirt", price: "$125" }, mid: { store: "J.Crew", item: "Slim Stretch Cotton Shirt", price: "$80" }, budget: { store: "Uniqlo", item: "Oxford Slim-Fit Shirt", price: "$30" } },
+  blouse:       { luxury: { store: "Reformation", item: "Kelsey Silk Wrap Top", price: "$178" }, mid: { store: "Mango", item: "Floral Print Wrap Blouse", price: "$50" }, budget: { store: "Amazon", item: "VIISHOW Chiffon V-Neck Blouse", price: "$22" } },
+  top:          { luxury: { store: "Net-a-Porter", item: "The Row Ellie Knit Top", price: "$590" }, mid: { store: "Zara", item: "Ribbed Knit Top", price: "$36" }, budget: { store: "H&M", item: "Fitted Jersey Top", price: "$10" } },
+  sweater:      { luxury: { store: "Nordstrom", item: "Vince Cashmere Crew Sweater", price: "$345" }, mid: { store: "Everlane", item: "Cashmere Crew", price: "$130" }, budget: { store: "Amazon", item: "Amazon Essentials Crewneck Sweater", price: "$28" } },
+  turtleneck:   { luxury: { store: "Net-a-Porter", item: "The Row Funnel-Neck Knit", price: "$490" }, mid: { store: "Everlane", item: "Cashmere Turtleneck", price: "$130" }, budget: { store: "Uniqlo", item: "Heattech Turtleneck", price: "$15" } },
+  camisole:     { luxury: { store: "Net-a-Porter", item: "Vince Silk Camisole", price: "$225" }, mid: { store: "Nordstrom", item: "Topshop Satin Cowl Cami", price: "$45" }, budget: { store: "H&M", item: "Satin V-Neck Camisole", price: "$18" } },
+  heels:        { luxury: { store: "Nordstrom", item: "Stuart Weitzman Nudist Sandal", price: "$425" }, mid: { store: "DSW", item: "Sam Edelman Yaro Block Heel", price: "$120" }, budget: { store: "Target", item: "A New Day Block Heel Sandal", price: "$30" } },
+  boots:        { luxury: { store: "Nordstrom", item: "Isabel Marant Dicker Boot", price: "$690" }, mid: { store: "DSW", item: "Dolce Vita Western Boot", price: "$130" }, budget: { store: "Target", item: "Universal Thread Ankle Boot", price: "$35" } },
+  sneakers:     { luxury: { store: "Nordstrom", item: "Golden Goose Superstar", price: "$530" }, mid: { store: "DSW", item: "New Balance 550", price: "$110" }, budget: { store: "Amazon", item: "Adidas Grand Court Sneaker", price: "$45" } },
+  loafers:      { luxury: { store: "Nordstrom", item: "Gucci Horsebit Loafer", price: "$890" }, mid: { store: "Cole Haan", item: "Geneva Loafer", price: "$130" }, budget: { store: "Amazon", item: "Amazon Essentials Loafer", price: "$28" } },
+  sandals:      { luxury: { store: "Nordstrom", item: "Ancient Greek Sandals Desmos", price: "$230" }, mid: { store: "DSW", item: "Steve Madden Flat Sandal", price: "$60" }, budget: { store: "Amazon", item: "Amazon Essentials Flat Sandal", price: "$18" } },
+  flats:        { luxury: { store: "Nordstrom", item: "Jimmy Choo Romy Ballet Flat", price: "$595" }, mid: { store: "DSW", item: "Sam Edelman Jillie Flat", price: "$100" }, budget: { store: "Target", item: "A New Day Pointed Toe Flat", price: "$22" } },
+  suit:         { luxury: { store: "Brooks Brothers", item: "Regent Fit Wool Suit", price: "$898" }, mid: { store: "Banana Republic", item: "Italian Wool Suit", price: "$450" }, budget: { store: "Amazon", item: "Kenneth Cole Slim-Fit Suit", price: "$130" } },
+  hoodie:       { luxury: { store: "Nordstrom", item: "Acne Studios Logo Hoodie", price: "$380" }, mid: { store: "Everlane", item: "French Terry Hoodie", price: "$58" }, budget: { store: "Amazon", item: "Hanes EcoSmart Hoodie", price: "$15" } },
+  shorts:       { luxury: { store: "Nordstrom", item: "Vince Pleated Shorts", price: "$225" }, mid: { store: "J.Crew", item: "Dock Short", price: "$60" }, budget: { store: "Target", item: "Goodfellow Flat Front Short", price: "$20" } },
+  vest:         { luxury: { store: "Ralph Lauren", item: "Quilted Vest", price: "$248" }, mid: { store: "Banana Republic", item: "Puffer Vest", price: "$90" }, budget: { store: "Amazon", item: "Amazon Essentials Puffer Vest", price: "$32" } },
+  jumpsuit:     { luxury: { store: "Net-a-Porter", item: "Stella McCartney Tailored Jumpsuit", price: "$1,295" }, mid: { store: "& Other Stories", item: "Belted Utility Jumpsuit", price: "$129" }, budget: { store: "H&M", item: "Jersey Jumpsuit", price: "$30" } },
+  cardigan:     { luxury: { store: "Nordstrom", item: "Vince Cashmere Cardigan", price: "$395" }, mid: { store: "Everlane", item: "Oversized Alpaca Cardigan", price: "$128" }, budget: { store: "Amazon", item: "Amazon Essentials Cardigan", price: "$25" } },
+};
+
+const accessoryStoreMap: Record<string, { luxury: { store: string; item: string; price: string }; mid: { store: string; item: string; price: string }; budget: { store: string; item: string; price: string } }> = {
+  watch:        { luxury: { store: "Nordstrom", item: "TAG Heuer Carrera 29mm", price: "$2,350" }, mid: { store: "Amazon", item: "Fossil Jacqueline Watch", price: "$90" }, budget: { store: "Amazon", item: "Casio Classic Watch", price: "$18" } },
+  necklace:     { luxury: { store: "Mejuri", item: "Bold Link Chain Necklace", price: "$198" }, mid: { store: "Gorjana", item: "Layered Necklace Set", price: "$65" }, budget: { store: "Amazon", item: "PAVOI 14K Layered Necklace", price: "$14" } },
+  earrings:     { luxury: { store: "Mejuri", item: "Croissant Dome Gold Hoops", price: "$125" }, mid: { store: "Nordstrom", item: "BaubleBar Dalilah Hoops", price: "$42" }, budget: { store: "Amazon", item: "PAVOI 14K Gold Chunky Hoops", price: "$14" } },
+  bracelet:     { luxury: { store: "Nordstrom", item: "David Yurman Cable Bracelet", price: "$450" }, mid: { store: "Gorjana", item: "Power Gemstone Bracelet", price: "$38" }, budget: { store: "Amazon", item: "PAVOI Cuff Bangle Bracelet", price: "$12" } },
+  ring:         { luxury: { store: "Mejuri", item: "Dome Ring in 14K Gold", price: "$175" }, mid: { store: "Gorjana", item: "Stackable Ring Set", price: "$55" }, budget: { store: "Amazon", item: "PAVOI 14K Gold Stacking Rings", price: "$12" } },
+  bag:          { luxury: { store: "Nordstrom", item: "Saint Laurent Kate Chain Bag", price: "$2,150" }, mid: { store: "Coach Outlet", item: "Mini Skinny Crossbody", price: "$89" }, budget: { store: "Amazon", item: "CLUCI Small Crossbody Bag", price: "$22" } },
+  handbag:      { luxury: { store: "Nordstrom", item: "Bottega Veneta Cassette Bag", price: "$3,200" }, mid: { store: "Rebecca Minkoff", item: "Edie Crossbody", price: "$198" }, budget: { store: "Amazon", item: "CLUCI Leather Handbag", price: "$35" } },
+  belt:         { luxury: { store: "Nordstrom", item: "Gucci GG Marmont Belt", price: "$470" }, mid: { store: "Cole Haan", item: "Feather Edge Belt", price: "$68" }, budget: { store: "Amazon", item: "Amazon Essentials Leather Belt", price: "$15" } },
+  scarf:        { luxury: { store: "Nordstrom", item: "Burberry Classic Check Scarf", price: "$520" }, mid: { store: "Nordstrom", item: "Halogen Cashmere Scarf", price: "$70" }, budget: { store: "Amazon", item: "Amazon Essentials Scarf", price: "$15" } },
+  sunglasses:   { luxury: { store: "Nordstrom", item: "Celine Triomphe Sunglasses", price: "$460" }, mid: { store: "Nordstrom", item: "Ray-Ban Wayfarer Classic", price: "$163" }, budget: { store: "Amazon", item: "SOJOS Retro Square Sunglasses", price: "$15" } },
+  hat:          { luxury: { store: "Nordstrom", item: "Janessa Leoné Packable Fedora", price: "$238" }, mid: { store: "Madewell", item: "Packable Straw Hat", price: "$48" }, budget: { store: "Amazon", item: "Lanzom Wide Brim Straw Hat", price: "$16" } },
+  tie:          { luxury: { store: "Brooks Brothers", item: "Silk Rep Tie", price: "$98" }, mid: { store: "Ralph Lauren", item: "Silk Twill Tie", price: "$75" }, budget: { store: "Amazon", item: "KissTies Solid Satin Tie", price: "$10" } },
+  fragrance:    { luxury: { store: "Sephora", item: "Le Labo Santal 33 EDP", price: "$310" }, mid: { store: "Ulta", item: "Sol de Janeiro Cheirosa '62", price: "$35" }, budget: { store: "Amazon", item: "Raw Spirit Wild Fire Rollerball", price: "$15" } },
+  jewelry:      { luxury: { store: "Mejuri", item: "Bold Link Chain + Pendant Set", price: "$230" }, mid: { store: "Gorjana", item: "Layered Necklace Set", price: "$65" }, budget: { store: "Amazon", item: "PAVOI 14K Layered Chain Set", price: "$14" } },
+  glasses:      { luxury: { store: "Nordstrom", item: "Oliver Peoples O'Malley", price: "$420" }, mid: { store: "Nordstrom", item: "Ray-Ban Round Metal", price: "$163" }, budget: { store: "Amazon", item: "SOJOS Blue Light Blocking Glasses", price: "$16" } },
+  clutch:       { luxury: { store: "Nordstrom", item: "Bottega Veneta Pouch Clutch", price: "$1,800" }, mid: { store: "Rebecca Minkoff", item: "Leo Clutch", price: "$98" }, budget: { store: "Amazon", item: "CLUCI Evening Clutch", price: "$18" } },
+  tote:         { luxury: { store: "Nordstrom", item: "Tory Burch Perry Tote", price: "$348" }, mid: { store: "Madewell", item: "The Transport Tote", price: "$178" }, budget: { store: "Amazon", item: "Dreubea Faux Leather Tote", price: "$15" } },
+};
+
+const findMatch = (item: string, map: Record<string, any>) => {
+  const lower = item.toLowerCase();
+  for (const [key, val] of Object.entries(map)) {
+    if (lower.includes(key)) return val;
+  }
+  return null;
+};
+
+const getClothingStores = (item: string) => {
+  return findMatch(item, clothingStoreMap) || {
+    luxury: { store: "Nordstrom", item, price: "$150+" },
+    mid: { store: "Zara", item, price: "$40–80" },
+    budget: { store: "H&M", item, price: "$15–30" },
+  };
+};
+
+const getAccessoryStores = (item: string) => {
+  return findMatch(item, accessoryStoreMap) || {
+    luxury: { store: "Nordstrom", item, price: "$150+" },
+    mid: { store: "Mango", item, price: "$40–80" },
+    budget: { store: "Amazon", item, price: "$10–25" },
+  };
+};
+
 const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, onHome, onSave, onRegenerate, showWatermark }: Props) => {
   const [viewMode, setViewMode] = useState<"compare" | "image">("compare");
   const isMale = prefs.gender === "male";
@@ -163,23 +237,14 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
 
         {/* Shop This Look */}
         {hasStyled && profile.clothingTypes.length > 0 && (() => {
-          // Build shop items from the style profile's clothing + accessories
           const shopItems: ShopItem[] = [
             ...profile.clothingTypes.map((item) => ({
               label: item,
-              stores: {
-                luxury: { store: "Nordstrom", item: `${item} designer`, price: "$$$$" },
-                mid: { store: "Zara", item: `${item}`, price: "$$" },
-                budget: { store: "H&M", item: `${item}`, price: "$" },
-              },
+              stores: getClothingStores(item),
             })),
             ...profile.accessories.map((item) => ({
               label: item,
-              stores: {
-                luxury: { store: "Net-a-Porter", item: `${item} luxury`, price: "$$$$" },
-                mid: { store: "Mango", item: `${item}`, price: "$$" },
-                budget: { store: "Amazon", item: `${item}`, price: "$" },
-              },
+              stores: getAccessoryStores(item),
             })),
           ];
           return (
