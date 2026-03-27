@@ -201,8 +201,8 @@ serve(async (req) => {
             ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${refinementNote}`;
 
       messages = [
         {
