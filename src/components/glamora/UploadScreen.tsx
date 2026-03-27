@@ -30,7 +30,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
     reader.readAsDataURL(f);
   };
 
-  const isMakeup = prefs.styleCategory === "makeup-only";
+  const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "celebrity-makeup" || prefs.styleCategory === "grooming";
+  const isHairOnly = prefs.styleCategory === "celebrity-hair";
+  const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
   const canProceed = isMannequin || !!file;
 
