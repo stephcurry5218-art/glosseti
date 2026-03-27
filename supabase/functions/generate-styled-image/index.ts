@@ -100,9 +100,31 @@ serve(async (req) => {
 
     const isMannequin = generationMode === "mannequin";
 
+    const normalizeRefinementContext = (input: string) => {
+      let normalized = input.slice(0, 800);
+
+      if (styleCategory === "swimwear") {
+        normalized = normalized
+          .replace(/\bbikini\b/gi, "luxury two-piece swim set")
+          .replace(/\btwo-piece\b/gi, "coordinated two-piece swim set")
+          .replace(/\bstring bikini\b/gi, "elegant minimal swim set")
+          .replace(/\bred\b/gi, "rich crimson");
+      }
+
+      if (styleCategory === "lingerie") {
+        normalized = normalized
+          .replace(/\blingerie\b/gi, "luxury sleepwear")
+          .replace(/\bbra\b/gi, "structured satin top")
+          .replace(/\bpanties\b/gi, "matching satin bottoms")
+          .replace(/\bred\b/gi, "deep ruby");
+      }
+
+      return normalized;
+    };
+
     // Add Gio's refinement context if available
     const refinementNote = refinementContext
-      ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look: ${refinementContext.slice(0, 800)}`
+      ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
       : "";
 
     // Add celebrity style guide — mandatory for celebrity-makeup and celebrity-hair
