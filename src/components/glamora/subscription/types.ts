@@ -4,6 +4,7 @@ export interface SubscriptionPlan {
   tier: SubscriptionTier;
   name: string;
   monthlyPrice: number | null;
+  weeklyPrice?: number | null;
   yearlyPrice: number | null;
   features: string[];
   highlighted?: boolean;
@@ -43,7 +44,8 @@ export const PLANS: SubscriptionPlan[] = [
   {
     tier: "premium",
     name: "Premium",
-    monthlyPrice: 12.99,
+    monthlyPrice: 14.99,
+    weeklyPrice: 4.99,
     yearlyPrice: 99,
     highlighted: true,
     badge: "Most Popular",
@@ -62,6 +64,7 @@ export const PLANS: SubscriptionPlan[] = [
     tier: "pro",
     name: "Pro",
     monthlyPrice: 24.99,
+    weeklyPrice: null,
     yearlyPrice: null,
     badge: "Creator",
     monthlyGenerationCap: 75,
@@ -75,5 +78,4 @@ export const PLANS: SubscriptionPlan[] = [
     ],
   },
 ];
-
 export const FREE_DAILY_LIMIT = 3; // kept for backward compat

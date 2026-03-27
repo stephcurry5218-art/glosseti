@@ -56,7 +56,7 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => (
             boxShadow: "0 6px 24px hsla(28 40% 52% / 0.3)",
           }}
         >
-          Start Free Trial — $12.99/mo
+          Start Free Trial — $14.99/mo
         </button>
 
         <button onClick={onClose} style={{
