@@ -210,7 +210,25 @@ const GlamoraApp = () => {
         />
       )}
 
-      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat ref={chatRef} gender={prefs.gender} />}
+      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && (
+        <StylistChat
+          ref={chatRef}
+          gender={prefs.gender}
+          onRegenerate={(gioSuggestion) => {
+            if (!tryGenerate()) return;
+            // Store Gio's suggestion in prefs metadata for the generation pipeline
+            localStorage.setItem("glamora_gio_refinement", gioSuggestion);
+            if (screen === "inspiration-results") {
+              setInspirationImageUrl(null);
+              setInspirationProfile(null);
+              go("inspiration-loading");
+            } else {
+              setStyledImageUrl(null);
+              go("loading");
+            }
+          }}
+        />
+      )}
 
       {showPaywall && (
         <PaywallScreen onClose={() => setShowPaywall(false)} onUpgrade={upgradeTo}

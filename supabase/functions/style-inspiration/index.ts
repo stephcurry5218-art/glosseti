@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { iconName, imageBase64, photoType, gender, generationMode } = await req.json();
+    const { iconName, imageBase64, photoType, gender, generationMode, refinementContext } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -107,19 +107,23 @@ Respond ONLY with valid JSON, no markdown.`,
     const genderWord = gender === "male" ? "man" : "woman";
     const isMannequin = generationMode === "mannequin";
 
+    const refinementNote = refinementContext
+      ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes: ${refinementContext.slice(0, 800)}`
+      : "";
+
     let editPrompt: string;
     let imageMessages: any[];
 
     if (isMannequin) {
-      editPrompt = `Create a professional fashion photography image of a ${gender === "male" ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleProfile.detailedPrompt} The mannequin should be a clean, modern, matte ${gender === "male" ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures. Do NOT include any human face or identity.`;
+      editPrompt = `Create a professional fashion photography image of a ${gender === "male" ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleProfile.detailedPrompt} The mannequin should be a clean, modern, matte ${gender === "male" ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures. Do NOT include any human face or identity.${refinementNote}`;
 
       imageMessages = [
         { role: "user", content: [{ type: "text", text: editPrompt }] },
       ];
     } else {
       editPrompt = photoType === "full-body"
-        ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`
-        : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`;
+        ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`
+        : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`;
 
       imageMessages = [
         {

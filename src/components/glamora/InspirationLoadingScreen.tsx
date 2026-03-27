@@ -57,8 +57,10 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
           setAiDone(true);
           return;
         }
+        const gioRefinement = localStorage.getItem("glamora_gio_refinement");
+        localStorage.removeItem("glamora_gio_refinement");
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
-          body: { iconName, imageBase64: photoBase64, photoType, gender, generationMode },
+          body: { iconName, imageBase64: photoBase64, photoType, gender, generationMode, ...(gioRefinement ? { refinementContext: gioRefinement } : {}) },
         });
         if (error || data?.error) {
           const errMsg = data?.error || error?.message || "";

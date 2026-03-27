@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-import { Send, Sparkles, Loader2, Share2, ChevronDown } from "lucide-react";
+import { Send, Sparkles, Loader2, Share2, ChevronDown, RefreshCw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import ShareMenu from "./ShareMenu";
 import { formatChatForShare } from "./shareUtils";
@@ -15,13 +15,14 @@ const GREETING: Msg = {
 
 interface Props {
   gender: "male" | "female";
+  onRegenerate?: (gioSuggestion: string) => void;
 }
 
 export interface StylistChatHandle {
   openWithPrompt: (prompt: string) => void;
 }
 
-const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender }, ref) => {
+const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender, onRegenerate }, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([GREETING]);
   const [input, setInput] = useState("");
@@ -367,6 +368,26 @@ const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender }, ref) => {
                     msg.content
                   )}
                 </div>
+                {/* Regenerate button on last assistant message */}
+                {msg.role === "assistant" && i === messages.length - 1 && i > 0 && !isLoading && onRegenerate && (
+                  <button
+                    onClick={() => onRegenerate(msg.content)}
+                    style={{
+                      marginTop: 8, padding: "8px 14px", borderRadius: 100,
+                      border: "none", cursor: "pointer", display: "flex",
+                      alignItems: "center", gap: 6, width: "100%",
+                      background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
+                      color: "white", fontSize: 12, fontWeight: 600,
+                      fontFamily: "'Jost', sans-serif", justifyContent: "center",
+                      boxShadow: "0 2px 10px hsla(0 0% 0% / 0.2)",
+                      transition: "transform 0.15s",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                  >
+                    <RefreshCw size={14} /> Apply & Regenerate Look
+                  </button>
+                )}
               </div>
             ))}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
