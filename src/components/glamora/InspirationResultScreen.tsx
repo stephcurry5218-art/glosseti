@@ -80,27 +80,6 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
           </div>
         )}
 
-        {/* View toggle */}
-        {hasOriginal && hasStyled && (
-          <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
-            {([
-              { id: "compare" as const, label: "Before / After" },
-              { id: "image" as const, label: "Styled Look" },
-            ]).map((mode) => (
-              <button key={mode.id} onClick={() => setViewMode(mode.id)} style={{
-                flex: 1, padding: "10px 6px", borderRadius: 12, border: "1.5px solid",
-                borderColor: viewMode === mode.id ? `hsl(${accent})` : "hsla(var(--glamora-gray-light) / 0.2)",
-                background: viewMode === mode.id ? `hsla(${accent} / 0.12)` : "transparent",
-                cursor: "pointer", fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 600,
-                color: viewMode === mode.id ? `hsl(${accent})` : "hsl(var(--glamora-gray))",
-                transition: "all 0.2s",
-              }}>
-                {mode.label}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Image display */}
         {viewMode === "compare" && hasOriginal && hasStyled ? (
           <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22, position: "relative" }}>
