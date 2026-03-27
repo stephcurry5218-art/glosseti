@@ -210,7 +210,7 @@ const GlamoraApp = () => {
         />
       )}
 
-      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat gender={prefs.gender} />}
+      {screen !== "splash" && screen !== "entrance" && screen !== "auth" && <StylistChat ref={chatRef} gender={prefs.gender} />}
 
       {showPaywall && (
         <PaywallScreen onClose={() => setShowPaywall(false)} onUpgrade={upgradeTo}
