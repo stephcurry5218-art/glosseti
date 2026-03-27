@@ -65,6 +65,8 @@ const GlamoraApp = () => {
     lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
   } = useSubscription();
 
+  const { recordStyle } = useStyleHistory();
+
   useEffect(() => {
     const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
