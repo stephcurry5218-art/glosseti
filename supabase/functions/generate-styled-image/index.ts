@@ -54,8 +54,8 @@ serve(async (req) => {
         male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
       },
       swimwear: {
-        female: "wearing ONLY a bikini swimsuit — a high-cut two-piece bikini set showing midriff and legs. NO regular clothes, NO pants, NO shirt. Beach setting with sand and ocean. Include a sheer sarong loosely tied at waist, strappy sandals, oversized sunglasses, sun hat, and woven beach tote. Sun-kissed skin, confident beach pose.",
-        male: "wearing ONLY swim trunks — fitted board shorts with no shirt on, showing bare chest. Beach setting with sand and ocean. Open linen shirt draped on shoulders (not buttoned), slide sandals, aviator sunglasses, waterproof watch.",
+        female: "in a professional fashion editorial beach photoshoot, wearing a stylish two-piece swimsuit set with a matching sarong wrap at the waist, strappy sandals, oversized designer sunglasses, a wide-brim sun hat, and a woven beach tote bag. Tropical beach resort setting with palm trees and turquoise water. Professional fashion photography, editorial lighting.",
+        male: "in a professional fashion editorial beach photoshoot, wearing tailored swim shorts with a relaxed open linen shirt draped over shoulders, slide sandals, aviator sunglasses, and a waterproof sport watch. Tropical beach resort setting. Professional fashion photography, editorial lighting.",
       },
       "urban-hiphop": {
         female: "wearing urban hip-hop style: oversized graphic jersey, baggy low-rise jeans, chunky platform sneakers, layered gold chains, hoop earrings, and a designer belt bag.",
