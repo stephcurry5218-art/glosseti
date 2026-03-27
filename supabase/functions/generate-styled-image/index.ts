@@ -80,6 +80,11 @@ serve(async (req) => {
 
     const isMannequin = generationMode === "mannequin";
 
+    // Add Gio's refinement context if available
+    const refinementNote = refinementContext
+      ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look: ${refinementContext.slice(0, 800)}`
+      : "";
+
     let editPrompt: string;
     let messages: any[];
 
