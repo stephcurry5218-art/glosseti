@@ -37,15 +37,19 @@ const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
   ];
 };
 
+const ESTIMATED_TIME = 30; // seconds
+
 const LoadingScreen = ({ prefs, onDone }: Props) => {
   const steps = getSteps(prefs);
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
   const [animDone, setAnimDone] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const generatedUrlRef = useRef<string | null>(null);
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
+  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
     if (aiCalledRef.current) return;
