@@ -211,7 +211,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
             onClick={() => onSave(profile.styleName)}>
             <Bookmark size={16} /> Save
           </button>
-          <ShareMenu text={`Check out my "${profile.styleName}" look on Glamora!`} imageUrl={styledImageUrl || undefined} />
+          <ShareMenu text={`Check out my "${profile.styleName}" look on Glosseti!`} imageUrl={styledImageUrl || undefined} />
           {hasStyled && (
             <button className="btn-primary btn-sm btn-ghost" style={{ flex: 1 }}
               onClick={() => handleDownload(styledImageUrl!)}>
