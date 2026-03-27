@@ -19,9 +19,10 @@ export interface StyleProfile {
 
 interface Props {
   iconName: string;
-  photoBase64: string;
+  photoBase64: string | null;
   photoType: PhotoType;
   gender: Gender;
+  generationMode: GenerationMode;
   onDone: (imageUrl: string | null, styleProfile: StyleProfile | null) => void;
 }
 
