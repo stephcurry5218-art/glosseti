@@ -30,7 +30,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
     reader.readAsDataURL(f);
   };
 
-  const isMakeup = prefs.styleCategory === "makeup-only";
+  const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "celebrity-makeup" || prefs.styleCategory === "grooming";
+  const isHairOnly = prefs.styleCategory === "celebrity-hair";
+  const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
   const canProceed = isMannequin || !!file;
 
@@ -43,8 +45,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <div className="header-sub">
             {isMannequin
               ? "See the outfit on a mannequin — no photo needed"
-              : isMakeup
-                ? "Upload a selfie for makeup analysis"
+              : isFaceCategory
+                ? "Upload a face photo — selfie, portrait, or any clear shot"
                 : "Selfie or full body for best styling"}
           </div>
         </div>
@@ -52,7 +54,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
 
       <div style={{ padding: "0 22px", marginTop: 16 }}>
         {/* Mode toggle: On Me vs Mannequin */}
-        {!isMakeup && (
+        {!isFaceCategory && (
           <div className="anim-fadeUp" style={{
             display: "flex", gap: 6, marginBottom: 16,
             background: "hsl(var(--card))",
@@ -92,7 +94,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
         )}
 
         {/* Photo type selector — only for "on-me" mode */}
-        {!isMakeup && !isMannequin && (
+        {!isFaceCategory && !isMannequin && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             {([
               { id: "selfie" as PhotoType, label: "Selfie", Icon: Camera, desc: "Face & upper body" },
@@ -142,12 +144,16 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
                 <>
                   <Camera size={56} color="hsl(var(--glamora-gray))" strokeWidth={1} />
                   <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", textAlign: "center" }}>
-                    Tap to Upload {photoType === "full-body" ? "Full Body Shot" : "Selfie"}
+                    {isFaceCategory
+                      ? "Tap to Upload a Face Photo"
+                      : `Tap to Upload ${photoType === "full-body" ? "Full Body Shot" : "Selfie"}`}
                   </div>
                   <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", textAlign: "center", lineHeight: 1.6 }}>
-                    {photoType === "full-body"
-                      ? "Stand straight, good lighting, full outfit visible for best results."
-                      : "Front-facing with good lighting for the best analysis."}
+                    {isFaceCategory
+                      ? "Any clear face photo works — selfie, portrait, or headshot. Good lighting for best results."
+                      : photoType === "full-body"
+                        ? "Stand straight, good lighting, full outfit visible for best results."
+                        : "Front-facing with good lighting for the best analysis."}
                   </p>
                 </>
               )}
@@ -200,7 +206,13 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
             <div className="section-label">Tips for Best Results</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {(photoType === "full-body"
+              {(isFaceCategory
+                ? [
+                    { Icon: Sun, text: "Good, natural lighting" },
+                    { Icon: Camera, text: "Clear face shot — selfie, portrait, or headshot" },
+                    { Icon: CircleOff, text: "No heavy filters or sunglasses" },
+                  ]
+                : photoType === "full-body"
                 ? [
                     { Icon: Sun, text: "Good, natural lighting" },
                     { Icon: UserRound, text: "Stand straight, arms relaxed" },
