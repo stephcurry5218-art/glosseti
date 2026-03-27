@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check } from "lucide-react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoStyledImage } from "./demoMode";
 import type { UserPrefs } from "./GlamoraApp";
@@ -37,15 +37,19 @@ const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
   ];
 };
 
+const ESTIMATED_TIME = 30; // seconds
+
 const LoadingScreen = ({ prefs, onDone }: Props) => {
   const steps = getSteps(prefs);
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
   const [animDone, setAnimDone] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const generatedUrlRef = useRef<string | null>(null);
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
+  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
     if (aiCalledRef.current) return;
@@ -114,12 +118,20 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     }
   }, [aiDone, animDone, onDone]);
 
+  // Elapsed timer
+  useEffect(() => {
+    if (aiDone && !aiError) return;
+    const timer = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [aiDone, aiError]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((s) => {
         if (s >= steps.length - 1) {
           clearInterval(interval);
-          // If AI is already done, proceed. Otherwise mark anim done and wait.
           setTimeout(() => setAnimDone(true), 1200);
           return s;
         }
@@ -128,6 +140,10 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     }, 1200);
     return () => clearInterval(interval);
   }, [steps.length]);
+
+  const remaining = Math.max(0, ESTIMATED_TIME - elapsed);
+  const progressPct = aiDone ? 100 : Math.min(95, ((step + 1) / steps.length) * 90 + (elapsed / ESTIMATED_TIME) * 10);
+  const formatTime = (s: number) => s < 60 ? `~${s}s` : `~${Math.floor(s / 60)}m ${s % 60}s`;
 
   const CurrentIcon = steps[step].Icon;
 
@@ -189,13 +205,26 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         })}
       </div>
 
-      <div style={{ marginTop: 36, width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
-        <div style={{
-          height: "100%", borderRadius: 2,
-          background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
-          width: `${((step + 1) / steps.length) * 100}%`,
-          transition: "width 0.6s ease",
-        }} />
+      <div style={{ marginTop: 24, width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+            <Clock size={12} />
+            {aiDone ? "Complete!" : elapsed > 0 ? `${elapsed}s elapsed` : "Starting..."}
+          </div>
+          {!aiDone && !aiError && (
+            <div style={{ fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-rose-dark))" }}>
+              {remaining > 0 ? `${formatTime(remaining)} remaining` : "Almost done..."}
+            </div>
+          )}
+        </div>
+        <div style={{ width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
+          <div style={{
+            height: "100%", borderRadius: 2,
+            background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
+            width: `${progressPct}%`,
+            transition: "width 0.6s ease",
+          }} />
+        </div>
       </div>
     </div>
   );

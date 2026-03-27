@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check } from "lucide-react";
+import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoInspirationResult } from "./demoMode";
 import type { PhotoType, Gender, GenerationMode } from "./GlamoraApp";
@@ -35,14 +35,18 @@ const steps: { label: string; Icon: LucideIcon }[] = [
   { label: "Generating your inspired look...", Icon: Sparkles },
 ];
 
+const ESTIMATED_TIME = 45; // inspiration has 2 API calls so takes longer
+
 const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, generationMode, onDone }: Props) => {
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
   const [animDone, setAnimDone] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const resultRef = useRef<{ imageUrl: string | null; styleProfile: StyleProfile | null }>({ imageUrl: null, styleProfile: null });
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
+  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
     if (aiCalledRef.current) return;
@@ -98,6 +102,15 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
     }
   }, [aiDone, animDone, onDone]);
 
+  // Elapsed timer
+  useEffect(() => {
+    if (aiDone && !aiError) return;
+    const timer = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [aiDone, aiError]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((s) => {
@@ -111,6 +124,10 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
     }, 1400);
     return () => clearInterval(interval);
   }, []);
+
+  const remaining = Math.max(0, ESTIMATED_TIME - elapsed);
+  const progressPct = aiDone ? 100 : Math.min(95, ((step + 1) / steps.length) * 85 + (elapsed / ESTIMATED_TIME) * 10);
+  const formatTime = (s: number) => s < 60 ? `~${s}s` : `~${Math.floor(s / 60)}m ${s % 60}s`;
 
   const CurrentIcon = steps[step].Icon;
 
@@ -172,13 +189,26 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
         })}
       </div>
 
-      <div style={{ marginTop: 36, width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
-        <div style={{
-          height: "100%", borderRadius: 2,
-          background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
-          width: `${((step + 1) / steps.length) * 100}%`,
-          transition: "width 0.6s ease",
-        }} />
+      <div style={{ marginTop: 24, width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+            <Clock size={12} />
+            {aiDone ? "Complete!" : elapsed > 0 ? `${elapsed}s elapsed` : "Starting..."}
+          </div>
+          {!aiDone && !aiError && (
+            <div style={{ fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-rose-dark))" }}>
+              {remaining > 0 ? `${formatTime(remaining)} remaining` : "Almost done..."}
+            </div>
+          )}
+        </div>
+        <div style={{ width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
+          <div style={{
+            height: "100%", borderRadius: 2,
+            background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
+            width: `${progressPct}%`,
+            transition: "width 0.6s ease",
+          }} />
+        </div>
       </div>
     </div>
   );
