@@ -312,7 +312,8 @@
 .glamora-card {
   background: hsl(var(--card));
   border-radius: 22px;
-  box-shadow: 0 2px 16px hsla(0 0% 0% / 0.2);
+  border: 1px solid hsla(0 0% 100% / 0.08);
+  box-shadow: 0 2px 16px hsla(0 0% 0% / 0.25), 0 0 0 1px hsla(0 0% 100% / 0.03), 0 0 24px hsla(32 55% 52% / 0.06);
 }
 
 /* Animations */
