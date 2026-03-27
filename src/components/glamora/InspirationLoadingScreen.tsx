@@ -80,7 +80,7 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
     };
 
     generate();
-  }, [iconName, photoBase64, photoType, gender]);
+  }, [iconName, photoBase64, photoType, gender, generationMode]);
 
   useEffect(() => {
     if (aiDone && animDone && !navigatedRef.current) {
