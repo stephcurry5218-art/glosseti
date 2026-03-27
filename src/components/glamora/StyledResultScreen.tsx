@@ -164,7 +164,6 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               <BeforeAfterSlider
                 beforeSrc={prefs.photoBase64!}
                 afterSrc={styledImageUrl!}
-                />
               />
             </div>
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 10 }}>
