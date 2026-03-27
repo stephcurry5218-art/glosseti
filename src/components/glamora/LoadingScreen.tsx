@@ -118,12 +118,20 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     }
   }, [aiDone, animDone, onDone]);
 
+  // Elapsed timer
+  useEffect(() => {
+    if (aiDone && !aiError) return;
+    const timer = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [aiDone, aiError]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((s) => {
         if (s >= steps.length - 1) {
           clearInterval(interval);
-          // If AI is already done, proceed. Otherwise mark anim done and wait.
           setTimeout(() => setAnimDone(true), 1200);
           return s;
         }
@@ -132,6 +140,10 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     }, 1200);
     return () => clearInterval(interval);
   }, [steps.length]);
+
+  const remaining = Math.max(0, ESTIMATED_TIME - elapsed);
+  const progressPct = aiDone ? 100 : Math.min(95, ((step + 1) / steps.length) * 90 + (elapsed / ESTIMATED_TIME) * 10);
+  const formatTime = (s: number) => s < 60 ? `~${s}s` : `~${Math.floor(s / 60)}m ${s % 60}s`;
 
   const CurrentIcon = steps[step].Icon;
 
