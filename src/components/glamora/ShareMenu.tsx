@@ -25,6 +25,7 @@ const platforms: { id: SharePlatform; label: string; icon: string; color: string
 const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedLabel, setCopiedLabel] = useState("");
 
   const handleShare = async (platform: SharePlatform) => {
     // Instagram, TikTok, Snapchat don't have web share URLs — copy link instead
