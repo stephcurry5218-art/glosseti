@@ -40,6 +40,68 @@ const StylistChat = forwardRef<StylistChatHandle, Props>(({ gender }, ref) => {
     if (inputRef.current) inputRef.current.focus();
   }, [expanded]);
 
+  // Expose method to open chat with a pre-filled prompt and auto-send
+  const pendingPrompt = useRef<string | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    openWithPrompt: (prompt: string) => {
+      pendingPrompt.current = prompt;
+      setExpanded(true);
+    },
+  }));
+
+  useEffect(() => {
+    if (expanded && pendingPrompt.current) {
+      const prompt = pendingPrompt.current;
+      pendingPrompt.current = null;
+      setInput(prompt);
+      // Auto-send after a short delay
+      setTimeout(() => {
+        setInput("");
+        const userMsg: Msg = { role: "user", content: prompt };
+        setMessages((prev) => [...prev, userMsg]);
+        setIsLoading(true);
+        const allMsgs = [...messages, userMsg];
+        const apiMessages = allMsgs
+          .filter((m) => m !== GREETING)
+          .map((m, i) => (i === 0 && m.role === "user" ? { ...m, content: `[User is ${gender}] ${m.content}` } : m));
+        let assistantSoFar = "";
+        fetch(CHAT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+          body: JSON.stringify({ messages: apiMessages }),
+        }).then(async (resp) => {
+          if (!resp.ok || !resp.body) throw new Error("Error");
+          const reader = resp.body.getReader();
+          const decoder = new TextDecoder();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            for (const line of decoder.decode(value, { stream: true }).split("\n")) {
+              if (!line.startsWith("data: ")) continue;
+              const payload = line.slice(6).trim();
+              if (payload === "[DONE]") continue;
+              try {
+                const delta = JSON.parse(payload).choices?.[0]?.delta?.content;
+                if (delta) {
+                  assistantSoFar += delta;
+                  setMessages((prev) => {
+                    const last = prev[prev.length - 1];
+                    if (last?.role === "assistant" && prev.length > 1)
+                      return [...prev.slice(0, -1), { role: "assistant", content: assistantSoFar }];
+                    return [...prev, { role: "assistant", content: assistantSoFar }];
+                  });
+                }
+              } catch {}
+            }
+          }
+        }).catch(() => {
+          setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I hit a snag. Try again? 💫" }]);
+        }).finally(() => setIsLoading(false));
+      }, 300);
+    }
+  }, [expanded]);
+
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || isLoading) return;
