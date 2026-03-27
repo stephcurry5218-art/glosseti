@@ -36,6 +36,7 @@ export interface UserPrefs {
   photoBase64: string | null;
   gender: Gender;
   generationMode: GenerationMode;
+  celebrityGuide?: string;
 }
 
 const GlamoraApp = () => {
