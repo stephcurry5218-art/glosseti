@@ -278,7 +278,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
         </div>
 
         {/* Shop This Look */}
-        {hasStyled && profile.clothingTypes.length > 0 && (() => {
+        {hasStyled && (profile.clothingTypes.length > 0 || profile.makeupStyle || profile.hairTrend) && (() => {
           const shopItems: ShopItem[] = [
             ...profile.clothingTypes.map((item) => ({
               label: item,
@@ -288,6 +288,14 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
               label: item,
               stores: getAccessoryStores(item),
             })),
+            ...(profile.makeupStyle ? [{
+              label: profile.makeupStyle,
+              stores: getBeautyStores(profile.makeupStyle),
+            }] : []),
+            ...(profile.hairTrend ? [{
+              label: profile.hairTrend,
+              stores: getBeautyStores(profile.hairTrend),
+            }] : []),
           ];
           return (
             <div className="anim-fadeUp d4" style={{ marginTop: 16 }}>
