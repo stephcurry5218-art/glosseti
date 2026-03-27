@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Sparkles, Loader2, Share2 } from "lucide-react";
+import { Send, Sparkles, Loader2, Share2, ChevronDown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import ShareMenu from "./ShareMenu";
 import { formatChatForShare } from "./shareUtils";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const StylistChat = ({ gender }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([GREETING]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,15 +30,17 @@ const StylistChat = ({ gender }: Props) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, open]);
+  }, [messages, expanded]);
 
   useEffect(() => {
-    if (open && inputRef.current) inputRef.current.focus();
-  }, [open]);
+    if (inputRef.current) inputRef.current.focus();
+  }, [expanded]);
 
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || isLoading) return;
+
+    if (!expanded) setExpanded(true);
 
     const userMsg: Msg = { role: "user", content: text };
     const updatedMessages = [...messages, userMsg];
@@ -46,7 +48,6 @@ const StylistChat = ({ gender }: Props) => {
     setInput("");
     setIsLoading(true);
 
-    // Add gender context to first user message
     const apiMessages = updatedMessages
       .filter((m) => m !== GREETING)
       .map((m, i) => {
@@ -129,94 +130,134 @@ const StylistChat = ({ gender }: Props) => {
   const accentColor = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
 
   return (
-    <>
-      {/* Floating button */}
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          style={{
-            position: "absolute", bottom: 80, right: 16, zIndex: 100,
-            width: 56, height: 56, borderRadius: "50%",
-            background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
-            border: "none", cursor: "pointer",
-            boxShadow: "0 4px 20px hsla(0 0% 0% / 0.4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            animation: "pulse2 2.5s ease-in-out infinite",
-          }}
-        >
-          <MessageCircle size={24} color="white" />
-        </button>
-      )}
-
-      {/* Chat panel */}
-      {open && (
-        <div style={{
-          position: "absolute", inset: 0, zIndex: 200,
-          display: "flex", flexDirection: "column",
-          background: "hsl(var(--glamora-cream))",
-          animation: "fadeUp 0.3s ease both",
-        }}>
+    <div
+      style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        display: "flex",
+        flexDirection: "column",
+        transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+        maxHeight: expanded ? "75%" : "auto",
+        background: expanded ? "hsl(var(--glamora-cream))" : "transparent",
+        borderTopLeftRadius: expanded ? 22 : 0,
+        borderTopRightRadius: expanded ? 22 : 0,
+        boxShadow: expanded ? "0 -8px 40px hsla(0 0% 0% / 0.4)" : "none",
+      }}
+    >
+      {/* Expanded chat header + messages */}
+      {expanded && (
+        <>
           {/* Header */}
-          <div style={{
-            padding: "16px 18px", display: "flex", alignItems: "center", gap: 12,
-            background: "hsl(var(--glamora-cream2))",
-            borderBottom: "1px solid hsla(var(--glamora-gold) / 0.15)",
-          }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: "50%",
-              background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-            }}>
-              <Sparkles size={20} color="white" />
+          <div
+            style={{
+              padding: "12px 16px",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              borderBottom: "1px solid hsla(var(--glamora-gold) / 0.12)",
+            }}
+          >
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <Sparkles size={16} color="white" />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Gio — Master Stylist</div>
-              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>AI Fashion & Beauty Advisor</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                Gio — Master Stylist
+              </div>
             </div>
             {messages.length > 1 && (
               <ShareMenu
                 text={formatChatForShare(messages)}
                 trigger={
-                  <button style={{
-                    width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer",
-                    background: "hsla(var(--glamora-gray-light) / 0.2)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <Share2 size={14} color="hsl(var(--glamora-gray))" />
+                  <button
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: "50%",
+                      border: "none",
+                      cursor: "pointer",
+                      background: "hsla(var(--glamora-gray-light) / 0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Share2 size={13} color="hsl(var(--glamora-gray))" />
                   </button>
                 }
               />
             )}
-            <button onClick={() => setOpen(false)} style={{
-              width: 32, height: 32, borderRadius: "50%", border: "none", cursor: "pointer",
-              background: "hsla(var(--glamora-gray-light) / 0.2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <X size={16} color="hsl(var(--glamora-gray))" />
+            <button
+              onClick={() => setExpanded(false)}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "50%",
+                border: "none",
+                cursor: "pointer",
+                background: "hsla(var(--glamora-gray-light) / 0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ChevronDown size={16} color="hsl(var(--glamora-gray))" />
             </button>
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} style={{
-            flex: 1, overflowY: "auto", padding: "16px 14px",
-            display: "flex", flexDirection: "column", gap: 12,
-          }}>
+          <div
+            ref={scrollRef}
+            style={{
+              flex: 1,
+              overflowY: "auto",
+              padding: "12px 14px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}
+          >
             {messages.map((msg, i) => (
-              <div key={i} style={{
-                alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                maxWidth: "85%",
-              }}>
-                <div style={{
-                  padding: "12px 16px", borderRadius: 18,
-                  borderBottomRightRadius: msg.role === "user" ? 4 : 18,
-                  borderBottomLeftRadius: msg.role === "assistant" ? 4 : 18,
-                  background: msg.role === "user"
-                    ? `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`
-                    : "hsl(var(--glamora-cream2))",
-                  color: msg.role === "user" ? "white" : "hsl(var(--glamora-char))",
-                  fontSize: 13, lineHeight: 1.55,
-                  border: msg.role === "assistant" ? "1px solid hsla(var(--glamora-gold) / 0.1)" : "none",
-                }}>
+              <div
+                key={i}
+                style={{
+                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                  maxWidth: "85%",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "10px 14px",
+                    borderRadius: 16,
+                    borderBottomRightRadius: msg.role === "user" ? 4 : 16,
+                    borderBottomLeftRadius: msg.role === "assistant" ? 4 : 16,
+                    background:
+                      msg.role === "user"
+                        ? `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`
+                        : "hsl(var(--glamora-cream2))",
+                    color: msg.role === "user" ? "white" : "hsl(var(--glamora-char))",
+                    fontSize: 13,
+                    lineHeight: 1.55,
+                    border:
+                      msg.role === "assistant"
+                        ? "1px solid hsla(var(--glamora-gold) / 0.1)"
+                        : "none",
+                  }}
+                >
                   {msg.role === "assistant" ? (
                     <div className="stylist-chat-md">
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -228,50 +269,104 @@ const StylistChat = ({ gender }: Props) => {
               </div>
             ))}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
-              <div style={{ alignSelf: "flex-start", padding: "12px 16px", borderRadius: 18, borderBottomLeftRadius: 4, background: "hsl(var(--glamora-cream2))", border: "1px solid hsla(var(--glamora-gold) / 0.1)" }}>
-                <Loader2 size={18} color={`hsl(${accentColor})`} style={{ animation: "spin 1s linear infinite" }} />
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  padding: "10px 14px",
+                  borderRadius: 16,
+                  borderBottomLeftRadius: 4,
+                  background: "hsl(var(--glamora-cream2))",
+                  border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+                }}
+              >
+                <Loader2
+                  size={18}
+                  color={`hsl(${accentColor})`}
+                  style={{ animation: "spin 1s linear infinite" }}
+                />
               </div>
             )}
           </div>
-
-          {/* Input */}
-          <div style={{
-            padding: "12px 14px", display: "flex", gap: 8,
-            background: "hsl(var(--glamora-cream2))",
-            borderTop: "1px solid hsla(var(--glamora-gold) / 0.15)",
-          }}>
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask Gio anything about style..."
-              style={{
-                flex: 1, padding: "12px 16px", borderRadius: 14,
-                background: "hsl(var(--glamora-cream))",
-                border: "1.5px solid hsla(var(--glamora-gold) / 0.15)",
-                color: "hsl(var(--glamora-char))", fontSize: 13,
-                fontFamily: "'Jost', sans-serif", outline: "none",
-              }}
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!input.trim() || isLoading}
-              style={{
-                width: 44, height: 44, borderRadius: 14, border: "none", cursor: "pointer",
-                background: input.trim()
-                  ? `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`
-                  : "hsla(var(--glamora-gray-light) / 0.3)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all 0.2s", opacity: isLoading ? 0.5 : 1,
-              }}
-            >
-              <Send size={18} color="white" />
-            </button>
-          </div>
-        </div>
+        </>
       )}
-    </>
+
+      {/* Prompt bar — always visible */}
+      <div
+        style={{
+          padding: expanded ? "10px 14px 14px" : "10px 14px 18px",
+          display: "flex",
+          gap: 8,
+          alignItems: "center",
+          background: expanded
+            ? "hsl(var(--glamora-cream))"
+            : "linear-gradient(to top, hsla(var(--background) / 1) 60%, hsla(var(--background) / 0))",
+          borderTop: expanded ? "1px solid hsla(var(--glamora-gold) / 0.1)" : "none",
+        }}
+      >
+        {!expanded && (
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: "50%",
+              background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Sparkles size={16} color="white" />
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          onFocus={() => {
+            if (messages.length > 1 && !expanded) setExpanded(true);
+          }}
+          placeholder="Ask Gio anything about style..."
+          style={{
+            flex: 1,
+            padding: "11px 16px",
+            borderRadius: 22,
+            background: expanded
+              ? "hsl(var(--glamora-cream2))"
+              : "hsla(0 0% 100% / 0.08)",
+            border: "1.5px solid hsla(var(--glamora-gold) / 0.15)",
+            color: "hsl(var(--glamora-char))",
+            fontSize: 13,
+            fontFamily: "'Jost', sans-serif",
+            outline: "none",
+            backdropFilter: expanded ? "none" : "blur(12px)",
+          }}
+        />
+        <button
+          onClick={sendMessage}
+          disabled={!input.trim() || isLoading}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            border: "none",
+            cursor: "pointer",
+            background: input.trim()
+              ? `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`
+              : "hsla(var(--glamora-gray-light) / 0.3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s",
+            opacity: isLoading ? 0.5 : 1,
+            flexShrink: 0,
+          }}
+        >
+          <Send size={16} color="white" />
+        </button>
+      </div>
+    </div>
   );
 };
 
