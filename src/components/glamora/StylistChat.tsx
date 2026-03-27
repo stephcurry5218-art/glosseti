@@ -129,6 +129,36 @@ const StylistChat = ({ gender }: Props) => {
 
   const accentColor = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
 
+  if (!expanded) {
+    // Floating button when collapsed
+    return (
+      <button
+        onClick={() => setExpanded(true)}
+        style={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          zIndex: 100,
+          width: 52,
+          height: 52,
+          borderRadius: "50%",
+          border: "none",
+          cursor: "pointer",
+          background: `linear-gradient(135deg, hsl(${accentColor}), hsl(var(--glamora-gold)))`,
+          boxShadow: "0 4px 20px hsla(0 0% 0% / 0.3)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "transform 0.2s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        <Sparkles size={22} color="white" />
+      </button>
+    );
+  }
+
   return (
     <div
       style={{
@@ -139,13 +169,13 @@ const StylistChat = ({ gender }: Props) => {
         zIndex: 100,
         display: "flex",
         flexDirection: "column",
-        transition: "max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease",
-        maxHeight: expanded ? "75vh" : "72px",
+        maxHeight: "75vh",
         overflow: "hidden",
-        background: expanded ? "hsl(var(--glamora-cream))" : "transparent",
-        borderTopLeftRadius: expanded ? 22 : 0,
-        borderTopRightRadius: expanded ? 22 : 0,
-        boxShadow: expanded ? "0 -8px 40px hsla(0 0% 0% / 0.4)" : "none",
+        background: "hsl(var(--glamora-cream))",
+        borderTopLeftRadius: 22,
+        borderTopRightRadius: 22,
+        boxShadow: "0 -8px 40px hsla(0 0% 0% / 0.4)",
+        animation: "slideUp 0.3s ease",
       }}
     >
       {/* Expanded chat header + messages */}
