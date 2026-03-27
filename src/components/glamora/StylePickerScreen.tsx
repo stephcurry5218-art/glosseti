@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors } from "lucide-react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
   onBack: () => void;
-  onNext: (category: StyleCategory) => void;
+  onNext: (category: StyleCategory, celebrityGuide?: string) => void;
 }
 
 const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: string; includes: string[]; genderLabel?: { male: string; female: string } }[] = [
