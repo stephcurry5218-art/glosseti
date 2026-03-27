@@ -102,6 +102,15 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
     }
   }, [aiDone, animDone, onDone]);
 
+  // Elapsed timer
+  useEffect(() => {
+    if (aiDone && !aiError) return;
+    const timer = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [aiDone, aiError]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((s) => {
@@ -115,6 +124,10 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
     }, 1400);
     return () => clearInterval(interval);
   }, []);
+
+  const remaining = Math.max(0, ESTIMATED_TIME - elapsed);
+  const progressPct = aiDone ? 100 : Math.min(95, ((step + 1) / steps.length) * 85 + (elapsed / ESTIMATED_TIME) * 10);
+  const formatTime = (s: number) => s < 60 ? `~${s}s` : `~${Math.floor(s / 60)}m ${s % 60}s`;
 
   const CurrentIcon = steps[step].Icon;
 
