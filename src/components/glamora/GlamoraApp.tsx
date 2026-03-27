@@ -82,9 +82,9 @@ const GlamoraApp = () => {
     go("home");
   };
 
-  const handleStartGeneration = useCallback((file: File, photoType: PhotoType, base64: string) => {
+  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
     go("loading");
   }, [tryGenerate, go]);
 
