@@ -88,11 +88,12 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
               </button>
             </div>
 
-            <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 12 }}>
               {platforms.map((p) => (
                 <button key={p.id} onClick={() => handleShare(p.id)} style={{
                   width: 44, height: 44, borderRadius: 12, border: "none", cursor: "pointer",
-                  background: p.color, color: "white", fontSize: 18, fontWeight: 700,
+                  background: p.color, color: p.id === "snapchat" ? "#000" : "white",
+                  fontSize: p.icon.length > 1 ? 13 : 18, fontWeight: 700,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontFamily: "sans-serif", transition: "transform 0.15s",
                 }} title={p.label}>
@@ -101,17 +102,29 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
               ))}
             </div>
 
+            {copied && copiedLabel && (
+              <div style={{
+                padding: "8px 12px", borderRadius: 10, marginBottom: 10,
+                background: "hsla(var(--glamora-success) / 0.1)",
+                border: "1px solid hsla(var(--glamora-success) / 0.3)",
+                fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-success))",
+                textAlign: "center", fontFamily: "'Jost', sans-serif",
+              }}>
+                ✅ {copiedLabel}
+              </div>
+            )}
+
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={() => handleShare("copy")} style={{
                 flex: 1, padding: "10px 12px", borderRadius: 12,
                 border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",
-                background: copied ? "hsla(var(--glamora-success) / 0.1)" : "hsl(var(--glamora-cream2))",
+                background: copied && !copiedLabel.includes("Paste") ? "hsla(var(--glamora-success) / 0.1)" : "hsl(var(--glamora-cream2))",
                 cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                 fontSize: 12, fontWeight: 600, fontFamily: "'Jost', sans-serif",
-                color: copied ? "hsl(var(--glamora-success))" : "hsl(var(--glamora-char))",
+                color: copied && !copiedLabel.includes("Paste") ? "hsl(var(--glamora-success))" : "hsl(var(--glamora-char))",
                 transition: "all 0.2s",
               }}>
-                {copied ? <><Check size={14} /> Copied!</> : <><Copy size={14} /> Copy Link</>}
+                {copied && !copiedLabel.includes("Paste") ? <><Check size={14} /> Copied!</> : <><Copy size={14} /> Copy Link</>}
               </button>
               {typeof navigator !== "undefined" && navigator.share && (
                 <button onClick={handleNative} style={{
