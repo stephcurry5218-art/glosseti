@@ -88,10 +88,10 @@ const GlamoraApp = () => {
     go("loading");
   }, [tryGenerate, go]);
 
-  const handleInspirationGenerate = useCallback((iconName: string, file: File, photoType: PhotoType, base64: string) => {
+  const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
     setInspirationIcon(iconName);
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
     go("inspiration-loading");
   }, [tryGenerate, go]);
 
