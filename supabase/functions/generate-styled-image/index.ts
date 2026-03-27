@@ -110,8 +110,8 @@ serve(async (req) => {
     } else {
       // On-me mode: restyle the user's photo
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} Keep face, body, background. Realistic clothing, warm lighting.${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} Keep face and background. Realistic, warm lighting.${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} Keep face, body, background. Realistic clothing, warm lighting.${celebrityNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} Keep face and background. Realistic, warm lighting.${celebrityNote}${refinementNote}`;
 
       messages = [
         {
