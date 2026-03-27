@@ -48,25 +48,27 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const navigatedRef = useRef(false);
 
   useEffect(() => {
-    if (aiCalledRef.current || !prefs.photoBase64) return;
+    if (aiCalledRef.current) return;
+    // For mannequin mode, no photo needed
+    if (prefs.generationMode !== "mannequin" && !prefs.photoBase64) return;
     aiCalledRef.current = true;
 
     const generateImage = async () => {
       try {
         if (DEMO_MODE) {
-          // Simulate network delay for realistic feel
           await new Promise(r => setTimeout(r, 2000));
           generatedUrlRef.current = getDemoStyledImage(prefs.gender);
           setAiDone(true);
           return;
         }
-        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType });
+        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
             styleCategory: prefs.styleCategory,
             photoType: prefs.photoType,
             gender: prefs.gender,
+            generationMode: prefs.generationMode,
           },
         });
         if (error) {
