@@ -60,9 +60,16 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
           body: { iconName, imageBase64: photoBase64, photoType, gender, generationMode },
         });
-        if (error) {
-          console.error("Inspiration error:", error);
-          setAiError("Could not generate inspired look. Try again.");
+        if (error || data?.error) {
+          const errMsg = data?.error || error?.message || "";
+          console.error("Inspiration error:", errMsg);
+          if (errMsg.includes("credits exhausted") || errMsg.includes("402")) {
+            setAiError("AI credits exhausted. Go to Settings → Cloud & AI balance to add funds, then try again.");
+          } else if (errMsg.includes("Rate limited") || errMsg.includes("429")) {
+            setAiError("Too many requests — please wait a moment, then tap to retry.");
+          } else {
+            setAiError("Could not generate inspired look. Try again.");
+          }
           setAiDone(true);
           return;
         }

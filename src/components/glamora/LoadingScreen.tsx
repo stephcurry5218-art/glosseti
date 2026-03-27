@@ -71,9 +71,16 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             generationMode: prefs.generationMode,
           },
         });
-        if (error) {
-          console.error("AI generation error:", error);
-          setAiError("Could not generate styled image. Tap to retry.");
+        if (error || data?.error) {
+          const errMsg = data?.error || error?.message || "";
+          console.error("AI generation error:", errMsg);
+          if (errMsg.includes("credits exhausted") || errMsg.includes("402")) {
+            setAiError("AI credits exhausted. Go to Settings → Cloud & AI balance to add funds, then try again.");
+          } else if (errMsg.includes("Rate limited") || errMsg.includes("429")) {
+            setAiError("Too many requests — please wait a moment, then tap to retry.");
+          } else {
+            setAiError("Could not generate styled image. Tap to retry.");
+          }
           setAiDone(true);
           return;
         }
