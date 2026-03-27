@@ -26,7 +26,7 @@ export const tierInfo: Record<PriceTier, { label: string; color: string; bg: str
   budget: { label: "Budget", color: "hsl(var(--glamora-success))", bg: "hsla(var(--glamora-success) / 0.1)" },
 };
 
-export const lookData: Record<string, Record<Category, Step[]>> = {
+export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   "Soft Glam": {
     makeup: [
       { title: "Prep & Prime", detail: "Apply a hydrating primer with a dewy finish. Focus on T-zone for a natural glow.", tip: "Use a beauty sponge for even application", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
