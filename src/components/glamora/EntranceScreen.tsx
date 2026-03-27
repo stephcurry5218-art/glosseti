@@ -256,7 +256,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
           fontSize: 52, fontWeight: 400, letterSpacing: 8,
           color: "hsl(var(--glamora-cream))",
         }}>
-          GLAMORA<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
+          GLOSSETI<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
         </div>
         <div className="anim-fadeIn d2" style={{
           fontSize: 12, letterSpacing: 4, textTransform: "uppercase",
