@@ -11,7 +11,7 @@ import StyledResultScreen from "./StyledResultScreen";
 import TutorialScreen from "./TutorialScreen";
 import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
-import StylistChat from "./StylistChat";
+import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
 import InspirationScreen from "./InspirationScreen";
 import InspirationLoadingScreen from "./InspirationLoadingScreen";
