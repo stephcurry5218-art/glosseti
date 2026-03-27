@@ -296,8 +296,7 @@ const StylistChat = ({ gender }: Props) => {
               </div>
             )}
           </div>
-        </>
-      )}
+      </div>
 
       {/* Prompt bar — always visible */}
       <div
