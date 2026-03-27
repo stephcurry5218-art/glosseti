@@ -4,6 +4,7 @@ export interface SubscriptionPlan {
   tier: SubscriptionTier;
   name: string;
   monthlyPrice: number | null;
+  weeklyPrice?: number | null;
   yearlyPrice: number | null;
   features: string[];
   highlighted?: boolean;
