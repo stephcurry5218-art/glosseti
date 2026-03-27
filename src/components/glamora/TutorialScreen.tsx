@@ -11,7 +11,7 @@ interface Props {
   onHome: () => void;
 }
 
-const categoryIcons: Record<Category, LucideIcon> = {
+const categoryIcons: Partial<Record<Category, LucideIcon>> = {
   makeup: Palette,
   top: Shirt,
   bottom: CircleDot,
