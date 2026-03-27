@@ -243,7 +243,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
         }}>
           <Info size={13} color="hsl(var(--glamora-gold))" style={{ flexShrink: 0, marginTop: 2 }} />
           <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", lineHeight: 1.5 }}>
-            Styles are AI-generated and inspired by general trends. Glamora is not affiliated with or endorsed by any public figures.
+            Styles are AI-generated and inspired by general trends. Glosseti is not affiliated with or endorsed by any public figures.
           </div>
         </div>
       </div>
