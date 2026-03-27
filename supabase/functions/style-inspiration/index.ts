@@ -22,7 +22,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-2.5-flash-lite",
         messages: [
           {
             role: "system",
@@ -115,15 +115,15 @@ Respond ONLY with valid JSON, no markdown.`,
     let imageMessages: any[];
 
     if (isMannequin) {
-      editPrompt = `Create a professional fashion photography image of a ${gender === "male" ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleProfile.detailedPrompt} The mannequin should be a clean, modern, matte ${gender === "male" ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures. Do NOT include any human face or identity.${refinementNote}`;
+      editPrompt = `Fashion photo of a ${gender === "male" ? "male grey" : "female white"} mannequin displaying: ${styleProfile.detailedPrompt} Clean studio, soft lighting, realistic fabrics. High-end lookbook style. No human face.${refinementNote}`;
 
       imageMessages = [
         { role: "user", content: [{ type: "text", text: editPrompt }] },
       ];
     } else {
       editPrompt = photoType === "full-body"
-        ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`
-        : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleProfile.detailedPrompt} Keep face, body, background. Realistic, warm lighting. No celebrity likeness.${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleProfile.detailedPrompt} Keep face and background. Realistic, warm lighting. No celebrity likeness.${refinementNote}`;
 
       imageMessages = [
         {

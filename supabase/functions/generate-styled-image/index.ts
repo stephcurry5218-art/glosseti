@@ -94,7 +94,7 @@ serve(async (req) => {
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      editPrompt = `Create a professional fashion photography image of a ${isMale ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleDesc} The mannequin should be a clean, modern, matte ${isMale ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures.${refinementNote}`;
+      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${refinementNote}`;
 
       messages = [
         {
@@ -105,8 +105,8 @@ serve(async (req) => {
     } else {
       // On-me mode: restyle the user's photo
       editPrompt = photoType === "full-body"
-        ? `Transform this ${genderWord}'s outfit. Show them ${styleDesc} Keep the person's face, body, and background the same. Make the clothing and accessories look realistic and well-fitted. Professional fashion photography style with warm lighting.${refinementNote}`
-        : `Transform this ${genderWord}'s look. Show them ${styleDesc} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting.${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} Keep face, body, background. Realistic clothing, warm lighting.${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} Keep face and background. Realistic, warm lighting.${refinementNote}`;
 
       messages = [
         {
