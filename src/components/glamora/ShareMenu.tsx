@@ -67,13 +67,13 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
 
       {open && (
         <>
-          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 300 }} />
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 300, background: "hsla(0 0% 0% / 0.4)" }} />
           <div style={{
-            position: "absolute", bottom: "calc(100% + 8px)", right: 0, zIndex: 301,
-            background: "hsl(var(--glamora-cream))", borderRadius: 18, padding: 14,
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 301,
+            background: "hsl(var(--glamora-cream))", borderRadius: "20px 20px 0 0", padding: "16px 18px 24px",
             border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",
-            boxShadow: "0 8px 32px hsla(0 0% 0% / 0.18)",
-            minWidth: 200, animation: "fadeUp 0.2s ease both",
+            boxShadow: "0 -8px 32px hsla(0 0% 0% / 0.18)",
+            animation: "fadeUp 0.25s ease both", maxHeight: "70vh", overflowY: "auto",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", fontFamily: "'Jost', sans-serif" }}>
