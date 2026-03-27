@@ -6,7 +6,7 @@ import type { LucideIcon } from "lucide-react";
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
   onBack: () => void;
-  onNext: (category: StyleCategory, celebrityGuide?: string) => void;
+  onNext: (category: StyleCategory, celebrityGuide?: string, subcategory?: string) => void;
 }
 
 const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: string; includes: string[]; genderLabel?: { male: string; female: string } }[] = [
