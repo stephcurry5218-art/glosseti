@@ -329,7 +329,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
           style={{ marginTop: 12 }}
           onClick={onRegenerate}
         >
-          <RefreshCw size={16} /> Generate Another Variation
+          <Sparkles size={16} /> Refine with Gio AI
         </button>
 
         {/* Home */}
