@@ -202,9 +202,9 @@ const GlamoraApp = () => {
             setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
           }}
           onRegenerate={() => {
-            if (!tryGenerate()) return;
-            setInspirationImageUrl(null); setInspirationProfile(null);
-            go("inspiration-loading");
+            const styleName = inspirationProfile?.styleName || "inspired";
+            const prompt = `I just generated a "${styleName}" inspiration look and I want to refine it. What tweaks would you suggest — different clothing pieces, color palette changes, or accessory swaps? Give me specific ideas to make the look even better.`;
+            chatRef.current?.openWithPrompt(prompt);
           }}
           showWatermark={showWatermark}
         />
