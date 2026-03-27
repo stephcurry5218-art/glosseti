@@ -31,6 +31,7 @@ type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "load
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
+  styleSubcategory?: string;
   photoType: PhotoType;
   photoFile: File | null;
   photoBase64: string | null;
