@@ -89,6 +89,11 @@ serve(async (req) => {
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look: ${refinementContext.slice(0, 800)}`
       : "";
 
+    // Add celebrity style guide if provided
+    const celebrityNote = celebrityGuide
+      ? `\n\nSTYLE INSPIRATION: Channel the fashion aesthetic and styling sensibility of ${celebrityGuide}. Adapt their signature style elements (color palette, fits, accessories, overall vibe) to this look. Do NOT replicate their face or identity.`
+      : "";
+
     let editPrompt: string;
     let messages: any[];
 
