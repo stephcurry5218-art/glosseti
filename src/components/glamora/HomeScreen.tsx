@@ -1,5 +1,6 @@
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
+import StyleSuggestions from "./StyleSuggestions";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import UsageBadge from "./subscription/UsageBadge";
@@ -15,6 +16,8 @@ interface Props {
   remainingGenerations: number;
   onShowPaywall: () => void;
   onInspiration: () => void;
+  isLoggedIn: boolean;
+  onSignIn: () => void;
 }
 
 const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration }: Props) => {
