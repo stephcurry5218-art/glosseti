@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { iconName, imageBase64, photoType, gender } = await req.json();
+    const { iconName, imageBase64, photoType, gender, generationMode } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -105,9 +105,32 @@ Respond ONLY with valid JSON, no markdown.`,
 
     // Step 2: Generate styled image using the extracted profile
     const genderWord = gender === "male" ? "man" : "woman";
-    const editPrompt = photoType === "full-body"
-      ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`
-      : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`;
+    const isMannequin = generationMode === "mannequin";
+
+    let editPrompt: string;
+    let imageMessages: any[];
+
+    if (isMannequin) {
+      editPrompt = `Create a professional fashion photography image of a ${gender === "male" ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleProfile.detailedPrompt} The mannequin should be a clean, modern, matte ${gender === "male" ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures. Do NOT include any human face or identity.`;
+
+      imageMessages = [
+        { role: "user", content: [{ type: "text", text: editPrompt }] },
+      ];
+    } else {
+      editPrompt = photoType === "full-body"
+        ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`
+        : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.`;
+
+      imageMessages = [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: editPrompt },
+            { type: "image_url", image_url: { url: imageBase64 } },
+          ],
+        },
+      ];
+    }
 
     const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -117,15 +140,7 @@ Respond ONLY with valid JSON, no markdown.`,
       },
       body: JSON.stringify({
         model: "google/gemini-3.1-flash-image-preview",
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: editPrompt },
-              { type: "image_url", image_url: { url: imageBase64 } },
-            ],
-          },
-        ],
+        messages: imageMessages,
         modalities: ["image", "text"],
       }),
     });

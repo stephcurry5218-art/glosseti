@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoInspirationResult } from "./demoMode";
-import type { PhotoType, Gender } from "./GlamoraApp";
+import type { PhotoType, Gender, GenerationMode } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
 export interface StyleProfile {
@@ -19,9 +19,10 @@ export interface StyleProfile {
 
 interface Props {
   iconName: string;
-  photoBase64: string;
+  photoBase64: string | null;
   photoType: PhotoType;
   gender: Gender;
+  generationMode: GenerationMode;
   onDone: (imageUrl: string | null, styleProfile: StyleProfile | null) => void;
 }
 
@@ -34,7 +35,7 @@ const steps: { label: string; Icon: LucideIcon }[] = [
   { label: "Generating your inspired look...", Icon: Sparkles },
 ];
 
-const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, onDone }: Props) => {
+const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, generationMode, onDone }: Props) => {
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
@@ -57,7 +58,7 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, on
           return;
         }
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
-          body: { iconName, imageBase64: photoBase64, photoType, gender },
+          body: { iconName, imageBase64: photoBase64, photoType, gender, generationMode },
         });
         if (error) {
           console.error("Inspiration error:", error);
@@ -79,7 +80,7 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, on
     };
 
     generate();
-  }, [iconName, photoBase64, photoType, gender]);
+  }, [iconName, photoBase64, photoType, gender, generationMode]);
 
   useEffect(() => {
     if (aiDone && animDone && !navigatedRef.current) {

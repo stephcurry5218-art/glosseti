@@ -88,10 +88,10 @@ const GlamoraApp = () => {
     go("loading");
   }, [tryGenerate, go]);
 
-  const handleInspirationGenerate = useCallback((iconName: string, file: File, photoType: PhotoType, base64: string) => {
+  const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
     setInspirationIcon(iconName);
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64 }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
     go("inspiration-loading");
   }, [tryGenerate, go]);
 
@@ -166,12 +166,13 @@ const GlamoraApp = () => {
       {screen === "inspiration" && (
         <InspirationScreen prefs={prefs} onBack={() => go("home")} onGenerate={handleInspirationGenerate} />
       )}
-      {screen === "inspiration-loading" && prefs.photoBase64 && (
+      {screen === "inspiration-loading" && (prefs.photoBase64 || prefs.generationMode === "mannequin") && (
         <InspirationLoadingScreen
           iconName={inspirationIcon}
           photoBase64={prefs.photoBase64}
           photoType={prefs.photoType}
           gender={prefs.gender}
+          generationMode={prefs.generationMode}
           onDone={(imageUrl, styleProfile) => {
             setInspirationImageUrl(imageUrl);
             setInspirationProfile(styleProfile);
