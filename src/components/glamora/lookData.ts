@@ -562,6 +562,8 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Poolside Glam": { match: 95, desc: "Main-character pool energy — metallic swim, gold chains, bold lip" },
   "Midnight Lace": { match: 93, desc: "Dark, dramatic intimates — black lace, garters, smoky eyes" },
   "Velvet Boudoir": { match: 94, desc: "Old Hollywood intimates — velvet, feathers, champagne tones" },
+  "Butterfly Babe": { match: 94, desc: "Y2K nostalgia — butterfly tops, low-rise, frosted gloss, baguette bags" },
+  "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
 };
 
 export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
