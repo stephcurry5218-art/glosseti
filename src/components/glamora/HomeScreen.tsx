@@ -297,7 +297,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
-      {/* Bottom Nav */}
+      {/* Top Nav */}
       <div className="bottom-nav">
         <button className="nav-btn active"><span className="nav-icon"><Home size={20} /></span><span className="nav-label">Home</span></button>
         <button className="nav-btn" onClick={() => onGetStyled()}><span className="nav-icon"><Scissors size={20} /></span><span className="nav-label">Style</span></button>
