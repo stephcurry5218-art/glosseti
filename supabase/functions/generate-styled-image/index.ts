@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, styleCategory, photoType, gender } = await req.json();
+    const { imageBase64, styleCategory, photoType, gender, generationMode } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -77,9 +77,41 @@ serve(async (req) => {
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
     const genderWord = isMale ? "man" : "woman";
-    const editPrompt = photoType === "full-body"
-      ? `Transform this ${genderWord}'s outfit. Show them ${styleDesc} Keep the person's face, body, and background the same. Make the clothing and accessories look realistic and well-fitted. Professional fashion photography style with warm lighting.`
-      : `Transform this ${genderWord}'s look. Show them ${styleDesc} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting.`;
+
+    const isMannequin = generationMode === "mannequin";
+
+    let editPrompt: string;
+    let messages: any[];
+
+    if (isMannequin) {
+      // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
+      editPrompt = `Create a professional fashion photography image of a ${isMale ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleDesc} The mannequin should be a clean, modern, matte ${isMale ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures.`;
+
+      messages = [
+        {
+          role: "user",
+          content: [{ type: "text", text: editPrompt }],
+        },
+      ];
+    } else {
+      // On-me mode: restyle the user's photo
+      editPrompt = photoType === "full-body"
+        ? `Transform this ${genderWord}'s outfit. Show them ${styleDesc} Keep the person's face, body, and background the same. Make the clothing and accessories look realistic and well-fitted. Professional fashion photography style with warm lighting.`
+        : `Transform this ${genderWord}'s look. Show them ${styleDesc} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting.`;
+
+      messages = [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: editPrompt },
+            {
+              type: "image_url",
+              image_url: { url: imageBase64 },
+            },
+          ],
+        },
+      ];
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -89,18 +121,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-3.1-flash-image-preview",
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: editPrompt },
-              {
-                type: "image_url",
-                image_url: { url: imageBase64 },
-              },
-            ],
-          },
-        ],
+        messages,
         modalities: ["image", "text"],
       }),
     });
