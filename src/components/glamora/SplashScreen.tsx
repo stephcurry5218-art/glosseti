@@ -25,9 +25,6 @@ const SplashScreen = ({ onDone }: Props) => {
         style={{ width: 200, height: 200, bottom: 60, left: -40, background: "radial-gradient(circle, rgba(196,151,74,0.25) 0%, transparent 70%)", animation: "glamFloat 6s ease-in-out infinite 1s" }}
       />
       <img src="/glamora-icon.png" alt="Glosseti" className="relative z-10 anim-fadeIn" style={{ width: 100, height: 100, objectFit: "contain" }} />
-      <div className="serif relative z-10 anim-fadeIn" style={{ fontSize: 52, fontWeight: 400, color: "hsl(var(--glamora-cream))", letterSpacing: 8, marginTop: 12 }}>
-        GLOSSETI<span style={{ color: "hsl(var(--glamora-gold))" }}>.</span>
-      </div>
       <div className="relative z-10 anim-fadeIn d3" style={{ fontSize: 12, color: "rgba(251,246,240,0.45)", letterSpacing: 4, textTransform: "uppercase", marginTop: 10 }}>
         AI-Powered Style Studio
       </div>
