@@ -27,10 +27,22 @@ const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async (platform: SharePlatform) => {
+    // Instagram, TikTok, Snapchat don't have web share URLs — copy link instead
+    const copyOnlyPlatforms: SharePlatform[] = ["instagram", "tiktok", "snapchat"];
+    if (copyOnlyPlatforms.includes(platform)) {
+      const success = await shareToSocial("copy", { text: text + `\n\nStyled with #Glosseti ✨`, imageUrl });
+      if (success) {
+        setCopied(true);
+        setCopiedLabel(`Copied! Paste in ${platforms.find(p => p.id === platform)?.label}`);
+        setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 3000);
+      }
+      return;
+    }
     const success = await shareToSocial(platform, { text, imageUrl });
     if (platform === "copy" && success) {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedLabel("Copied!");
+      setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 2000);
     }
     if (platform !== "copy") setOpen(false);
   };
