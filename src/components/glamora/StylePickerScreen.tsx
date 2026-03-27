@@ -111,6 +111,16 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Elegant intimate wear — lace, silk, and delicate details",
     includes: ["Bralettes & Corsets", "Silk Robes & Slips", "Lace Sets", "Loungewear"],
   },
+  {
+    id: "y2k", label: "Y2K", Icon: Sparkles,
+    desc: "Early 2000s nostalgia — low-rise, butterfly tops, frosted lips",
+    includes: ["Crop Tops & Halters", "Mini Skirts & Low-Rise Jeans", "Platform Shoes", "Tinted Sunglasses & Belly Chains"],
+  },
+  {
+    id: "cottagecore", label: "Cottagecore", Icon: Flower,
+    desc: "Romantic countryside aesthetic — florals, linen, wicker",
+    includes: ["Floral Dresses", "Puff-Sleeve Blouses", "Mary Janes & Leather Boots", "Straw Hats & Wicker Bags"],
+  },
 ];
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
