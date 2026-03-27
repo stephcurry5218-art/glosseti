@@ -1,4 +1,4 @@
-export type Category = "makeup" | "top" | "bottom" | "shoes" | "accessories";
+export type Category = "makeup" | "top" | "bottom" | "shoes" | "accessories" | "swimwear" | "lingerie";
 export type PriceTier = "luxury" | "mid" | "budget";
 export type ShopOption = { store: string; item: string; price: string };
 export type Step = {
