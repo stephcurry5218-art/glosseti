@@ -87,16 +87,20 @@ const GlamoraApp = () => {
 
   const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
+    const genMode = mode || "on-me";
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
+    recordStyle({ styleCategory: prefs.styleCategory, gender: prefs.gender, generationMode: genMode });
     go("loading");
-  }, [tryGenerate, go]);
+  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
     setInspirationIcon(iconName);
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
+    const genMode = mode || "on-me";
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
+    recordStyle({ styleCategory: prefs.styleCategory, celebrityInspiration: iconName, gender: prefs.gender, generationMode: genMode });
     go("inspiration-loading");
-  }, [tryGenerate, go]);
+  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   return (
     <div className="phone">
