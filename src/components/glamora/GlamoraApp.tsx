@@ -165,6 +165,11 @@ const GlamoraApp = () => {
             const prompt = `I just generated a ${category.replace("-", " ")} look and I'd like to refine it. Can you help me tweak the style? What changes would make it better — different colors, fits, or vibes? Give me specific suggestions I can try.`;
             chatRef.current?.openWithPrompt(prompt);
           }}
+          onQuickRegenerate={() => {
+            if (!tryGenerate()) return;
+            setStyledImageUrl(null);
+            go("loading");
+          }}
           showWatermark={showWatermark}
         />
       )}

@@ -17,6 +17,7 @@ interface Props {
   onSave: (lookNames: string[]) => void;
   onLookSelect: (name: string) => void;
   onRegenerate?: (tweakedCategory?: StyleCategory) => void;
+  onQuickRegenerate?: () => void;
   showWatermark?: boolean;
 }
 
@@ -59,7 +60,7 @@ const handleDownload = async (imageUrl: string) => {
   }
 };
 
-const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate, showWatermark }: Props) => {
+const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate, onQuickRegenerate, showWatermark }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
   const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
   const [showTweaker, setShowTweaker] = useState(false);
@@ -439,6 +440,19 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 Download <Download size={16} />
               </button>
             </div>
+          )}
+          {onQuickRegenerate && (
+            <button
+              className="btn-primary"
+              onClick={onQuickRegenerate}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                boxShadow: "0 4px 16px hsla(var(--glamora-gold) / 0.25)",
+              }}
+            >
+              <RefreshCw size={16} /> Regenerate Look
+            </button>
           )}
           {!hasStyled && onRegenerate && (
             <button className="btn-primary btn-rose" onClick={() => onRegenerate()} style={{ display: "flex", alignItems: "center", gap: 8 }}>
