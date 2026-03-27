@@ -129,9 +129,26 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
       <div className="serif" style={{ fontSize: 22, color: "hsl(var(--glamora-char))", marginBottom: 8, textAlign: "center" }}>
         Channeling the Aesthetic...
       </div>
-      <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginBottom: 28, textAlign: "center" }}>
+      <div style={{ fontSize: 13, color: aiError ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))", marginBottom: aiError?.includes("credits") ? 12 : 28, textAlign: "center" }}>
         {aiError || (animDone && !aiDone ? "Almost there, finalizing your look..." : "Extracting style DNA & generating your look")}
       </div>
+      {aiError?.includes("credits") && (
+        <a
+          href="https://lovable.dev/settings"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "10px 24px", marginBottom: 28, borderRadius: 12,
+            background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-rose-dark)))",
+            color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none",
+            boxShadow: "0 4px 16px hsla(var(--glamora-gold) / 0.35)",
+            transition: "transform 0.2s, box-shadow 0.2s",
+          }}
+        >
+          💳 Add Funds
+        </a>
+      )}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
         {steps.map((s, i) => {
