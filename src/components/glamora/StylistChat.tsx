@@ -178,12 +178,8 @@ const StylistChat = ({ gender }: Props) => {
         animation: "slideUp 0.3s ease",
       }}
     >
-      {/* Expanded chat header + messages */}
+      {/* Chat header + messages */}
       <div style={{
-        opacity: expanded ? 1 : 0,
-        transform: expanded ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s",
-        pointerEvents: expanded ? "auto" : "none",
         display: "flex",
         flexDirection: "column",
         flex: 1,
