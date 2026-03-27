@@ -106,6 +106,11 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Polished and alluring — dress to impress",
     includes: ["Fitted Blazers & Dresses", "Heels & Dress Shoes", "Fragrance", "Accessories"],
   },
+  {
+    id: "lingerie", label: "Lingerie & Intimates", Icon: Heart,
+    desc: "Elegant intimate wear — lace, silk, and delicate details",
+    includes: ["Bralettes & Corsets", "Silk Robes & Slips", "Lace Sets", "Loungewear"],
+  },
 ];
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
