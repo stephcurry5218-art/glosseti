@@ -134,7 +134,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Camera size={22} color="white" />
           </div>
           <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+            <div style={{ fontSize: 15, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
               {isMale ? "Get Your Style" : "Get Styled Now"}
             </div>
             <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
