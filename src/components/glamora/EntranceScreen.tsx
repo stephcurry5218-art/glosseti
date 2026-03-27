@@ -219,15 +219,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
         opacity: revealed ? 1 : 0.3,
         transition: "opacity 0.8s ease 0.4s",
       }}>
-        <img src="/glamora-icon.png" alt="Glosseti" style={{ width: 80, height: 80, objectFit: "contain", marginBottom: 8 }} />
-        <div className="serif" style={{
-          fontSize: 48, fontWeight: 400, letterSpacing: 6,
-          color: "hsl(var(--glamora-cream))",
-          textShadow: `0 0 40px hsla(${accent} / 0.3)`,
-          transition: "text-shadow 0.6s ease",
-        }}>
-          GLOSSETI<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
-        </div>
+        <img src="/glosseti-icon-only.png" alt="Glosseti" style={{ width: 100, height: 100, objectFit: "contain", marginBottom: 8 }} />
         <div style={{
           fontSize: 13, letterSpacing: 4, textTransform: "uppercase",
           color: "hsla(var(--glamora-cream) / 0.5)",
@@ -253,13 +245,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
         opacity: revealed ? 0 : 1,
         transition: "opacity 0.5s ease",
       }}>
-        <img src="/glamora-icon.png" alt="Glosseti" className="anim-fadeIn" style={{ width: 90, height: 90, objectFit: "contain", marginBottom: 8 }} />
-        <div className="serif anim-fadeIn" style={{
-          fontSize: 52, fontWeight: 400, letterSpacing: 8,
-          color: "hsl(var(--glamora-cream))",
-        }}>
-          GLOSSETI<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
-        </div>
+        <img src="/glosseti-icon-only.png" alt="Glosseti" className="anim-fadeIn" style={{ width: 110, height: 110, objectFit: "contain", marginBottom: 8 }} />
         <div className="anim-fadeIn d2" style={{
           fontSize: 12, letterSpacing: 4, textTransform: "uppercase",
           color: "hsla(var(--glamora-cream) / 0.5)",
