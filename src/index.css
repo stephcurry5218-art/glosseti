@@ -59,7 +59,7 @@
     --sidebar-accent-foreground: 30 20% 90%;
     --sidebar-border: 20 14% 18%;
     --sidebar-ring: 24 38% 48%;
-
+  }
 
   @keyframes gold-shimmer {
     0% { background-position: -200% 0; }
