@@ -290,8 +290,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
               }}
             >
               <item.icon size={16} color={`hsl(${accent})`} style={{ marginBottom: 6 }} />
-              <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{item.title}</div>
-              <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>{item.sub}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>{item.title}</div>
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 2 }}>{item.sub}</div>
             </div>
           ))}
         </div>
