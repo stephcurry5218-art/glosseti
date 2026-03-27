@@ -83,7 +83,14 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             const Icon = tierIcons[plan.tier];
             const price = billingCycle === "yearly" && plan.yearlyPrice
               ? plan.yearlyPrice
-              : plan.monthlyPrice;
+              : billingCycle === "weekly" && plan.weeklyPrice
+                ? plan.weeklyPrice
+                : plan.monthlyPrice;
+            const periodLabel = billingCycle === "yearly" && plan.yearlyPrice
+              ? "yr"
+              : billingCycle === "weekly" && plan.weeklyPrice
+                ? "wk"
+                : "mo";
             const perMonth = billingCycle === "yearly" && plan.yearlyPrice
               ? (plan.yearlyPrice / 12).toFixed(2)
               : null;
