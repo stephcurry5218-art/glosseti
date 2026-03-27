@@ -11,6 +11,14 @@ interface Props {
 }
 
 const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
+  if (prefs.generationMode === "mannequin") {
+    return [
+      { label: "Selecting style elements...", Icon: Shirt },
+      { label: "Matching color palette...", Icon: Palette },
+      { label: "Styling the mannequin...", Icon: Sparkles },
+      { label: "Finalizing the look...", Icon: ShoppingBag },
+    ];
+  }
   if (prefs.styleCategory === "makeup-only") {
     return [
       { label: "Analyzing facial features...", Icon: Search },
