@@ -226,18 +226,18 @@
   50% { background-position: 100% 50%; }
 }
 
-/* Bottom nav */
+/* Top nav */
 .bottom-nav {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 78px;
+  top: 0; left: 0; right: 0;
+  height: 56px;
   background: hsla(20 18% 9% / 0.96);
   backdrop-filter: blur(16px);
-  border-top: 1px solid hsla(24 38% 48% / 0.1);
+  border-bottom: 1px solid hsla(24 38% 48% / 0.1);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 8px 12px;
+  padding: 0 8px;
   z-index: 90;
 }
 .nav-btn {

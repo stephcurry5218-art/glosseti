@@ -26,7 +26,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
   const accentLight = "var(--glamora-gold-light)";
 
   return (
-    <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 90 }}>
+    <div className="screen enter" style={{ minHeight: "100%", paddingTop: 64, paddingBottom: 20 }}>
       {/* Compact hero */}
       <div style={{ position: "relative", height: 260, overflow: "hidden" }}>
         <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
@@ -297,7 +297,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
-      {/* Bottom Nav */}
+      {/* Top Nav */}
       <div className="bottom-nav">
         <button className="nav-btn active"><span className="nav-icon"><Home size={20} /></span><span className="nav-label">Home</span></button>
         <button className="nav-btn" onClick={() => onGetStyled()}><span className="nav-icon"><Scissors size={20} /></span><span className="nav-label">Style</span></button>
