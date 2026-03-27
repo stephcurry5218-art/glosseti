@@ -644,4 +644,14 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Midnight Lace", desc: "Dark drama — black lace, garters, smoky seduction", match: 93 },
     { name: "Soft Glam", desc: "Romantic intimate styling with rose tones", match: 90 },
   ],
+  y2k: [
+    { name: "Butterfly Babe", desc: "Low-rise, butterfly tops, frosted lips — peak 2000s", match: 96 },
+    { name: "Retro Revival", desc: "Retro glamour with Y2K edge", match: 89 },
+    { name: "Urban Edge", desc: "Y2K streetwear — baggy jeans, baby tees, platforms", match: 87 },
+  ],
+  cottagecore: [
+    { name: "Meadow Dream", desc: "Florals, linen, straw hats — countryside romance", match: 96 },
+    { name: "Desert Wanderer", desc: "Earthy bohemian with cottagecore softness", match: 90 },
+    { name: "Soft Glam", desc: "Romantic natural beauty with countryside charm", match: 87 },
+  ],
 };
