@@ -58,7 +58,7 @@ const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, ge
           return;
         }
         const { data, error } = await supabase.functions.invoke("style-inspiration", {
-          body: { iconName, imageBase64: photoBase64, photoType, gender },
+          body: { iconName, imageBase64: photoBase64, photoType, gender, generationMode },
         });
         if (error) {
           console.error("Inspiration error:", error);
