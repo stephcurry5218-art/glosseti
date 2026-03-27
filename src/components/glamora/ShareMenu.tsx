@@ -10,9 +10,16 @@ interface Props {
 
 const platforms: { id: SharePlatform; label: string; icon: string; color: string }[] = [
   { id: "twitter", label: "X / Twitter", icon: "𝕏", color: "#000" },
+  { id: "instagram", label: "Instagram", icon: "📷", color: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)" },
+  { id: "tiktok", label: "TikTok", icon: "♪", color: "#000" },
+  { id: "snapchat", label: "Snapchat", icon: "👻", color: "#FFFC00" },
   { id: "facebook", label: "Facebook", icon: "f", color: "#1877F2" },
   { id: "pinterest", label: "Pinterest", icon: "P", color: "#E60023" },
   { id: "whatsapp", label: "WhatsApp", icon: "W", color: "#25D366" },
+  { id: "telegram", label: "Telegram", icon: "✈", color: "#0088cc" },
+  { id: "linkedin", label: "LinkedIn", icon: "in", color: "#0A66C2" },
+  { id: "reddit", label: "Reddit", icon: "R", color: "#FF4500" },
+  { id: "email", label: "Email", icon: "✉", color: "#666" },
 ];
 
 const ShareMenu = ({ text, imageUrl, trigger }: Props) => {
