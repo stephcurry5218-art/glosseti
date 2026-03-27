@@ -38,8 +38,8 @@ const analysis = {
   features: ["High cheekbones", "Broad shoulders", "Proportional waist"],
 };
 
-const openShopLink = (searchTerm: string) => {
-  window.open(getAmazonSearchUrl(searchTerm), "_blank", "noopener,noreferrer");
+const openShopLink = (store: string, item: string) => {
+  window.open(getShopUrl(store, item), "_blank", "noopener,noreferrer");
 };
 
 const handleDownload = async (imageUrl: string) => {
