@@ -388,6 +388,46 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
       { title: "Bag", detail: "A simple black or grey backpack with minimal branding.", shop: { luxury: { store: "Nordstrom", item: "Troubadour Apex Backpack", price: "$475" }, mid: { store: "Everlane", item: "The Modern Zip Backpack", price: "$68" }, budget: { store: "Amazon", item: "Matein Slim Laptop Backpack", price: "$25" } } },
     ],
   },
+  "Beach Goddess": {
+    makeup: [
+      { title: "Waterproof Base", detail: "Use a tinted SPF moisturizer for a natural, sun-kissed glow. Skip heavy foundation.", shop: { luxury: { store: "Sephora", item: "Supergoop Glowscreen SPF 40", price: "$38" }, mid: { store: "Ulta", item: "Australian Gold Botanical Tinted SPF 50", price: "$16" }, budget: { store: "Target", item: "CeraVe Tinted Sunscreen SPF 30", price: "$12" } } },
+      { title: "Waterproof Mascara & Brows", detail: "One coat of waterproof mascara and a clear brow gel to keep everything in place poolside.", shop: { luxury: { store: "Sephora", item: "Too Faced Better Than Sex Waterproof Mascara", price: "$29" }, mid: { store: "Ulta", item: "Essence Lash Princess Waterproof", price: "$5" }, budget: { store: "Amazon", item: "Maybelline Lash Sensational Waterproof", price: "$8" } } },
+      { title: "Bronzer & Lip", detail: "Dust bronzer on cheeks and shoulders. Apply a tinted lip balm with SPF.", shop: { luxury: { store: "Sephora", item: "Tom Ford Soleil Glow Bronzer", price: "$68" }, mid: { store: "Ulta", item: "Physician's Formula Butter Bronzer", price: "$15" }, budget: { store: "Amazon", item: "e.l.f. Putty Bronzer", price: "$7" } } },
+    ],
+    swimwear: [
+      { title: "Bikini Top", detail: "Triangle or balconette bikini top. Look for adjustable straps and removable padding for a custom fit.", tip: "Underwire styles provide extra support for larger busts", shop: { luxury: { store: "Net-a-Porter", item: "Zimmermann Floral Triangle Bikini Top", price: "$195" }, mid: { store: "Nordstrom", item: "Seafolly Wrap Front Bikini Top", price: "$78" }, budget: { store: "Target", item: "Shade & Shore Textured Triangle Top", price: "$22" } } },
+      { title: "Bikini Bottom", detail: "High-cut or Brazilian-cut bottom for an elongated leg line. Match or mix with your top.", shop: { luxury: { store: "Net-a-Porter", item: "Frankies Bikinis Jenna High-Leg Bottom", price: "$95" }, mid: { store: "Nordstrom", item: "Seafolly High Waist Bikini Bottom", price: "$62" }, budget: { store: "Target", item: "Shade & Shore High Leg Cheeky Bottom", price: "$18" } } },
+      { title: "One-Piece Alternative", detail: "A plunging V-neck or cutout one-piece for a sophisticated beach look.", shop: { luxury: { store: "Net-a-Porter", item: "Norma Kamali Marissa Swimsuit", price: "$175" }, mid: { store: "Nordstrom", item: "Good American Always Fits One-Piece", price: "$99" }, budget: { store: "Amazon", item: "CUPSHE Cutout One Piece Swimsuit", price: "$32" } } },
+    ],
+    accessories: [
+      { title: "Cover-Up", detail: "A sheer crochet or linen cover-up dress for transitioning from beach to bar.", shop: { luxury: { store: "Revolve", item: "Cult Gaia Kaia Knit Cover-Up", price: "$298" }, mid: { store: "Nordstrom", item: "Elan Crochet Cover-Up Dress", price: "$58" }, budget: { store: "Amazon", item: "Bsubseach Crochet Beach Cover Up", price: "$22" } } },
+      { title: "Sunglasses & Hat", detail: "Oversized cat-eye sunglasses and a wide-brim straw hat complete the beach look.", shop: { luxury: { store: "Nordstrom", item: "Gucci Oversized Sunglasses", price: "$380" }, mid: { store: "Nordstrom", item: "Quay Australia After Hours Sunnies", price: "$55" }, budget: { store: "Amazon", item: "SOJOS Retro Oversized Sunglasses", price: "$15" } } },
+      { title: "Beach Bag", detail: "An oversized straw tote that fits towels, sunscreen, and your essentials.", shop: { luxury: { store: "Net-a-Porter", item: "Loewe Basket Bag in Raffia", price: "$550" }, mid: { store: "Nordstrom", item: "BTB Los Angeles Straw Tote", price: "$68" }, budget: { store: "Target", item: "A New Day Straw Circle Tote", price: "$25" } } },
+    ],
+    shoes: [
+      { title: "Sandals", detail: "Strappy flat sandals or elevated slide sandals. Waterproof materials preferred.", shop: { luxury: { store: "Nordstrom", item: "Ancient Greek Sandals Eleftheria", price: "$230" }, mid: { store: "Nordstrom", item: "Steve Madden Knox Slide Sandal", price: "$60" }, budget: { store: "Target", item: "A New Day Braided Slide Sandal", price: "$20" } } },
+    ],
+  },
+  "Silk & Lace": {
+    makeup: [
+      { title: "Romantic Glow", detail: "Dewy primer, light coverage base, and a flush of rose blush for a bedroom-ready glow.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Flawless Filter", price: "$49" }, mid: { store: "Ulta", item: "Glossier Futuredew Serum", price: "$26" }, budget: { store: "Amazon", item: "e.l.f. Halo Glow Setting Powder", price: "$9" } } },
+      { title: "Sultry Eye & Lip", detail: "Smudged eyeliner, mascara, and a berry or nude lip stain for a hint of allure.", shop: { luxury: { store: "Sephora", item: "YSL Tatouage Couture Lip Stain", price: "$39" }, mid: { store: "Ulta", item: "Revlon Kiss Cloud Lip Tint", price: "$10" }, budget: { store: "Target", item: "Maybelline Vinyl Ink Lip Color", price: "$9" } } },
+    ],
+    lingerie: [
+      { title: "Bralette or Bra", detail: "Delicate lace bralette or underwired plunge bra. Look for scalloped edges and mesh details.", tip: "Bralettes work best for A-C cups; plunge bras offer more support for D+", shop: { luxury: { store: "Nordstrom", item: "Fleur du Mal Lily Lace Bralette", price: "$128" }, mid: { store: "Nordstrom", item: "Free People Adella Lace Bralette", price: "$38" }, budget: { store: "Amazon", item: "DOBREVA Lace Bralette with Padding", price: "$18" } } },
+      { title: "Matching Bottom", detail: "High-waist lace thong, cheeky, or Brazilian cut. Match the lace pattern to your top.", shop: { luxury: { store: "Nordstrom", item: "Agent Provocateur Mercy Thong", price: "$95" }, mid: { store: "Nordstrom", item: "Natori Feathers Hipster", price: "$36" }, budget: { store: "Amazon", item: "Avidlove Lace Cheeky Panties 3-Pack", price: "$16" } } },
+      { title: "Corset or Bustier", detail: "A satin or lace corset with boning for a structured, sculpted silhouette. Can double as a top.", shop: { luxury: { store: "Net-a-Porter", item: "Dion Lee Lace-Up Corset Top", price: "$490" }, mid: { store: "Nordstrom", item: "Good American Lace Corset Top", price: "$89" }, budget: { store: "Amazon", item: "Houseables Satin Corset Bustier", price: "$24" } } },
+      { title: "Silk Robe or Slip", detail: "A mid-thigh silk robe or satin chemise for an elegant layering piece.", tip: "Kimono-style robes add drama; wrap robes are more classic", shop: { luxury: { store: "Net-a-Porter", item: "Olivia von Halle Issa Silk Robe", price: "$495" }, mid: { store: "Nordstrom", item: "Flora Nikrooz Showstopper Robe", price: "$68" }, budget: { store: "Amazon", item: "Ekouaer Satin Kimono Robe", price: "$20" } } },
+      { title: "Bodysuit", detail: "Sheer mesh or lace bodysuit — can be worn alone or styled under jeans/blazers.", shop: { luxury: { store: "Net-a-Porter", item: "Kiki de Montparnasse Allover Lace Bodysuit", price: "$295" }, mid: { store: "Nordstrom", item: "Free People Intimately Lace Bodysuit", price: "$48" }, budget: { store: "Amazon", item: "SheIn Mesh Lace Bodysuit", price: "$15" } } },
+    ],
+    accessories: [
+      { title: "Hosiery", detail: "Sheer thigh-highs with lace tops or fishnet stockings for an extra sultry touch.", shop: { luxury: { store: "Nordstrom", item: "Wolford Satin Touch Stay-Up Stockings", price: "$52" }, mid: { store: "Nordstrom", item: "Commando Sheer Thigh-Highs", price: "$28" }, budget: { store: "Amazon", item: "Berkshire Sheer Thigh-Highs 2-Pack", price: "$10" } } },
+      { title: "Fragrance", detail: "A warm, sensual scent with notes of vanilla, amber, or musk.", shop: { luxury: { store: "Sephora", item: "Tom Ford Black Orchid EDP", price: "$180" }, mid: { store: "Sephora", item: "YSL Black Opium EDP", price: "$98" }, budget: { store: "Amazon", item: "Ariana Grande Cloud EDP", price: "$30" } } },
+    ],
+    shoes: [
+      { title: "Heeled Mules or Slippers", detail: "Feather-trimmed heeled mules or satin bedroom slippers for the finishing touch.", shop: { luxury: { store: "Net-a-Porter", item: "Aquazzura Pom Pom Mules", price: "$750" }, mid: { store: "Nordstrom", item: "Steve Madden Feather Sandal", price: "$80" }, budget: { store: "Amazon", item: "The Drop Feather Heel Sandal", price: "$35" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
@@ -405,6 +445,8 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Sharp & Clean": { match: 96, desc: "Precision grooming — clean skin, quality basics" },
   "Rugged Refined": { match: 92, desc: "Textured beard, work boots, woodsy scent" },
   "Modern Minimal": { match: 88, desc: "No-fuss grooming — essentials only" },
+  "Beach Goddess": { match: 95, desc: "Sun-kissed bikini looks — bronzed, effortless, beach-ready" },
+  "Silk & Lace": { match: 96, desc: "Luxe intimate wear — lace, silk, sultry elegance" },
 };
 
 export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
@@ -472,5 +514,15 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Sharp & Clean", desc: "Precision cut, fresh skin, subtle fragrance", match: 96 },
     { name: "Rugged Refined", desc: "Textured beard, natural skincare, woodsy scent", match: 92 },
     { name: "Modern Minimal", desc: "No-fuss grooming with quality basics", match: 88 },
+  ],
+  swimwear: [
+    { name: "Beach Goddess", desc: "Sun-kissed bikini perfection — bronzed & beachy", match: 96 },
+    { name: "Coastal Luxe", desc: "Resort-ready swimwear with elegant accessories", match: 91 },
+    { name: "Golden Hour", desc: "Warm sunset tones for the perfect beach day", match: 87 },
+  ],
+  lingerie: [
+    { name: "Silk & Lace", desc: "Luxe intimates — lace bralettes, silk robes, sultry layers", match: 96 },
+    { name: "Soft Glam", desc: "Romantic intimate styling with rose tones", match: 90 },
+    { name: "Berry Chic", desc: "Dark, seductive lingerie in deep tones", match: 88 },
   ],
 };
