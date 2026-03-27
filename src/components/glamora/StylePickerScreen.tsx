@@ -384,7 +384,59 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           </div>
         </div>
 
-        {/* Selected summary chips */}
+        {/* Subcategory selector */}
+        {current.subs.length > 0 && (
+          <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14 }}>
+            <div className="section-label" style={{ marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
+              <Sparkles size={14} color={`hsl(var(${accent}))`} />
+              Refine Your Vibe
+            </div>
+            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
+              Pick a sub-style for a more tailored result (optional)
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {current.subs.map(sub => {
+                const isActive = selectedSub === sub.id;
+                return (
+                  <div
+                    key={sub.id}
+                    onClick={() => setSelectedSub(isActive ? null : sub.id)}
+                    style={{
+                      padding: "12px 14px", borderRadius: 14, cursor: "pointer",
+                      border: isActive
+                        ? `2px solid hsl(var(${accent}))`
+                        : `1.5px solid hsla(var(--glamora-gold) / 0.1)`,
+                      background: isActive
+                        ? `linear-gradient(135deg, hsla(var(${accentLight}) / 0.12), hsla(var(${accent}) / 0.05))`
+                        : "hsl(var(--card))",
+                      transition: "all 0.2s",
+                      display: "flex", alignItems: "center", gap: 12,
+                    }}
+                  >
+                    <div style={{
+                      width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                      background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.1)`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.2s",
+                    }}>
+                      {isActive
+                        ? <Check size={14} color="white" />
+                        : <ArrowRight size={12} color={`hsl(var(${accent}))`} />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
+                        {sub.label}
+                      </div>
+                      <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.3 }}>
+                        {sub.desc}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
         {selected.length > 1 && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
             {selected.map(id => {
