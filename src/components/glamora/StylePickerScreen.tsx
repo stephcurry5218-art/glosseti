@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2 } from "lucide-react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
