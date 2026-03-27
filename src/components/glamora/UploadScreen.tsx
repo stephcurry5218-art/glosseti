@@ -94,7 +94,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
         )}
 
         {/* Photo type selector — only for "on-me" mode */}
-        {!isMakeup && !isMannequin && (
+        {!isFaceCategory && !isMannequin && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             {([
               { id: "selfie" as PhotoType, label: "Selfie", Icon: Camera, desc: "Face & upper body" },
