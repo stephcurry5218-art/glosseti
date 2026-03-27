@@ -117,7 +117,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     includes: ["Crop Tops & Halters", "Mini Skirts & Low-Rise Jeans", "Platform Shoes", "Tinted Sunglasses & Belly Chains"],
   },
   {
-    id: "cottagecore", label: "Cottagecore", Icon: Flower,
+    id: "cottagecore", label: "Cottagecore", Icon: Flower2,
     desc: "Romantic countryside aesthetic — florals, linen, wicker",
     includes: ["Floral Dresses", "Puff-Sleeve Blouses", "Mary Janes & Leather Boots", "Straw Hats & Wicker Bags"],
   },
