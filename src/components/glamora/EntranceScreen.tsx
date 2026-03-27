@@ -225,7 +225,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
           textShadow: `0 0 40px hsla(${accent} / 0.3)`,
           transition: "text-shadow 0.6s ease",
         }}>
-          GLAMORA<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
+          GLOSSETI<span style={{ color: `hsl(${accent})`, transition: "color 0.6s ease" }}>.</span>
         </div>
         <div style={{
           fontSize: 13, letterSpacing: 4, textTransform: "uppercase",
