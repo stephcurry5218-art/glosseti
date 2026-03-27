@@ -110,11 +110,12 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           onClick={() => onGetStyled()}
           style={{
             padding: "18px 16px", cursor: "pointer",
-            background: `linear-gradient(160deg, hsl(var(--glamora-cream2)), hsla(var(--glamora-gold) / 0.08))`,
+            background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.1), hsla(0 0% 100% / 0.04))`,
             border: `1.5px solid hsla(var(--glamora-gold) / 0.2)`,
             display: "flex", alignItems: "center", gap: 14,
-            boxShadow: "0 6px 24px hsla(0 0% 0% / 0.2)",
+            boxShadow: "0 6px 24px hsla(0 0% 0% / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
             position: "relative", overflow: "hidden",
+            backdropFilter: "blur(12px)",
           }}
         >
           {/* Shimmer overlay */}
@@ -133,10 +134,10 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Camera size={22} color="white" />
           </div>
           <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+            <div style={{ fontSize: 15, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
               {isMale ? "Get Your Style" : "Get Styled Now"}
             </div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
+            <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
               Upload a photo · AI generates your look
             </div>
           </div>
@@ -149,8 +150,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
           padding: "16px 12px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
-          background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), hsl(var(--card)))`,
-          border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
+          border: `1px solid hsla(0 0% 100% / 0.08)`,
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
@@ -160,8 +161,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Eye size={18} color={`hsl(${accent})`} />
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>AI Vision</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>AI Vision</div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>
               {isMale ? "Full outfit analysis" : "Head-to-toe scan"}
             </div>
           </div>
@@ -170,8 +171,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <div className="glamora-card" onClick={() => onGetStyled(isMale ? "grooming" : "makeup-only")} style={{
           padding: "16px 12px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
-          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsl(var(--card)))`,
-          border: "1px solid hsla(var(--glamora-gold) / 0.12)",
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
+          border: "1px solid hsla(0 0% 100% / 0.08)",
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
@@ -181,10 +182,10 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             {isMale ? <Scissors size={18} color="hsl(var(--glamora-gold))" /> : <Palette size={18} color="hsl(var(--glamora-gold))" />}
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>
               {isMale ? "Grooming" : "Makeup"}
             </div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 1 }}>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>
               {isMale ? "Hair & skincare" : "Beauty & color picks"}
             </div>
           </div>
@@ -198,8 +199,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           onClick={onInspiration}
           style={{
             padding: "16px 16px", cursor: "pointer",
-            background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.08), hsl(var(--card)))`,
-            border: `1.5px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.15)`,
+            background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
+            border: `1.5px solid hsla(0 0% 100% / 0.08)`,
             display: "flex", alignItems: "center", gap: 14,
           }}
         >
@@ -211,8 +212,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
             <Star size={20} color={`hsl(${accent})`} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Style Inspiration</div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>Style Inspiration</div>
+            <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.45)", marginTop: 2 }}>
               Channel any celebrity's aesthetic
             </div>
           </div>
@@ -228,8 +229,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         }}>
           <Bookmark size={16} color={`hsl(${accent})`} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Saved Looks</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>{savedCount} saved</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>Saved Looks</div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)" }}>{savedCount} saved</div>
           </div>
           {savedCount > 0 && (
             <div style={{
@@ -246,8 +247,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         }}>
           <Zap size={16} color="hsl(var(--glamora-success))" />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>3 Price Tiers</div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>Luxury to budget</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>3 Price Tiers</div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)" }}>Luxury to budget</div>
           </div>
         </div>
       </div>
@@ -284,13 +285,13 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
               onClick={() => onGetStyled()}
               style={{
                 minWidth: 130, padding: "14px 12px", cursor: "pointer",
-                border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
-                background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.05), transparent)`,
+                border: `1px solid hsla(0 0% 100% / 0.08)`,
+                background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsla(0 0% 100% / 0.03))`,
               }}
             >
               <item.icon size={16} color={`hsl(${accent})`} style={{ marginBottom: 6 }} />
-              <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{item.title}</div>
-              <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>{item.sub}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>{item.title}</div>
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.45)", marginTop: 2 }}>{item.sub}</div>
             </div>
           ))}
         </div>
