@@ -152,9 +152,9 @@ const GlamoraApp = () => {
             setSelectedLook(name); go("tutorial");
           }}
           onRegenerate={(tweakedCategory) => {
-            if (!tryGenerate()) return;
-            if (tweakedCategory) setPrefs(p => ({ ...p, styleCategory: tweakedCategory }));
-            setStyledImageUrl(null); go("loading");
+            const category = tweakedCategory || prefs.styleCategory;
+            const prompt = `I just generated a ${category.replace("-", " ")} look and I'd like to refine it. Can you help me tweak the style? What changes would make it better — different colors, fits, or vibes? Give me specific suggestions I can try.`;
+            chatRef.current?.openWithPrompt(prompt);
           }}
           showWatermark={showWatermark}
         />
