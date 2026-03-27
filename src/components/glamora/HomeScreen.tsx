@@ -42,7 +42,6 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           <div style={{ display: "flex", alignItems: "center" }}>
             <img src="/glosseti-icon-only.png" alt="Glosseti" style={{ width: 36, height: 36, objectFit: "contain" }} />
           </div>
-          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{
               display: "flex", borderRadius: 100, overflow: "hidden",
