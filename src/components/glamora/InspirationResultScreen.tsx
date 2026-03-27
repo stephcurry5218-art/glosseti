@@ -110,7 +110,7 @@ const getAccessoryStores = (item: string) => {
   };
 };
 
-
+const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, onHome, onSave, onRegenerate, showWatermark }: Props) => {
   const [viewMode, setViewMode] = useState<"compare" | "image">("compare");
   const isMale = prefs.gender === "male";
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
