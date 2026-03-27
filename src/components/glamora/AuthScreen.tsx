@@ -87,10 +87,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
             display: "flex", alignItems: "center", justifyContent: "center",
             boxShadow: `0 8px 28px hsla(28 40% 52% / 0.3)`,
           }}>
-            <User size={32} color="white" />
-          </div>
-          <div className="serif" style={{ fontSize: 22, color: "hsl(var(--glamora-char))" }}>
-            GLOSSETI<span style={{ color: `hsl(${accent})` }}>.</span>
+            <img src="/glosseti-icon-only.png" alt="Glosseti" style={{ width: 48, height: 48, objectFit: "contain" }} />
           </div>
         </div>
 
