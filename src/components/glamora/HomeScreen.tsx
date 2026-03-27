@@ -26,7 +26,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
   const accentLight = "var(--glamora-gold-light)";
 
   return (
-    <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 90 }}>
+    <div className="screen enter" style={{ minHeight: "100%", paddingTop: 64, paddingBottom: 20 }}>
       {/* Compact hero */}
       <div style={{ position: "relative", height: 260, overflow: "hidden" }}>
         <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
