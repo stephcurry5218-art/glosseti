@@ -115,7 +115,7 @@ Respond ONLY with valid JSON, no markdown.`,
     let imageMessages: any[];
 
     if (isMannequin) {
-      editPrompt = `Create a professional fashion photography image of a ${gender === "male" ? "male" : "female"} mannequin / dress form displaying the following outfit and accessories: ${styleProfile.detailedPrompt} The mannequin should be a clean, modern, matte ${gender === "male" ? "grey" : "white"} dress form against a minimal studio backdrop with soft, warm lighting. Show every clothing item, accessory, shoe, and detail clearly. Style it like a high-end retail window display or fashion lookbook. Make the clothes look realistic with natural fabric draping and textures. Do NOT include any human face or identity.${refinementNote}`;
+      editPrompt = `Fashion photo of a ${gender === "male" ? "male grey" : "female white"} mannequin displaying: ${styleProfile.detailedPrompt} Clean studio, soft lighting, realistic fabrics. High-end lookbook style. No human face.${refinementNote}`;
 
       imageMessages = [
         { role: "user", content: [{ type: "text", text: editPrompt }] },
