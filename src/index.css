@@ -303,10 +303,11 @@
   padding: 7px 14px;
   border-radius: 100px;
   background: hsla(var(--glamora-rose) / 0.15);
-  border: 1px solid hsla(var(--glamora-rose-dark) / 0.2);
+  border: 1px solid hsla(0 0% 100% / 0.1);
   font-size: 12px;
   color: hsl(var(--glamora-rose-dark));
   font-weight: 500;
+  box-shadow: 0 0 12px hsla(var(--glamora-rose) / 0.08);
 }
 
 .glamora-card {
