@@ -50,7 +50,7 @@ serve(async (req) => {
         }).join("\n")
       : "No previous style history yet.";
 
-    const systemPrompt = `You are Glamora's AI style advisor. Based on a user's past style choices, suggest 3 personalized style recommendations they'd love. Be specific and creative.
+    const systemPrompt = `You are Glosseti's AI style advisor. Based on a user's past style choices, suggest 3 personalized style recommendations they'd love. Be specific and creative.
 
 Return a JSON array with exactly 3 objects, each having:
 - "title": catchy style name (3-4 words max)
