@@ -105,7 +105,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
         {viewMode === "compare" && hasOriginal && hasStyled ? (
           <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22, position: "relative" }}>
             {showWatermark && <Watermark />}
-            <BeforeAfterSlider beforeSrc={prefs.photoBase64!} afterSrc={styledImageUrl!} height={420} />
+            <BeforeAfterSlider beforeSrc={prefs.photoBase64!} afterSrc={styledImageUrl!} />
           </div>
         ) : (
           <div className="glamora-card anim-fadeUp d2" style={{ position: "relative", overflow: "hidden", borderRadius: 22 }}>
