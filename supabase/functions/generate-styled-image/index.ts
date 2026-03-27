@@ -101,8 +101,8 @@ serve(async (req) => {
     } else {
       // On-me mode: restyle the user's photo
       editPrompt = photoType === "full-body"
-        ? `Transform this ${genderWord}'s outfit. Show them ${styleDesc} Keep the person's face, body, and background the same. Make the clothing and accessories look realistic and well-fitted. Professional fashion photography style with warm lighting.`
-        : `Transform this ${genderWord}'s look. Show them ${styleDesc} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting.`;
+        ? `Transform this ${genderWord}'s outfit. Show them ${styleDesc} Keep the person's face, body, and background the same. Make the clothing and accessories look realistic and well-fitted. Professional fashion photography style with warm lighting.${refinementNote}`
+        : `Transform this ${genderWord}'s look. Show them ${styleDesc} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting.${refinementNote}`;
 
       messages = [
         {
