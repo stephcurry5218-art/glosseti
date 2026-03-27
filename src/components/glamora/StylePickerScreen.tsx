@@ -149,9 +149,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
     });
   };
 
-  // Show detail for the most recently selected
-  const lastSelected = selected[selected.length - 1];
-  const current = filtered.find(c => c.id === lastSelected) || filtered[0];
+  // Show detail for the most recently selected and use it as the primary generation style
+  const primarySelected = selected[selected.length - 1];
+  const current = filtered.find(c => c.id === primarySelected) || filtered[0];
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
@@ -312,7 +312,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           )}
         </div>
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(selected[0], celebrityGuide || undefined)} style={{
+        <button className="btn-primary btn-rose" onClick={() => onNext(current.id, celebrityGuide || undefined)} style={{
           display: "flex", alignItems: "center", gap: 8,
           background: isMale
             ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"

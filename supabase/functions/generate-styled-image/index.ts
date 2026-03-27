@@ -117,10 +117,16 @@ serve(async (req) => {
       ];
     } else {
       // On-me mode: restyle the user's photo
-      const isRevealing = styleCategory === "swimwear" || styleCategory === "lingerie" || styleCategory === "sexy";
-      const keepNote = isRevealing
-        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
-        : "Keep face, body, background. Realistic clothing, warm lighting.";
+      const isSwimwear = styleCategory === "swimwear";
+      const isLingerie = styleCategory === "lingerie";
+      const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
+      const keepNote = isSwimwear
+        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described bikini or swimwear pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a clear beach or pool setting."
+        : isLingerie
+          ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described lingerie pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a tasteful indoor boudoir or bedroom setting."
+          : isRevealing
+            ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
+            : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
         : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`;
