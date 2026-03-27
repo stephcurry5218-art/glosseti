@@ -1,7 +1,7 @@
-// Social sharing utilities for Glamora
+// Social sharing utilities for Glosseti
 
-const APP_URL = "https://glamora.app";
-const HASHTAGS = "Glamora,AIStyle,FashionAI";
+const APP_URL = "https://glosseti.app";
+const HASHTAGS = "Glosseti,AIStyle,FashionAI";
 
 export type SharePlatform = "twitter" | "facebook" | "pinterest" | "whatsapp" | "copy" | "native";
 
