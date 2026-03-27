@@ -312,7 +312,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           )}
         </div>
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(selected[0], celebrityGuide || undefined)} style={{
+        <button className="btn-primary btn-rose" onClick={() => onNext(current.id, celebrityGuide || undefined)} style={{
           display: "flex", alignItems: "center", gap: 8,
           background: isMale
             ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
