@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, Settings2 } from "lucide-react";
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
-import { styleLooks } from "./lookData";
+import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
-import { getAmazonSearchUrl } from "./affiliateUrls";
+import { getShopUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
+import ShopPanel, { type ShopItem } from "./ShopPanel";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
