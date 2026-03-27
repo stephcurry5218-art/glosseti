@@ -362,7 +362,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     ))}
                   </div>
                   <button className="btn-primary btn-rose" onClick={() => onRegenerate(tweakedCategory)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%" }}>
-                    <RefreshCw size={16} /> Regenerate with {tweakedCategory.replace("-", " ")}
+                    <Sparkles size={16} /> Ask Gio about {tweakedCategory.replace("-", " ")}
                   </button>
                 </div>
               )}
