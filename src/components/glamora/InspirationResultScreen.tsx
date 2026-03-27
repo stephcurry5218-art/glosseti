@@ -3,9 +3,10 @@ import { Sparkles, Bookmark, Share2, RefreshCw, Download, Palette, Shirt, Gem, S
 import type { UserPrefs, PhotoType } from "./GlamoraApp";
 import type { StyleProfile } from "./InspirationLoadingScreen";
 import BeforeAfterSlider from "./BeforeAfterSlider";
-import { getAmazonSearchUrl } from "./affiliateUrls";
+import { getShopUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
+import ShopPanel, { type ShopItem } from "./ShopPanel";
 
 interface Props {
   prefs: UserPrefs;
