@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check } from "lucide-react";
+import { Search, Palette, Sparkles, Shirt, Gem, Scissors, Check, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoInspirationResult } from "./demoMode";
 import type { PhotoType, Gender, GenerationMode } from "./GlamoraApp";
