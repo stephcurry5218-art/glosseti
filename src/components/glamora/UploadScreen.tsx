@@ -54,7 +54,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
 
       <div style={{ padding: "0 22px", marginTop: 16 }}>
         {/* Mode toggle: On Me vs Mannequin */}
-        {!isMakeup && (
+        {!isFaceCategory && (
           <div className="anim-fadeUp" style={{
             display: "flex", gap: 6, marginBottom: 16,
             background: "hsl(var(--card))",
