@@ -46,10 +46,24 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const [aiDone, setAiDone] = useState(false);
   const [animDone, setAnimDone] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [retryNonce, setRetryNonce] = useState(0);
   const generatedUrlRef = useRef<string | null>(null);
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
   const startTimeRef = useRef(Date.now());
+
+  const handleRetry = useCallback(() => {
+    generatedUrlRef.current = null;
+    aiCalledRef.current = false;
+    navigatedRef.current = false;
+    startTimeRef.current = Date.now();
+    setAiError(null);
+    setAiDone(false);
+    setAnimDone(false);
+    setElapsed(0);
+    setStep(0);
+    setRetryNonce((value) => value + 1);
+  }, []);
 
   useEffect(() => {
     if (aiCalledRef.current) return;
@@ -108,15 +122,15 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     };
 
     generateImage();
-  }, [prefs]);
+  }, [prefs, retryNonce]);
 
   // Navigate when BOTH animation and AI are done
   useEffect(() => {
-    if (aiDone && animDone && !navigatedRef.current) {
+    if (aiDone && animDone && !aiError && !navigatedRef.current) {
       navigatedRef.current = true;
       onDone(generatedUrlRef.current);
     }
-  }, [aiDone, animDone, onDone]);
+  }, [aiDone, aiError, animDone, onDone]);
 
   // Elapsed timer
   useEffect(() => {
@@ -125,7 +139,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
       setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
     }, 1000);
     return () => clearInterval(timer);
-  }, [aiDone, aiError]);
+  }, [aiDone, aiError, retryNonce]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -139,7 +153,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
       });
     }, 1200);
     return () => clearInterval(interval);
-  }, [steps.length]);
+  }, [steps.length, retryNonce]);
 
   const remaining = Math.max(0, ESTIMATED_TIME - elapsed);
   const progressPct = aiDone ? 100 : Math.min(95, ((step + 1) / steps.length) * 90 + (elapsed / ESTIMATED_TIME) * 10);
@@ -183,6 +197,16 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         >
           💳 Add Funds
         </a>
+      )}
+
+      {aiError && !aiError.includes("credits") && animDone && (
+        <button
+          className="btn-primary btn-rose"
+          onClick={handleRetry}
+          style={{ marginBottom: 24 }}
+        >
+          Try Again
+        </button>
       )}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>

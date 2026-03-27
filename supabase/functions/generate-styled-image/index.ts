@@ -113,6 +113,41 @@ serve(async (req) => {
         : `\n\nSTYLE INSPIRATION: Channel the fashion aesthetic and styling sensibility of ${celebrityGuide}. Adapt their signature style elements (color palette, fits, accessories, overall vibe) to this look. Do NOT replicate their face or identity.`
       : "";
 
+    const requestImage = async (messages: any[]) => {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3.1-flash-image-preview",
+          messages,
+          modalities: ["image", "text"],
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error("RATE_LIMITED");
+        }
+        if (response.status === 402) {
+          throw new Error("CREDITS_EXHAUSTED");
+        }
+        const errText = await response.text();
+        console.error("AI gateway error:", response.status, errText);
+        throw new Error("GENERATION_FAILED");
+      }
+
+      const data = await response.json();
+      const firstImage = data.choices?.[0]?.message?.images?.[0];
+
+      return {
+        generatedImage: firstImage?.image_url?.url ?? firstImage?.url ?? null,
+        textResponse: data.choices?.[0]?.message?.content || "",
+      };
+    };
+
     let editPrompt: string;
     let messages: any[];
 
@@ -156,52 +191,69 @@ serve(async (req) => {
       ];
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3.1-flash-image-preview",
-        messages,
-        modalities: ["image", "text"],
-      }),
-    });
+    let { generatedImage, textResponse } = await requestImage(messages);
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limited. Please try again in a moment." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const errText = await response.text();
-      console.error("AI gateway error:", response.status, errText);
-      return new Response(JSON.stringify({ error: "Failed to generate styled image" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (!generatedImage) {
+      const fallbackDescriptions: Record<string, string> = {
+        swimwear: isMannequin
+          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in elevated resortwear with layered cover-up pieces, tasteful beach accessories, and luxury vacation styling. Clean studio-quality editorial image.`
+          : `Restyle this ${genderWord} into a tasteful luxury resortwear editorial look. Keep the person's identity and body shape, use elegant coordinated beachwear with a chic cover-up or wrap, and prioritize sophisticated fashion styling over exposed skin. Premium magazine photography.` ,
+        lingerie: isMannequin
+          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in luxury sleepwear and elegant loungewear, including a satin set and robe. Sophisticated editorial studio lighting.`
+          : `Restyle this ${genderWord} into a luxury sleepwear editorial look. Keep the person's identity and body shape, dress them in elegant premium loungewear such as a satin set or silk robe, and make it polished, tasteful, and fashion-forward. Premium editorial photography.`,
+        sexy: isMannequin
+          ? `Fashion mannequin styled in glamorous eveningwear with a confident silhouette, refined accessories, and polished editorial lighting. Tasteful luxury campaign aesthetic.`
+          : `Restyle this ${genderWord} into a glamorous eveningwear editorial look. Keep the person's identity and body shape, use a confident fitted silhouette with refined styling, and keep the result tasteful and high-fashion. Premium editorial photography.`,
+      };
+
+      const fallbackPrompt = fallbackDescriptions[styleCategory] || (isMannequin
+        ? `High-end fashion mannequin editorial showing ${styleDesc}. Sophisticated styling, realistic fabrics, luxury studio lighting.`
+        : `Restyle this ${genderWord} into a polished high-end fashion editorial look inspired by ${styleCategory.replace(/-/g, " ")}. Keep identity and body shape while prioritizing elegant, realistic styling and premium magazine photography.`);
+
+      const fallbackMessages = isMannequin
+        ? [{ role: "user", content: [{ type: "text", text: `${fallbackPrompt}${refinementNote}` }] }]
+        : [{
+            role: "user",
+            content: [
+              { type: "text", text: `${fallbackPrompt}${refinementNote}` },
+              { type: "image_url", image_url: { url: imageBase64 } },
+            ],
+          }];
+
+      const fallbackResult = await requestImage(fallbackMessages);
+      generatedImage = fallbackResult.generatedImage;
+      textResponse = fallbackResult.textResponse;
     }
 
-    const data = await response.json();
-    const generatedImage = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-    const textResponse = data.choices?.[0]?.message?.content || "";
+    if (!generatedImage) {
+      return new Response(
+        JSON.stringify({ error: "No image could be generated for this look. Please try again." }),
+        { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     return new Response(
       JSON.stringify({ imageUrl: generatedImage || null, description: textResponse }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {
+    if (e instanceof Error && e.message === "RATE_LIMITED") {
+      return new Response(JSON.stringify({ error: "Rate limited. Please try again in a moment." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (e instanceof Error && e.message === "CREDITS_EXHAUSTED") {
+      return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
+        status: 402,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     console.error("generate-styled-image error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: e instanceof Error && e.message === "GENERATION_FAILED" ? "Failed to generate styled image" : e instanceof Error ? e.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
