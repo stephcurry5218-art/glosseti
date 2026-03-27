@@ -20,7 +20,7 @@ interface Props {
   onSignIn: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration }: Props) => {
+const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration, isLoggedIn, onSignIn }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
