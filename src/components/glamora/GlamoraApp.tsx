@@ -20,6 +20,7 @@ import type { StyleProfile } from "./InspirationLoadingScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
+import { useStyleHistory } from "./useStyleHistory";
 
 export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night";
 export type PhotoType = "selfie" | "full-body";
@@ -64,6 +65,8 @@ const GlamoraApp = () => {
     lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
   } = useSubscription();
 
+  const { recordStyle } = useStyleHistory();
+
   useEffect(() => {
     const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
@@ -84,16 +87,20 @@ const GlamoraApp = () => {
 
   const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
+    const genMode = mode || "on-me";
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
+    recordStyle({ styleCategory: prefs.styleCategory, gender: prefs.gender, generationMode: genMode });
     go("loading");
-  }, [tryGenerate, go]);
+  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
     if (!tryGenerate()) return;
     setInspirationIcon(iconName);
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: mode || "on-me" }));
+    const genMode = mode || "on-me";
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
+    recordStyle({ styleCategory: prefs.styleCategory, celebrityInspiration: iconName, gender: prefs.gender, generationMode: genMode });
     go("inspiration-loading");
-  }, [tryGenerate, go]);
+  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   return (
     <div className="phone">
@@ -116,6 +123,8 @@ const GlamoraApp = () => {
           remainingGenerations={remainingGenerations}
           onShowPaywall={() => setShowPaywall(true)}
           onInspiration={() => go("inspiration")}
+          isLoggedIn={!!user}
+          onSignIn={() => go("auth")}
         />
       )}
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}

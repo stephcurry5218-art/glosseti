@@ -1,5 +1,6 @@
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
+import StyleSuggestions from "./StyleSuggestions";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import UsageBadge from "./subscription/UsageBadge";
@@ -15,9 +16,11 @@ interface Props {
   remainingGenerations: number;
   onShowPaywall: () => void;
   onInspiration: () => void;
+  isLoggedIn: boolean;
+  onSignIn: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration }: Props) => {
+const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, onInspiration, isLoggedIn, onSignIn }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -248,6 +251,14 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           </div>
         </div>
       </div>
+
+      {/* AI Style Suggestions */}
+      <StyleSuggestions
+        gender={gender}
+        isLoggedIn={isLoggedIn}
+        onSelectStyle={(cat) => onGetStyled(cat)}
+        onSignIn={onSignIn}
+      />
 
       {/* Trending section */}
       <div style={{ padding: "18px 20px 0" }}>
