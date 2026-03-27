@@ -28,7 +28,7 @@ serve(async (req) => {
       });
     }
 
-    const { gender } = await req.json();
+    const { gender, occasion } = await req.json();
 
     // Fetch user's style history
     const { data: history } = await supabase
@@ -50,18 +50,23 @@ serve(async (req) => {
         }).join("\n")
       : "No previous style history yet.";
 
-    const systemPrompt = `You are Glosseti's AI style advisor. Based on a user's past style choices, suggest 3 personalized style recommendations they'd love. Be specific and creative.
+    const occasionContext = occasion
+      ? `\n\nIMPORTANT: The user wants styling specifically for this occasion: "${occasion}". Tailor ALL 3 suggestions to be perfect for "${occasion}" while still reflecting the user's personal style history and preferences. Consider dress codes, venue vibes, and what would make them stand out at this event.`
+      : "";
+
+    const systemPrompt = `You are Glosseti's AI style advisor. Based on a user's past style choices, suggest 3 personalized style recommendations they'd love. Be specific and creative.${occasionContext}
 
 Return a JSON array with exactly 3 objects, each having:
 - "title": catchy style name (3-4 words max)
-- "description": one sentence explaining why this suits them
+- "description": one sentence explaining why this suits them${occasion ? " for this occasion" : ""}
 - "category": one of: full-style, streetwear, formal, casual, makeup-only, minimalist, vintage, athleisure, bohemian, preppy, edgy, resort, grooming, sexy, swimwear, urban-hiphop, rugged, techwear, date-night
 - "confidence": a percentage (60-99) showing how well this matches their taste
-- "reasoning": one short sentence on what pattern you noticed
+- "reasoning": one short sentence on what pattern you noticed${occasion ? " and why it works for this occasion" : ""}
 
-If they have no history, suggest popular trending styles for their gender.`;
+If they have no history, suggest popular trending styles for their gender${occasion ? " appropriate for the occasion" : ""}.`;
 
     const userPrompt = `Gender: ${gender || "female"}
+${occasion ? `Occasion: ${occasion}` : ""}
 
 Style History:
 ${historyText}
@@ -140,6 +145,7 @@ Generate 3 personalized style suggestions.`;
     return new Response(JSON.stringify({
       suggestions,
       historyCount: history?.length || 0,
+      occasion: occasion || null,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
