@@ -534,7 +534,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
         <button
           className="btn-primary btn-rose"
           disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
-          onClick={() => onNext(current.id, celebrityGuide || undefined)}
+          onClick={() => onNext(current.id, celebrityGuide || undefined, selectedSub || undefined)}
           style={{
             display: "flex", alignItems: "center", gap: 8,
             background: isMale
