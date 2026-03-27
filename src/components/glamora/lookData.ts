@@ -428,6 +428,76 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
       { title: "Heeled Mules or Slippers", detail: "Feather-trimmed heeled mules or satin bedroom slippers for the finishing touch.", shop: { luxury: { store: "Net-a-Porter", item: "Aquazzura Pom Pom Mules", price: "$750" }, mid: { store: "Nordstrom", item: "Steve Madden Feather Sandal", price: "$80" }, budget: { store: "Amazon", item: "The Drop Feather Heel Sandal", price: "$35" } } },
     ],
   },
+  "Tropical Paradise": {
+    makeup: [
+      { title: "Island Glow Base", detail: "Tinted moisturizer with coconut-scented SPF. Add coral cream blush to cheeks.", shop: { luxury: { store: "Sephora", item: "Tatcha Silk Canvas Primer + Rare Beauty Blush", price: "$62" }, mid: { store: "Ulta", item: "Tarte Amazonian Clay Blush in Captivating", price: "$32" }, budget: { store: "Target", item: "Milani Baked Blush in Corallina", price: "$9" } } },
+      { title: "Tropical Eyes & Lips", detail: "Turquoise eyeliner accent with waterproof mascara. Glossy coral lip.", shop: { luxury: { store: "Sephora", item: "Pat McGrath Lip Gloss in Sunset Rose", price: "$29" }, mid: { store: "Ulta", item: "NYX Epic Wear Liner in Turquoise Storm", price: "$10" }, budget: { store: "Amazon", item: "Maybelline Lifter Gloss in Reef", price: "$8" } } },
+    ],
+    swimwear: [
+      { title: "Tropical Print Bikini", detail: "Bold tropical or floral print bikini in vibrant greens, pinks, or oranges. High-cut leg for a flattering line.", tip: "Mix prints — pair a tropical top with solid bottoms", shop: { luxury: { store: "Net-a-Porter", item: "Zimmermann Tropicana Triangle Set", price: "$350" }, mid: { store: "Revolve", item: "Agua Bendita Tropical Bikini Set", price: "$168" }, budget: { store: "Amazon", item: "CUPSHE Tropical Floral Bikini Set", price: "$28" } } },
+      { title: "Wrap Sarong", detail: "Lightweight chiffon or cotton sarong in coordinating tropical print. Wear as skirt, dress, or halter.", shop: { luxury: { store: "Net-a-Porter", item: "Johanna Ortiz Silk Wrap Sarong", price: "$295" }, mid: { store: "Nordstrom", item: "ViX Paula Hermanny Printed Sarong", price: "$88" }, budget: { store: "Amazon", item: "SHU-SHI Sarong Beach Cover Up", price: "$16" } } },
+      { title: "String Bikini Alternative", detail: "Micro string bikini in neon or sunset ombré for maximum tan lines.", shop: { luxury: { store: "Revolve", item: "Frankies Bikinis Tia String Set", price: "$180" }, mid: { store: "Nordstrom", item: "L*Space Bowie String Bikini", price: "$95" }, budget: { store: "Amazon", item: "Zaful String Triangle Bikini", price: "$18" } } },
+    ],
+    accessories: [
+      { title: "Shell & Bead Jewelry", detail: "Layered shell necklaces, anklets, and beaded bracelets for island vibes.", shop: { luxury: { store: "Net-a-Porter", item: "Tohum Design Puka Shell Necklace", price: "$195" }, mid: { store: "Nordstrom", item: "BaubleBar Shell Layered Necklace Set", price: "$44" }, budget: { store: "Amazon", item: "FIBO STEEL Shell Necklace Set", price: "$14" } } },
+      { title: "Straw Bucket Hat & Sunnies", detail: "Woven straw bucket hat with colorful oversized sunglasses.", shop: { luxury: { store: "Nordstrom", item: "Lack of Color Palma Bucket Hat", price: "$89" }, mid: { store: "Nordstrom", item: "Free People Riviera Straw Bucket", price: "$38" }, budget: { store: "Target", item: "A New Day Straw Bucket Hat", price: "$15" } } },
+    ],
+    shoes: [
+      { title: "Platform Espadrilles", detail: "Woven platform espadrille sandals with ankle ties — beach to brunch ready.", shop: { luxury: { store: "Nordstrom", item: "Castañer Carina Wedge Espadrille", price: "$155" }, mid: { store: "DSW", item: "Marc Fisher Adalyn Espadrille", price: "$80" }, budget: { store: "Amazon", item: "DREAM PAIRS Platform Espadrille", price: "$30" } } },
+    ],
+  },
+  "Poolside Glam": {
+    makeup: [
+      { title: "Waterproof Glam Base", detail: "Full-coverage waterproof foundation with setting spray. Bold lashes with waterproof liner.", shop: { luxury: { store: "Sephora", item: "Lancôme Teint Idole Ultra Wear + Setting Spray", price: "$52" }, mid: { store: "Ulta", item: "MAC Studio Fix + All Nighter Spray", price: "$38" }, budget: { store: "Target", item: "Maybelline SuperStay + e.l.f. Setting Spray", price: "$16" } } },
+      { title: "Statement Lip & Contour", detail: "Sharp contour, blinding highlight, and a bold red or hot pink lip that won't budge.", shop: { luxury: { store: "Sephora", item: "Fenty Beauty Stunna Lip Paint in Uncensored", price: "$28" }, mid: { store: "Ulta", item: "Maybelline SuperStay Ink in Pioneer", price: "$11" }, budget: { store: "Amazon", item: "Revlon ColorStay Satin Ink in My Own Boss", price: "$8" } } },
+    ],
+    swimwear: [
+      { title: "Glam One-Piece", detail: "Plunging neckline one-piece with gold hardware, mesh inserts, or metallic finish. Think resort runway.", shop: { luxury: { store: "Net-a-Porter", item: "Versace Medusa Studded One-Piece", price: "$550" }, mid: { store: "Revolve", item: "BEACH RIOT Reese Gold Chain Swimsuit", price: "$168" }, budget: { store: "Amazon", item: "BALEAF V-Neck Mesh Panel Swimsuit", price: "$35" } } },
+      { title: "Metallic Bikini", detail: "Gold or silver metallic bikini set with chain details for poolside main-character energy.", shop: { luxury: { store: "Net-a-Porter", item: "Oséree Lumière Metallic Bikini", price: "$280" }, mid: { store: "Revolve", item: "Luli Fama Gold Rush Bikini Set", price: "$150" }, budget: { store: "Amazon", item: "ZAFUL Metallic Gold Bikini Set", price: "$24" } } },
+      { title: "Cut-Out Monokini", detail: "Asymmetric cut-out monokini that shows skin in all the right places.", shop: { luxury: { store: "Revolve", item: "Norma Kamali Snake Mesh One-Piece", price: "$195" }, mid: { store: "Nordstrom", item: "Good American Sculptress Cut-Out Swimsuit", price: "$99" }, budget: { store: "Amazon", item: "CUPSHE Cut-Out Monokini", price: "$30" } } },
+    ],
+    accessories: [
+      { title: "Oversized Pool Shades", detail: "Dramatic oversized or shield sunglasses with gold or tortoise frames.", shop: { luxury: { store: "Nordstrom", item: "Saint Laurent SL1 Shield Sunglasses", price: "$420" }, mid: { store: "Nordstrom", item: "Quay High Key Shield Sunnies", price: "$65" }, budget: { store: "Amazon", item: "SOJOS Oversized Shield Sunglasses", price: "$16" } } },
+      { title: "Gold Body Chain & Anklet", detail: "Layered gold body chain or belly chain plus a dainty anklet for poolside bling.", shop: { luxury: { store: "Net-a-Porter", item: "Jacquemus La Chaîne Necklace / Body Chain", price: "$330" }, mid: { store: "Revolve", item: "8 Other Reasons Body Chain", price: "$44" }, budget: { store: "Amazon", item: "Dremcoue Layered Body Chain", price: "$12" } } },
+      { title: "Luxury Towel & Pool Slides", detail: "Oversized designer-print towel draped over a lounger. Logo pool slides.", shop: { luxury: { store: "Nordstrom", item: "Versace Medusa Beach Towel", price: "$350" }, mid: { store: "Nordstrom", item: "Tory Burch Printed Beach Towel", price: "$78" }, budget: { store: "Target", item: "Sun Squad Oversized Beach Towel", price: "$15" } } },
+    ],
+    shoes: [
+      { title: "Designer Slides", detail: "Elevated pool slides in metallic, padded, or logo style.", shop: { luxury: { store: "Nordstrom", item: "Bottega Veneta Padded Slide Sandal", price: "$620" }, mid: { store: "Nordstrom", item: "Steve Madden Soulful Slide", price: "$60" }, budget: { store: "Target", item: "Shade & Shore Puffy Slide Sandal", price: "$18" } } },
+    ],
+  },
+  "Midnight Lace": {
+    makeup: [
+      { title: "Dark Glam Base", detail: "Matte full-coverage foundation, sharp contour, and a dark berry or wine lip.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Matte Revolution in Walk of No Shame", price: "$37" }, mid: { store: "Ulta", item: "MAC Matte Lipstick in Diva", price: "$22" }, budget: { store: "Amazon", item: "Revlon Super Lustrous in Black Cherry", price: "$8" } } },
+      { title: "Smoky Eye", detail: "Deep smoky eye with black and plum tones. Winged liner and dramatic lashes.", shop: { luxury: { store: "Sephora", item: "Tom Ford Eye Color Quad in Disco Dust", price: "$90" }, mid: { store: "Ulta", item: "Urban Decay Naked3 Palette", price: "$30" }, budget: { store: "Amazon", item: "NYX Ultimate Shadow Palette Smokey", price: "$14" } } },
+    ],
+    lingerie: [
+      { title: "Black Lace Set", detail: "Matching black lace bra and thong with geometric or floral lace patterns. Underwire for structure.", shop: { luxury: { store: "Nordstrom", item: "Agent Provocateur Mercy Bra + Brief Set", price: "$295" }, mid: { store: "Nordstrom", item: "Savage X Fenty Black Lace Unlined Set", price: "$65" }, budget: { store: "Amazon", item: "Avidlove Lace Bra and Panty Set", price: "$18" } } },
+      { title: "Garter Belt & Stockings", detail: "A lace garter belt paired with sheer black thigh-high stockings for a classic seductive silhouette.", shop: { luxury: { store: "Net-a-Porter", item: "Bordelle Art Deco Suspender Belt", price: "$185" }, mid: { store: "Nordstrom", item: "Hanky Panky Lace Garter Belt", price: "$38" }, budget: { store: "Amazon", item: "Dreamgirl Garter Belt + Stockings Set", price: "$16" } } },
+      { title: "Sheer Robe", detail: "Floor-length sheer black robe with lace trim. Dramatic and elegant layering piece.", shop: { luxury: { store: "Net-a-Porter", item: "Carine Gilson Long Lace-Trimmed Robe", price: "$890" }, mid: { store: "Nordstrom", item: "Rya Collection Darling Robe", price: "$120" }, budget: { store: "Amazon", item: "Avidlove Long Sheer Lace Robe", price: "$22" } } },
+    ],
+    accessories: [
+      { title: "Choker & Jewelry", detail: "Velvet or lace choker necklace with dangling charm. Black lace gloves optional for drama.", shop: { luxury: { store: "Net-a-Porter", item: "Fallon Monarch Velvet Choker", price: "$125" }, mid: { store: "Nordstrom", item: "Ettika Velvet Choker Set", price: "$35" }, budget: { store: "Amazon", item: "Mudder Velvet Choker Set 6pcs", price: "$10" } } },
+      { title: "Dark Fragrance", detail: "Deep, intoxicating scent with oud, dark rose, or black orchid notes.", shop: { luxury: { store: "Sephora", item: "Tom Ford Black Orchid EDP", price: "$180" }, mid: { store: "Sephora", item: "Viktor&Rolf Flowerbomb Midnight", price: "$105" }, budget: { store: "Amazon", item: "Pacifica Dream Moon EDP", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Strappy Stilettos", detail: "Black strappy stiletto heels with ankle wrap for a dramatic silhouette.", shop: { luxury: { store: "Nordstrom", item: "Aquazzura Tequila Sandal", price: "$950" }, mid: { store: "Nordstrom", item: "Schutz Cadey Lee Sandal", price: "$118" }, budget: { store: "Amazon", item: "DREAM PAIRS Strappy Stiletto Sandal", price: "$32" } } },
+    ],
+  },
+  "Velvet Boudoir": {
+    makeup: [
+      { title: "Soft & Sultry Base", detail: "Luminous foundation, peach blush, champagne highlight. Soft, romantic, and touchable.", shop: { luxury: { store: "Sephora", item: "Armani Luminous Silk + Becca Highlighter", price: "$72" }, mid: { store: "Ulta", item: "L'Oréal Lumi Glotion + Milani Baked Highlight", price: "$22" }, budget: { store: "Target", item: "e.l.f. Halo Glow + Flower Beauty Highlight", price: "$14" } } },
+      { title: "Nude Lip & Soft Lashes", detail: "Nude-pink lip liner filled in with gloss. Natural-looking false lash strips.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Lip Kit", price: "$45" }, mid: { store: "Ulta", item: "NYX Lip Liner + Butter Gloss Duo", price: "$14" }, budget: { store: "Amazon", item: "Revlon Lip Liner + e.l.f. Lip Lacquer", price: "$10" } } },
+    ],
+    lingerie: [
+      { title: "Velvet Bralette Set", detail: "Crushed velvet bralette with matching high-waist brief in jewel tones — emerald, burgundy, or sapphire.", shop: { luxury: { store: "Net-a-Porter", item: "Fleur du Mal Velvet Triangle Bralette Set", price: "$198" }, mid: { store: "Nordstrom", item: "Savage X Fenty Velvet Unlined Set", price: "$55" }, budget: { store: "Amazon", item: "SheIn Velvet Bralette & Brief Set", price: "$16" } } },
+      { title: "Satin Slip Dress", detail: "Bias-cut satin mini slip dress in champagne or blush. Works as nightwear or styled out with heels.", shop: { luxury: { store: "Net-a-Porter", item: "Reformation Satin Silk Slip Dress", price: "$198" }, mid: { store: "Nordstrom", item: "BP. Satin Slip Dress", price: "$45" }, budget: { store: "Amazon", item: "The Drop Ana Satin Slip Dress", price: "$35" } } },
+      { title: "Feather-Trim Robe", detail: "Satin robe with marabou feather cuffs in pastel pink or champagne. Old Hollywood glamour.", tip: "Pair with matching satin slippers for the full look", shop: { luxury: { store: "Net-a-Porter", item: "Gilda & Pearl Feather Robe", price: "$545" }, mid: { store: "Nordstrom", item: "Rya Collection Swan Feather Robe", price: "$165" }, budget: { store: "Amazon", item: "Boudoir by D'Lish Feather Robe", price: "$40" } } },
+    ],
+    accessories: [
+      { title: "Satin Slippers", detail: "Marabou-trimmed satin slippers or kitten heel mules in matching tones.", shop: { luxury: { store: "Net-a-Porter", item: "Aquazzura Pom Pom Mule", price: "$750" }, mid: { store: "Nordstrom", item: "Steve Madden Feather Sandal", price: "$80" }, budget: { store: "Amazon", item: "The Drop Feather Heel Sandal", price: "$35" } } },
+      { title: "Vanity Fragrance", detail: "A warm, powdery scent with notes of rose, vanilla, and sandalwood.", shop: { luxury: { store: "Sephora", item: "Diptyque Eau Rose EDP", price: "$175" }, mid: { store: "Sephora", item: "Sol de Janeiro Brazilian Bum Bum Cream", price: "$48" }, budget: { store: "Amazon", item: "Ariana Grande Cloud EDP", price: "$30" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
@@ -447,6 +517,10 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Modern Minimal": { match: 88, desc: "No-fuss grooming — essentials only" },
   "Beach Goddess": { match: 95, desc: "Sun-kissed bikini looks — bronzed, effortless, beach-ready" },
   "Silk & Lace": { match: 96, desc: "Luxe intimate wear — lace, silk, sultry elegance" },
+  "Tropical Paradise": { match: 94, desc: "Bold tropical prints — island vibes, shell jewelry, sarongs" },
+  "Poolside Glam": { match: 95, desc: "Main-character pool energy — metallic swim, gold chains, bold lip" },
+  "Midnight Lace": { match: 93, desc: "Dark, dramatic intimates — black lace, garters, smoky eyes" },
+  "Velvet Boudoir": { match: 94, desc: "Old Hollywood intimates — velvet, feathers, champagne tones" },
 };
 
 export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
@@ -517,12 +591,14 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
   ],
   swimwear: [
     { name: "Beach Goddess", desc: "Sun-kissed bikini perfection — bronzed & beachy", match: 96 },
+    { name: "Tropical Paradise", desc: "Bold tropical prints with island accessories", match: 94 },
+    { name: "Poolside Glam", desc: "Main-character energy — metallic swim & gold chains", match: 93 },
     { name: "Coastal Luxe", desc: "Resort-ready swimwear with elegant accessories", match: 91 },
-    { name: "Golden Hour", desc: "Warm sunset tones for the perfect beach day", match: 87 },
   ],
   lingerie: [
     { name: "Silk & Lace", desc: "Luxe intimates — lace bralettes, silk robes, sultry layers", match: 96 },
+    { name: "Velvet Boudoir", desc: "Old Hollywood glamour — velvet, feathers, champagne tones", match: 94 },
+    { name: "Midnight Lace", desc: "Dark drama — black lace, garters, smoky seduction", match: 93 },
     { name: "Soft Glam", desc: "Romantic intimate styling with rose tones", match: 90 },
-    { name: "Berry Chic", desc: "Dark, seductive lingerie in deep tones", match: 88 },
   ],
 };

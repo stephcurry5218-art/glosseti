@@ -63,7 +63,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         }
         const gioRefinement = localStorage.getItem("glamora_gio_refinement");
         localStorage.removeItem("glamora_gio_refinement");
-        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode, hasRefinement: !!gioRefinement });
+        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode, hasRefinement: !!gioRefinement, hasCelebrityGuide: !!prefs.celebrityGuide });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
@@ -72,6 +72,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             gender: prefs.gender,
             generationMode: prefs.generationMode,
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
+            ...(prefs.celebrityGuide ? { celebrityGuide: prefs.celebrityGuide } : {}),
           },
         });
         if (error || data?.error) {
