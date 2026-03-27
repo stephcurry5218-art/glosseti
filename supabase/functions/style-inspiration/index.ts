@@ -122,8 +122,8 @@ Respond ONLY with valid JSON, no markdown.`,
       ];
     } else {
       editPrompt = photoType === "full-body"
-        ? `Transform this ${genderWord}'s outfit and overall look. Show them ${styleProfile.detailedPrompt} Keep the person's face, body shape, and background the same. Make the clothing, accessories, hair, and makeup look realistic and well-fitted. Professional fashion photography style with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`
-        : `Transform this ${genderWord}'s look. Show them ${styleProfile.detailedPrompt} Keep the person's face shape, features, and background the same. Make everything look realistic and natural. Professional fashion portrait with warm lighting. Do NOT make the person look like any specific celebrity or public figure.${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleProfile.detailedPrompt} Keep face, body, background. Realistic, warm lighting. No celebrity likeness.${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleProfile.detailedPrompt} Keep face and background. Realistic, warm lighting. No celebrity likeness.${refinementNote}`;
 
       imageMessages = [
         {
