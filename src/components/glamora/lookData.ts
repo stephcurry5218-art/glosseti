@@ -498,6 +498,47 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
       { title: "Vanity Fragrance", detail: "A warm, powdery scent with notes of rose, vanilla, and sandalwood.", shop: { luxury: { store: "Sephora", item: "Diptyque Eau Rose EDP", price: "$175" }, mid: { store: "Sephora", item: "Sol de Janeiro Brazilian Bum Bum Cream", price: "$48" }, budget: { store: "Amazon", item: "Ariana Grande Cloud EDP", price: "$30" } } },
     ],
   },
+  "Butterfly Babe": {
+    makeup: [
+      { title: "Frosted Glam", detail: "Shimmery pastel eyeshadow (baby blue, pink, or lilac), thin arched brows, frosted lip gloss, and body glitter on collarbones.", shop: { luxury: { store: "Sephora", item: "Pat McGrath Mothership Palette in Subliminal", price: "$128" }, mid: { store: "Ulta", item: "ColourPop Y2K Baby Palette", price: "$14" }, budget: { store: "Amazon", item: "NYX Glitter Goals Liquid Eyeshadow", price: "$7" } } },
+      { title: "Glossy Lips & Highlights", detail: "Clear or pink-tinted lip gloss with maximum shine. Highlight on cheekbones and inner corners.", shop: { luxury: { store: "Sephora", item: "Dior Lip Maximizer Gloss", price: "$38" }, mid: { store: "Ulta", item: "NYX Butter Gloss in Crème Brûlée", price: "$5" }, budget: { store: "Amazon", item: "essence Extreme Shine Lip Gloss", price: "$3" } } },
+    ],
+    top: [
+      { title: "Y2K Crop Top", detail: "Sparkly butterfly or rhinestone halter top, mesh baby tee, or bandana top. Low neckline, midriff-baring.", shop: { luxury: { store: "Revolve", item: "Retrofête Crystal Halter Top", price: "$295" }, mid: { store: "Urban Outfitters", item: "BDG Mesh Baby Tee", price: "$29" }, budget: { store: "Amazon", item: "SheIn Butterfly Print Halter Crop Top", price: "$12" } } },
+      { title: "Velour Zip-Up", detail: "Fitted velour track jacket in pink, baby blue, or lavender. Zip halfway for the iconic look.", shop: { luxury: { store: "Revolve", item: "Juicy Couture OG Velour Jacket", price: "$128" }, mid: { store: "Urban Outfitters", item: "Juicy Couture UO Exclusive Track Jacket", price: "$69" }, budget: { store: "Amazon", item: "Made By Johnny Velour Track Jacket", price: "$25" } } },
+    ],
+    bottom: [
+      { title: "Low-Rise Jeans or Mini", detail: "Low-rise bootcut jeans with a studded belt, or a pleated plaid mini skirt.", shop: { luxury: { store: "Revolve", item: "AGOLDE Low-Rise Baggy Jeans", price: "$198" }, mid: { store: "Urban Outfitters", item: "BDG Low-Rise Flare Jean", price: "$79" }, budget: { store: "Amazon", item: "ZMPSIISA Low-Rise Wide Leg Jeans", price: "$35" } } },
+    ],
+    shoes: [
+      { title: "Platform Shoes", detail: "Chunky platform sneakers, clear jelly sandals, or platform flip-flops.", shop: { luxury: { store: "Nordstrom", item: "Naked Wolfe Slingback Platform", price: "$280" }, mid: { store: "DSW", item: "Steve Madden Charge Platform Sneaker", price: "$90" }, budget: { store: "Amazon", item: "DREAM PAIRS Chunky Platform Sneaker", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Butterfly & Bling", detail: "Butterfly hair clips, tinted rectangular sunglasses, layered belly chains, and a tiny baguette bag.", shop: { luxury: { store: "Revolve", item: "FENDI Baguette Bag Mini", price: "$1,590" }, mid: { store: "Urban Outfitters", item: "UO Mini Baguette Bag + Butterfly Clips Set", price: "$38" }, budget: { store: "Amazon", item: "Y2K Butterfly Clip + Belly Chain + Baguette Set", price: "$18" } } },
+      { title: "Phone Charms & Chokers", detail: "Beaded phone charms, tattoo chokers, and plastic bead bracelets for full Y2K energy.", shop: { luxury: { store: "Revolve", item: "Swarovski Crystal Phone Charm", price: "$65" }, mid: { store: "Urban Outfitters", item: "UO Beaded Phone Charm Pack", price: "$14" }, budget: { store: "Amazon", item: "FROG SAC Tattoo Choker + Phone Charm Set", price: "$10" } } },
+    ],
+  },
+  "Meadow Dream": {
+    makeup: [
+      { title: "Dewy Natural Glow", detail: "Tinted moisturizer, cream blush in soft peach, fluffy natural brows, and a tinted lip balm in berry or rose.", shop: { luxury: { store: "Sephora", item: "Glossier Cloud Paint in Dusk + Boy Brow", price: "$36" }, mid: { store: "Ulta", item: "Rare Beauty Soft Pinch Blush in Joy", price: "$23" }, budget: { store: "Target", item: "Flower Beauty Blush Bomb in Pinched", price: "$10" } } },
+      { title: "Freckles & Fresh Skin", detail: "Fake freckles with a brow pencil, dewy setting spray, and minimal mascara for a fresh-from-the-garden look.", shop: { luxury: { store: "Sephora", item: "MILK Makeup Hydro Grip Setting Spray", price: "$36" }, mid: { store: "Ulta", item: "e.l.f. Power Grip Dewy Setting Spray", price: "$10" }, budget: { store: "Amazon", item: "NYX Dewy Finish Setting Spray", price: "$8" } } },
+    ],
+    top: [
+      { title: "Floral Blouse or Dress", detail: "Puff-sleeve floral blouse in a ditsy print, or a smocked milkmaid top in cream or sage.", shop: { luxury: { store: "Reformation", item: "Julianna Puff Sleeve Top in Floral", price: "$148" }, mid: { store: "& Other Stories", item: "Puff Sleeve Smocked Blouse", price: "$69" }, budget: { store: "Amazon", item: "Milumia Floral Puff Sleeve Blouse", price: "$22" } } },
+      { title: "Linen Pinafore", detail: "A linen apron dress or pinafore in natural, mustard, or sage green over a white cotton tee.", shop: { luxury: { store: "Net-a-Porter", item: "Zimmermann Linen Midi Dress", price: "$495" }, mid: { store: "& Other Stories", item: "Linen Pinafore Midi Dress", price: "$99" }, budget: { store: "Amazon", item: "YESNO Linen Pinafore Dress", price: "$28" } } },
+    ],
+    bottom: [
+      { title: "Flowy Midi Skirt", detail: "A tiered prairie skirt in floral, gingham, or solid linen. High waist, soft movement.", shop: { luxury: { store: "Reformation", item: "Petites Naya Skirt in Flora", price: "$178" }, mid: { store: "Mango", item: "Floral Midi Skirt with Ruffles", price: "$60" }, budget: { store: "Amazon", item: "Afibi Floral A-Line Midi Skirt", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Mary Janes or Boots", detail: "Brown leather Mary Jane shoes, lace-up ankle boots, or woven espadrilles.", shop: { luxury: { store: "Nordstrom", item: "Loeffler Randall Leather Mary Jane", price: "$350" }, mid: { store: "DSW", item: "Dr. Martens Mary Jane", price: "$120" }, budget: { store: "Amazon", item: "DREAM PAIRS Mary Jane Flats", price: "$28" } } },
+    ],
+    accessories: [
+      { title: "Straw Hat & Wicker Bag", detail: "A wide-brim straw sun hat and a woven wicker or rattan basket bag. Ribbon tied around the hat.", shop: { luxury: { store: "Net-a-Porter", item: "Lack of Color The Spencer Wide Brim", price: "$120" }, mid: { store: "Nordstrom", item: "Brixton Joanna Straw Hat", price: "$55" }, budget: { store: "Amazon", item: "Lanzom Wide Brim Straw Hat", price: "$16" } } },
+      { title: "Daisy Chain Jewelry", detail: "Dainty daisy pendant necklace, pearl studs, and a woven friendship bracelet.", shop: { luxury: { store: "Nordstrom", item: "Tory Burch Kira Pearl Studs", price: "$78" }, mid: { store: "Nordstrom", item: "Madewell Daisy Pendant Necklace", price: "$32" }, budget: { store: "Amazon", item: "PAVOI Daisy Necklace + Pearl Studs Set", price: "$14" } } },
+      { title: "Hair Ribbon", detail: "Satin or gingham hair ribbon tied in a bow, or fresh flowers tucked behind the ear.", shop: { luxury: { store: "Net-a-Porter", item: "Jennifer Behr Silk Hair Ribbon", price: "$48" }, mid: { store: "Free People", item: "Bow Hair Ribbon Set", price: "$18" }, budget: { store: "Amazon", item: "Satin Hair Ribbon 6-Pack", price: "$8" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
