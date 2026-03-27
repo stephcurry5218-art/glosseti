@@ -166,12 +166,13 @@ const GlamoraApp = () => {
       {screen === "inspiration" && (
         <InspirationScreen prefs={prefs} onBack={() => go("home")} onGenerate={handleInspirationGenerate} />
       )}
-      {screen === "inspiration-loading" && prefs.photoBase64 && (
+      {screen === "inspiration-loading" && (prefs.photoBase64 || prefs.generationMode === "mannequin") && (
         <InspirationLoadingScreen
           iconName={inspirationIcon}
           photoBase64={prefs.photoBase64}
           photoType={prefs.photoType}
           gender={prefs.gender}
+          generationMode={prefs.generationMode}
           onDone={(imageUrl, styleProfile) => {
             setInspirationImageUrl(imageUrl);
             setInspirationProfile(styleProfile);
