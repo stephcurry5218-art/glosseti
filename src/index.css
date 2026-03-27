@@ -6,60 +6,59 @@
 
 @layer base {
   :root {
-    /* ═══ SKIN-TONE DARK MODE ═══ */
-    --background: 20 18% 9%;
-    --foreground: 28 18% 88%;
-    --card: 20 14% 13%;
-    --card-foreground: 28 18% 88%;
-    --popover: 20 14% 13%;
-    --popover-foreground: 28 18% 88%;
-    --primary: 28 18% 88%;
-    --primary-foreground: 20 18% 9%;
-    --secondary: 20 12% 18%;
-    --secondary-foreground: 28 18% 88%;
-    --muted: 20 12% 18%;
+    /* ═══ SKIN-TONE DARK MODE — WARM TINT ═══ */
+    --background: 18 22% 7%;
+    --foreground: 30 20% 90%;
+    --card: 18 18% 11%;
+    --card-foreground: 30 20% 90%;
+    --popover: 18 18% 11%;
+    --popover-foreground: 30 20% 90%;
+    --primary: 30 20% 90%;
+    --primary-foreground: 18 22% 7%;
+    --secondary: 18 16% 15%;
+    --secondary-foreground: 30 20% 90%;
+    --muted: 18 16% 15%;
     --muted-foreground: 20 10% 50%;
     --accent: 24 38% 48%;
-    --accent-foreground: 20 18% 9%;
+    --accent-foreground: 18 22% 7%;
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 20 12% 20%;
-    --input: 20 12% 20%;
+    --border: 20 14% 18%;
+    --input: 20 14% 18%;
     --ring: 24 38% 48%;
     --radius: 1rem;
 
     /* GLAMORA palette — skin tone spectrum */
-    --glamora-cream: 20 18% 9%;
-    --glamora-cream2: 20 14% 13%;
-    --glamora-blush: 18 28% 24%;
-    --glamora-rose: 18 32% 42%;
-    --glamora-rose-dark: 20 35% 55%;
+    --glamora-cream: 18 22% 7%;
+    --glamora-cream2: 18 18% 11%;
+    --glamora-blush: 16 30% 22%;
+    --glamora-rose: 14 36% 40%;
+    --glamora-rose-dark: 16 40% 55%;
     --glamora-nude: 24 22% 40%;
-    --glamora-gold: 28 40% 52%;
-    --glamora-gold-light: 30 45% 62%;
-    --glamora-gold-pale: 24 20% 18%;
-    --glamora-char: 28 18% 88%;
-    --glamora-char2: 25 14% 76%;
+    --glamora-gold: 32 55% 52%;
+    --glamora-gold-light: 34 58% 62%;
+    --glamora-gold-pale: 26 22% 16%;
+    --glamora-char: 30 20% 90%;
+    --glamora-char2: 28 16% 76%;
     --glamora-gray: 20 8% 50%;
     --glamora-gray-light: 20 6% 36%;
     --glamora-success: 150 30% 50%;
 
     /* Skin tone accents */
     --skin-porcelain: 25 30% 85%;
-    --skin-honey: 28 40% 62%;
+    --skin-honey: 32 48% 58%;
     --skin-caramel: 22 35% 45%;
     --skin-sienna: 16 38% 35%;
     --skin-espresso: 18 30% 20%;
 
-    --sidebar-background: 20 18% 9%;
-    --sidebar-foreground: 28 18% 88%;
-    --sidebar-primary: 28 18% 88%;
-    --sidebar-primary-foreground: 20 18% 9%;
-    --sidebar-accent: 20 12% 18%;
-    --sidebar-accent-foreground: 28 18% 88%;
-    --sidebar-border: 20 12% 20%;
+    --sidebar-background: 18 22% 7%;
+    --sidebar-foreground: 30 20% 90%;
+    --sidebar-primary: 30 20% 90%;
+    --sidebar-primary-foreground: 18 22% 7%;
+    --sidebar-accent: 18 16% 15%;
+    --sidebar-accent-foreground: 30 20% 90%;
+    --sidebar-border: 20 14% 18%;
     --sidebar-ring: 24 38% 48%;
-  }
 
 
   @keyframes gold-shimmer {
