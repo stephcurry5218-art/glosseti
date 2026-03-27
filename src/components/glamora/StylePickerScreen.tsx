@@ -267,7 +267,42 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           </div>
         )}
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(selected[0])} style={{
+        {/* Celebrity / Influencer Style Guide */}
+        <div className="glamora-card anim-fadeUp" style={{ padding: "14px 16px", marginBottom: 14 }}>
+          <div className="section-label" style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+            <Star size={14} color={`hsl(var(${accent}))`} />
+            Style Inspired By (Optional)
+          </div>
+          <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>
+            Enter a celebrity or influencer name to guide the AI's styling direction
+          </div>
+          <input
+            type="text"
+            value={celebrityGuide}
+            onChange={(e) => setCelebrityGuide(e.target.value)}
+            placeholder={isMale ? "e.g. David Beckham, A$AP Rocky..." : "e.g. Zendaya, Hailey Bieber..."}
+            style={{
+              width: "100%", padding: "12px 14px", borderRadius: 12,
+              border: `1.5px solid hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`,
+              background: celebrityGuide ? `hsla(var(${accent}) / 0.05)` : "hsl(var(--card))",
+              fontSize: 13, fontFamily: "'Jost', sans-serif",
+              color: "hsl(var(--glamora-char))", outline: "none",
+              transition: "all 0.2s",
+            }}
+            onFocus={(e) => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
+            onBlur={(e) => { e.target.style.borderColor = `hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`; }}
+          />
+          {celebrityGuide && (
+            <div style={{
+              marginTop: 8, fontSize: 10, color: `hsl(var(${accent}))`, fontWeight: 500,
+              display: "flex", alignItems: "center", gap: 5,
+            }}>
+              <Star size={10} /> AI will use {celebrityGuide}'s style as inspiration
+            </div>
+          )}
+        </div>
+
+        <button className="btn-primary btn-rose" onClick={() => onNext(selected[0], celebrityGuide || undefined)} style={{
           display: "flex", alignItems: "center", gap: 8,
           background: isMale
             ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
