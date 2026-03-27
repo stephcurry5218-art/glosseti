@@ -35,7 +35,7 @@ const steps: { label: string; Icon: LucideIcon }[] = [
   { label: "Generating your inspired look...", Icon: Sparkles },
 ];
 
-const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, onDone }: Props) => {
+const InspirationLoadingScreen = ({ iconName, photoBase64, photoType, gender, generationMode, onDone }: Props) => {
   const [step, setStep] = useState(0);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
