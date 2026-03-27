@@ -150,8 +150,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
           padding: "16px 12px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
-          background: `linear-gradient(160deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.06), hsl(var(--card)))`,
-          border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.12)`,
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
+          border: `1px solid hsla(0 0% 100% / 0.08)`,
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
