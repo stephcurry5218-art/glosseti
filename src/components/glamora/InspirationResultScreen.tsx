@@ -162,28 +162,36 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
         </div>
 
         {/* Shop This Look */}
-        {hasStyled && (
-          <button
-            className="glamora-card anim-fadeUp d4"
-            onClick={() => {
-              const searchTerms = [...profile.clothingTypes, ...profile.accessories].slice(0, 3).join(" ");
-              window.open(getAmazonSearchUrl(searchTerms || "fashion outfit"), "_blank", "noopener,noreferrer");
-            }}
-            style={{
-              width: "100%", padding: "14px 16px", marginTop: 16, cursor: "pointer",
-              border: `1.5px solid hsla(${accent} / 0.2)`,
-              display: "flex", alignItems: "center", gap: 10,
-              background: `linear-gradient(160deg, hsla(${accent} / 0.06), hsl(var(--card)))`,
-              fontFamily: "'Jost', sans-serif",
-            }}
-          >
-            <ExternalLink size={18} color={`hsl(${accent})`} />
-            <div style={{ flex: 1, textAlign: "left" }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Shop This Look</div>
-              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Find similar items at 3 price tiers</div>
+        {hasStyled && profile.clothingTypes.length > 0 && (() => {
+          // Build shop items from the style profile's clothing + accessories
+          const shopItems: ShopItem[] = [
+            ...profile.clothingTypes.map((item) => ({
+              label: item,
+              stores: {
+                luxury: { store: "Nordstrom", item: `${item} designer`, price: "$$$$" },
+                mid: { store: "Zara", item: `${item}`, price: "$$" },
+                budget: { store: "H&M", item: `${item}`, price: "$" },
+              },
+            })),
+            ...profile.accessories.map((item) => ({
+              label: item,
+              stores: {
+                luxury: { store: "Net-a-Porter", item: `${item} luxury`, price: "$$$$" },
+                mid: { store: "Mango", item: `${item}`, price: "$$" },
+                budget: { store: "Amazon", item: `${item}`, price: "$" },
+              },
+            })),
+          ];
+          return (
+            <div className="anim-fadeUp d4" style={{ marginTop: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                <ExternalLink size={16} color={`hsl(${accent})`} />
+                <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Shop This Look</span>
+              </div>
+              <ShopPanel items={shopItems} accent={accent} />
             </div>
-          </button>
-        )}
+          );
+        })()}
 
         {/* Actions */}
         <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
