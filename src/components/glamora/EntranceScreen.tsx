@@ -253,6 +253,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
         opacity: revealed ? 0 : 1,
         transition: "opacity 0.5s ease",
       }}>
+        <img src="/glamora-icon.png" alt="Glosseti" className="anim-fadeIn" style={{ width: 90, height: 90, objectFit: "contain", marginBottom: 8 }} />
         <div className="serif anim-fadeIn" style={{
           fontSize: 52, fontWeight: 400, letterSpacing: 8,
           color: "hsl(var(--glamora-cream))",
