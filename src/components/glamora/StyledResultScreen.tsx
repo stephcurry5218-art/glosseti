@@ -199,11 +199,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     key={id}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (isActive) {
-                        openShopLink(pos.searchTerm);
-                      } else {
-                        setActiveHotspot(id as HotspotId);
-                      }
+                      setActiveHotspot(isActive ? null : id as HotspotId);
                     }}
                     style={{
                       position: "absolute", top: pos.top, left: pos.left, transform: "translate(-50%, -50%)",
@@ -225,46 +221,61 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               })}
             </div>
 
-            {/* Active hotspot detail */}
-            {activeHotspot && (
-              <div className="glamora-card anim-fadeUp" style={{ padding: "16px", marginTop: 14, border: "1.5px solid hsla(var(--glamora-gold) / 0.2)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  {(() => { const HIcon = hotspotPositions[activeHotspot].Icon; return <HIcon size={22} color="hsl(var(--glamora-rose-dark))" />; })()}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{hotspotPositions[activeHotspot].label}</div>
-                    <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Tap hotspot again to shop on Amazon</div>
-                  </div>
-                  <button onClick={() => openShopLink(hotspotPositions[activeHotspot].searchTerm)} style={{
-                    padding: "6px 14px", borderRadius: 100, border: "none", cursor: "pointer",
-                    background: "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
-                    color: "white", fontSize: 11, fontWeight: 600, display: "flex", alignItems: "center", gap: 4,
-                    fontFamily: "'Jost', sans-serif",
-                  }}>
-                    Shop <ExternalLink size={12} />
-                  </button>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {looks.map((look) => (
-                    <div key={look.name} onClick={() => onLookSelect(look.name)} style={{
-                      padding: "12px 14px", borderRadius: 14,
-                      background: "hsla(var(--glamora-cream2) / 0.5)",
-                      border: "1px solid hsla(var(--glamora-gold) / 0.1)",
-                      display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
-                    }}>
-                      <Sparkles size={22} color="hsl(var(--glamora-rose-dark))" />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{look.name}</div>
-                        <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{look.desc}</div>
-                      </div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-success))" }}>{look.match}%</div>
+            {/* Active hotspot shop panel */}
+            {activeHotspot && (() => {
+              // Build shop items from lookData for this category
+              const lookName = looks[0]?.name;
+              const categoryMap: Record<HotspotId, Category> = {
+                makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
+              };
+              const cat = categoryMap[activeHotspot];
+              const data = lookName && lookData[lookName]?.[cat];
+              const shopItems: ShopItem[] = data
+                ? data.filter(step => step.shop).map(step => ({
+                    label: step.title,
+                    stores: step.shop!,
+                  }))
+                : [];
+
+              return (
+                <div className="anim-fadeUp" style={{ marginTop: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    {(() => { const HIcon = hotspotPositions[activeHotspot].Icon; return <HIcon size={20} color="hsl(var(--glamora-rose-dark))" />; })()}
+                    <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                      Shop {hotspotPositions[activeHotspot].label}
                     </div>
-                  ))}
+                  </div>
+                  {shopItems.length > 0 ? (
+                    <ShopPanel items={shopItems} />
+                  ) : (
+                    <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 8 }}>
+                      Select a style below to see shopping options
+                    </div>
+                  )}
+                  {/* Look selection */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
+                    {looks.map((look) => (
+                      <div key={look.name} onClick={() => onLookSelect(look.name)} style={{
+                        padding: "12px 14px", borderRadius: 14,
+                        background: "hsla(var(--glamora-cream2) / 0.5)",
+                        border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+                        display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+                      }}>
+                        <Sparkles size={22} color="hsl(var(--glamora-rose-dark))" />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>{look.name}</div>
+                          <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{look.desc}</div>
+                        </div>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-success))" }}>{look.match}%</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 14 }}>
-              Tap a hotspot once to preview · tap again to shop on Amazon
+              Tap a hotspot to browse items at 3 price tiers
             </div>
           </>
         )}
