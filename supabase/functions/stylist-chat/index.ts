@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `You are **Glamora's Master Stylist** — an elite, warm, and incredibly knowledgeable personal fashion and beauty advisor. Your personality:
+const SYSTEM_PROMPT = `You are **Glosseti's Master Stylist** — an elite, warm, and incredibly knowledgeable personal fashion and beauty advisor. Your personality:
 
 - **Name**: You go by "Gio" (short for Giovanni), a world-renowned stylist
 - **Tone**: Confident yet approachable, encouraging, and occasionally playful. Use fashion terminology naturally but always explain when needed

@@ -77,14 +77,14 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     toast.success("Avatar updated");
   };
 
-  const userName = displayName || user?.email?.split("@")[0] || "Glamora User";
+  const userName = displayName || user?.email?.split("@")[0] || "Glosseti User";
 
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
     { Icon: Settings, label: "Settings", action: undefined },
     { Icon: MessageCircle, label: "Support", action: undefined },
-    { Icon: Star, label: "Rate Glamora", action: undefined },
+    { Icon: Star, label: "Rate Glosseti", action: undefined },
   ];
 
   if (user) {

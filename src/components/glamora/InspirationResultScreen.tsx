@@ -25,7 +25,7 @@ const handleDownload = async (imageUrl: string) => {
     const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = blobUrl;
-    a.download = `glamora-inspired-look-${Date.now()}.png`;
+    a.download = `glosseti-inspired-look-${Date.now()}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -211,7 +211,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
             onClick={() => onSave(profile.styleName)}>
             <Bookmark size={16} /> Save
           </button>
-          <ShareMenu text={`Check out my "${profile.styleName}" look on Glamora!`} imageUrl={styledImageUrl || undefined} />
+          <ShareMenu text={`Check out my "${profile.styleName}" look on Glosseti!`} imageUrl={styledImageUrl || undefined} />
           {hasStyled && (
             <button className="btn-primary btn-sm btn-ghost" style={{ flex: 1 }}
               onClick={() => handleDownload(styledImageUrl!)}>
@@ -243,7 +243,7 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
         }}>
           <Info size={13} color="hsl(var(--glamora-gold))" style={{ flexShrink: 0, marginTop: 2 }} />
           <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", lineHeight: 1.5 }}>
-            Styles are AI-generated and inspired by general trends. Glamora is not affiliated with or endorsed by any public figures.
+            Styles are AI-generated and inspired by general trends. Glosseti is not affiliated with or endorsed by any public figures.
           </div>
         </div>
       </div>
