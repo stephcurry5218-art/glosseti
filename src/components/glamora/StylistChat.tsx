@@ -15,6 +15,7 @@ const GREETING: Msg = {
 
 interface Props {
   gender: "male" | "female";
+  onRegenerate?: (gioSuggestion: string) => void;
 }
 
 export interface StylistChatHandle {
