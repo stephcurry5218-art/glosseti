@@ -122,13 +122,13 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     includes: ["Floral Dresses", "Puff-Sleeve Blouses", "Mary Janes & Leather Boots", "Straw Hats & Wicker Bags"],
   },
   {
-    id: "celebrity-makeup", label: "Celebrity Makeup", Icon: Crown,
-    genderLabel: { male: "Celebrity Grooming", female: "Celebrity Makeup" },
+    id: "celebrity-makeup", label: "Influencer Makeup", Icon: Crown,
+    genderLabel: { male: "Influencer Grooming", female: "Influencer Makeup" },
     desc: "Get your makeup styled like your favorite influencer or celebrity",
     includes: ["Signature Lip Look", "Eye Makeup Technique", "Skin Finish", "Brow Style"],
   },
   {
-    id: "celebrity-hair", label: "Celebrity Hair", Icon: Scissors,
+    id: "celebrity-hair", label: "Influencer Hair", Icon: Scissors,
     desc: "Recreate iconic hairstyles from influencers and celebrities",
     includes: ["Cut & Shape", "Color & Highlights", "Styling & Texture", "Accessories & Updos"],
   },
