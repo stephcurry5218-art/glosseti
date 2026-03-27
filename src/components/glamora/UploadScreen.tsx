@@ -144,12 +144,16 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
                 <>
                   <Camera size={56} color="hsl(var(--glamora-gray))" strokeWidth={1} />
                   <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", textAlign: "center" }}>
-                    Tap to Upload {photoType === "full-body" ? "Full Body Shot" : "Selfie"}
+                    {isFaceCategory
+                      ? "Tap to Upload a Face Photo"
+                      : `Tap to Upload ${photoType === "full-body" ? "Full Body Shot" : "Selfie"}`}
                   </div>
                   <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", textAlign: "center", lineHeight: 1.6 }}>
-                    {photoType === "full-body"
-                      ? "Stand straight, good lighting, full outfit visible for best results."
-                      : "Front-facing with good lighting for the best analysis."}
+                    {isFaceCategory
+                      ? "Any clear face photo works — selfie, portrait, or headshot. Good lighting for best results."
+                      : photoType === "full-body"
+                        ? "Stand straight, good lighting, full outfit visible for best results."
+                        : "Front-facing with good lighting for the best analysis."}
                   </p>
                 </>
               )}
