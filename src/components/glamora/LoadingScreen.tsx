@@ -205,13 +205,26 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         })}
       </div>
 
-      <div style={{ marginTop: 36, width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
-        <div style={{
-          height: "100%", borderRadius: 2,
-          background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
-          width: `${((step + 1) / steps.length) * 100}%`,
-          transition: "width 0.6s ease",
-        }} />
+      <div style={{ marginTop: 24, width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+            <Clock size={12} />
+            {aiDone ? "Complete!" : elapsed > 0 ? `${elapsed}s elapsed` : "Starting..."}
+          </div>
+          {!aiDone && !aiError && (
+            <div style={{ fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-rose-dark))" }}>
+              {remaining > 0 ? `${formatTime(remaining)} remaining` : "Almost done..."}
+            </div>
+          )}
+        </div>
+        <div style={{ width: "100%", height: 4, borderRadius: 2, background: "hsla(var(--glamora-char) / 0.08)" }}>
+          <div style={{
+            height: "100%", borderRadius: 2,
+            background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))",
+            width: `${progressPct}%`,
+            transition: "width 0.6s ease",
+          }} />
+        </div>
       </div>
     </div>
   );
