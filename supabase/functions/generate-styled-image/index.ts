@@ -74,8 +74,8 @@ serve(async (req) => {
         male: "wearing a date-night outfit: a slim-fit dark blazer over a crew-neck tee, tailored dark trousers, clean leather dress shoes, a sleek watch, and fresh cologne-ready grooming.",
       },
       lingerie: {
-        female: "wearing elegant lingerie: a delicate lace bralette and matching high-waisted briefs in a rich jewel tone, a flowing sheer silk robe draped open, satin mule slippers, and dainty gold body chain jewelry. Soft boudoir lighting with a luxurious velvet backdrop.",
-        male: "wearing luxury loungewear: fitted silk boxer shorts, an open silk robe, and minimal accessories. Soft warm lighting with an elegant bedroom setting.",
+        female: "wearing ONLY lingerie — a delicate lace bralette and matching lace briefs/thong, NO regular clothes, NO pants, NO shirt over it. Include a sheer silk robe draped open (not covering the lingerie), satin mule slippers, dainty gold body chain jewelry. Boudoir setting with soft warm lighting and luxurious velvet/silk backdrop. Elegant and tasteful.",
+        male: "wearing ONLY luxury loungewear — fitted silk boxer shorts and an open silk robe showing bare chest, NO regular clothes. Bedroom setting with soft warm lighting and elegant decor. Minimal accessories.",
       },
     };
 
