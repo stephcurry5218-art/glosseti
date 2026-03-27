@@ -45,8 +45,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <div className="header-sub">
             {isMannequin
               ? "See the outfit on a mannequin — no photo needed"
-              : isMakeup
-                ? "Upload a selfie for makeup analysis"
+              : isFaceCategory
+                ? "Upload a face photo — selfie, portrait, or any clear shot"
                 : "Selfie or full body for best styling"}
           </div>
         </div>
