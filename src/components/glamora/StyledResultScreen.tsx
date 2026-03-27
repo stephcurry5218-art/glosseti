@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, Settings2 } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, Settings2, AlertTriangle, Camera, Sun, Lightbulb } from "lucide-react";
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -125,6 +125,71 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
       </div>
 
       <div style={{ padding: "0 22px" }}>
+        {/* Error card when generation failed */}
+        {!hasStyled && (
+          <div className="glamora-card anim-fadeUp" style={{
+            padding: "20px 18px", marginBottom: 16,
+            border: "1.5px solid hsla(var(--glamora-rose-dark) / 0.3)",
+            background: "linear-gradient(135deg, hsla(var(--glamora-rose-dark) / 0.06), hsla(var(--glamora-gold) / 0.04))",
+            boxShadow: "0 4px 20px hsla(var(--glamora-rose-dark) / 0.08), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: 12,
+                background: "hsla(var(--glamora-rose-dark) / 0.12)",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}>
+                <AlertTriangle size={20} color="hsl(var(--glamora-rose-dark))" />
+              </div>
+              <div>
+                <div className="serif" style={{ fontSize: 16, color: "hsl(var(--glamora-char))", fontWeight: 600 }}>
+                  Image Couldn't Be Generated
+                </div>
+                <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginTop: 2 }}>
+                  The AI wasn't able to produce a result this time
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              padding: "12px 14px", borderRadius: 12, marginBottom: 14,
+              background: "hsla(var(--glamora-cream2) / 0.6)",
+              border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+            }}>
+              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8, fontWeight: 600 }}>
+                Tips to improve results
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { Icon: Camera, text: "Use a clear, well-lit photo with your face visible" },
+                  { Icon: Sun, text: "Avoid heavy filters, sunglasses, or busy backgrounds" },
+                  { Icon: Lightbulb, text: "Try a different style category or switch to Mannequin mode" },
+                ].map(tip => (
+                  <div key={tip.text} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "hsl(var(--glamora-char))" }}>
+                    <tip.Icon size={14} color="hsl(var(--glamora-gold))" style={{ flexShrink: 0 }} />
+                    {tip.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              {onRegenerate && (
+                <button className="btn-primary btn-rose" onClick={() => onRegenerate()} style={{
+                  flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                }}>
+                  <RefreshCw size={14} /> Try Again
+                </button>
+              )}
+              <button className="btn-primary btn-ghost" onClick={onBack} style={{
+                flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              }}>
+                <Camera size={14} /> New Photo
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Analysis Summary */}
         <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 16 }}>
           {analysisCards.map((c) => (
