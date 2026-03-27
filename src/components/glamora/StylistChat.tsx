@@ -149,8 +149,16 @@ const StylistChat = ({ gender }: Props) => {
       }}
     >
       {/* Expanded chat header + messages */}
-      {expanded && (
-        <>
+      <div style={{
+        opacity: expanded ? 1 : 0,
+        transform: expanded ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s",
+        pointerEvents: expanded ? "auto" : "none",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        minHeight: 0,
+      }}>
           {/* Header */}
           <div
             style={{
