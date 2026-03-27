@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature }: Props) => {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
+  const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">("yearly");
 
   const tierIcons: Record<string, typeof Crown> = { free: Zap, premium: Crown, pro: Star };
 
