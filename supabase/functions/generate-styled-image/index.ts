@@ -132,11 +132,11 @@ serve(async (req) => {
       const isLingerie = styleCategory === "lingerie";
       const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
       const keepNote = isSwimwear
-        ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described bikini or swimwear pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a clear beach or pool setting."
+        ? "Keep the person's face and body shape. Restyle their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style."
         : isLingerie
-          ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with ONLY the described lingerie pieces. Remove all dresses, tops, pants, shorts, and outerwear. Change the background to a tasteful indoor boudoir or bedroom setting."
+          ? "Keep the person's face and body shape. Restyle their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style."
           : isRevealing
-            ? "Keep the person's face and body shape. COMPLETELY REPLACE all existing clothing with the described outfit. Change the background to match the setting described."
+            ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${celebrityNote}${refinementNote}`
