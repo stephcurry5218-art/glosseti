@@ -74,7 +74,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
         <button className="back-btn" onClick={onBack}>←</button>
         <div>
           <div className="header-title">{mode === "signin" ? "Welcome Back" : "Create Account"}</div>
-          <div className="header-sub">{mode === "signin" ? "Sign in to your profile" : "Join the Glamora community"}</div>
+          <div className="header-sub">{mode === "signin" ? "Sign in to your profile" : "Join the Glosseti community"}</div>
         </div>
       </div>
 
