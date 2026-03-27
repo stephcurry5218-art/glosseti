@@ -54,7 +54,7 @@ serve(async (req) => {
         male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
       },
       swimwear: {
-        female: "wearing stylish beachwear: a trendy high-waisted bikini, a sheer cover-up kimono, strappy flat sandals, oversized sunglasses, and a woven beach tote.",
+        female: "wearing stylish swimwear: a fashionable high-cut bikini set in a flattering color, a sheer sarong wrap, strappy flat sandals, oversized sunglasses, a wide-brim sun hat, and a woven beach tote. Confident beach-ready pose.",
         male: "wearing beach-ready style: well-fitted swim trunks, an open linen shirt, slide sandals, aviator sunglasses, and a waterproof watch.",
       },
       "urban-hiphop": {
@@ -72,6 +72,10 @@ serve(async (req) => {
       "date-night": {
         female: "wearing a date-night outfit: an elegant midi dress with a subtle slit, pointed-toe heels, delicate pendant necklace, a small clutch purse, and soft romantic makeup.",
         male: "wearing a date-night outfit: a slim-fit dark blazer over a crew-neck tee, tailored dark trousers, clean leather dress shoes, a sleek watch, and fresh cologne-ready grooming.",
+      },
+      lingerie: {
+        female: "wearing elegant lingerie: a delicate lace bralette and matching high-waisted briefs in a rich jewel tone, a flowing sheer silk robe draped open, satin mule slippers, and dainty gold body chain jewelry. Soft boudoir lighting with a luxurious velvet backdrop.",
+        male: "wearing luxury loungewear: fitted silk boxer shorts, an open silk robe, and minimal accessories. Soft warm lighting with an elegant bedroom setting.",
       },
     };
 
