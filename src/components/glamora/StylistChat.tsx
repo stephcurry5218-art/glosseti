@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-import { Send, Sparkles, Loader2, Share2, ChevronDown } from "lucide-react";
+import { Send, Sparkles, Loader2, Share2, ChevronDown, RefreshCw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import ShareMenu from "./ShareMenu";
 import { formatChatForShare } from "./shareUtils";
