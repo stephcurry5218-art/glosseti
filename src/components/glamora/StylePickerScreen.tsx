@@ -289,46 +289,89 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
         )}
 
         {/* Celebrity / Influencer Style Guide */}
-        <div className="glamora-card anim-fadeUp" style={{ padding: "14px 16px", marginBottom: 14 }}>
-          <div className="section-label" style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-            <Star size={14} color={`hsl(var(${accent}))`} />
-            Style Inspired By (Optional)
-          </div>
-          <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>
-            Enter a celebrity or influencer name to guide the AI's styling direction
-          </div>
-          <input
-            type="text"
-            value={celebrityGuide}
-            onChange={(e) => setCelebrityGuide(e.target.value)}
-            placeholder={isMale ? "e.g. David Beckham, A$AP Rocky..." : "e.g. Zendaya, Hailey Bieber..."}
-            style={{
-              width: "100%", padding: "12px 14px", borderRadius: 12,
-              border: `1.5px solid hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`,
-              background: celebrityGuide ? `hsla(var(${accent}) / 0.05)` : "hsl(var(--card))",
-              fontSize: 13, fontFamily: "'Jost', sans-serif",
-              color: "hsl(var(--glamora-char))", outline: "none",
-              transition: "all 0.2s",
-            }}
-            onFocus={(e) => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
-            onBlur={(e) => { e.target.style.borderColor = `hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`; }}
-          />
-          {celebrityGuide && (
-            <div style={{
-              marginTop: 8, fontSize: 10, color: `hsl(var(${accent}))`, fontWeight: 500,
-              display: "flex", alignItems: "center", gap: 5,
+        {(() => {
+          const isCelebrityCategory = current.id === "celebrity-makeup" || current.id === "celebrity-hair";
+          const isRequired = isCelebrityCategory;
+          const categoryLabel = current.id === "celebrity-makeup"
+            ? (isMale ? "grooming" : "makeup")
+            : current.id === "celebrity-hair" ? "hair" : "style";
+          return (
+            <div className="glamora-card anim-fadeUp" style={{
+              padding: "14px 16px", marginBottom: 14,
+              border: isRequired ? `2px solid hsl(var(${accent}))` : undefined,
+              background: isRequired ? `hsla(var(${accent}) / 0.03)` : undefined,
             }}>
-              <Star size={10} /> AI will use {celebrityGuide}'s style as inspiration
+              <div className="section-label" style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                {isRequired ? <Crown size={14} color={`hsl(var(${accent}))`} /> : <Star size={14} color={`hsl(var(${accent}))`} />}
+                {isRequired
+                  ? `Who's ${categoryLabel} do you want?`
+                  : "Style Inspired By (Optional)"}
+                {isRequired && (
+                  <span style={{
+                    marginLeft: "auto", padding: "2px 8px", borderRadius: 100,
+                    background: `hsl(var(${accent}))`, color: "white",
+                    fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5,
+                  }}>Required</span>
+                )}
+              </div>
+              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>
+                {isRequired
+                  ? `Enter a celebrity or influencer name to recreate their ${categoryLabel} look on you`
+                  : "Enter a celebrity or influencer name to guide the AI's styling direction"}
+              </div>
+              <input
+                type="text"
+                value={celebrityGuide}
+                onChange={(e) => setCelebrityGuide(e.target.value)}
+                placeholder={
+                  current.id === "celebrity-makeup"
+                    ? (isMale ? "e.g. Brad Pitt, Timothée Chalamet..." : "e.g. Rihanna, Kim Kardashian, Hailey Bieber...")
+                    : current.id === "celebrity-hair"
+                      ? (isMale ? "e.g. Chris Hemsworth, Bad Bunny..." : "e.g. Sabrina Carpenter, Ariana Grande, Dua Lipa...")
+                      : (isMale ? "e.g. David Beckham, A$AP Rocky..." : "e.g. Zendaya, Hailey Bieber...")
+                }
+                style={{
+                  width: "100%", padding: "12px 14px", borderRadius: 12,
+                  border: `1.5px solid hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`,
+                  background: celebrityGuide ? `hsla(var(${accent}) / 0.05)` : "hsl(var(--card))",
+                  fontSize: 13, fontFamily: "'Jost', sans-serif",
+                  color: "hsl(var(--glamora-char))", outline: "none",
+                  transition: "all 0.2s",
+                }}
+                onFocus={(e) => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
+                onBlur={(e) => { e.target.style.borderColor = `hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`; }}
+              />
+              {celebrityGuide && (
+                <div style={{
+                  marginTop: 8, fontSize: 10, color: `hsl(var(${accent}))`, fontWeight: 500,
+                  display: "flex", alignItems: "center", gap: 5,
+                }}>
+                  <Star size={10} /> AI will recreate {celebrityGuide}'s {categoryLabel} on you
+                </div>
+              )}
+              {isRequired && !celebrityGuide && (
+                <div style={{
+                  marginTop: 8, fontSize: 10, color: "hsl(var(--glamora-gray))", fontWeight: 500,
+                  fontStyle: "italic",
+                }}>
+                  ⚠ Enter a name above to continue
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          );
+        })()}
 
-        <button className="btn-primary btn-rose" onClick={() => onNext(current.id, celebrityGuide || undefined)} style={{
-          display: "flex", alignItems: "center", gap: 8,
-          background: isMale
-            ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
-            : undefined,
-        }}>
+        <button
+          className="btn-primary btn-rose"
+          disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
+          onClick={() => onNext(current.id, celebrityGuide || undefined)}
+          style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: isMale
+              ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
+              : undefined,
+            opacity: (current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim() ? 0.5 : 1,
+          }}>
           Continue — Upload Photo <ArrowRight size={16} />
         </button>
       </div>
