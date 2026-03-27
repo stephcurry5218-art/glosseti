@@ -62,17 +62,17 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           background: "hsla(var(--glamora-char) / 0.05)", borderRadius: 100,
           padding: 3, maxWidth: 260, margin: "0 auto 24px",
         }}>
-          {(["monthly", "yearly"] as const).map(cycle => (
+          {(["weekly", "monthly", "yearly"] as const).map(cycle => (
             <button key={cycle} onClick={() => setBillingCycle(cycle)} style={{
               flex: 1, padding: "8px 0", borderRadius: 100, border: "none", cursor: "pointer",
               background: billingCycle === cycle
                 ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
                 : "transparent",
               color: billingCycle === cycle ? "white" : "hsl(var(--glamora-gray))",
-              fontSize: 12, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+              fontSize: 11, fontWeight: 600, fontFamily: "'Jost', sans-serif",
               transition: "all 0.2s",
             }}>
-              {cycle === "yearly" ? "Yearly (Save 30%)" : "Monthly"}
+              {cycle === "yearly" ? "Yearly" : cycle === "monthly" ? "Monthly" : "Weekly"}
             </button>
           ))}
         </div>
