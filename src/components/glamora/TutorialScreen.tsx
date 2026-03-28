@@ -17,6 +17,9 @@ const categoryIcons: Partial<Record<Category, LucideIcon>> = {
   bottom: CircleDot,
   shoes: Footprints,
   accessories: Watch,
+  bags: ShoppingBag,
+  swimwear: Sparkles,
+  lingerie: Sparkles,
 };
 
 const tierIcons: Record<PriceTier, LucideIcon> = {
