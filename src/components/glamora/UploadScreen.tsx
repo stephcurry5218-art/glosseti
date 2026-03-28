@@ -36,6 +36,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
   const canProceed = isMannequin || !!file;
+  const showMakeupPref = !isMale && !isMakeup && !isHairOnly;
 
   return (
     <div className="screen enter" style={{ minHeight: "100%" }}>
