@@ -251,6 +251,35 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                       </div>
                     )}
 
+                    {/* Video Tutorial Link */}
+                    {step.videoUrl && (
+                      <a
+                        href={step.videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          marginTop: 10, padding: "10px 14px", borderRadius: 12,
+                          background: "linear-gradient(135deg, #FF0000 0%, #CC0000 100%)",
+                          display: "flex", alignItems: "center", gap: 10,
+                          textDecoration: "none", cursor: "pointer",
+                          boxShadow: "0 2px 8px rgba(255,0,0,0.15)",
+                        }}
+                      >
+                        <div style={{
+                          width: 30, height: 30, borderRadius: 8, background: "rgba(255,255,255,0.2)",
+                          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                        }}>
+                          <Play size={14} color="white" fill="white" />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.8)", fontWeight: 500 }}>Watch Tutorial</div>
+                          <div style={{ fontSize: 13, color: "white", fontWeight: 600 }}>{step.videoLabel || "See How It's Done"}</div>
+                        </div>
+                        <ExternalLink size={14} color="rgba(255,255,255,0.7)" />
+                      </a>
+                    )}
+
                     {/* Technique micro-steps - shown in beginner mode */}
                     {showTechnique && (
                       <div style={{
