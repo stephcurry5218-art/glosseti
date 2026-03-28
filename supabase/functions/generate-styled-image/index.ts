@@ -101,6 +101,10 @@ serve(async (req) => {
         female: "wearing stylish designer sunglasses or eyewear, perfectly framed for her face shape. Paired with a chic outfit that complements the eyewear. Fashion editorial lighting with reflections and details on the frames.",
         male: "wearing premium designer sunglasses or eyewear that suits his face shape perfectly. Paired with a stylish outfit. Fashion editorial lighting highlighting the frame details and lens quality.",
       },
+      "hats-headwear": {
+        female: "wearing a stylish hat or headpiece that perfectly complements her face shape and outfit. Styled with a coordinated look that elevates the headwear as the hero piece. Fashion editorial lighting.",
+        male: "wearing a premium hat or cap that suits his face and style perfectly. Paired with a complementary outfit that makes the headwear the focal point. Fashion editorial lighting.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
