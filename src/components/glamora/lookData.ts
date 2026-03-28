@@ -697,4 +697,9 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Soft Glam", desc: "Elegant bags in blush and nude tones", match: 90 },
     { name: "Urban Edge", desc: "Statement bags with streetwear edge", match: 88 },
   ],
+  "shoes-sneakers": [
+    { name: "Shoe Edit", desc: "Designer kicks, heels, and boots — the ultimate footwear guide", match: 95 },
+    { name: "Urban Edge", desc: "Sneakers and boots with street credibility", match: 90 },
+    { name: "Soft Glam", desc: "Elegant heels and flats in neutral tones", match: 88 },
+  ],
 };
