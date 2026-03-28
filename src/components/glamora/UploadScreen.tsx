@@ -15,6 +15,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const [base64, setBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
   const [mode, setMode] = useState<GenerationMode>(prefs.generationMode);
+  const [makeupPref, setMakeupPref] = useState<"natural" | "glam">(prefs.makeupPreference || "natural");
   const isMale = prefs.gender === "male";
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
