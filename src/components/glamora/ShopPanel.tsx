@@ -66,34 +66,51 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)" }: Props) => {
               padding: 0, overflow: "hidden",
               border: `1px solid hsla(${tierMeta.color} / 0.15)`,
             }}>
-              {/* Main row — tap to expand or shop */}
-              <button
-                onClick={() => setExpandedItem(isExpanded ? null : idx)}
-                style={{
-                  width: "100%", padding: "14px 16px", background: "none", border: "none",
-                  cursor: "pointer", display: "flex", alignItems: "center", gap: 12,
-                  fontFamily: "'Jost', sans-serif", textAlign: "left",
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
-                    {item.label}
+              {/* Main row — tap to shop directly */}
+              <div style={{
+                width: "100%", padding: "14px 16px",
+                display: "flex", alignItems: "center", gap: 12,
+                fontFamily: "'Jost', sans-serif", textAlign: "left",
+              }}>
+                <a
+                  href={getShopUrl(tierData.store, tierData.item)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    flex: 1, textDecoration: "none", display: "flex", alignItems: "center", gap: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
+                      {item.label}
+                    </div>
+                    <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+                      {tierData.store} · {tierData.item}
+                    </div>
                   </div>
-                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
-                    {tierData.item}
+                  <div style={{
+                    fontSize: 13, fontWeight: 700, color: `hsl(${tierMeta.color})`,
+                    marginRight: 4, whiteSpace: "nowrap",
+                  }}>
+                    {tierData.price}
                   </div>
-                </div>
-                <div style={{
-                  fontSize: 13, fontWeight: 700, color: `hsl(${tierMeta.color})`,
-                  marginRight: 4, whiteSpace: "nowrap",
-                }}>
-                  {tierData.price}
-                </div>
-                <ChevronRight size={14} color="hsl(var(--glamora-gray))" style={{
-                  transition: "transform 0.2s",
-                  transform: isExpanded ? "rotate(90deg)" : "rotate(0)",
-                }} />
-              </button>
+                  <ExternalLink size={14} color={`hsl(${tierMeta.color})`} />
+                </a>
+                <button
+                  onClick={() => setExpandedItem(isExpanded ? null : idx)}
+                  style={{
+                    background: "none", border: "none", cursor: "pointer", padding: 4,
+                    display: "flex", alignItems: "center",
+                  }}
+                >
+                  <ChevronRight size={14} color="hsl(var(--glamora-gray))" style={{
+                    transition: "transform 0.2s",
+                    transform: isExpanded ? "rotate(90deg)" : "rotate(0)",
+                  }} />
+                </button>
+              </div>
 
               {/* Expanded — show all 3 tiers for this item */}
               {isExpanded && (
