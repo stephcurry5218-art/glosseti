@@ -155,11 +155,9 @@ const GlamoraApp = () => {
           prefs={prefs} styledImageUrl={styledImageUrl}
           onBack={() => go("upload")} onHome={() => go("home")}
           onSave={(lookNames) => {
-            if (!checkFeatureAccess("Save & organize looks")) return;
             setSavedStyles(prev => [...new Set([...prev, ...lookNames])]); go("home");
           }}
           onLookSelect={(name) => {
-            if (subscription.tier === "free" && !checkFeatureAccess("Full tutorials")) return;
             setSelectedLook(name); go("tutorial");
           }}
           onRegenerate={(tweakedCategory) => {
@@ -214,7 +212,6 @@ const GlamoraApp = () => {
           onBack={() => go("inspiration")}
           onHome={() => go("home")}
           onSave={(lookName) => {
-            if (!checkFeatureAccess("Save & organize looks")) return;
             setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
           }}
           onRegenerate={() => {
