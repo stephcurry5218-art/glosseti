@@ -78,7 +78,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Step 3: Pat the shimmer shade onto the center of your lid with your fingertip for maximum sparkle",
         "Step 4: Blend everything together by sweeping the fluffy brush where colors meet — no harsh lines!",
         "Step 5: Apply mascara — wiggle the wand at the base of your lashes and pull upward"
-      ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
+      ], shop: { luxury: { store: "Charlotte Tilbury", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
       { title: "Lips & Set", detail: "Line lips with a nude-rose liner. Apply a satin rose lipstick. Set everything with a dewy setting spray.", tools: ["Lip Liner", "Lipstick or Lip Brush"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+lipstick+and+lip+liner+beginner", videoLabel: "Lip Liner & Lipstick Guide", technique: [
         "Start with lip liner: begin at the cupid's bow (the V-shape of your upper lip)",
         "Draw small strokes following your natural lip line — don't try to draw one continuous line",
