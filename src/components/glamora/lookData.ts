@@ -133,7 +133,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "For liquid highlighter: put one tiny drop on your fingertip",
         "Tap it onto the tops of your cheekbones, bridge of nose, and center of forehead",
         "Use gentle tapping motions to blend — liquid highlighter looks most natural when sheered out"
-      ], shop: { luxury: { store: "Sephora", item: "Rare Beauty Warm Wishes Bronzer Stick", price: "$30" }, mid: { store: "Ulta", item: "Milani Baked Blush in Bellissimo Bronze", price: "$10" }, budget: { store: "Target", item: "e.l.f. Liquid Highlighter in Golden Glow", price: "$5" } } },
+      ], shop: { luxury: { store: "Rare Beauty", item: "Rare Beauty Warm Wishes Bronzer Stick", price: "$30" }, mid: { store: "Ulta", item: "Milani Baked Blush in Bellissimo Bronze", price: "$10" }, budget: { store: "Target", item: "e.l.f. Liquid Highlighter in Golden Glow", price: "$5" } } },
       { title: "Warm Lips", detail: "A terracotta or warm nude lip liner with a glossy caramel lip gloss.", tools: ["Lip Liner", "Lip Gloss"], videoUrl: "https://www.youtube.com/results?search_query=glossy+lip+tutorial+beginner+easy", videoLabel: "Easy Glossy Lip Tutorial", technique: [
         "Line your lips starting from the center of the upper lip (the V-shape / cupid's bow)",
         "Use short, feathery strokes following your natural lip line",
