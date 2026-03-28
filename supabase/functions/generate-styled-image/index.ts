@@ -109,6 +109,10 @@ serve(async (req) => {
         female: "styled with a stunning designer bag as the focal point — perfectly coordinated with her outfit. The bag is prominently displayed and styled for a fashion editorial. Close-up details showing hardware, texture, and craftsmanship. Premium fashion photography.",
         male: "styled with a premium bag or carry — leather messenger, sleek backpack, or structured briefcase as the hero piece. Coordinated with a sharp outfit. Fashion editorial lighting highlighting bag details and craftsmanship.",
       },
+      "shoes-sneakers": {
+        female: "wearing stunning designer shoes as the hero piece — perfectly styled with a coordinated outfit that showcases the footwear. Full-body or knee-down editorial shot with dramatic lighting highlighting shoe details, materials, and silhouette. The shoes should be the clear focal point. Premium fashion photography.",
+        male: "wearing premium designer shoes or sneakers as the hero piece — perfectly styled with a coordinated outfit that puts the footwear center stage. Full-body or knee-down editorial shot with dramatic lighting highlighting shoe details, construction, and colorway. Premium fashion photography.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];

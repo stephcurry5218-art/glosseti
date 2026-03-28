@@ -566,6 +566,27 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Butterfly Babe": { match: 94, desc: "Y2K nostalgia — butterfly tops, low-rise, frosted gloss, baguette bags" },
   "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
   "Bag Edit": { match: 95, desc: "The perfect bag to complete any look — totes, clutches, crossbodies" },
+  "Shoe Edit": { match: 95, desc: "Designer kicks and heels — the focal point of your fit" },
+};
+
+// Shoe-specific look data for shopping
+export const shoeLookData: Record<string, Step[]> = {
+  "Shoe Edit": [
+    { title: "Retro Sneakers", detail: "Heritage silhouettes like Air Jordan 1, Nike Dunk Low, New Balance 550, or Adidas Samba. Timeless designs that pair with everything from jeans to tailored trousers.", tip: "White/neutral colorways are the most versatile", shop: { luxury: { store: "SSENSE", item: "Golden Goose Super-Star Sneakers", price: "$530" }, mid: { store: "Nike", item: "Nike Dunk Low Retro", price: "$115" }, budget: { store: "Amazon", item: "New Balance 480 Classic", price: "$75" } } },
+    { title: "Running Sneakers", detail: "Performance-meets-style runners — Nike Air Max 90, Asics Gel-Kayano 14, Adidas Ultra Boost, or On Cloud. Tech fabrics and cushioned soles.", shop: { luxury: { store: "SSENSE", item: "Salomon XT-6 Advanced", price: "$195" }, mid: { store: "Nike", item: "Nike Air Max 90", price: "$130" }, budget: { store: "Amazon", item: "Adidas Ultraboost 1.0", price: "$95" } } },
+    { title: "Designer Sneakers", detail: "Luxury sneakers from Balenciaga Triple S, Alexander McQueen Oversized, Maison Margiela Replica, or Common Projects Achilles. Statement pieces that elevate any casual look.", shop: { luxury: { store: "Nordstrom", item: "Alexander McQueen Oversized Sneaker", price: "$590" }, mid: { store: "Nordstrom", item: "Common Projects Original Achilles", price: "$411" }, budget: { store: "Amazon", item: "GREATS Royale Sneaker", price: "$159" } } },
+    { title: "Stiletto Heels", detail: "Pointed-toe stilettos from Christian Louboutin So Kate, Manolo Blahnik BB, or Jimmy Choo Anouk. The ultimate power shoe for evening and formal occasions.", tip: "Red soles = instant confidence boost", shop: { luxury: { store: "Nordstrom", item: "Christian Louboutin So Kate 120mm", price: "$795" }, mid: { store: "Nordstrom", item: "Sam Edelman Hazel Pointed Toe Pump", price: "$150" }, budget: { store: "Amazon", item: "DREAM PAIRS Pointed Toe Stiletto", price: "$35" } } },
+    { title: "Block Heels", detail: "Comfortable height with chunky stability — great for day-to-night transitions. Look for square toes and architectural shapes.", shop: { luxury: { store: "Nordstrom", item: "Bottega Veneta Stretch Sandal", price: "$1,100" }, mid: { store: "Nordstrom", item: "Marc Fisher Viviene Block Heel", price: "$150" }, budget: { store: "Amazon", item: "Ankis Chunky Block Heel Sandal", price: "$40" } } },
+    { title: "Ankle Boots", detail: "Chelsea boots, combat boots, or pointed-toe booties. Dr. Martens, Blundstone, or designer options. Year-round wardrobe staple.", shop: { luxury: { store: "Nordstrom", item: "Gianvito Rossi Leather Ankle Boot", price: "$1,195" }, mid: { store: "Nordstrom", item: "Dr. Martens 2976 Chelsea Boot", price: "$170" }, budget: { store: "Amazon", item: "Thursday Boot Co. Duchess Chelsea", price: "$149" } } },
+    { title: "Knee-High Boots", detail: "Over-the-knee or knee-high in leather, suede, or stretch. Stuart Weitzman 5050, Paris Texas, or Isabel Marant. Statement boot season essential.", shop: { luxury: { store: "Nordstrom", item: "Stuart Weitzman 5050 Over-the-Knee", price: "$795" }, mid: { store: "Nordstrom", item: "Steve Madden Showbiz Knee High Boot", price: "$130" }, budget: { store: "Amazon", item: "DREAM PAIRS Over The Knee Boot", price: "$45" } } },
+    { title: "Cowboy Boots", detail: "Western-inspired with embroidery, pointed toes, and stacked heels. Pairs with dresses, jeans, or skirts.", shop: { luxury: { store: "Nordstrom", item: "Isabel Marant Duerto Western Boot", price: "$1,290" }, mid: { store: "Nordstrom", item: "Free People Brayden Western Boot", price: "$198" }, budget: { store: "Amazon", item: "IUV Cowboy Boots for Women", price: "$50" } } },
+    { title: "Loafers", detail: "Gucci Horsebit, Prada Triangle, or classic penny loafers. Versatile enough for office, brunch, or weekend wear. Platform versions add edge.", shop: { luxury: { store: "Nordstrom", item: "Gucci Horsebit Loafer", price: "$920" }, mid: { store: "Nordstrom", item: "G.H. Bass Whitney Weejuns", price: "$150" }, budget: { store: "Amazon", item: "DREAM PAIRS Platform Loafers", price: "$40" } } },
+    { title: "Oxfords & Derbies", detail: "Classic lace-up dress shoes in polished leather or suede. Allen Edmonds, Church's, or Dr. Martens 1461 for a more casual take.", shop: { luxury: { store: "Nordstrom", item: "Church's Shannon Derby Shoe", price: "$620" }, mid: { store: "Nordstrom", item: "Cole Haan ØriginalGrand Oxford", price: "$150" }, budget: { store: "Amazon", item: "Bruno Marc Oxford Dress Shoes", price: "$35" } } },
+    { title: "Sandals", detail: "Hermès Oran, Birkenstock Arizona, or strappy flat sandals. Essential warm-weather footwear from luxury to everyday.", shop: { luxury: { store: "Nordstrom", item: "Hermès Oran Sandal", price: "$680" }, mid: { store: "Nordstrom", item: "Birkenstock Arizona Soft Footbed", price: "$160" }, budget: { store: "Amazon", item: "CUSHIONAIRE Luna Cork Sandal", price: "$30" } } },
+    { title: "Slides & Mules", detail: "Slip-on ease — Yeezy Slides, Bottega Veneta Padded, or simple leather mules. Effortless style for running errands or poolside.", shop: { luxury: { store: "Nordstrom", item: "Bottega Veneta Padded Flat Sandal", price: "$790" }, mid: { store: "Nordstrom", item: "Adidas Yeezy Slide", price: "$70" }, budget: { store: "Amazon", item: "Pillow Slides Cloud Slippers", price: "$20" } } },
+    { title: "Ballet Flats", detail: "The Row, Repetto, or Sam Edelman Felicia. Minimalist elegance that works with everything from dresses to cropped pants.", shop: { luxury: { store: "Nordstrom", item: "The Row Elastic Ballet Flat", price: "$760" }, mid: { store: "Nordstrom", item: "Sam Edelman Felicia Ballet Flat", price: "$130" }, budget: { store: "Amazon", item: "Amazon Essentials Ballet Flat", price: "$22" } } },
+    { title: "Work Boots", detail: "Timberland 6-inch, Red Wing Iron Ranger, or Dr. Martens 1460. Rugged, durable, and stylish — built for function and fashion.", shop: { luxury: { store: "Nordstrom", item: "Red Wing Iron Ranger Boot", price: "$350" }, mid: { store: "Nordstrom", item: "Timberland 6-Inch Premium Boot", price: "$198" }, budget: { store: "Amazon", item: "EVER BOOTS Tank Work Boot", price: "$40" } } },
+  ],
 };
 
 // Bag-specific look data for shopping
@@ -675,5 +696,10 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Bag Edit", desc: "The perfect bag to complete any look", match: 95 },
     { name: "Soft Glam", desc: "Elegant bags in blush and nude tones", match: 90 },
     { name: "Urban Edge", desc: "Statement bags with streetwear edge", match: 88 },
+  ],
+  "shoes-sneakers": [
+    { name: "Shoe Edit", desc: "Designer kicks, heels, and boots — the ultimate footwear guide", match: 95 },
+    { name: "Urban Edge", desc: "Sneakers and boots with street credibility", match: 90 },
+    { name: "Soft Glam", desc: "Elegant heels and flats in neutral tones", match: 88 },
   ],
 };
