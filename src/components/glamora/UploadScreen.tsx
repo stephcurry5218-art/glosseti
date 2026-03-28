@@ -5,7 +5,7 @@ import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 interface Props {
   prefs: UserPrefs;
   onBack: () => void;
-  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode) => void;
+  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode, makeupPref?: "natural" | "glam") => void;
 }
 
 const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
