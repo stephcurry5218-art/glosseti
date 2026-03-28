@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch, ExternalLink } from "lucide-react";
-import { lookData, categoryLabels, categoryOrder, tierInfo } from "./lookData";
+import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch, ExternalLink, BookOpen, Wrench } from "lucide-react";
+import { lookData, categoryLabels, categoryOrder, tierInfo, makeupToolsChecklist } from "./lookData";
 import { getShopUrl } from "./affiliateUrls";
 import type { Category, PriceTier } from "./lookData";
 import type { LucideIcon } from "lucide-react";
@@ -33,6 +33,8 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
   const [activeTier, setActiveTier] = useState<PriceTier>("mid");
+  const [beginnerMode, setBeginnerMode] = useState(false);
+  const [showToolsChecklist, setShowToolsChecklist] = useState(false);
 
   const data = lookData[lookName] || lookData["Soft Glam"];
   const steps = data[activeCategory] || [];
@@ -62,6 +64,9 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
     return sum + (isNaN(num) ? 0 : num);
   }, 0);
 
+  const isMakeupCategory = activeCategory === "makeup";
+  const hasTechniques = isMakeupCategory && steps.some(s => s.technique?.length);
+
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
       <div className="screen-header">
@@ -86,6 +91,65 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
             <div style={{ height: "100%", borderRadius: 100, width: `${progress}%`, background: "linear-gradient(90deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))", transition: "width 0.4s ease" }} />
           </div>
         </div>
+
+        {/* Beginner Mode Toggle - shown when makeup has techniques */}
+        {hasTechniques && (
+          <div className="glamora-card anim-fadeUp d1" style={{ padding: "14px 18px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: beginnerMode ? "linear-gradient(135deg, hsla(var(--glamora-rose-dark) / 0.15), hsla(var(--glamora-gold) / 0.1))" : "hsla(var(--glamora-cream2))", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                <BookOpen size={17} color={beginnerMode ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Beginner Mode</div>
+                <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Step-by-step technique for each product</div>
+              </div>
+            </div>
+            <button
+              onClick={() => setBeginnerMode(!beginnerMode)}
+              style={{
+                width: 46, height: 26, borderRadius: 100, border: "none", cursor: "pointer",
+                background: beginnerMode ? "hsl(var(--glamora-rose-dark))" : "hsla(var(--glamora-gray-light) / 0.4)",
+                position: "relative", transition: "background 0.2s",
+              }}
+            >
+              <div style={{
+                width: 20, height: 20, borderRadius: 100, background: "white",
+                position: "absolute", top: 3,
+                left: beginnerMode ? 23 : 3,
+                transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              }} />
+            </button>
+          </div>
+        )}
+
+        {/* Tools Checklist - shown in beginner mode for makeup */}
+        {beginnerMode && isMakeupCategory && (
+          <div className="glamora-card anim-fadeUp" style={{ padding: "14px 18px", marginBottom: 16 }}>
+            <button
+              onClick={() => setShowToolsChecklist(!showToolsChecklist)}
+              style={{
+                width: "100%", background: "none", border: "none", cursor: "pointer",
+                fontFamily: "'Jost', sans-serif", display: "flex", alignItems: "center", justifyContent: "space-between", padding: 0,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Wrench size={15} color="hsl(var(--glamora-gold))" />
+                <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>🧰 Tools You'll Need</span>
+              </div>
+              <ChevronDown size={14} color="hsl(var(--glamora-gray))" style={{ transform: showToolsChecklist ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
+            </button>
+            {showToolsChecklist && (
+              <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8, animation: "fadeUp 0.3s ease both" }}>
+                {makeupToolsChecklist.map((tool) => (
+                  <div key={tool.name} style={{ padding: "10px 12px", borderRadius: 10, background: "hsla(var(--glamora-gold-pale) / 0.4)", border: "1px solid hsla(var(--glamora-gold) / 0.12)" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>{tool.name}</div>
+                    <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.45 }}>{tool.desc}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Price Tier Selector */}
         <div className="glamora-card anim-fadeUp d1" style={{ padding: "14px 14px", marginBottom: 20 }}>
@@ -148,6 +212,7 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
             const done = completedSteps.has(key);
             const isExpanded = expandedStep === key;
             const shopItem = step.shop?.[activeTier];
+            const showTechnique = beginnerMode && step.technique?.length;
             return (
               <div key={key} className={`glamora-card anim-fadeUp d${Math.min(i + 1, 6)}`} style={{
                 padding: "18px 18px",
@@ -166,9 +231,43 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))", textDecoration: done ? "line-through" : "none", marginBottom: 4 }}>{step.title}</div>
                     <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", lineHeight: 1.55 }}>{step.detail}</div>
+
+                    {/* Tools needed - shown in beginner mode */}
+                    {beginnerMode && step.tools?.length && (
+                      <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 4 }}>
+                        {step.tools.map((tool) => (
+                          <span key={tool} style={{
+                            fontSize: 10, padding: "3px 8px", borderRadius: 100,
+                            background: "hsla(var(--glamora-rose) / 0.1)", color: "hsl(var(--glamora-rose-dark))",
+                            fontWeight: 600, letterSpacing: 0.3,
+                          }}>🖌 {tool}</span>
+                        ))}
+                      </div>
+                    )}
+
                     {step.tip && (
                       <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 10, background: "hsla(var(--glamora-gold-pale) / 0.5)", border: "1px solid hsla(var(--glamora-gold) / 0.15)", fontSize: 12, color: "hsl(var(--glamora-gold))", fontWeight: 500, display: "flex", alignItems: "center", gap: 6 }}>
                         <Lightbulb size={14} /> {step.tip}
+                      </div>
+                    )}
+
+                    {/* Technique micro-steps - shown in beginner mode */}
+                    {showTechnique && (
+                      <div style={{
+                        marginTop: 12, padding: "12px 14px", borderRadius: 12,
+                        background: "linear-gradient(135deg, hsla(var(--glamora-rose) / 0.06), hsla(var(--glamora-gold-pale) / 0.3))",
+                        border: "1px solid hsla(var(--glamora-rose-dark) / 0.1)",
+                      }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: "hsl(var(--glamora-rose-dark))", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8, display: "flex", alignItems: "center", gap: 5 }}>
+                          <BookOpen size={12} /> How To Do This
+                        </div>
+                        <ol style={{ margin: 0, paddingLeft: 16, display: "flex", flexDirection: "column", gap: 6 }}>
+                          {step.technique!.map((t, ti) => (
+                            <li key={ti} style={{ fontSize: 12, color: "hsl(var(--glamora-char))", lineHeight: 1.5, paddingLeft: 4 }}>
+                              {t}
+                            </li>
+                          ))}
+                        </ol>
                       </div>
                     )}
                   </div>
