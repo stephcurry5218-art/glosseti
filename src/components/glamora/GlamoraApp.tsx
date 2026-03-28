@@ -155,13 +155,11 @@ const GlamoraApp = () => {
           prefs={prefs} styledImageUrl={styledImageUrl}
           onBack={() => go("upload")} onHome={() => go("home")}
           onSave={(lookNames) => {
-            if (!checkFeatureAccess("Save & organize looks")) return;
             setSavedStyles(prev => [...new Set([...prev, ...lookNames])]); go("home");
           }}
           onLookSelect={(name) => {
-            if (subscription.tier === "free" && !checkFeatureAccess("Full tutorials")) return;
             setSelectedLook(name); go("tutorial");
-          }}
+          }
           onRegenerate={(tweakedCategory) => {
             const category = tweakedCategory || prefs.styleCategory;
             const prompt = `I just generated a ${category.replace("-", " ")} look and I'd like to refine it. Can you help me tweak the style? What changes would make it better — different colors, fits, or vibes? Give me specific suggestions I can try.`;
