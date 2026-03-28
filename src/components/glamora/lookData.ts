@@ -566,6 +566,7 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Butterfly Babe": { match: 94, desc: "Y2K nostalgia — butterfly tops, low-rise, frosted gloss, baguette bags" },
   "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
   "Bag Edit": { match: 95, desc: "The perfect bag to complete any look — totes, clutches, crossbodies" },
+  "Shoe Edit": { match: 95, desc: "Designer kicks and heels — the focal point of your fit" },
 };
 
 // Bag-specific look data for shopping
