@@ -565,8 +565,28 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Velvet Boudoir": { match: 94, desc: "Old Hollywood intimates — velvet, feathers, champagne tones" },
   "Butterfly Babe": { match: 94, desc: "Y2K nostalgia — butterfly tops, low-rise, frosted gloss, baguette bags" },
   "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
+  "bags-purses": [
+    { name: "Bag Edit", desc: "The perfect bag to complete any look", match: 95 },
+    { name: "Soft Glam", desc: "Elegant bags in blush and nude tones", match: 90 },
+    { name: "Urban Edge", desc: "Statement bags with streetwear edge", match: 88 },
+  ],
 };
 
+// Bag-specific look data for shopping
+export const bagLookData: Record<string, Step[]> = {
+  "Bag Edit": [
+    { title: "Everyday Tote", detail: "A structured leather tote in a neutral tone — fits laptop, wallet, and essentials. Look for reinforced handles and interior pockets.", tip: "Saffiano leather resists scratches", shop: { luxury: { store: "Nordstrom", item: "Saint Laurent Shopping Tote", price: "$1,350" }, mid: { store: "Nordstrom", item: "Tory Burch Perry Triple-Compartment Tote", price: "$348" }, budget: { store: "Amazon", item: "Dreubea Soft Faux Leather Tote", price: "$18" } } },
+    { title: "Crossbody Bag", detail: "Compact hands-free bag with adjustable strap. Perfect for errands, travel, or a night out.", shop: { luxury: { store: "Nordstrom", item: "Gucci GG Marmont Mini Crossbody", price: "$1,250" }, mid: { store: "Nordstrom", item: "Marc Jacobs The Snapshot Crossbody", price: "$295" }, budget: { store: "Amazon", item: "CLUCI Small Crossbody Bag", price: "$22" } } },
+    { title: "Evening Clutch", detail: "Slim envelope or box clutch for formal events. Metallic hardware and chain strap options elevate the look.", shop: { luxury: { store: "Nordstrom", item: "Bottega Veneta Knot Clutch", price: "$3,200" }, mid: { store: "Nordstrom", item: "Ted Baker Satin Bow Clutch", price: "$95" }, budget: { store: "Amazon", item: "Charming Tailor Metallic Clutch", price: "$20" } } },
+    { title: "Backpack", detail: "Leather or premium nylon backpack that transitions from work to weekend. Clean lines, minimal branding.", shop: { luxury: { store: "Nordstrom", item: "Prada Re-Nylon Backpack", price: "$1,790" }, mid: { store: "Nordstrom", item: "Longchamp Le Pliage Neo Backpack", price: "$245" }, budget: { store: "Amazon", item: "BROMEN Leather Laptop Backpack", price: "$40" } } },
+    { title: "Shoulder Bag", detail: "Classic shoulder bag — hobo, baguette, or structured. Sits comfortably under the arm with room for daily essentials.", shop: { luxury: { store: "Nordstrom", item: "Fendi Baguette Bag", price: "$3,190" }, mid: { store: "Nordstrom", item: "Coach Pillow Tabby Shoulder Bag", price: "$395" }, budget: { store: "Amazon", item: "JW PEI Joy Shoulder Bag", price: "$70" } } },
+    { title: "Belt Bag / Fanny Pack", detail: "Worn at the waist or crossbody for a modern hands-free silhouette. Leather or sport nylon.", shop: { luxury: { store: "Nordstrom", item: "Loewe Gate Bum Bag", price: "$1,550" }, mid: { store: "Nordstrom", item: "Lululemon Everywhere Belt Bag", price: "$38" }, budget: { store: "Amazon", item: "ZORFIN Fanny Pack Crossbody", price: "$16" } } },
+    { title: "Mini Bag", detail: "Tiny statement piece — just enough for phone, cards, and lipstick. Maximum style, minimal space.", tip: "Pair with a larger bag for practicality", shop: { luxury: { store: "Nordstrom", item: "Jacquemus Le Chiquito Long", price: "$620" }, mid: { store: "Nordstrom", item: "Kate Spade Mini Flap Crossbody", price: "$179" }, budget: { store: "Amazon", item: "CATMICOO Mini Purse", price: "$15" } } },
+    { title: "Weekend Duffle", detail: "Overnight travel bag in leather or coated canvas. Fits a change of clothes, toiletries, and a laptop.", shop: { luxury: { store: "Nordstrom", item: "Louis Vuitton Keepall Bandoulière 45", price: "$2,570" }, mid: { store: "Nordstrom", item: "Herschel Novel Duffle", price: "$90" }, budget: { store: "Amazon", item: "Weekender Overnight Bag for Women", price: "$30" } } },
+    { title: "Bucket Bag", detail: "Slouchy drawstring silhouette — relaxed but refined. Great for casual-to-dressy transitions.", shop: { luxury: { store: "Nordstrom", item: "Mansur Gavriel Mini Bucket Bag", price: "$595" }, mid: { store: "Nordstrom", item: "Madewell The Transport Bucket Bag", price: "$168" }, budget: { store: "Amazon", item: "Montana West Bucket Bag", price: "$28" } } },
+    { title: "Designer Classic", detail: "An investment piece that transcends trends — Chanel Flap, Hermès Birkin, or Dior Saddle.", tip: "Pre-owned luxury is a smart entry point", shop: { luxury: { store: "The RealReal", item: "Chanel Classic Double Flap (Pre-owned)", price: "$6,500" }, mid: { store: "Rebag", item: "Louis Vuitton Neverfull MM (Pre-owned)", price: "$1,200" }, budget: { store: "Amazon", item: "TIBES Classic Quilted Chain Bag", price: "$25" } } },
+  ],
+};
 export const styleLooks: Record<string, { name: string; desc: string; match: number }[]> = {
   "full-style": [
     { name: "Soft Glam", desc: "Elegant & refined — silk, rose gold, satin", match: 96 },
