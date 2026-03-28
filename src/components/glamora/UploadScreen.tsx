@@ -204,6 +204,46 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
 
+        {/* Makeup preference for female users */}
+        {showMakeupPref && !isMannequin && (
+          <div className="anim-fadeUp d2" style={{
+            marginTop: 16, display: "flex", gap: 6,
+            background: "hsl(var(--card))",
+            borderRadius: 16, padding: 4,
+            border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+          }}>
+            {([
+              { id: "natural" as const, label: "Natural Look", Icon: Flower2, desc: "Minimal or no makeup" },
+              { id: "glam" as const, label: "Glam Makeup", Icon: Gem, desc: "Full glam styling" },
+            ]).map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => setMakeupPref(opt.id)}
+                style={{
+                  flex: 1, padding: "10px 8px", borderRadius: 12,
+                  border: "none",
+                  background: makeupPref === opt.id
+                    ? `linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-rose)))`
+                    : "transparent",
+                  cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                  transition: "all 0.25s ease",
+                }}
+              >
+                <opt.Icon size={18} color={makeupPref === opt.id ? "white" : "hsl(var(--glamora-gray))"} />
+                <span style={{
+                  fontSize: 12, fontWeight: 600,
+                  color: makeupPref === opt.id ? "white" : "hsl(var(--glamora-char))",
+                }}>{opt.label}</span>
+                <span style={{
+                  fontSize: 10,
+                  color: makeupPref === opt.id ? "hsla(0 0% 100% / 0.75)" : "hsl(var(--glamora-gray))",
+                }}>{opt.desc}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {!isMannequin && (
           <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
             <div className="section-label">Tips for Best Results</div>
