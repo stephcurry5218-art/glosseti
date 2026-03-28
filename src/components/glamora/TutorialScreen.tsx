@@ -121,7 +121,7 @@ const TutorialScreen = ({ lookName, onBack, onHome }: Props) => {
             const isActive = activeCategory === cat;
             const catSteps = data[cat] || [];
             const catDone = catSteps.filter((_, i) => completedSteps.has(`${cat}-${i}`)).length;
-            const CatIcon = categoryIcons[cat];
+            const CatIcon = categoryIcons[cat] || ShoppingBag;
             return (
               <button key={cat} onClick={() => setActiveCategory(cat)} style={{
                 padding: "10px 16px", borderRadius: 14, border: "1.5px solid",
