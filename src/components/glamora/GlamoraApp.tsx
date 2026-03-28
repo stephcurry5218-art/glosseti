@@ -89,10 +89,10 @@ const GlamoraApp = () => {
     go("home");
   };
 
-  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
+  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: GenerationMode, makeupPref?: "natural" | "glam") => {
     if (!tryGenerate()) return;
     const genMode = mode || "on-me";
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode, makeupPreference: makeupPref }));
     recordStyle({ styleCategory: prefs.styleCategory, gender: prefs.gender, generationMode: genMode });
     go("loading");
   }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
