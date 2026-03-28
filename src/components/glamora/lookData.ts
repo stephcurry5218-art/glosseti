@@ -45,7 +45,7 @@ export const tierInfo: Record<PriceTier, { label: string; color: string; bg: str
 export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   "Soft Glam": {
     makeup: [
-      { title: "Prep & Prime", detail: "Apply a hydrating primer with a dewy finish. Focus on T-zone for a natural glow.", tip: "Use a beauty sponge for even application", tools: ["Beauty Sponge", "Clean fingers"], technique: [
+      { title: "Prep & Prime", detail: "Apply a hydrating primer with a dewy finish. Focus on T-zone for a natural glow.", tip: "Use a beauty sponge for even application", tools: ["Beauty Sponge", "Clean fingers"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+primer+for+beginners", videoLabel: "How to Apply Primer", technique: [
         "Start with a clean, moisturized face — wait 2 minutes after moisturizer so it absorbs",
         "Squeeze a pea-sized amount of primer onto your fingertips",
         "Dot the primer on your forehead, nose, both cheeks, and chin (5 dots)",
@@ -53,7 +53,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Pay extra attention to the T-zone (forehead + nose) — this is where you get oily first",
         "Wait 60 seconds for the primer to set before moving to the next step"
       ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
-      { title: "Soft Rose Base", detail: "Blend a light-coverage foundation matched to your skin tone. Conceal under eyes with a shade lighter.", tools: ["Beauty Sponge or Foundation Brush"], technique: [
+      { title: "Soft Rose Base", detail: "Blend a light-coverage foundation matched to your skin tone. Conceal under eyes with a shade lighter.", tools: ["Beauty Sponge or Foundation Brush"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+foundation+with+beauty+sponge+beginner", videoLabel: "Foundation Application 101", technique: [
         "Match your foundation by testing on your jawline — it should disappear into your skin",
         "Pump one dot of foundation onto the back of your hand",
         "Dip a damp beauty sponge into the product (dampen the sponge first — squeeze out all water)",
@@ -62,7 +62,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "For concealer: dot a small amount in an upside-down triangle under each eye",
         "Bounce the sponge to blend concealer — never rub or drag"
       ], shop: { luxury: { store: "Nordstrom", item: "Armani Luminous Silk Foundation", price: "$65" }, mid: { store: "Ulta", item: "L'Oréal True Match Serum Foundation", price: "$17" }, budget: { store: "Target", item: "Maybelline Fit Me Dewy Foundation", price: "$9" } } },
-      { title: "Blush & Highlight", detail: "Sweep a rose-pink blush on the apples of your cheeks. Add a champagne highlighter to cheekbones and nose bridge.", tip: "Smile to find the apples of your cheeks", tools: ["Fluffy Blush Brush", "Fan Brush or Finger"], technique: [
+      { title: "Blush & Highlight", detail: "Sweep a rose-pink blush on the apples of your cheeks. Add a champagne highlighter to cheekbones and nose bridge.", tip: "Smile to find the apples of your cheeks", tools: ["Fluffy Blush Brush", "Fan Brush or Finger"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+blush+and+highlighter+beginner", videoLabel: "Blush & Highlight Placement", technique: [
         "Smile wide — see those round parts that pop up? Those are the 'apples' of your cheeks",
         "Tap your brush into the blush, then tap off excess on the back of your hand (less is more!)",
         "Sweep the blush onto the apples in a gentle circular motion, blending upward toward your ear",
@@ -70,7 +70,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Press it onto the top of your cheekbones (the bone you feel when you press), the bridge of your nose, and your cupid's bow (the dip above your top lip)",
         "Blend gently — highlighter should look like a natural glow, not a stripe"
       ], shop: { luxury: { store: "Sephora", item: "NARS Orgasm Blush + Highlighter Duo", price: "$40" }, mid: { store: "Ulta", item: "Milani Baked Blush in Luminoso", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Baked Highlighter + Blush Duo", price: "$8" } } },
-      { title: "Soft Eye Look", detail: "Apply a matte nude on the lid, rose shimmer on the center, and blend a soft brown in the crease.", tools: ["Flat Shader Brush", "Fluffy Blending Brush"], technique: [
+      { title: "Soft Eye Look", detail: "Apply a matte nude on the lid, rose shimmer on the center, and blend a soft brown in the crease.", tools: ["Flat Shader Brush", "Fluffy Blending Brush"], videoUrl: "https://www.youtube.com/results?search_query=easy+eyeshadow+tutorial+for+beginners+soft+glam", videoLabel: "Easy Eyeshadow for Beginners", technique: [
         "The 'lid' is your eyelid from lash line to the crease (the fold where your eye socket starts)",
         "The 'crease' is the natural fold above your eyelid — close one eye and feel for the indent",
         "Step 1: Use a flat brush to press the lightest (nude/beige) shade all over your lid",
@@ -79,7 +79,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Step 4: Blend everything together by sweeping the fluffy brush where colors meet — no harsh lines!",
         "Step 5: Apply mascara — wiggle the wand at the base of your lashes and pull upward"
       ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
-      { title: "Lips & Set", detail: "Line lips with a nude-rose liner. Apply a satin rose lipstick. Set everything with a dewy setting spray.", tools: ["Lip Liner", "Lipstick or Lip Brush"], technique: [
+      { title: "Lips & Set", detail: "Line lips with a nude-rose liner. Apply a satin rose lipstick. Set everything with a dewy setting spray.", tools: ["Lip Liner", "Lipstick or Lip Brush"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+lipstick+and+lip+liner+beginner", videoLabel: "Lip Liner & Lipstick Guide", technique: [
         "Start with lip liner: begin at the cupid's bow (the V-shape of your upper lip)",
         "Draw small strokes following your natural lip line — don't try to draw one continuous line",
         "Connect the outline all the way around both lips",
