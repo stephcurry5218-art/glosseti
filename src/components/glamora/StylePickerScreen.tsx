@@ -438,14 +438,14 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                     }}
                   >
                     <div style={{
-                      width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                      background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.1)`,
+                      width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+                      background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.08)`,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s",
+                      transition: "all 0.2s", fontSize: 16,
                     }}>
                       {isActive
                         ? <Check size={14} color="white" />
-                        : <ArrowRight size={12} color={`hsl(var(${accent}))`} />}
+                        : <span>{sub.emoji}</span>}
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
