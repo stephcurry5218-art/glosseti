@@ -212,7 +212,6 @@ const GlamoraApp = () => {
           onBack={() => go("inspiration")}
           onHome={() => go("home")}
           onSave={(lookName) => {
-            if (!checkFeatureAccess("Save & organize looks")) return;
             setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
           }}
           onRegenerate={() => {
