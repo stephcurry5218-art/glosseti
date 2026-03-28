@@ -230,7 +230,7 @@ const EntranceScreen = ({ onEnter }: Props) => {
         <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 8 }}>
           <Sparkles size={18} color={`hsl(${accent})`} />
           <span style={{ fontSize: 14, color: `hsl(${accent})`, fontWeight: 500, transition: "color 0.6s ease" }}>
-            Welcome to your runway
+            Welcome to your fashion suite
           </span>
           <Sparkles size={18} color={`hsl(${accent})`} />
         </div>
