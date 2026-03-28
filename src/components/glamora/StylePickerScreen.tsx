@@ -261,6 +261,20 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
+    id: "jewelry-accessories", label: "Jewelry & Accessories", Icon: Gem,
+    desc: "Statement pieces — rings, necklaces, watches, and bracelets styled on you",
+    includes: ["Rings & Bands", "Necklaces & Chains", "Watches", "Bracelets & Bangles", "Earrings"],
+    subs: [
+      { id: "diamond-rings", label: "Diamond Rings", desc: "Solitaires, halos, and pavé bands that sparkle", emoji: "💍" },
+      { id: "gold-chains", label: "Gold Chains", desc: "Cuban links, rope chains, and layered pendants", emoji: "⛓️" },
+      { id: "statement-necklace", label: "Statement Necklace", desc: "Bold chokers, bib necklaces, and oversized pendants", emoji: "📿" },
+      { id: "luxury-watches", label: "Luxury Watches", desc: "Rolex, Cartier, AP — wrist game on point", emoji: "⌚" },
+      { id: "stacked-bracelets", label: "Stacked Bracelets", desc: "Layered bangles, beads, and cuffs", emoji: "🪬" },
+      { id: "pearl-elegance", label: "Pearl Elegance", desc: "Classic pearls — necklaces, studs, and drops", emoji: "🤍" },
+      { id: "ear-party", label: "Ear Party", desc: "Multiple piercings, hoops, studs, and cuffs", emoji: "✨" },
+    ],
+  },
+  {
     id: "celebrity-makeup", label: "Influencer Makeup", Icon: Crown,
     genderLabel: { male: "Influencer Grooming", female: "Influencer Makeup" },
     desc: "Get your makeup styled like your favorite influencer or celebrity",
