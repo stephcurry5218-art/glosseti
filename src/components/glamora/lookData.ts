@@ -400,7 +400,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   "Sharp & Clean": {
     makeup: [
       { title: "Fresh Face", detail: "Clean, moisturized skin. Mattifying primer on T-zone. Concealer only where needed.", shop: { luxury: { store: "Sephora", item: "Lab Series Daily Moisturizer SPF 35", price: "$48" }, mid: { store: "Ulta", item: "Cetaphil Daily Moisturizer SPF 30", price: "$16" }, budget: { store: "Amazon", item: "CeraVe AM Facial Moisturizer SPF 30", price: "$12" } } },
-      { title: "Groomed Brows", detail: "Trim and brush brows into shape. Use a clear brow gel to set.", shop: { luxury: { store: "Sephora", item: "Boy Brow by Glossier", price: "$18" }, mid: { store: "Ulta", item: "NYX Control Freak Clear Brow Gel", price: "$6" }, budget: { store: "Amazon", item: "e.l.f. Brow Lift Gel", price: "$4" } } },
+      { title: "Groomed Brows", detail: "Trim and brush brows into shape. Use a clear brow gel to set.", shop: { luxury: { store: "Glossier", item: "Boy Brow by Glossier", price: "$18" }, mid: { store: "Ulta", item: "NYX Control Freak Clear Brow Gel", price: "$6" }, budget: { store: "Amazon", item: "e.l.f. Brow Lift Gel", price: "$4" } } },
       { title: "Lip Care", detail: "Exfoliate and apply a quality lip balm. Keep lips hydrated and clean.", shop: { luxury: { store: "Sephora", item: "Laneige Lip Sleeping Mask", price: "$24" }, mid: { store: "Ulta", item: "Jack Black Lip Balm SPF 25", price: "$8" }, budget: { store: "Amazon", item: "Burt's Bees Original Lip Balm", price: "$4" } } },
     ],
     top: [
