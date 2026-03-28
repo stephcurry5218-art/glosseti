@@ -671,4 +671,9 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Desert Wanderer", desc: "Earthy bohemian with cottagecore softness", match: 90 },
     { name: "Soft Glam", desc: "Romantic natural beauty with countryside charm", match: 87 },
   ],
+  "bags-purses": [
+    { name: "Bag Edit", desc: "The perfect bag to complete any look", match: 95 },
+    { name: "Soft Glam", desc: "Elegant bags in blush and nude tones", match: 90 },
+    { name: "Urban Edge", desc: "Statement bags with streetwear edge", match: 88 },
+  ],
 };
