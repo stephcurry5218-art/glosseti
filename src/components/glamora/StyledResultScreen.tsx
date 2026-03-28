@@ -265,7 +265,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     key={id}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setActiveHotspot(isActive ? null : id as HotspotId);
+                      if (isActive) {
+                        window.open(getShopUrl("Amazon", pos.searchTerm), "_blank", "noopener,noreferrer");
+                      } else {
+                        setActiveHotspot(id as HotspotId);
+                      }
                     }}
                     style={{
                       position: "absolute", top: pos.top, left: pos.left, transform: "translate(-50%, -50%)",
