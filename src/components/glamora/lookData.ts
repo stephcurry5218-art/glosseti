@@ -376,7 +376,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   "Coastal Luxe": {
     makeup: [
       { title: "Glowing Base", detail: "Light, dewy tinted sunscreen or skin tint. A touch of cream bronzer on the cheeks.", shop: { luxury: { store: "Sephora", item: "Saie Slip Tint Dewy Foundation", price: "$36" }, mid: { store: "Ulta", item: "Supergoop Glowscreen SPF 40", price: "$22" }, budget: { store: "Amazon", item: "CeraVe Tinted Sunscreen SPF 30", price: "$12" } } },
-      { title: "Beach-Ready Eyes", detail: "Champagne shimmer on lids. Waterproof brown mascara. Brushed-up brows.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Eyes to Mesmerize in Champagne", price: "$34" }, mid: { store: "Ulta", item: "Maybelline Color Tattoo in Barely Branded", price: "$8" }, budget: { store: "Amazon", item: "e.l.f. Liquid Glitter Eyeshadow", price: "$5" } } },
+      { title: "Beach-Ready Eyes", detail: "Champagne shimmer on lids. Waterproof brown mascara. Brushed-up brows.", shop: { luxury: { store: "Charlotte Tilbury", item: "Charlotte Tilbury Eyes to Mesmerize in Champagne", price: "$34" }, mid: { store: "Ulta", item: "Maybelline Color Tattoo in Barely Branded", price: "$8" }, budget: { store: "Amazon", item: "e.l.f. Liquid Glitter Eyeshadow", price: "$5" } } },
       { title: "Glossy Lips", detail: "A sheer coral or peach lip gloss. Hydrating and beachy.", shop: { luxury: { store: "Sephora", item: "Dior Addict Lip Maximizer in Coral", price: "$38" }, mid: { store: "Ulta", item: "NYX Butter Gloss in Tiramisu", price: "$6" }, budget: { store: "Amazon", item: "Burt's Bees Lip Shimmer in Peony", price: "$5" } } },
     ],
     top: [
