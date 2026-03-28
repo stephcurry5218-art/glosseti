@@ -43,11 +43,49 @@ export const tierInfo: Record<PriceTier, { label: string; color: string; bg: str
 export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   "Soft Glam": {
     makeup: [
-      { title: "Prep & Prime", detail: "Apply a hydrating primer with a dewy finish. Focus on T-zone for a natural glow.", tip: "Use a beauty sponge for even application", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
-      { title: "Soft Rose Base", detail: "Blend a light-coverage foundation matched to your skin tone. Conceal under eyes with a shade lighter.", shop: { luxury: { store: "Nordstrom", item: "Armani Luminous Silk Foundation", price: "$65" }, mid: { store: "Ulta", item: "L'Oréal True Match Serum Foundation", price: "$17" }, budget: { store: "Target", item: "Maybelline Fit Me Dewy Foundation", price: "$9" } } },
-      { title: "Blush & Highlight", detail: "Sweep a rose-pink blush on the apples of your cheeks. Add a champagne highlighter to cheekbones and nose bridge.", tip: "Smile to find the apples of your cheeks", shop: { luxury: { store: "Sephora", item: "NARS Orgasm Blush + Highlighter Duo", price: "$40" }, mid: { store: "Ulta", item: "Milani Baked Blush in Luminoso", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Baked Highlighter + Blush Duo", price: "$8" } } },
-      { title: "Soft Eye Look", detail: "Apply a matte nude on the lid, rose shimmer on the center, and blend a soft brown in the crease.", shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
-      { title: "Lips & Set", detail: "Line lips with a nude-rose liner. Apply a satin rose lipstick. Set everything with a dewy setting spray.", shop: { luxury: { store: "Nordstrom", item: "Tom Ford Lip Color in Pink Dusk", price: "$58" }, mid: { store: "Ulta", item: "MAC Matte Lipstick in Velvet Teddy", price: "$22" }, budget: { store: "Target", item: "Revlon Super Lustrous in Pink in the Afternoon", price: "$8" } } },
+      { title: "Prep & Prime", detail: "Apply a hydrating primer with a dewy finish. Focus on T-zone for a natural glow.", tip: "Use a beauty sponge for even application", tools: ["Beauty Sponge", "Clean fingers"], technique: [
+        "Start with a clean, moisturized face — wait 2 minutes after moisturizer so it absorbs",
+        "Squeeze a pea-sized amount of primer onto your fingertips",
+        "Dot the primer on your forehead, nose, both cheeks, and chin (5 dots)",
+        "Gently spread outward from each dot using your fingertips in upward strokes",
+        "Pay extra attention to the T-zone (forehead + nose) — this is where you get oily first",
+        "Wait 60 seconds for the primer to set before moving to the next step"
+      ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
+      { title: "Soft Rose Base", detail: "Blend a light-coverage foundation matched to your skin tone. Conceal under eyes with a shade lighter.", tools: ["Beauty Sponge or Foundation Brush"], technique: [
+        "Match your foundation by testing on your jawline — it should disappear into your skin",
+        "Pump one dot of foundation onto the back of your hand",
+        "Dip a damp beauty sponge into the product (dampen the sponge first — squeeze out all water)",
+        "Bounce (don't drag!) the sponge starting from the center of your face outward",
+        "Build coverage where needed — add tiny amounts under eyes, around nose, on any redness",
+        "For concealer: dot a small amount in an upside-down triangle under each eye",
+        "Bounce the sponge to blend concealer — never rub or drag"
+      ], shop: { luxury: { store: "Nordstrom", item: "Armani Luminous Silk Foundation", price: "$65" }, mid: { store: "Ulta", item: "L'Oréal True Match Serum Foundation", price: "$17" }, budget: { store: "Target", item: "Maybelline Fit Me Dewy Foundation", price: "$9" } } },
+      { title: "Blush & Highlight", detail: "Sweep a rose-pink blush on the apples of your cheeks. Add a champagne highlighter to cheekbones and nose bridge.", tip: "Smile to find the apples of your cheeks", tools: ["Fluffy Blush Brush", "Fan Brush or Finger"], technique: [
+        "Smile wide — see those round parts that pop up? Those are the 'apples' of your cheeks",
+        "Tap your brush into the blush, then tap off excess on the back of your hand (less is more!)",
+        "Sweep the blush onto the apples in a gentle circular motion, blending upward toward your ear",
+        "For highlighter: dab a tiny amount on your fingertip",
+        "Press it onto the top of your cheekbones (the bone you feel when you press), the bridge of your nose, and your cupid's bow (the dip above your top lip)",
+        "Blend gently — highlighter should look like a natural glow, not a stripe"
+      ], shop: { luxury: { store: "Sephora", item: "NARS Orgasm Blush + Highlighter Duo", price: "$40" }, mid: { store: "Ulta", item: "Milani Baked Blush in Luminoso", price: "$10" }, budget: { store: "Amazon", item: "e.l.f. Baked Highlighter + Blush Duo", price: "$8" } } },
+      { title: "Soft Eye Look", detail: "Apply a matte nude on the lid, rose shimmer on the center, and blend a soft brown in the crease.", tools: ["Flat Shader Brush", "Fluffy Blending Brush"], technique: [
+        "The 'lid' is your eyelid from lash line to the crease (the fold where your eye socket starts)",
+        "The 'crease' is the natural fold above your eyelid — close one eye and feel for the indent",
+        "Step 1: Use a flat brush to press the lightest (nude/beige) shade all over your lid",
+        "Step 2: With a fluffy brush, pick up the medium brown shade and sweep back and forth in your crease using small windshield-wiper motions",
+        "Step 3: Pat the shimmer shade onto the center of your lid with your fingertip for maximum sparkle",
+        "Step 4: Blend everything together by sweeping the fluffy brush where colors meet — no harsh lines!",
+        "Step 5: Apply mascara — wiggle the wand at the base of your lashes and pull upward"
+      ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Pillow Talk Palette", price: "$53" }, mid: { store: "Ulta", item: "Anastasia Soft Glam Palette", price: "$29" }, budget: { store: "Amazon", item: "Maybelline The Nudes Palette", price: "$11" } } },
+      { title: "Lips & Set", detail: "Line lips with a nude-rose liner. Apply a satin rose lipstick. Set everything with a dewy setting spray.", tools: ["Lip Liner", "Lipstick or Lip Brush"], technique: [
+        "Start with lip liner: begin at the cupid's bow (the V-shape of your upper lip)",
+        "Draw small strokes following your natural lip line — don't try to draw one continuous line",
+        "Connect the outline all the way around both lips",
+        "Fill in with lipstick: start at the center of your lips and press outward",
+        "Blot with a tissue — press lips onto tissue once to remove excess",
+        "For setting spray: close your eyes, hold 8 inches away, and mist in an X then a T pattern",
+        "Let the spray dry naturally — don't touch your face!"
+      ], shop: { luxury: { store: "Nordstrom", item: "Tom Ford Lip Color in Pink Dusk", price: "$58" }, mid: { store: "Ulta", item: "MAC Matte Lipstick in Velvet Teddy", price: "$22" }, budget: { store: "Target", item: "Revlon Super Lustrous in Pink in the Afternoon", price: "$8" } } },
     ],
     top: [
       { title: "Base Layer", detail: "Choose a fitted silk or satin camisole in blush, champagne, or soft cream.", tip: "Silk reflects light and elevates the soft glam vibe", shop: { luxury: { store: "Net-a-Porter", item: "Vince Silk Camisole in Blush", price: "$225" }, mid: { store: "Nordstrom", item: "Topshop Satin Cowl Neck Cami", price: "$45" }, budget: { store: "H&M", item: "Satin V-Neck Camisole Top", price: "$18" } } },
