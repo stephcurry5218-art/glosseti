@@ -257,16 +257,35 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 </div>
               )}
 
-              {/* Hotspot overlays — tap to shop on Amazon */}
+              {/* Hotspot overlays — tap to shop for specific items */}
               {Object.entries(hotspotPositions).map(([id, pos]) => {
                 const isActive = activeHotspot === id;
+                // Build a specific shop link from the actual look data
+                const getSpecificShopLink = () => {
+                  const lookName = looks[0]?.name;
+                  const categoryMap: Record<HotspotId, Category> = {
+                    makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
+                  };
+                  const cat = categoryMap[id as HotspotId];
+                  const steps = lookName && lookData[lookName]?.[cat];
+                  if (steps && steps.length > 0) {
+                    const firstWithShop = steps.find(s => s.shop);
+                    if (firstWithShop?.shop) {
+                      // Use mid-tier as default direct link (most common price point)
+                      const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
+                      return getShopUrl(tier.store, tier.item);
+                    }
+                  }
+                  // Fallback to generic Amazon search
+                  return getShopUrl("Amazon", pos.searchTerm);
+                };
                 return (
                   <button
                     key={id}
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isActive) {
-                        window.open(getShopUrl("Amazon", pos.searchTerm), "_blank", "noopener,noreferrer");
+                        window.open(getSpecificShopLink(), "_blank", "noopener,noreferrer");
                       } else {
                         setActiveHotspot(id as HotspotId);
                       }
