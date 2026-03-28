@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch, ExternalLink, BookOpen, Wrench } from "lucide-react";
+import { Home, Check, Lightbulb, ShoppingBag, ChevronDown, Crown, Sparkles, Coins, Palette, Shirt, CircleDot, Footprints, Watch, ExternalLink, BookOpen, Wrench, Play } from "lucide-react";
 import { lookData, categoryLabels, categoryOrder, tierInfo, makeupToolsChecklist } from "./lookData";
 import { getShopUrl } from "./affiliateUrls";
 import type { Category, PriceTier } from "./lookData";
