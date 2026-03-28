@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, celebrityGuide } = await req.json();
+    const { imageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, celebrityGuide, makeupPreference } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -93,6 +93,14 @@ serve(async (req) => {
         female: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and shape, color and highlight placement, texture and styling technique, volume and movement, parting and framing. Make the hair look identical to the celebrity's signature style. Professional beauty lighting.`,
         male: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and length, texture and styling, color if distinctive, facial hair pairing. Make the hair look identical to the celebrity's signature style. Professional portrait lighting.`,
       },
+      "jewelry-accessories": {
+        female: "styled with statement jewelry and accessories: layered gold necklaces, stacked rings including a diamond cocktail ring, a luxury bracelet stack, elegant drop earrings, and a designer watch. Close-up editorial styling with warm, luxurious lighting.",
+        male: "styled with premium accessories: a luxury automatic watch, a signet ring, layered chain bracelets, a sleek pendant necklace, and subtle ear studs. Close-up editorial styling with sophisticated lighting.",
+      },
+      "sunglasses-eyewear": {
+        female: "wearing stylish designer sunglasses or eyewear, perfectly framed for her face shape. Paired with a chic outfit that complements the eyewear. Fashion editorial lighting with reflections and details on the frames.",
+        male: "wearing premium designer sunglasses or eyewear that suits his face shape perfectly. Paired with a stylish outfit. Fashion editorial lighting highlighting the frame details and lens quality.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
@@ -125,6 +133,13 @@ serve(async (req) => {
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
       ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.`
+      : "";
+
+    // Makeup preference for female users
+    const makeupNote = (!isMale && makeupPreference)
+      ? makeupPreference === "natural"
+        ? "\n\nMAKEUP DIRECTION: Keep the look natural — minimal or no visible makeup. Clean, fresh skin with a barely-there beauty approach. No heavy foundation, bold lipstick, or dramatic eye makeup."
+        : "\n\nMAKEUP DIRECTION: Apply full glam makeup — flawless base, sculpted contour, defined brows, lashes, statement lips, and polished beauty styling."
       : "";
 
     // Add Gio's refinement context if available
@@ -201,8 +216,8 @@ serve(async (req) => {
             ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${makeupNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${makeupNote}${refinementNote}`;
 
       messages = [
         {

@@ -92,6 +92,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             generationMode: prefs.generationMode,
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
             ...(prefs.celebrityGuide ? { celebrityGuide: prefs.celebrityGuide } : {}),
+            ...(prefs.makeupPreference ? { makeupPreference: prefs.makeupPreference } : {}),
           },
         });
         if (error || data?.error) {

@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
-import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon } from "lucide-react";
+import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 
 interface Props {
   prefs: UserPrefs;
   onBack: () => void;
-  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode) => void;
+  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode, makeupPref?: "natural" | "glam") => void;
 }
 
 const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
@@ -15,6 +15,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const [base64, setBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
   const [mode, setMode] = useState<GenerationMode>(prefs.generationMode);
+  const [makeupPref, setMakeupPref] = useState<"natural" | "glam">(prefs.makeupPreference || "natural");
   const isMale = prefs.gender === "male";
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
@@ -35,6 +36,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
   const canProceed = isMannequin || !!file;
+  const showMakeupPref = !isMale && !isMakeup && !isHairOnly;
 
   return (
     <div className="screen enter" style={{ minHeight: "100%" }}>
@@ -202,6 +204,46 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
 
+        {/* Makeup preference for female users */}
+        {showMakeupPref && !isMannequin && (
+          <div className="anim-fadeUp d2" style={{
+            marginTop: 16, display: "flex", gap: 6,
+            background: "hsl(var(--card))",
+            borderRadius: 16, padding: 4,
+            border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+          }}>
+            {([
+              { id: "natural" as const, label: "Natural Look", Icon: Flower2, desc: "Minimal or no makeup" },
+              { id: "glam" as const, label: "Glam Makeup", Icon: Gem, desc: "Full glam styling" },
+            ]).map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => setMakeupPref(opt.id)}
+                style={{
+                  flex: 1, padding: "10px 8px", borderRadius: 12,
+                  border: "none",
+                  background: makeupPref === opt.id
+                    ? `linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-rose)))`
+                    : "transparent",
+                  cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                  transition: "all 0.25s ease",
+                }}
+              >
+                <opt.Icon size={18} color={makeupPref === opt.id ? "white" : "hsl(var(--glamora-gray))"} />
+                <span style={{
+                  fontSize: 12, fontWeight: 600,
+                  color: makeupPref === opt.id ? "white" : "hsl(var(--glamora-char))",
+                }}>{opt.label}</span>
+                <span style={{
+                  fontSize: 10,
+                  color: makeupPref === opt.id ? "hsla(0 0% 100% / 0.75)" : "hsl(var(--glamora-gray))",
+                }}>{opt.desc}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {!isMannequin && (
           <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
             <div className="section-label">Tips for Best Results</div>
@@ -241,7 +283,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               opacity: canProceed ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8,
               ...(canProceed && isMale ? { background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))" } : {}),
             }}
-            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode)}
+            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode, showMakeupPref ? makeupPref : undefined)}
           >
             {isMannequin
               ? (<>Generate Mannequin Look <ShirtIcon size={16} /></>)
