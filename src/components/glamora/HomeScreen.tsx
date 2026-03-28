@@ -39,8 +39,18 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
 
         {/* Top bar */}
         <div style={{ position: "relative", zIndex: 5, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "44px 20px 0" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="/glosseti-icon-only.png" alt="Glosseti" style={{ width: 36, height: 36, objectFit: "contain" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <img src="/glosseti-icon-only.png" alt="Glosseti" style={{
+              width: 40, height: 40, objectFit: "contain",
+              filter: "drop-shadow(0 2px 8px hsla(var(--glamora-gold) / 0.4))",
+            }} />
+            <span className="serif" style={{
+              fontSize: 22, fontWeight: 700, letterSpacing: 1.5,
+              background: `linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))`,
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              textShadow: "none",
+              filter: "drop-shadow(0 1px 6px hsla(var(--glamora-gold) / 0.3))",
+            }}>GLOSSETI</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{
