@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown } from "lucide-react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
@@ -340,6 +340,23 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "braided-updo", label: "Braided Updo", desc: "Elegant braided styles pinned up for formal occasions", emoji: "🎀" },
       { id: "blowout", label: "Blowout", desc: "Voluminous bouncy blowout with body and movement", emoji: "💨" },
       { id: "buzz-cut", label: "Buzz Cut", desc: "Ultra-short, clean, and low-maintenance", emoji: "🔲" },
+    ],
+  },
+  {
+    id: "bags-purses", label: "Bags & Purses", Icon: ShoppingBag,
+    desc: "Carry in style — totes, crossbodies, clutches, backpacks, and designer bags",
+    includes: ["Tote Bags", "Crossbody Bags", "Clutches", "Backpacks", "Shoulder Bags"],
+    subs: [
+      { id: "tote", label: "Tote Bag", desc: "Spacious everyday carry — leather, canvas, or structured", emoji: "👜" },
+      { id: "crossbody", label: "Crossbody", desc: "Hands-free and compact — ideal for day or night", emoji: "💼" },
+      { id: "clutch", label: "Clutch", desc: "Elegant evening essential — slim and statement", emoji: "✨" },
+      { id: "backpack", label: "Backpack", desc: "Practical meets stylish — leather or nylon", emoji: "🎒" },
+      { id: "shoulder-bag", label: "Shoulder Bag", desc: "Classic silhouette — hobo, baguette, or structured", emoji: "👛" },
+      { id: "belt-bag", label: "Belt Bag / Fanny Pack", desc: "Trendy hands-free — sporty to luxury", emoji: "🪢" },
+      { id: "mini-bag", label: "Mini Bag", desc: "Tiny statement piece — just the essentials", emoji: "🤏" },
+      { id: "weekender", label: "Weekender / Duffle", desc: "Overnight travel bag with style and space", emoji: "🧳" },
+      { id: "bucket-bag", label: "Bucket Bag", desc: "Slouchy drawstring silhouette — casual luxury", emoji: "🪣" },
+      { id: "designer-classic", label: "Designer Classic", desc: "Iconic luxury bags — Birkin, Chanel Flap, Lady Dior", emoji: "💎" },
     ],
   },
 ];
