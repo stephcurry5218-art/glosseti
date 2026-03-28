@@ -599,7 +599,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   },
   "Meadow Dream": {
     makeup: [
-      { title: "Dewy Natural Glow", detail: "Tinted moisturizer, cream blush in soft peach, fluffy natural brows, and a tinted lip balm in berry or rose.", shop: { luxury: { store: "Sephora", item: "Glossier Cloud Paint in Dusk + Boy Brow", price: "$36" }, mid: { store: "Ulta", item: "Rare Beauty Soft Pinch Blush in Joy", price: "$23" }, budget: { store: "Target", item: "Flower Beauty Blush Bomb in Pinched", price: "$10" } } },
+      { title: "Dewy Natural Glow", detail: "Tinted moisturizer, cream blush in soft peach, fluffy natural brows, and a tinted lip balm in berry or rose.", shop: { luxury: { store: "Glossier", item: "Glossier Cloud Paint in Dusk + Boy Brow", price: "$36" }, mid: { store: "Rare Beauty", item: "Rare Beauty Soft Pinch Blush in Joy", price: "$23" }, budget: { store: "Target", item: "Flower Beauty Blush Bomb in Pinched", price: "$10" } } },
       { title: "Freckles & Fresh Skin", detail: "Fake freckles with a brow pencil, dewy setting spray, and minimal mascara for a fresh-from-the-garden look.", shop: { luxury: { store: "Sephora", item: "MILK Makeup Hydro Grip Setting Spray", price: "$36" }, mid: { store: "Ulta", item: "e.l.f. Power Grip Dewy Setting Spray", price: "$10" }, budget: { store: "Amazon", item: "NYX Dewy Finish Setting Spray", price: "$8" } } },
     ],
     top: [
