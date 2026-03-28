@@ -351,7 +351,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   },
   "Rebel Noir": {
     makeup: [
-      { title: "Matte Base", detail: "Full-coverage matte foundation. Contour sharply under cheekbones and jawline.", shop: { luxury: { store: "Sephora", item: "Fenty Beauty Pro Filt'r Matte Foundation", price: "$40" }, mid: { store: "Ulta", item: "NYX Can't Stop Won't Stop Foundation", price: "$15" }, budget: { store: "Amazon", item: "Maybelline Fit Me Matte Foundation", price: "$8" } } },
+      { title: "Matte Base", detail: "Full-coverage matte foundation. Contour sharply under cheekbones and jawline.", shop: { luxury: { store: "Fenty Beauty", item: "Fenty Beauty Pro Filt'r Matte Foundation", price: "$40" }, mid: { store: "Ulta", item: "NYX Can't Stop Won't Stop Foundation", price: "$15" }, budget: { store: "Amazon", item: "Maybelline Fit Me Matte Foundation", price: "$8" } } },
       { title: "Smoky Eyes", detail: "Black and charcoal smoky eye. Smudge liner along upper and lower lash lines. Heavy mascara.", tip: "Use a small brush to smoke out the lower lash line", shop: { luxury: { store: "Sephora", item: "Urban Decay Naked Smoky Palette", price: "$54" }, mid: { store: "Ulta", item: "NYX Ultimate Shadow Palette Smokey", price: "$18" }, budget: { store: "Amazon", item: "Rimmel Magnif'Eyes Smoke Edition", price: "$7" } } },
       { title: "Dark Lip", detail: "Matte black, deep oxblood, or dark plum lip. Line and fill with precision.", shop: { luxury: { store: "Nordstrom", item: "MAC Matte Lipstick in Diva", price: "$22" }, mid: { store: "Ulta", item: "NYX Suede Matte in Alien", price: "$8" }, budget: { store: "Amazon", item: "Wet n Wild MegaLast in Vamp It Up", price: "$3" } } },
     ],
