@@ -93,6 +93,14 @@ serve(async (req) => {
         female: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and shape, color and highlight placement, texture and styling technique, volume and movement, parting and framing. Make the hair look identical to the celebrity's signature style. Professional beauty lighting.`,
         male: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and length, texture and styling, color if distinctive, facial hair pairing. Make the hair look identical to the celebrity's signature style. Professional portrait lighting.`,
       },
+      "jewelry-accessories": {
+        female: "styled with statement jewelry and accessories: layered gold necklaces, stacked rings including a diamond cocktail ring, a luxury bracelet stack, elegant drop earrings, and a designer watch. Close-up editorial styling with warm, luxurious lighting.",
+        male: "styled with premium accessories: a luxury automatic watch, a signet ring, layered chain bracelets, a sleek pendant necklace, and subtle ear studs. Close-up editorial styling with sophisticated lighting.",
+      },
+      "sunglasses-eyewear": {
+        female: "wearing stylish designer sunglasses or eyewear, perfectly framed for her face shape. Paired with a chic outfit that complements the eyewear. Fashion editorial lighting with reflections and details on the frames.",
+        male: "wearing premium designer sunglasses or eyewear that suits his face shape perfectly. Paired with a stylish outfit. Fashion editorial lighting highlighting the frame details and lens quality.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
