@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon } from "lucide-react";
+import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 
 interface Props {
