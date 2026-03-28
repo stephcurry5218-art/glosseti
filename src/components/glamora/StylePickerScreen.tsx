@@ -9,16 +9,17 @@ interface Props {
   onNext: (category: StyleCategory, celebrityGuide?: string, subcategory?: string) => void;
 }
 
-const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: string; includes: string[]; genderLabel?: { male: string; female: string }; subs: { id: string; label: string; desc: string }[] }[] = [
+const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: string; includes: string[]; genderLabel?: { male: string; female: string }; subs: { id: string; label: string; desc: string; emoji: string }[] }[] = [
   {
     id: "full-style", label: "Full Style", Icon: Shirt,
     desc: "Complete head-to-toe outfit with accessories, shoes, and grooming",
     includes: ["Tops & Layers", "Bottoms", "Shoes & Socks", "Watches & Jewelry", "Bags"],
     subs: [
-      { id: "smart-casual", label: "Smart Casual", desc: "Polished but relaxed — blazer + sneakers energy" },
-      { id: "power-outfit", label: "Power Outfit", desc: "Commanding, confident, head-turning ensemble" },
-      { id: "brunch-ready", label: "Brunch Ready", desc: "Effortlessly chic for a weekend outing" },
-      { id: "night-out", label: "Night Out", desc: "Going out? Stand out with this curated look" },
+      { id: "smart-casual", label: "Smart Casual", desc: "Polished but relaxed — blazer + sneakers energy", emoji: "🧥" },
+      { id: "power-outfit", label: "Power Outfit", desc: "Commanding, confident, head-turning ensemble", emoji: "💼" },
+      { id: "brunch-ready", label: "Brunch Ready", desc: "Effortlessly chic for a weekend outing", emoji: "🥂" },
+      { id: "night-out", label: "Night Out", desc: "Going out? Stand out with this curated look", emoji: "🌙" },
+      { id: "monochrome-set", label: "Monochrome Set", desc: "Head-to-toe in one color family — elevated and intentional", emoji: "⬛" },
     ],
   },
   {
@@ -26,10 +27,11 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Urban-inspired looks with sneakers, hoodies, and statement pieces",
     includes: ["Graphic Tees & Hoodies", "Cargos & Baggy Jeans", "Sneakers & Boots", "Caps & Chains"],
     subs: [
-      { id: "japanese-street", label: "Japanese Street", desc: "Harajuku-inspired layering and bold silhouettes" },
-      { id: "hypebeast", label: "Hypebeast", desc: "Designer-heavy flex with rare drops and collabs" },
-      { id: "skater", label: "Skater", desc: "Loose fits, Vans, and graphic-heavy tees" },
-      { id: "gorpcore", label: "Gorpcore", desc: "Outdoorsy tech meets city — trail runners, fleece, utility" },
+      { id: "japanese-street", label: "Japanese Street", desc: "Harajuku-inspired layering and bold silhouettes", emoji: "🏯" },
+      { id: "hypebeast", label: "Hypebeast", desc: "Designer-heavy flex with rare drops and collabs", emoji: "🔥" },
+      { id: "skater", label: "Skater", desc: "Loose fits, Vans, and graphic-heavy tees", emoji: "🛹" },
+      { id: "gorpcore", label: "Gorpcore", desc: "Outdoorsy tech meets city — trail runners, fleece, utility", emoji: "🏔️" },
+      { id: "oversized-layers", label: "Oversized Layers", desc: "Chunky hoodies, puffer vests, and baggy proportions", emoji: "🧤" },
     ],
   },
   {
@@ -37,9 +39,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Clean, intentional, timeless — quality over quantity",
     includes: ["Essential Tees & Knits", "Tailored Trousers", "Clean Sneakers", "Minimal Watches"],
     subs: [
-      { id: "scandinavian", label: "Scandinavian", desc: "Neutral tones, clean lines, cozy textures" },
-      { id: "monochrome", label: "Monochrome", desc: "Single-tone outfits with tonal layering" },
-      { id: "capsule-wardrobe", label: "Capsule Wardrobe", desc: "Max versatility from minimal pieces" },
+      { id: "scandinavian", label: "Scandinavian", desc: "Neutral tones, clean lines, cozy textures", emoji: "❄️" },
+      { id: "monochrome", label: "Monochrome", desc: "Single-tone outfits with tonal layering", emoji: "⚪" },
+      { id: "capsule-wardrobe", label: "Capsule Wardrobe", desc: "Max versatility from minimal pieces", emoji: "🎯" },
+      { id: "quiet-luxury", label: "Quiet Luxury", desc: "No logos, just impeccable fabric and fit", emoji: "🤫" },
     ],
   },
   {
@@ -47,10 +50,11 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "60s mod, 70s boho, 90s grunge — pull from the best eras",
     includes: ["Printed Shirts", "Flare Jeans", "Platform Shoes", "Retro Sunglasses"],
     subs: [
-      { id: "70s-boho", label: "70s Boho", desc: "Flowy fabrics, fringe, earthy tones" },
-      { id: "90s-grunge", label: "90s Grunge", desc: "Flannel, ripped denim, combat boots" },
-      { id: "60s-mod", label: "60s Mod", desc: "Sharp lines, bold patterns, mini silhouettes" },
-      { id: "80s-glam", label: "80s Glam", desc: "Neon, power shoulders, and statement everything" },
+      { id: "70s-boho", label: "70s Boho", desc: "Flowy fabrics, fringe, earthy tones", emoji: "🌻" },
+      { id: "90s-grunge", label: "90s Grunge", desc: "Flannel, ripped denim, combat boots", emoji: "🎸" },
+      { id: "60s-mod", label: "60s Mod", desc: "Sharp lines, bold patterns, mini silhouettes", emoji: "🕺" },
+      { id: "80s-glam", label: "80s Glam", desc: "Neon, power shoulders, and statement everything", emoji: "🪩" },
+      { id: "50s-pin-up", label: "50s Pin-Up", desc: "Polka dots, high-waisted, classic glamour", emoji: "💋" },
     ],
   },
   {
@@ -58,9 +62,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Gym-to-street style — performance fabrics meet fashion",
     includes: ["Performance Tees", "Joggers & Shorts", "Running Sneakers", "Smart Watches"],
     subs: [
-      { id: "yoga-chic", label: "Yoga Chic", desc: "Matching sets, earth tones, zen-to-street" },
-      { id: "gym-to-brunch", label: "Gym to Brunch", desc: "Sporty but put-together enough for coffee" },
-      { id: "performance-luxe", label: "Performance Luxe", desc: "Premium athletic brands styled elevated" },
+      { id: "yoga-chic", label: "Yoga Chic", desc: "Matching sets, earth tones, zen-to-street", emoji: "🧘" },
+      { id: "gym-to-brunch", label: "Gym to Brunch", desc: "Sporty but put-together enough for coffee", emoji: "☕" },
+      { id: "performance-luxe", label: "Performance Luxe", desc: "Premium athletic brands styled elevated", emoji: "🏆" },
+      { id: "running-fit", label: "Running Fit", desc: "Sleek performance gear styled for the streets", emoji: "🏃" },
     ],
   },
   {
@@ -68,10 +73,11 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Professional and elegant looks for work and events",
     includes: ["Suits & Blazers", "Dress Shirts", "Dress Shoes", "Ties & Cufflinks"],
     subs: [
-      { id: "black-tie", label: "Black Tie", desc: "Tuxedos, gowns, and red-carpet polish" },
-      { id: "business-modern", label: "Business Modern", desc: "Tailored fits with contemporary edge" },
-      { id: "cocktail", label: "Cocktail", desc: "Semiformal elegance for evening events" },
-      { id: "boardroom", label: "Boardroom", desc: "CEO-level power dressing" },
+      { id: "black-tie", label: "Black Tie", desc: "Tuxedos, gowns, and red-carpet polish", emoji: "🎩" },
+      { id: "business-modern", label: "Business Modern", desc: "Tailored fits with contemporary edge", emoji: "👔" },
+      { id: "cocktail", label: "Cocktail", desc: "Semiformal elegance for evening events", emoji: "🍸" },
+      { id: "boardroom", label: "Boardroom", desc: "CEO-level power dressing", emoji: "💎" },
+      { id: "gala-evening", label: "Gala Evening", desc: "Floor-length gowns, cufflinks, and opulence", emoji: "✨" },
     ],
   },
   {
@@ -79,9 +85,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Effortless daily outfits that look put-together",
     includes: ["Tees & Knits", "Jeans & Chinos", "Sneakers & Loafers"],
     subs: [
-      { id: "weekend-chill", label: "Weekend Chill", desc: "Relaxed fits for errands and hangouts" },
-      { id: "elevated-basics", label: "Elevated Basics", desc: "Simple pieces that feel premium" },
-      { id: "cozy-layered", label: "Cozy Layered", desc: "Knits, flannels, and warm-tone comfort" },
+      { id: "weekend-chill", label: "Weekend Chill", desc: "Relaxed fits for errands and hangouts", emoji: "😎" },
+      { id: "elevated-basics", label: "Elevated Basics", desc: "Simple pieces that feel premium", emoji: "👕" },
+      { id: "cozy-layered", label: "Cozy Layered", desc: "Knits, flannels, and warm-tone comfort", emoji: "🧣" },
+      { id: "denim-on-denim", label: "Denim on Denim", desc: "Canadian tuxedo but make it fashion", emoji: "👖" },
     ],
   },
   {
@@ -89,9 +96,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Free-spirited, earthy, layered textures and flowing silhouettes",
     includes: ["Flowy Tops", "Wide-Leg Pants", "Sandals & Boots", "Layered Jewelry"],
     subs: [
-      { id: "festival", label: "Festival", desc: "Coachella-ready with fringe, crochet, and boots" },
-      { id: "earthy-boho", label: "Earthy Boho", desc: "Muted tones, linen, natural textures" },
-      { id: "boho-glam", label: "Boho Glam", desc: "Free-spirited with a touch of sparkle" },
+      { id: "festival", label: "Festival", desc: "Coachella-ready with fringe, crochet, and boots", emoji: "🎪" },
+      { id: "earthy-boho", label: "Earthy Boho", desc: "Muted tones, linen, natural textures", emoji: "🍂" },
+      { id: "boho-glam", label: "Boho Glam", desc: "Free-spirited with a touch of sparkle", emoji: "🌟" },
+      { id: "desert-nomad", label: "Desert Nomad", desc: "Flowing robes, turquoise jewelry, sun-washed tones", emoji: "🏜️" },
     ],
   },
   {
@@ -99,9 +107,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Ivy League polish — blazers, loafers, clean patterns",
     includes: ["Polo Shirts & Oxfords", "Chinos & Pleated Trousers", "Loafers & Boat Shoes", "Belts & Watches"],
     subs: [
-      { id: "old-money", label: "Old Money", desc: "Quiet luxury — cashmere, navy, and heritage brands" },
-      { id: "country-club", label: "Country Club", desc: "Tennis whites, pastels, and boat shoes" },
-      { id: "academic", label: "Dark Academia", desc: "Tweed, turtlenecks, and vintage spectacles" },
+      { id: "old-money", label: "Old Money", desc: "Quiet luxury — cashmere, navy, and heritage brands", emoji: "🏛️" },
+      { id: "country-club", label: "Country Club", desc: "Tennis whites, pastels, and boat shoes", emoji: "🎾" },
+      { id: "academic", label: "Dark Academia", desc: "Tweed, turtlenecks, and vintage spectacles", emoji: "📚" },
+      { id: "ivy-league", label: "Ivy League", desc: "Varsity jackets, oxford shirts, and class rings", emoji: "🎓" },
     ],
   },
   {
@@ -109,9 +118,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Leather, studs, dark tones — rebellious and bold",
     includes: ["Leather Jackets", "Ripped Denim", "Combat Boots", "Chain Accessories"],
     subs: [
-      { id: "goth", label: "Goth", desc: "All-black, dramatic, and darkly romantic" },
-      { id: "punk-rock", label: "Punk Rock", desc: "Band tees, safety pins, and plaid" },
-      { id: "biker", label: "Biker", desc: "Heavy leather, studs, and moto boots" },
+      { id: "goth", label: "Goth", desc: "All-black, dramatic, and darkly romantic", emoji: "🖤" },
+      { id: "punk-rock", label: "Punk Rock", desc: "Band tees, safety pins, and plaid", emoji: "🤘" },
+      { id: "biker", label: "Biker", desc: "Heavy leather, studs, and moto boots", emoji: "🏍️" },
+      { id: "grunge-revival", label: "Grunge Revival", desc: "Oversized flannels, docs, and messy layers", emoji: "⛓️" },
     ],
   },
   {
@@ -119,9 +129,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Relaxed luxury for beach, travel, and warm-weather vibes",
     includes: ["Linen Shirts", "Swim & Shorts", "Sandals & Espadrilles", "Straw Accessories"],
     subs: [
-      { id: "tropical-luxe", label: "Tropical Luxe", desc: "Prints, linen, and resort-wear elegance" },
-      { id: "coastal-casual", label: "Coastal Casual", desc: "Breezy and sun-bleached — effortless beach town" },
-      { id: "yacht-club", label: "Yacht Club", desc: "Nautical stripes, whites, and deck shoes" },
+      { id: "tropical-luxe", label: "Tropical Luxe", desc: "Prints, linen, and resort-wear elegance", emoji: "🌴" },
+      { id: "coastal-casual", label: "Coastal Casual", desc: "Breezy and sun-bleached — effortless beach town", emoji: "🐚" },
+      { id: "yacht-club", label: "Yacht Club", desc: "Nautical stripes, whites, and deck shoes", emoji: "⛵" },
+      { id: "island-hopper", label: "Island Hopper", desc: "Lightweight layers for tropical adventures", emoji: "🏝️" },
     ],
   },
   {
@@ -130,10 +141,11 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Focus on face — skincare, grooming, and beauty routine",
     includes: ["Primer & Base", "Eyes & Brows", "Lips", "Skincare"],
     subs: [
-      { id: "soft-glam", label: "Soft Glam", desc: "Dewy skin, neutral eyes, glossy lips" },
-      { id: "bold-beat", label: "Bold Beat", desc: "Full-coverage, dramatic eyes, statement lips" },
-      { id: "no-makeup-makeup", label: "No-Makeup Makeup", desc: "Barely-there beauty that enhances naturally" },
-      { id: "editorial", label: "Editorial", desc: "Avant-garde, high-fashion, artistic expression" },
+      { id: "soft-glam", label: "Soft Glam", desc: "Dewy skin, neutral eyes, glossy lips", emoji: "✨" },
+      { id: "bold-beat", label: "Bold Beat", desc: "Full-coverage, dramatic eyes, statement lips", emoji: "💄" },
+      { id: "no-makeup-makeup", label: "No-Makeup Makeup", desc: "Barely-there beauty that enhances naturally", emoji: "🌿" },
+      { id: "editorial", label: "Editorial", desc: "Avant-garde, high-fashion, artistic expression", emoji: "🎨" },
+      { id: "glass-skin", label: "Glass Skin", desc: "K-beauty inspired luminous, hydrated perfection", emoji: "💧" },
     ],
   },
   {
@@ -141,9 +153,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Hair, beard, skincare — the complete grooming playbook",
     includes: ["Haircut Styles", "Beard & Shave", "Skincare Routine", "Fragrance"],
     subs: [
-      { id: "clean-cut", label: "Clean Cut", desc: "Sharp fade, clean shave, polished skin" },
-      { id: "rugged-grooming", label: "Rugged Grooming", desc: "Well-kept beard, textured hair, natural skin" },
-      { id: "modern-gent", label: "Modern Gent", desc: "Styled hair, trimmed stubble, curated fragrance" },
+      { id: "clean-cut", label: "Clean Cut", desc: "Sharp fade, clean shave, polished skin", emoji: "✂️" },
+      { id: "rugged-grooming", label: "Rugged Grooming", desc: "Well-kept beard, textured hair, natural skin", emoji: "🧔" },
+      { id: "modern-gent", label: "Modern Gent", desc: "Styled hair, trimmed stubble, curated fragrance", emoji: "🪞" },
+      { id: "buzz-fresh", label: "Buzz & Fresh", desc: "Buzz cut, clean skin, minimal effort max impact", emoji: "💈" },
     ],
   },
   {
@@ -151,9 +164,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Bold, body-confident looks that turn heads",
     includes: ["Bodycon Dresses", "Cut-Out Tops", "Strappy Heels", "Statement Jewelry"],
     subs: [
-      { id: "bombshell", label: "Bombshell", desc: "Classic Hollywood curves and confidence" },
-      { id: "sleek-sultry", label: "Sleek & Sultry", desc: "Minimalist but impossibly sexy silhouettes" },
-      { id: "va-va-voom", label: "Va Va Voom", desc: "Red dress energy — bold color, bold attitude" },
+      { id: "bombshell", label: "Bombshell", desc: "Classic Hollywood curves and confidence", emoji: "🔥" },
+      { id: "sleek-sultry", label: "Sleek & Sultry", desc: "Minimalist but impossibly sexy silhouettes", emoji: "🖤" },
+      { id: "va-va-voom", label: "Va Va Voom", desc: "Red dress energy — bold color, bold attitude", emoji: "❤️" },
+      { id: "diamond-drip", label: "Diamond Drip", desc: "Sparkling jewelry, statement necklaces, and bling", emoji: "💍" },
     ],
   },
   {
@@ -161,9 +175,12 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Bikinis, cover-ups, and beach-ready accessories",
     includes: ["Bikinis & One-Pieces", "Cover-Ups & Sarongs", "Sandals & Slides", "Sunglasses & Hats"],
     subs: [
-      { id: "beach-goddess", label: "Beach Goddess", desc: "Luxe one-pieces, gold jewelry, and sarongs" },
-      { id: "sporty-swim", label: "Sporty Swim", desc: "Athletic cuts, bold colors, active beach style" },
-      { id: "tropical-glam", label: "Tropical Glam", desc: "Print bikinis, statement cover-ups, resort vibes" },
+      { id: "beach-goddess", label: "Beach Goddess", desc: "Luxe one-pieces, gold jewelry, and sarongs", emoji: "👑" },
+      { id: "sporty-swim", label: "Sporty Swim", desc: "Athletic cuts, bold colors, active beach style", emoji: "🏄" },
+      { id: "tropical-glam", label: "Tropical Glam", desc: "Print bikinis, statement cover-ups, resort vibes", emoji: "🌺" },
+      { id: "two-piece-set", label: "Two-Piece Set", desc: "Coordinated bikini top and bottom — classic and flattering", emoji: "👙" },
+      { id: "monokini", label: "Monokini", desc: "Cut-out one-piece with revealing details", emoji: "🐠" },
+      { id: "swim-with-jewelry", label: "Swim & Jewelry", desc: "Beach look with waterproof chains, anklets, and rings", emoji: "💎" },
     ],
   },
   {
@@ -171,9 +188,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Bold streetwear with hip-hop flair — drip and swagger",
     includes: ["Designer Tees & Jerseys", "Baggy Denim & Cargos", "Fresh Kicks", "Chains & Grillz"],
     subs: [
-      { id: "trap-drip", label: "Trap Drip", desc: "Designer heavy, iced out, and flexing" },
-      { id: "boom-bap", label: "Boom Bap Classic", desc: "90s hip-hop vibes — Timbs, baggy jeans, Starter jackets" },
-      { id: "afro-futurism", label: "Afrofuturism", desc: "Bold prints, metallic accents, cultural fusion" },
+      { id: "trap-drip", label: "Trap Drip", desc: "Designer heavy, iced out, and flexing", emoji: "💰" },
+      { id: "boom-bap", label: "Boom Bap Classic", desc: "90s hip-hop vibes — Timbs, baggy jeans, Starter jackets", emoji: "🎤" },
+      { id: "afro-futurism", label: "Afrofuturism", desc: "Bold prints, metallic accents, cultural fusion", emoji: "🌍" },
+      { id: "diamond-chains", label: "Diamond Chains", desc: "Cuban links, diamond pendants, and iced-out watches", emoji: "💎" },
     ],
   },
   {
@@ -181,9 +199,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Tough, utilitarian style — built to last and look good",
     includes: ["Flannels & Henleys", "Raw Denim & Work Pants", "Boots", "Leather Belts"],
     subs: [
-      { id: "lumberjack", label: "Lumberjack", desc: "Flannel, denim, and heritage boots" },
-      { id: "military-surplus", label: "Military Surplus", desc: "Olive, khaki, and tactical utility" },
-      { id: "americana", label: "Americana", desc: "Denim-on-denim, workboots, and leather goods" },
+      { id: "lumberjack", label: "Lumberjack", desc: "Flannel, denim, and heritage boots", emoji: "🪓" },
+      { id: "military-surplus", label: "Military Surplus", desc: "Olive, khaki, and tactical utility", emoji: "🎖️" },
+      { id: "americana", label: "Americana", desc: "Denim-on-denim, workboots, and leather goods", emoji: "🦅" },
+      { id: "ranch-hand", label: "Ranch Hand", desc: "Western boots, leather belts, and sturdy denim", emoji: "🤠" },
     ],
   },
   {
@@ -191,9 +210,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Futuristic utility — tech fabrics, modular gear, dark tones",
     includes: ["Technical Jackets", "Cargo Joggers", "Trail Runners", "Tactical Bags"],
     subs: [
-      { id: "cyberpunk", label: "Cyberpunk", desc: "Neon accents, dark base, sci-fi silhouettes" },
-      { id: "urban-ninja", label: "Urban Ninja", desc: "All-black, sleek, modular and minimal" },
-      { id: "outdoor-tech", label: "Outdoor Tech", desc: "Trail-ready with city aesthetics" },
+      { id: "cyberpunk", label: "Cyberpunk", desc: "Neon accents, dark base, sci-fi silhouettes", emoji: "🤖" },
+      { id: "urban-ninja", label: "Urban Ninja", desc: "All-black, sleek, modular and minimal", emoji: "🥷" },
+      { id: "outdoor-tech", label: "Outdoor Tech", desc: "Trail-ready with city aesthetics", emoji: "⚡" },
+      { id: "dystopian", label: "Dystopian", desc: "Post-apocalyptic layers, utility straps, dark palettes", emoji: "🌑" },
     ],
   },
   {
@@ -201,9 +221,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Polished and alluring — dress to impress",
     includes: ["Fitted Blazers & Dresses", "Heels & Dress Shoes", "Fragrance", "Accessories"],
     subs: [
-      { id: "romantic-dinner", label: "Romantic Dinner", desc: "Candlelit vibes — elegant and refined" },
-      { id: "drinks-rooftop", label: "Drinks & Rooftop", desc: "Trendy, slightly edgy, conversation-starting" },
-      { id: "first-date", label: "First Date", desc: "Approachable yet impressive — confident charm" },
+      { id: "romantic-dinner", label: "Romantic Dinner", desc: "Candlelit vibes — elegant and refined", emoji: "🕯️" },
+      { id: "drinks-rooftop", label: "Drinks & Rooftop", desc: "Trendy, slightly edgy, conversation-starting", emoji: "🍷" },
+      { id: "first-date", label: "First Date", desc: "Approachable yet impressive — confident charm", emoji: "💐" },
+      { id: "anniversary", label: "Anniversary", desc: "Timeless elegance with a personal touch", emoji: "💝" },
     ],
   },
   {
@@ -211,9 +232,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Elegant intimate wear — lace, silk, and delicate details",
     includes: ["Bralettes & Corsets", "Silk Robes & Slips", "Lace Sets", "Loungewear"],
     subs: [
-      { id: "romantic-lace", label: "Romantic Lace", desc: "Soft, feminine, and delicately detailed" },
-      { id: "modern-minimal", label: "Modern Minimal", desc: "Clean lines, sleek fabrics, understated" },
-      { id: "luxury-silk", label: "Luxury Silk", desc: "Satin robes, silk slips, old-Hollywood intimacy" },
+      { id: "romantic-lace", label: "Romantic Lace", desc: "Soft, feminine, and delicately detailed", emoji: "🌹" },
+      { id: "modern-minimal", label: "Modern Minimal", desc: "Clean lines, sleek fabrics, understated", emoji: "🤍" },
+      { id: "luxury-silk", label: "Luxury Silk", desc: "Satin robes, silk slips, old-Hollywood intimacy", emoji: "🥂" },
+      { id: "two-piece-lace", label: "Two-Piece Lace Set", desc: "Matching bralette and bottom in delicate lace", emoji: "🎀" },
     ],
   },
   {
@@ -221,9 +243,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Early 2000s nostalgia — low-rise, butterfly tops, frosted lips",
     includes: ["Crop Tops & Halters", "Mini Skirts & Low-Rise Jeans", "Platform Shoes", "Tinted Sunglasses & Belly Chains"],
     subs: [
-      { id: "paris-hilton", label: "Paris Hilton Era", desc: "Pink, bedazzled, and unapologetically extra" },
-      { id: "skater-y2k", label: "Skater Y2K", desc: "Baggy pants, baby tees, and chunky shoes" },
-      { id: "cyber-y2k", label: "Cyber Y2K", desc: "Metallic, futuristic, and rave-inspired" },
+      { id: "paris-hilton", label: "Paris Hilton Era", desc: "Pink, bedazzled, and unapologetically extra", emoji: "💖" },
+      { id: "skater-y2k", label: "Skater Y2K", desc: "Baggy pants, baby tees, and chunky shoes", emoji: "🛼" },
+      { id: "cyber-y2k", label: "Cyber Y2K", desc: "Metallic, futuristic, and rave-inspired", emoji: "🪐" },
+      { id: "belly-chain-era", label: "Belly Chain Era", desc: "Body jewelry, low-rise everything, and nameplate necklaces", emoji: "⛓️" },
     ],
   },
   {
@@ -231,9 +254,10 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Romantic countryside aesthetic — florals, linen, wicker",
     includes: ["Floral Dresses", "Puff-Sleeve Blouses", "Mary Janes & Leather Boots", "Straw Hats & Wicker Bags"],
     subs: [
-      { id: "english-garden", label: "English Garden", desc: "Florals, tea dresses, and delicate embroidery" },
-      { id: "farmhouse-chic", label: "Farmhouse Chic", desc: "Linen aprons, wicker baskets, rustic charm" },
-      { id: "fairy-tale", label: "Fairy Tale", desc: "Puff sleeves, ribbons, and whimsical details" },
+      { id: "english-garden", label: "English Garden", desc: "Florals, tea dresses, and delicate embroidery", emoji: "🌷" },
+      { id: "farmhouse-chic", label: "Farmhouse Chic", desc: "Linen aprons, wicker baskets, rustic charm", emoji: "🧺" },
+      { id: "fairy-tale", label: "Fairy Tale", desc: "Puff sleeves, ribbons, and whimsical details", emoji: "🧚" },
+      { id: "meadow-picnic", label: "Meadow Picnic", desc: "Gingham, straw hats, and sun-dappled charm", emoji: "🌾" },
     ],
   },
   {
