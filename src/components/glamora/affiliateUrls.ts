@@ -38,6 +38,41 @@ const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam
   "Bonobos": { base: (q) => `https://bonobos.com/search?q=${encodeURIComponent(q)}` },
   "Sperry": { base: (q) => `https://www.sperry.com/en/search?q=${encodeURIComponent(q)}` },
   "L.L.Bean": { base: (q) => `https://www.llbean.com/llb/search/?freeText=${encodeURIComponent(q)}` },
+  // Athletic & Sneaker Brands
+  "Nike": { base: (q) => `https://www.nike.com/w?q=${encodeURIComponent(q)}` },
+  "Adidas": { base: (q) => `https://www.adidas.com/us/search?q=${encodeURIComponent(q)}` },
+  "New Balance": { base: (q) => `https://www.newbalance.com/search/?q=${encodeURIComponent(q)}` },
+  "Puma": { base: (q) => `https://us.puma.com/us/en/search?q=${encodeURIComponent(q)}` },
+  "Reebok": { base: (q) => `https://www.reebok.com/us/search?q=${encodeURIComponent(q)}` },
+  "Under Armour": { base: (q) => `https://www.underarmour.com/en-us/search?q=${encodeURIComponent(q)}` },
+  "ASICS": { base: (q) => `https://www.asics.com/us/en-us/search?q=${encodeURIComponent(q)}` },
+  "Converse": { base: (q) => `https://www.converse.com/search?q=${encodeURIComponent(q)}` },
+  "Vans": { base: (q) => `https://www.vans.com/search?q=${encodeURIComponent(q)}` },
+  // Luxury & Designer
+  "Gucci": { base: (q) => `https://www.gucci.com/us/en/search?search=${encodeURIComponent(q)}` },
+  "Louis Vuitton": { base: (q) => `https://us.louisvuitton.com/eng-us/search/${encodeURIComponent(q)}` },
+  "Prada": { base: (q) => `https://www.prada.com/us/en/search.html?q=${encodeURIComponent(q)}` },
+  "Versace": { base: (q) => `https://www.versace.com/us/en/search/?q=${encodeURIComponent(q)}` },
+  "Burberry": { base: (q) => `https://us.burberry.com/search?q=${encodeURIComponent(q)}` },
+  "Michael Kors": { base: (q) => `https://www.michaelkors.com/search?q=${encodeURIComponent(q)}` },
+  "Kate Spade": { base: (q) => `https://www.katespade.com/search?q=${encodeURIComponent(q)}` },
+  "Tory Burch": { base: (q) => `https://www.toryburch.com/en-us/search?q=${encodeURIComponent(q)}` },
+  // Beauty Brands
+  "MAC": { base: (q) => `https://www.maccosmetics.com/search?q=${encodeURIComponent(q)}` },
+  "Fenty Beauty": { base: (q) => `https://fentybeauty.com/search?q=${encodeURIComponent(q)}` },
+  "Glossier": { base: (q) => `https://www.glossier.com/search?q=${encodeURIComponent(q)}` },
+  "Rare Beauty": { base: (q) => `https://www.rarebeauty.com/search?q=${encodeURIComponent(q)}` },
+  "Charlotte Tilbury": { base: (q) => `https://www.charlottetilbury.com/us/search?q=${encodeURIComponent(q)}` },
+  // Other Popular Brands
+  "Lululemon": { base: (q) => `https://shop.lululemon.com/search?Ntt=${encodeURIComponent(q)}` },
+  "Patagonia": { base: (q) => `https://www.patagonia.com/search/?q=${encodeURIComponent(q)}` },
+  "The North Face": { base: (q) => `https://www.thenorthface.com/en-us/search?q=${encodeURIComponent(q)}` },
+  "ASOS": { base: (q) => `https://www.asos.com/us/search/?q=${encodeURIComponent(q)}` },
+  "Revolve": { base: (q) => `https://www.revolve.com/r/Search?query=${encodeURIComponent(q)}` },
+  "Steve Madden": { base: (q) => `https://www.stevemadden.com/search?q=${encodeURIComponent(q)}` },
+  "Dr. Martens": { base: (q) => `https://www.drmartens.com/us/en/search?q=${encodeURIComponent(q)}` },
+  "Birkenstock": { base: (q) => `https://www.birkenstock.com/us/search?q=${encodeURIComponent(q)}` },
+  "UGG": { base: (q) => `https://www.ugg.com/search?q=${encodeURIComponent(q)}` },
 };
 
 export const getShopUrl = (store: string, item: string): string => {
