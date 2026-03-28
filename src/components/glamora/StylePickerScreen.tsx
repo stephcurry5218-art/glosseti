@@ -359,6 +359,29 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "designer-classic", label: "Designer Classic", desc: "Iconic luxury bags — Birkin, Chanel Flap, Lady Dior", emoji: "💎" },
     ],
   },
+  {
+    id: "shoes-sneakers", label: "Shoes & Sneakers", Icon: Zap,
+    desc: "Step up your game — sneakers, heels, boots, loafers, and designer kicks",
+    includes: ["Sneakers", "Heels & Pumps", "Boots", "Loafers & Flats", "Sandals & Slides"],
+    subs: [
+      { id: "retro-sneakers", label: "Retro Sneakers", desc: "Air Jordan 1s, Dunks, New Balance 550 — classic silhouettes", emoji: "👟" },
+      { id: "running-sneakers", label: "Running Sneakers", desc: "Nike Air Max, Asics Gel, Adidas Ultra Boost — performance meets style", emoji: "🏃" },
+      { id: "designer-sneakers", label: "Designer Sneakers", desc: "Golden Goose, Balenciaga, Alexander McQueen — luxury on foot", emoji: "💎" },
+      { id: "high-top", label: "High Tops", desc: "Converse, Jordan, Rick Owens — ankle coverage with attitude", emoji: "🔝" },
+      { id: "stiletto-heels", label: "Stiletto Heels", desc: "Classic pointed-toe stilettos — Louboutin, Manolo, Jimmy Choo", emoji: "👠" },
+      { id: "block-heels", label: "Block Heels", desc: "Comfortable height with chunky stability — day to night", emoji: "🧱" },
+      { id: "platform-heels", label: "Platforms", desc: "Elevated soles — 70s disco to modern statement", emoji: "🪩" },
+      { id: "ankle-boots", label: "Ankle Boots", desc: "Chelsea, combat, or pointed — year-round staple", emoji: "🥾" },
+      { id: "knee-high-boots", label: "Knee-High Boots", desc: "Over-the-knee or knee-high — leather, suede, or stretch", emoji: "👢" },
+      { id: "cowboy-boots", label: "Cowboy Boots", desc: "Western-inspired — embroidered, pointed toe, stacked heel", emoji: "🤠" },
+      { id: "loafers", label: "Loafers", desc: "Penny, horsebit, or platform — Gucci, Prada, Bass", emoji: "🪷" },
+      { id: "oxfords-derbies", label: "Oxfords & Derbies", desc: "Classic lace-ups — polished leather for formal or smart casual", emoji: "👞" },
+      { id: "sandals", label: "Sandals", desc: "Birkenstock, Hermès Oran, strappy flats — warm-weather ease", emoji: "🩴" },
+      { id: "slides", label: "Slides & Mules", desc: "Slip-on ease — Yeezy Slides, Bottega padded, birkenstock", emoji: "🫧" },
+      { id: "ballet-flats", label: "Ballet Flats", desc: "Sam Edelman, Repetto, The Row — minimalist elegance", emoji: "🩰" },
+      { id: "work-boots", label: "Work Boots", desc: "Timberland, Red Wing, Dr. Martens — rugged and built to last", emoji: "🪓" },
+    ],
+  },
 ];
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
