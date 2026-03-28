@@ -5,8 +5,21 @@ export type Step = {
   title: string;
   detail: string;
   tip?: string;
+  technique?: string[];
+  tools?: string[];
   shop?: Record<PriceTier, ShopOption>;
 };
+
+export const makeupToolsChecklist = [
+  { name: "Beauty Sponge", desc: "Dampen & squeeze out water before use — bouncing motion blends foundation seamlessly" },
+  { name: "Flat Foundation Brush", desc: "Alternative to sponge — use for fuller coverage; paint in downward strokes" },
+  { name: "Fluffy Blending Brush", desc: "For eyeshadow — use windshield-wiper motions in the crease" },
+  { name: "Flat Shader Brush", desc: "Pack color onto eyelids — press & pat, don't swipe" },
+  { name: "Angled Brush", desc: "For brows, contour, and precise blush placement" },
+  { name: "Lip Brush or Finger", desc: "For precise lip application — fingers work great for a natural stain" },
+  { name: "Lash Curler", desc: "Clamp at the base of lashes for 10 seconds before mascara" },
+  { name: "Setting Spray", desc: "Hold 8 inches away, mist in an X and T pattern over your face" },
+];
 
 export const categoryLabels: Record<Category, { label: string }> = {
   makeup: { label: "Makeup" },
