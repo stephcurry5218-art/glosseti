@@ -565,11 +565,7 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Velvet Boudoir": { match: 94, desc: "Old Hollywood intimates — velvet, feathers, champagne tones" },
   "Butterfly Babe": { match: 94, desc: "Y2K nostalgia — butterfly tops, low-rise, frosted gloss, baguette bags" },
   "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
-  "bags-purses": [
-    { name: "Bag Edit", desc: "The perfect bag to complete any look", match: 95 },
-    { name: "Soft Glam", desc: "Elegant bags in blush and nude tones", match: 90 },
-    { name: "Urban Edge", desc: "Statement bags with streetwear edge", match: 88 },
-  ],
+  "Bag Edit": { match: 95, desc: "The perfect bag to complete any look — totes, clutches, crossbodies" },
 };
 
 // Bag-specific look data for shopping
