@@ -105,6 +105,10 @@ serve(async (req) => {
         female: "wearing a stylish hat or headpiece that perfectly complements her face shape and outfit. Styled with a coordinated look that elevates the headwear as the hero piece. Fashion editorial lighting.",
         male: "wearing a premium hat or cap that suits his face and style perfectly. Paired with a complementary outfit that makes the headwear the focal point. Fashion editorial lighting.",
       },
+      "bags-purses": {
+        female: "styled with a stunning designer bag as the focal point — perfectly coordinated with her outfit. The bag is prominently displayed and styled for a fashion editorial. Close-up details showing hardware, texture, and craftsmanship. Premium fashion photography.",
+        male: "styled with a premium bag or carry — leather messenger, sleek backpack, or structured briefcase as the hero piece. Coordinated with a sharp outfit. Fashion editorial lighting highlighting bag details and craftsmanship.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
