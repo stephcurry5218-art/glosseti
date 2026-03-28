@@ -52,7 +52,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Gently spread outward from each dot using your fingertips in upward strokes",
         "Pay extra attention to the T-zone (forehead + nose) — this is where you get oily first",
         "Wait 60 seconds for the primer to set before moving to the next step"
-      ], shop: { luxury: { store: "Sephora", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
+      ], shop: { luxury: { store: "Charlotte Tilbury", item: "Charlotte Tilbury Wonderglow Primer", price: "$55" }, mid: { store: "Ulta", item: "NYX Marshmallow Primer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Jelly Pop Dew Primer", price: "$10" } } },
       { title: "Soft Rose Base", detail: "Blend a light-coverage foundation matched to your skin tone. Conceal under eyes with a shade lighter.", tools: ["Beauty Sponge or Foundation Brush"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+foundation+with+beauty+sponge+beginner", videoLabel: "Foundation Application 101", technique: [
         "Match your foundation by testing on your jawline — it should disappear into your skin",
         "Pump one dot of foundation onto the back of your hand",
