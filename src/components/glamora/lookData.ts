@@ -437,7 +437,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
     ],
     shoes: [
       { title: "Work Boots", detail: "Leather work boots in brown or tan. Goodyear welt, quality sole.", shop: { luxury: { store: "Nordstrom", item: "Red Wing Iron Ranger", price: "$350" }, mid: { store: "Amazon", item: "Thursday Boot Company Captain", price: "$199" }, budget: { store: "Amazon", item: "EVER BOOTS Tank Work Boot", price: "$45" } } },
-      { title: "Alternative: Chelsea Boots", detail: "Suede or leather Chelsea boots in dark brown.", shop: { luxury: { store: "Nordstrom", item: "R.M. Williams Comfort Craftsman", price: "$495" }, mid: { store: "Nordstrom", item: "Blundstone Classic Chelsea Boot", price: "$200" }, budget: { store: "Amazon", item: "Bruno Marc Chelsea Boot", price: "$35" } } },
+      { title: "Alternative: Chelsea Boots", detail: "Suede or leather Chelsea boots in dark brown.", shop: { luxury: { store: "Nordstrom", item: "R.M. Williams Comfort Craftsman", price: "$495" }, mid: { store: "Birkenstock", item: "Birkenstock Stalon Chelsea Boot", price: "$200" }, budget: { store: "Amazon", item: "Bruno Marc Chelsea Boot", price: "$35" } } },
     ],
     accessories: [
       { title: "Watch", detail: "A field watch or diver with a canvas or leather strap.", shop: { luxury: { store: "Nordstrom", item: "Hamilton Khaki Field Mechanical", price: "$495" }, mid: { store: "Amazon", item: "Seiko 5 Sports Field Watch", price: "$275" }, budget: { store: "Amazon", item: "Casio Duro Diver MDV-106", price: "$45" } } },
