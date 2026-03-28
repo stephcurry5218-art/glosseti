@@ -296,6 +296,23 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
+    id: "hats-headwear", label: "Hats & Headwear", Icon: Crown,
+    desc: "Top it off — caps, hats, beanies, and head accessories",
+    includes: ["Caps & Snapbacks", "Brimmed Hats", "Beanies & Knits", "Head Wraps & Scarves"],
+    subs: [
+      { id: "bucket-hat", label: "Bucket Hat", desc: "Relaxed streetwear staple — casual and effortless", emoji: "🪣" },
+      { id: "beanie", label: "Beanie", desc: "Cozy knit for cold weather or laid-back vibes", emoji: "🧶" },
+      { id: "fedora", label: "Fedora", desc: "Structured brim with sophisticated charm", emoji: "🎩" },
+      { id: "snapback", label: "Snapback", desc: "Flat-brim cap with streetwear attitude", emoji: "🧢" },
+      { id: "baseball-cap", label: "Baseball Cap", desc: "Classic curved-brim everyday essential", emoji: "⚾" },
+      { id: "wide-brim", label: "Wide Brim", desc: "Sun hat glamour — perfect for resort and boho looks", emoji: "👒" },
+      { id: "beret", label: "Beret", desc: "Parisian chic — artistic and effortlessly stylish", emoji: "🇫🇷" },
+      { id: "headwrap", label: "Head Wrap", desc: "Bold prints and fabrics tied with flair", emoji: "🎀" },
+      { id: "cowboy", label: "Cowboy Hat", desc: "Western-inspired statement piece", emoji: "🤠" },
+      { id: "visor", label: "Visor", desc: "Sporty open-top sun protection with style", emoji: "☀️" },
+    ],
+  },
+  {
     id: "celebrity-makeup", label: "Influencer Makeup", Icon: Crown,
     genderLabel: { male: "Influencer Grooming", female: "Influencer Makeup" },
     desc: "Get your makeup styled like your favorite influencer or celebrity",
