@@ -112,14 +112,14 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
   },
   "Golden Hour": {
     makeup: [
-      { title: "Bronzed Base", detail: "Use a luminous foundation. Warm up the complexion with a golden bronzer on cheekbones, temples, and jawline.", tools: ["Beauty Sponge", "Fluffy Bronzer Brush"], technique: [
+      { title: "Bronzed Base", detail: "Use a luminous foundation. Warm up the complexion with a golden bronzer on cheekbones, temples, and jawline.", tools: ["Beauty Sponge", "Fluffy Bronzer Brush"], videoUrl: "https://www.youtube.com/results?search_query=how+to+apply+bronzer+beginner+natural", videoLabel: "Bronzer Application Guide", technique: [
         "Apply luminous foundation the same way as regular foundation — dot on face, bounce with damp sponge",
         "For bronzer: suck in your cheeks slightly — the hollow is where bronzer goes",
         "Sweep bronzer in a '3' shape on each side: forehead hairline → cheek hollow → jawline",
         "Use a big fluffy brush and tap off excess first — bronzer is very easy to overdo!",
         "Blend in circular motions so there are no harsh lines"
       ], shop: { luxury: { store: "Sephora", item: "Tom Ford Shade & Illuminate Glow", price: "$90" }, mid: { store: "Ulta", item: "Physician's Formula Butter Bronzer", price: "$16" }, budget: { store: "Amazon", item: "e.l.f. Putty Bronzer", price: "$7" } } },
-      { title: "Golden Eyes", detail: "Apply a warm copper shadow on lids with gold shimmer in the center. Blend a warm brown into the crease.", tip: "Wet your brush for maximum gold payoff", tools: ["Flat Shader Brush", "Fluffy Blending Brush"], technique: [
+      { title: "Golden Eyes", detail: "Apply a warm copper shadow on lids with gold shimmer in the center. Blend a warm brown into the crease.", tip: "Wet your brush for maximum gold payoff", tools: ["Flat Shader Brush", "Fluffy Blending Brush"], videoUrl: "https://www.youtube.com/results?search_query=gold+copper+eyeshadow+tutorial+beginner", videoLabel: "Gold & Copper Eye Tutorial", technique: [
         "Start by applying eyeshadow primer or concealer on your lids so color sticks better",
         "With a flat brush, press (don't swipe) the copper shade onto your entire eyelid",
         "For the gold shimmer: wet your fingertip, pick up the gold shade, and pat it onto the center of your lid",
@@ -127,14 +127,14 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Keep blending until there's a smooth gradient — no harsh edges",
         "Finish with mascara: wiggle the wand at the base of your lashes and pull upward slowly"
       ], shop: { luxury: { store: "Sephora", item: "Pat McGrath Mothership V Bronze Seduction", price: "$128" }, mid: { store: "Ulta", item: "Urban Decay Naked Honey Palette", price: "$27" }, budget: { store: "Amazon", item: "Maybelline The 24K Nudes Palette", price: "$10" } } },
-      { title: "Sun-Kissed Cheeks", detail: "A warm peach blush blended upward. Top with a gold liquid highlighter on the high points.", tools: ["Blush Brush", "Fingertip"], technique: [
+      { title: "Sun-Kissed Cheeks", detail: "A warm peach blush blended upward. Top with a gold liquid highlighter on the high points.", tools: ["Blush Brush", "Fingertip"], videoUrl: "https://www.youtube.com/results?search_query=peach+blush+liquid+highlighter+tutorial+beginner", videoLabel: "Peach Blush & Glow Guide", technique: [
         "Smile and apply peach blush to the rounded part of your cheeks",
         "Blend upward toward your temples — this lifts the face",
         "For liquid highlighter: put one tiny drop on your fingertip",
         "Tap it onto the tops of your cheekbones, bridge of nose, and center of forehead",
         "Use gentle tapping motions to blend — liquid highlighter looks most natural when sheered out"
       ], shop: { luxury: { store: "Sephora", item: "Rare Beauty Warm Wishes Bronzer Stick", price: "$30" }, mid: { store: "Ulta", item: "Milani Baked Blush in Bellissimo Bronze", price: "$10" }, budget: { store: "Target", item: "e.l.f. Liquid Highlighter in Golden Glow", price: "$5" } } },
-      { title: "Warm Lips", detail: "A terracotta or warm nude lip liner with a glossy caramel lip gloss.", tools: ["Lip Liner", "Lip Gloss"], technique: [
+      { title: "Warm Lips", detail: "A terracotta or warm nude lip liner with a glossy caramel lip gloss.", tools: ["Lip Liner", "Lip Gloss"], videoUrl: "https://www.youtube.com/results?search_query=glossy+lip+tutorial+beginner+easy", videoLabel: "Easy Glossy Lip Tutorial", technique: [
         "Line your lips starting from the center of the upper lip (the V-shape / cupid's bow)",
         "Use short, feathery strokes following your natural lip line",
         "Don't worry about perfection — you can always blend with your finger",
