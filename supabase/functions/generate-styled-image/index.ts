@@ -127,6 +127,13 @@ serve(async (req) => {
       ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.`
       : "";
 
+    // Makeup preference for female users
+    const makeupNote = (!isMale && makeupPreference)
+      ? makeupPreference === "natural"
+        ? "\n\nMAKEUP DIRECTION: Keep the look natural — minimal or no visible makeup. Clean, fresh skin with a barely-there beauty approach. No heavy foundation, bold lipstick, or dramatic eye makeup."
+        : "\n\nMAKEUP DIRECTION: Apply full glam makeup — flawless base, sculpted contour, defined brows, lashes, statement lips, and polished beauty styling."
+      : "";
+
     // Add Gio's refinement context if available
     const refinementNote = refinementContext
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
