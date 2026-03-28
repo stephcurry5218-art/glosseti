@@ -7,6 +7,8 @@ export type Step = {
   tip?: string;
   technique?: string[];
   tools?: string[];
+  videoUrl?: string;
+  videoLabel?: string;
   shop?: Record<PriceTier, ShopOption>;
 };
 
