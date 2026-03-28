@@ -243,7 +243,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               opacity: canProceed ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8,
               ...(canProceed && isMale ? { background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))" } : {}),
             }}
-            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode)}
+            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode, showMakeupPref ? makeupPref : undefined)}
           >
             {isMannequin
               ? (<>Generate Mannequin Look <ShirtIcon size={16} /></>)
