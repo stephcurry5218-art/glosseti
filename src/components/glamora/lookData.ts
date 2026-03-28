@@ -87,7 +87,7 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
         "Blot with a tissue — press lips onto tissue once to remove excess",
         "For setting spray: close your eyes, hold 8 inches away, and mist in an X then a T pattern",
         "Let the spray dry naturally — don't touch your face!"
-      ], shop: { luxury: { store: "Nordstrom", item: "Tom Ford Lip Color in Pink Dusk", price: "$58" }, mid: { store: "Ulta", item: "MAC Matte Lipstick in Velvet Teddy", price: "$22" }, budget: { store: "Target", item: "Revlon Super Lustrous in Pink in the Afternoon", price: "$8" } } },
+      ], shop: { luxury: { store: "Nordstrom", item: "Tom Ford Lip Color in Pink Dusk", price: "$58" }, mid: { store: "MAC", item: "MAC Matte Lipstick in Velvet Teddy", price: "$22" }, budget: { store: "Target", item: "Revlon Super Lustrous in Pink in the Afternoon", price: "$8" } } },
     ],
     top: [
       { title: "Base Layer", detail: "Choose a fitted silk or satin camisole in blush, champagne, or soft cream.", tip: "Silk reflects light and elevates the soft glam vibe", shop: { luxury: { store: "Net-a-Porter", item: "Vince Silk Camisole in Blush", price: "$225" }, mid: { store: "Nordstrom", item: "Topshop Satin Cowl Neck Cami", price: "$45" }, budget: { store: "H&M", item: "Satin V-Neck Camisole Top", price: "$18" } } },
