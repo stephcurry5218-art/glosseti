@@ -19,7 +19,7 @@ export const categoryLabels: Record<Category, { label: string }> = {
   bags: { label: "Bags & Purses" },
 };
 
-export const categoryOrder: Category[] = ["makeup", "top", "bottom", "shoes", "accessories", "swimwear", "lingerie"];
+export const categoryOrder: Category[] = ["makeup", "top", "bottom", "shoes", "accessories", "bags", "swimwear", "lingerie"];
 
 export const tierInfo: Record<PriceTier, { label: string; color: string; bg: string }> = {
   luxury: { label: "Luxury", color: "hsl(var(--glamora-gold))", bg: "hsla(var(--glamora-gold) / 0.1)" },
