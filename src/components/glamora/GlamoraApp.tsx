@@ -38,6 +38,7 @@ export interface UserPrefs {
   gender: Gender;
   generationMode: GenerationMode;
   celebrityGuide?: string;
+  makeupPreference?: "natural" | "glam";
 }
 
 const GlamoraApp = () => {

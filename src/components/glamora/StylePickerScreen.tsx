@@ -275,6 +275,20 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
+    id: "sunglasses-eyewear", label: "Sunglasses & Eyewear", Icon: Star,
+    desc: "Frame your face — designer shades, specs, and statement eyewear",
+    includes: ["Sunglasses", "Prescription Frames", "Sport Eyewear", "Blue Light Glasses"],
+    subs: [
+      { id: "aviators", label: "Aviators", desc: "Classic pilot frames — timeless and universally flattering", emoji: "🕶️" },
+      { id: "cat-eye", label: "Cat-Eye", desc: "Retro-femme frames with upswept corners", emoji: "😼" },
+      { id: "oversized", label: "Oversized", desc: "Big, bold frames that make a statement", emoji: "🔮" },
+      { id: "sport-frames", label: "Sport Frames", desc: "Wraparound performance shades for active lifestyles", emoji: "🏃" },
+      { id: "round-vintage", label: "Round Vintage", desc: "Lennon-inspired circular frames with retro charm", emoji: "🌀" },
+      { id: "shield", label: "Shield / Visor", desc: "Futuristic single-lens wraparound look", emoji: "🛡️" },
+      { id: "wayfarer", label: "Wayfarer", desc: "The iconic Ray-Ban silhouette — universally cool", emoji: "😎" },
+    ],
+  },
+  {
     id: "celebrity-makeup", label: "Influencer Makeup", Icon: Crown,
     genderLabel: { male: "Influencer Grooming", female: "Influencer Makeup" },
     desc: "Get your makeup styled like your favorite influencer or celebrity",
