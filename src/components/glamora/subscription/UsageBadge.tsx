@@ -34,7 +34,7 @@ const UsageBadge = ({ tier, remaining, onUpgrade }: Props) => {
       color: remaining <= 1 ? "hsl(var(--destructive))" : "hsl(var(--glamora-gold))",
       cursor: "pointer", fontFamily: "'Jost', sans-serif",
     }}>
-      <Zap size={12} /> {remaining} left this month
+      <Zap size={12} /> {remaining} left today
     </button>
   );
 };
