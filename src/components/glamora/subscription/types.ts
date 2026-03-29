@@ -18,14 +18,21 @@ export interface SubscriptionState {
   isTrialing: boolean;
   monthlyGenerations: number;
   maxMonthlyGenerations: number;
-  billingMonth: string; // YYYY-MM format
+  billingMonth: string; // YYYY-MM format for paid, YYYY-MM-DD for free (daily)
 }
 
+/** Monthly caps for paid tiers */
 export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
-  free: 5,
+  free: 3,   // daily cap (not monthly) — handled separately
   premium: 30,
   pro: 75,
 };
+
+/** Free tier uses a daily limit */
+export const FREE_DAILY_LIMIT = 3;
+
+/** Trial duration in days */
+export const TRIAL_DAYS = 3;
 
 export const PLANS: SubscriptionPlan[] = [
   {
@@ -33,9 +40,9 @@ export const PLANS: SubscriptionPlan[] = [
     name: "Free",
     monthlyPrice: null,
     yearlyPrice: null,
-    monthlyGenerationCap: 5,
+    monthlyGenerationCap: 3,
     features: [
-      "5 AI looks per month",
+      "3 AI looks per day",
       "Basic outfit & makeup suggestions",
       "Watermarked images",
       "Limited customization",
@@ -57,7 +64,7 @@ export const PLANS: SubscriptionPlan[] = [
       "Full makeup & outfit tutorials",
       "Shop recommended items",
       "Save & organize looks",
-      "7-day free trial",
+      "3-day free trial",
     ],
   },
   {
@@ -78,4 +85,3 @@ export const PLANS: SubscriptionPlan[] = [
     ],
   },
 ];
-export const FREE_DAILY_LIMIT = 3; // kept for backward compat
