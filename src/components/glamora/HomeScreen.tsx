@@ -114,8 +114,61 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
+      {/* Remaining generations counter */}
+      {(() => {
+        const cap = MONTHLY_CAPS[subscription.tier];
+        const used = cap - remainingGenerations;
+        const pct = Math.min((used / cap) * 100, 100);
+        const isLow = remainingGenerations <= 1;
+        const isEmpty = remainingGenerations <= 0;
+        return (
+          <div className="anim-fadeUp d1" style={{
+            margin: "0 20px", marginTop: -20, position: "relative", zIndex: 10,
+            padding: "12px 16px", borderRadius: 16,
+            background: "hsla(0 0% 0% / 0.5)",
+            backdropFilter: "blur(12px)",
+            border: `1px solid ${isLow ? "hsla(var(--destructive) / 0.25)" : "hsla(var(--glamora-gold) / 0.15)"}`,
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <Zap size={14} color={isLow ? "hsl(var(--destructive))" : "hsl(var(--glamora-gold))"} />
+                <span style={{
+                  fontSize: 12, fontWeight: 600,
+                  color: isLow ? "hsl(var(--destructive))" : "hsla(0 0% 100% / 0.85)",
+                }}>
+                  {isEmpty ? "No looks remaining" : `${remainingGenerations} of ${cap} looks remaining`}
+                </span>
+              </div>
+              {subscription.tier === "free" && (
+                <button onClick={onShowPaywall} style={{
+                  fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 100,
+                  background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                  color: "white", border: "none", cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  <Sparkles size={10} /> Upgrade
+                </button>
+              )}
+            </div>
+            <div style={{
+              height: 4, borderRadius: 100, overflow: "hidden",
+              background: "hsla(0 0% 100% / 0.08)",
+            }}>
+              <div style={{
+                height: "100%", borderRadius: 100,
+                width: `${100 - pct}%`,
+                background: isLow
+                  ? "linear-gradient(90deg, hsl(var(--destructive)), hsla(var(--destructive) / 0.6))"
+                  : "linear-gradient(90deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                transition: "width 0.5s ease",
+              }} />
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Main CTA — overlaps hero */}
-      <div style={{ padding: "0 20px", marginTop: -32, position: "relative", zIndex: 10 }}>
+      <div style={{ padding: "0 20px", marginTop: 10, position: "relative", zIndex: 10 }}>
         <div
           className="glamora-card anim-fadeUp d1"
           onClick={() => onGetStyled()}
