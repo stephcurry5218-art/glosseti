@@ -22,7 +22,7 @@ export interface SubscriptionState {
 }
 
 export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
-  free: 3,
+  free: 5,
   premium: 30,
   pro: 75,
 };
