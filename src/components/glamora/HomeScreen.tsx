@@ -136,7 +136,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
                   fontSize: 12, fontWeight: 600,
                   color: isLow ? "hsl(var(--destructive))" : "hsla(0 0% 100% / 0.85)",
                 }}>
-                  {isEmpty ? "No looks remaining" : `${remainingGenerations} of ${cap} looks remaining`}
+                  {isEmpty ? "No looks remaining" : `${remainingGenerations} of ${cap} looks remaining ${subscription.tier === "free" ? "today" : "this month"}`}
                 </span>
               </div>
               {subscription.tier === "free" && (
