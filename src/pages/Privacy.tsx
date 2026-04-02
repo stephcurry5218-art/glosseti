@@ -20,7 +20,7 @@ const Privacy = () => {
         {[
           {
             title: "Introduction",
-            body: "Glosseti ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use the Glosseti mobile application."
+            body: "Glosseti (\u201Cwe\u201D, \u201Cour\u201D, or \u201Cus\u201D) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use the Glosseti mobile application."
           },
           {
             title: "Information We Collect",
