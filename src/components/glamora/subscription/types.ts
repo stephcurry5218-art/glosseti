@@ -29,8 +29,6 @@ export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
 /** Free tier uses a daily limit */
 export const FREE_DAILY_LIMIT = 3;
 
-/** Trial duration in days */
-export const TRIAL_DAYS = 3;
 
 export const PLANS: SubscriptionPlan[] = [
   {
