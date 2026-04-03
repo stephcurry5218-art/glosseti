@@ -62,18 +62,9 @@ function loadSubscription(): SubscriptionState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Check if trial expired
-      if (parsed.isTrialing && parsed.trialEndsAt) {
-        if (new Date(parsed.trialEndsAt) < new Date()) {
-          parsed.tier = "free";
-          parsed.isTrialing = false;
-          parsed.trialEndsAt = null;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-        }
-      }
       const usage = getUsageForTier(parsed.tier as SubscriptionTier);
       return {
-        ...parsed,
+        tier: parsed.tier,
         monthlyGenerations: usage.count,
         maxMonthlyGenerations: usage.cap,
         billingMonth: usage.period,
@@ -83,8 +74,6 @@ function loadSubscription(): SubscriptionState {
   const usage = getUsageForTier("free");
   return {
     tier: "free",
-    trialEndsAt: null,
-    isTrialing: false,
     monthlyGenerations: usage.count,
     maxMonthlyGenerations: usage.cap,
     billingMonth: usage.period,
