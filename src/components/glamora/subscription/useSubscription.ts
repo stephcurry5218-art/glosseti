@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import type { SubscriptionTier, SubscriptionState } from "./types";
-import { MONTHLY_CAPS, FREE_DAILY_LIMIT, TRIAL_DAYS } from "./types";
+import { MONTHLY_CAPS, FREE_DAILY_LIMIT } from "./types";
 
 const STORAGE_KEY = "glamora_subscription";
 const USAGE_KEY = "glamora_monthly_usage";
