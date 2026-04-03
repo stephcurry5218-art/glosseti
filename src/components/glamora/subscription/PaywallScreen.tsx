@@ -5,7 +5,7 @@ import type { SubscriptionTier } from "./types";
 
 interface Props {
   onClose: () => void;
-  onUpgrade: (tier: SubscriptionTier, startTrial?: boolean) => void;
+  onUpgrade: (tier: SubscriptionTier) => void;
   remainingGenerations: number;
   lockedFeature?: string | null;
 }
