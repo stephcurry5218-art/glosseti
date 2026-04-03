@@ -250,7 +250,7 @@ const GlamoraApp = () => {
       )}
       {showUpgradePrompt && lockedFeature && (
         <UpgradePrompt feature={lockedFeature} onClose={() => setShowUpgradePrompt(false)}
-          onUpgrade={(tier) => upgradeTo(tier, tier === "premium")} />
+          onUpgrade={(tier) => upgradeTo(tier)} />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import type { SubscriptionTier, SubscriptionState } from "./types";
-import { MONTHLY_CAPS, FREE_DAILY_LIMIT, TRIAL_DAYS } from "./types";
+import { MONTHLY_CAPS, FREE_DAILY_LIMIT } from "./types";
 
 const STORAGE_KEY = "glamora_subscription";
 const USAGE_KEY = "glamora_monthly_usage";
@@ -62,18 +62,9 @@ function loadSubscription(): SubscriptionState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Check if trial expired
-      if (parsed.isTrialing && parsed.trialEndsAt) {
-        if (new Date(parsed.trialEndsAt) < new Date()) {
-          parsed.tier = "free";
-          parsed.isTrialing = false;
-          parsed.trialEndsAt = null;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-        }
-      }
       const usage = getUsageForTier(parsed.tier as SubscriptionTier);
       return {
-        ...parsed,
+        tier: parsed.tier,
         monthlyGenerations: usage.count,
         maxMonthlyGenerations: usage.cap,
         billingMonth: usage.period,
@@ -83,8 +74,6 @@ function loadSubscription(): SubscriptionState {
   const usage = getUsageForTier("free");
   return {
     tier: "free",
-    trialEndsAt: null,
-    isTrialing: false,
     monthlyGenerations: usage.count,
     maxMonthlyGenerations: usage.cap,
     billingMonth: usage.period,
@@ -136,12 +125,10 @@ export function useSubscription() {
     return false;
   }, [state.tier]);
 
-  const upgradeTo = useCallback((tier: SubscriptionTier, startTrial = false) => {
+  const upgradeTo = useCallback((tier: SubscriptionTier) => {
     const usage = getUsageForTier(tier);
     const newState: SubscriptionState = {
       tier,
-      trialEndsAt: startTrial ? new Date(Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000).toISOString() : null,
-      isTrialing: startTrial,
       monthlyGenerations: usage.count,
       maxMonthlyGenerations: usage.cap,
       billingMonth: usage.period,

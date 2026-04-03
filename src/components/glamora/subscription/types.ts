@@ -14,8 +14,6 @@ export interface SubscriptionPlan {
 
 export interface SubscriptionState {
   tier: SubscriptionTier;
-  trialEndsAt: string | null;
-  isTrialing: boolean;
   monthlyGenerations: number;
   maxMonthlyGenerations: number;
   billingMonth: string; // YYYY-MM format for paid, YYYY-MM-DD for free (daily)
@@ -31,8 +29,6 @@ export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
 /** Free tier uses a daily limit */
 export const FREE_DAILY_LIMIT = 3;
 
-/** Trial duration in days */
-export const TRIAL_DAYS = 3;
 
 export const PLANS: SubscriptionPlan[] = [
   {
@@ -64,7 +60,7 @@ export const PLANS: SubscriptionPlan[] = [
       "Full makeup & outfit tutorials",
       "Shop recommended items",
       "Save & organize looks",
-      "3-day free trial",
+      
     ],
   },
   {

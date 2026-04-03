@@ -5,7 +5,7 @@ import type { SubscriptionTier } from "./types";
 
 interface Props {
   onClose: () => void;
-  onUpgrade: (tier: SubscriptionTier, startTrial?: boolean) => void;
+  onUpgrade: (tier: SubscriptionTier) => void;
   remainingGenerations: number;
   lockedFeature?: string | null;
 }
@@ -160,7 +160,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                   </div>
 
                   <button
-                    onClick={() => onUpgrade(plan.tier as SubscriptionTier, plan.tier === "premium")}
+                    onClick={() => onUpgrade(plan.tier as SubscriptionTier)}
                     style={{
                       width: "100%", padding: "14px", borderRadius: 14, border: "none",
                       cursor: "pointer", fontFamily: "'Jost', sans-serif",
@@ -173,7 +173,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       transition: "all 0.2s",
                     }}
                   >
-                    {plan.tier === "premium" ? "Start 7-Day Free Trial" : "Subscribe Now"}
+                    Subscribe Now
                   </button>
                 </div>
               </div>
