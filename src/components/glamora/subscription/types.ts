@@ -14,8 +14,6 @@ export interface SubscriptionPlan {
 
 export interface SubscriptionState {
   tier: SubscriptionTier;
-  trialEndsAt: string | null;
-  isTrialing: boolean;
   monthlyGenerations: number;
   maxMonthlyGenerations: number;
   billingMonth: string; // YYYY-MM format for paid, YYYY-MM-DD for free (daily)
