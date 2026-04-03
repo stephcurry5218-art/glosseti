@@ -202,7 +202,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
                   {subscription.tier === "free" ? "Free Plan" : subscription.tier === "premium" ? "Premium" : "Pro"}
-                  {subscription.isTrialing && <span style={{ fontSize: 11, color: "hsl(var(--glamora-gold))", marginLeft: 8 }}>Trial</span>}
+                  
                 </div>
                 <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
                   {subscription.tier === "free" ? "Tap to upgrade" : "Manage subscription"}

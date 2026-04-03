@@ -125,12 +125,10 @@ export function useSubscription() {
     return false;
   }, [state.tier]);
 
-  const upgradeTo = useCallback((tier: SubscriptionTier, startTrial = false) => {
+  const upgradeTo = useCallback((tier: SubscriptionTier) => {
     const usage = getUsageForTier(tier);
     const newState: SubscriptionState = {
       tier,
-      trialEndsAt: startTrial ? new Date(Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000).toISOString() : null,
-      isTrialing: startTrial,
       monthlyGenerations: usage.count,
       maxMonthlyGenerations: usage.cap,
       billingMonth: usage.period,

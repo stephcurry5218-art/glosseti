@@ -60,7 +60,7 @@ export const PLANS: SubscriptionPlan[] = [
       "Full makeup & outfit tutorials",
       "Shop recommended items",
       "Save & organize looks",
-      "3-day free trial",
+      
     ],
   },
   {
