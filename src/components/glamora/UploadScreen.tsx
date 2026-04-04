@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
+import { fixImageOrientation } from "./fixImageOrientation";
 
 interface Props {
   prefs: UserPrefs;
