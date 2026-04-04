@@ -28,7 +28,7 @@ const formatPrice = (amount: number): string => {
 };
 
 const LookPriceCard = ({ lookName }: Props) => {
-  const [activeTier, setActiveTier] = useState<TierKey>("mid");
+  const [activeTier, setActiveTier] = useState<TierKey>("budget");
   const [expanded, setExpanded] = useState(false);
   const data = lookData[lookName];
   if (!data) return null;
