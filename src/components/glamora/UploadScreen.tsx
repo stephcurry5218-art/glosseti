@@ -21,15 +21,23 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
-  const handleFile = (f: File) => {
+  const handleFile = async (f: File) => {
     setFile(f);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setPreview(result);
-      setBase64(result);
-    };
-    reader.readAsDataURL(f);
+    try {
+      // Draw to canvas to strip EXIF orientation and normalize the image
+      const normalizedBase64 = await fixImageOrientation(f);
+      setPreview(normalizedBase64);
+      setBase64(normalizedBase64);
+    } catch {
+      // Fallback to raw FileReader if canvas fails
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setPreview(result);
+        setBase64(result);
+      };
+      reader.readAsDataURL(f);
+    }
   };
 
   const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "celebrity-makeup" || prefs.styleCategory === "grooming";
