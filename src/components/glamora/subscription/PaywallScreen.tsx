@@ -185,11 +185,13 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                   </div>
 
                   <button
-                    onClick={() => onUpgrade(plan.tier as SubscriptionTier)}
+                    onClick={() => handlePurchase(plan.tier as SubscriptionTier)}
+                    disabled={purchasing}
                     style={{
                       width: "100%", padding: "14px", borderRadius: 14, border: "none",
-                      cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                      cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
                       fontSize: 14, fontWeight: 700,
+                      opacity: purchasing ? 0.6 : 1,
                       background: isHighlighted
                         ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
                         : "hsla(var(--glamora-gold) / 0.12)",
@@ -198,7 +200,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       transition: "all 0.2s",
                     }}
                   >
-                    Subscribe Now
+                    {purchasing ? "Processing…" : "Subscribe Now"}
                   </button>
                 </div>
               </div>
