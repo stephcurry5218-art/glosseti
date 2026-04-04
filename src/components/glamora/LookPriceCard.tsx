@@ -62,47 +62,53 @@ const LookPriceCard = ({ lookName }: Props) => {
   return (
     <div className="glamora-card anim-fadeUp" style={{
       padding: 0, overflow: "hidden", marginBottom: 16,
-      border: `1.5px solid hsla(${activeTierMeta.color} / 0.25)`,
-      boxShadow: `0 6px 28px hsla(${activeTierMeta.color} / 0.12), inset 0 1px 0 hsla(0 0% 100% / 0.06)`,
+      border: "1.5px solid hsla(42 90% 55% / 0.5)",
+      boxShadow: "0 6px 28px hsla(42 90% 50% / 0.25), 0 0 20px hsla(42 90% 55% / 0.15), inset 0 1px 0 hsla(0 0% 100% / 0.15)",
     }}>
       {/* Header with total price */}
       <div style={{
         padding: "18px 20px 14px",
-        background: `linear-gradient(135deg, hsla(${activeTierMeta.color} / 0.12), hsla(${activeTierMeta.bg} / 0.06))`,
-        borderBottom: `1px solid hsla(${activeTierMeta.color} / 0.1)`,
+        background: "linear-gradient(135deg, hsl(42 90% 50%), hsl(38 85% 45%), hsl(45 95% 55%))",
+        borderBottom: "1px solid hsla(42 90% 60% / 0.4)",
         position: "relative", overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          background: "linear-gradient(105deg, transparent 40%, hsla(0 0% 100% / 0.25) 50%, transparent 60%)",
-          backgroundSize: "200% 100%",
-          animation: "gold-shimmer 3s ease-in-out infinite",
+          background: "linear-gradient(105deg, transparent 30%, hsla(0 0% 100% / 0.5) 45%, hsla(0 0% 100% / 0.7) 50%, hsla(0 0% 100% / 0.5) 55%, transparent 70%)",
+          backgroundSize: "250% 100%",
+          animation: "gold-shimmer 2s ease-in-out infinite",
         }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          background: "linear-gradient(180deg, hsla(0 0% 100% / 0.15) 0%, transparent 50%, hsla(0 0% 0% / 0.1) 100%)",
+        }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, position: "relative", zIndex: 1 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 14,
-            background: `linear-gradient(135deg, hsl(${activeTierMeta.color}), hsla(${activeTierMeta.color} / 0.7))`,
+            background: "linear-gradient(135deg, hsl(42 95% 60%), hsl(35 90% 45%))",
             display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 4px 14px hsla(${activeTierMeta.color} / 0.3)`,
+            boxShadow: "0 4px 14px hsla(42 90% 50% / 0.5)",
+            border: "1px solid hsla(0 0% 100% / 0.3)",
           }}>
             <ShoppingBag size={20} color="white" />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "hsl(var(--glamora-char))", fontFamily: "'Playfair Display', serif" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "white", fontFamily: "'Playfair Display', serif", textShadow: "0 1px 2px hsla(0 0% 0% / 0.2)" }}>
               Shop This Look
             </div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
+            <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.85)", textShadow: "0 1px 1px hsla(0 0% 0% / 0.15)" }}>
               {allItems.length} items · Complete outfit
             </div>
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{
-              fontSize: 24, fontWeight: 800, color: `hsl(${activeTierMeta.color})`,
+              fontSize: 24, fontWeight: 800, color: "white",
               lineHeight: 1, fontFamily: "'Jost', sans-serif",
+              textShadow: "0 2px 4px hsla(0 0% 0% / 0.2)",
             }}>
               {formatPrice(totals[activeTier])}
             </div>
-            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", textTransform: "uppercase", letterSpacing: 1 }}>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.8)", textTransform: "uppercase", letterSpacing: 1 }}>
               total
             </div>
           </div>
