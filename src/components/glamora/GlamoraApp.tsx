@@ -18,6 +18,7 @@ import InspirationLoadingScreen from "./InspirationLoadingScreen";
 import InspirationResultScreen from "./InspirationResultScreen";
 import type { StyleProfile } from "./InspirationLoadingScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
+import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
 import { useStyleHistory } from "./useStyleHistory";
@@ -252,6 +253,7 @@ const GlamoraApp = () => {
         <UpgradePrompt feature={lockedFeature} onClose={() => setShowUpgradePrompt(false)}
           onUpgrade={(tier) => upgradeTo(tier)} />
       )}
+      <AppDownloadSheet />
     </div>
   );
 };
