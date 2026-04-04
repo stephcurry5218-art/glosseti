@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Crown, X } from "lucide-react";
 import type { SubscriptionTier } from "./types";
+import { purchaseSubscription, isIAPAvailable } from "./iapService";
 
 interface Props {
   feature: string;
