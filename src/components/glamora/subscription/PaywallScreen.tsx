@@ -13,6 +13,30 @@ interface Props {
 
 const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature }: Props) => {
   const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">("yearly");
+  const [purchasing, setPurchasing] = useState(false);
+
+  const handlePurchase = async (tier: SubscriptionTier) => {
+    if (tier === "free") return;
+
+    if (!isIAPAvailable()) {
+      // On web, show message to download the app
+      alert("Subscriptions are available in the Glosseti app. Download from the App Store to subscribe.");
+      return;
+    }
+
+    setPurchasing(true);
+    try {
+      const success = await purchaseSubscription(tier as Exclude<SubscriptionTier, "free">, billingCycle);
+      // If purchase succeeds, the onPurchaseApproved callback in iapService handles the upgrade
+      if (!success) {
+        console.warn("Purchase was not completed");
+      }
+    } catch (err) {
+      console.error("Purchase error:", err);
+    } finally {
+      setPurchasing(false);
+    }
+  };
 
   const tierIcons: Record<string, typeof Crown> = { free: Zap, premium: Crown, pro: Star };
 
