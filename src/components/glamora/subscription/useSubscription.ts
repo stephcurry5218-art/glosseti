@@ -4,6 +4,7 @@ import type { SubscriptionTier, SubscriptionState } from "./types";
 import { MONTHLY_CAPS, FREE_DAILY_LIMIT } from "./types";
 
 const STORAGE_KEY = "glamora_subscription";
+const ANON_USAGE_KEY = "glamora_anon_usage";
 
 function getCurrentMonth(): string {
   const d = new Date();
@@ -26,6 +27,19 @@ function loadTier(): SubscriptionTier {
   return "free";
 }
 
+/** Anonymous usage stored in localStorage — counts total uses before requiring sign-up */
+function loadAnonUsage(): number {
+  try {
+    const raw = localStorage.getItem(ANON_USAGE_KEY);
+    if (raw) return parseInt(raw, 10) || 0;
+  } catch {}
+  return 0;
+}
+
+function saveAnonUsage(count: number) {
+  localStorage.setItem(ANON_USAGE_KEY, String(count));
+}
+
 export function useSubscription() {
   const tier = loadTier();
   const [state, setState] = useState<SubscriptionState>({
@@ -39,15 +53,15 @@ export function useSubscription() {
   const [lockedFeature, setLockedFeature] = useState<string | null>(null);
   const [usageCount, setUsageCount] = useState(0);
   const [userId, setUserId] = useState<string | null>(null);
+  const [anonUsage, setAnonUsage] = useState(loadAnonUsage);
+  const [requireAuth, setRequireAuth] = useState(false);
 
-  // Fetch current usage from the database
+  // Fetch current usage from the database (authenticated users only)
   const fetchUsage = useCallback(async (uid: string, currentTier: SubscriptionTier) => {
     let startDate: string;
     if (currentTier === "free") {
-      // Free tier: count today's generations
       startDate = getCurrentDayISO() + "T00:00:00.000Z";
     } else {
-      // Paid tier: count this month's generations
       startDate = getCurrentMonth() + "-01T00:00:00.000Z";
     }
 
@@ -69,6 +83,7 @@ export function useSubscription() {
       const uid = session?.user?.id ?? null;
       setUserId(uid);
       if (uid) {
+        setRequireAuth(false);
         fetchUsage(uid, state.tier);
       }
     });
@@ -78,6 +93,12 @@ export function useSubscription() {
       setUserId(uid);
       if (uid) {
         fetchUsage(uid, state.tier);
+      } else {
+        // Anonymous: use localStorage count
+        const anon = loadAnonUsage();
+        setAnonUsage(anon);
+        setUsageCount(anon);
+        setState(prev => ({ ...prev, monthlyGenerations: anon }));
       }
     });
 
@@ -90,20 +111,29 @@ export function useSubscription() {
   const showWatermark = state.tier === "free";
 
   const recordGeneration = useCallback(async () => {
-    if (!userId) return;
-    const { error } = await supabase
-      .from("usage_tracking")
-      .insert({ user_id: userId, tier: state.tier });
-
-    if (!error) {
-      setUsageCount(prev => prev + 1);
-      setState(prev => ({ ...prev, monthlyGenerations: prev.monthlyGenerations + 1 }));
+    if (userId) {
+      // Authenticated: record in database
+      const { error } = await supabase
+        .from("usage_tracking")
+        .insert({ user_id: userId, tier: state.tier });
+      if (!error) {
+        setUsageCount(prev => prev + 1);
+        setState(prev => ({ ...prev, monthlyGenerations: prev.monthlyGenerations + 1 }));
+      }
+    } else {
+      // Anonymous: record in localStorage
+      const newCount = anonUsage + 1;
+      saveAnonUsage(newCount);
+      setAnonUsage(newCount);
+      setUsageCount(newCount);
+      setState(prev => ({ ...prev, monthlyGenerations: newCount }));
     }
-  }, [userId, state.tier]);
+  }, [userId, state.tier, anonUsage]);
 
   const tryGenerate = useCallback((): boolean => {
-    if (!userId) {
-      // Not logged in — require auth
+    if (!userId && anonUsage >= FREE_DAILY_LIMIT) {
+      // Anonymous user exhausted free tries — require sign-up
+      setRequireAuth(true);
       setShowPaywall(true);
       return false;
     }
@@ -113,7 +143,7 @@ export function useSubscription() {
     }
     recordGeneration();
     return true;
-  }, [userId, usageCount, cap, recordGeneration]);
+  }, [userId, anonUsage, usageCount, cap, recordGeneration]);
 
   const checkFeatureAccess = useCallback((feature: string, requiredTier: SubscriptionTier = "premium"): boolean => {
     const tierLevel = { free: 0, premium: 1, pro: 2 };
@@ -152,5 +182,7 @@ export function useSubscription() {
     tryGenerate,
     checkFeatureAccess,
     upgradeTo,
+    requireAuth,
+    setRequireAuth,
   };
 }
