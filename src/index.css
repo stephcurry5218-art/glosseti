@@ -67,8 +67,8 @@
   }
 
   @keyframes gold-pulse-glow {
-    0%, 100% { box-shadow: 0 0 12px hsla(42, 90%, 55%, 0.3), 0 0 24px hsla(42, 90%, 50%, 0.15), 0 6px 28px hsla(42, 90%, 50%, 0.2); }
-    50% { box-shadow: 0 0 22px hsla(42, 90%, 55%, 0.55), 0 0 44px hsla(42, 90%, 50%, 0.3), 0 6px 28px hsla(42, 90%, 50%, 0.25); }
+    0%, 100% { box-shadow: 0 0 8px var(--glow-color, hsla(42, 90%, 55%, 0.2)), 0 4px 16px var(--glow-color, hsla(42, 90%, 50%, 0.1)); }
+    50% { box-shadow: 0 0 14px var(--glow-color, hsla(42, 90%, 55%, 0.35)), 0 4px 24px var(--glow-color, hsla(42, 90%, 50%, 0.18)); }
   }
 }
 
