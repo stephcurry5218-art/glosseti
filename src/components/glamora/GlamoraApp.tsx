@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import SplashScreen from "./SplashScreen";
@@ -81,6 +82,14 @@ const GlamoraApp = () => {
     });
     return () => authSub.unsubscribe();
   }, []);
+
+  // Initialize Apple IAP
+  useEffect(() => {
+    initializeIAP(
+      (tier) => upgradeTo(tier),
+      (error) => console.error("[IAP] Purchase error:", error),
+    );
+  }, [upgradeTo]);
 
   const go = useCallback((s: Screen) => setScreen(s), []);
 

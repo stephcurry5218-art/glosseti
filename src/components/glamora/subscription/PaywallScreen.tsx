@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Crown, Check, Sparkles, Zap, X, Star } from "lucide-react";
 import { PLANS } from "./types";
 import type { SubscriptionTier } from "./types";
+import { purchaseSubscription, isIAPAvailable } from "./iapService";
 
 interface Props {
   onClose: () => void;
@@ -12,6 +13,30 @@ interface Props {
 
 const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature }: Props) => {
   const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">("yearly");
+  const [purchasing, setPurchasing] = useState(false);
+
+  const handlePurchase = async (tier: SubscriptionTier) => {
+    if (tier === "free") return;
+
+    if (!isIAPAvailable()) {
+      // On web, show message to download the app
+      alert("Subscriptions are available in the Glosseti app. Download from the App Store to subscribe.");
+      return;
+    }
+
+    setPurchasing(true);
+    try {
+      const success = await purchaseSubscription(tier as Exclude<SubscriptionTier, "free">, billingCycle);
+      // If purchase succeeds, the onPurchaseApproved callback in iapService handles the upgrade
+      if (!success) {
+        console.warn("Purchase was not completed");
+      }
+    } catch (err) {
+      console.error("Purchase error:", err);
+    } finally {
+      setPurchasing(false);
+    }
+  };
 
   const tierIcons: Record<string, typeof Crown> = { free: Zap, premium: Crown, pro: Star };
 
@@ -160,11 +185,13 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                   </div>
 
                   <button
-                    onClick={() => onUpgrade(plan.tier as SubscriptionTier)}
+                    onClick={() => handlePurchase(plan.tier as SubscriptionTier)}
+                    disabled={purchasing}
                     style={{
                       width: "100%", padding: "14px", borderRadius: 14, border: "none",
-                      cursor: "pointer", fontFamily: "'Jost', sans-serif",
+                      cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
                       fontSize: 14, fontWeight: 700,
+                      opacity: purchasing ? 0.6 : 1,
                       background: isHighlighted
                         ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
                         : "hsla(var(--glamora-gold) / 0.12)",
@@ -173,7 +200,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       transition: "all 0.2s",
                     }}
                   >
-                    Subscribe Now
+                    {purchasing ? "Processing…" : "Subscribe Now"}
                   </button>
                 </div>
               </div>

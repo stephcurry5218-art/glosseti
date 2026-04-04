@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Crown, X } from "lucide-react";
 import type { SubscriptionTier } from "./types";
+import { purchaseSubscription, isIAPAvailable } from "./iapService";
 
 interface Props {
   feature: string;
@@ -7,7 +9,23 @@ interface Props {
   onUpgrade: (tier: SubscriptionTier) => void;
 }
 
-const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => (
+const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
+  const [purchasing, setPurchasing] = useState(false);
+
+  const handleUpgrade = async () => {
+    if (!isIAPAvailable()) {
+      alert("Subscriptions are available in the Glosseti app. Download from the App Store to subscribe.");
+      return;
+    }
+    setPurchasing(true);
+    try {
+      await purchaseSubscription("premium", "monthly");
+    } finally {
+      setPurchasing(false);
+    }
+  };
+
+  return (
   <div style={{
     position: "fixed", inset: 0, zIndex: 190,
     background: "hsla(0 0% 0% / 0.6)", backdropFilter: "blur(8px)",
@@ -46,17 +64,18 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => (
         </div>
 
         <button
-          onClick={() => onUpgrade("premium")}
+          onClick={handleUpgrade}
+          disabled={purchasing}
           style={{
             width: "100%", padding: "14px", borderRadius: 14, border: "none",
-            cursor: "pointer", fontFamily: "'Jost', sans-serif",
-            fontSize: 14, fontWeight: 700,
+            cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
+            fontSize: 14, fontWeight: 700, opacity: purchasing ? 0.6 : 1,
             background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
             color: "white", marginBottom: 10,
             boxShadow: "0 6px 24px hsla(28 40% 52% / 0.3)",
           }}
         >
-          Upgrade — $14.99/mo
+          {purchasing ? "Processing…" : "Upgrade — $14.99/mo"}
         </button>
 
         <button onClick={onClose} style={{
@@ -69,6 +88,7 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default UpgradePrompt;
