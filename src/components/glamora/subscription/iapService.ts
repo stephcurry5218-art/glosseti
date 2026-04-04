@@ -86,7 +86,7 @@ export async function initializeIAP(
 
     // Handle purchase errors
     store.error((err: any) => {
-      if (err.code !== (CdvPurchase as any).ErrorCode?.PAYMENT_CANCELLED) {
+      if (err.code !== 6777003) { // PAYMENT_CANCELLED
         onPurchaseError(err.message || "Purchase failed");
       }
     });
