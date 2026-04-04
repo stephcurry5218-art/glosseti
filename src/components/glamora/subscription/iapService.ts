@@ -49,7 +49,11 @@ export async function initializeIAP(
   if (initialized) return;
 
   try {
-    const CdvPurchase = await import("cordova-plugin-purchase");
+    const CdvPurchase = (window as any).CdvPurchase;
+    if (!CdvPurchase) {
+      console.error("[IAP] CdvPurchase not available on window");
+      return;
+    }
     const store = CdvPurchase.store;
     storeInstance = store;
 
