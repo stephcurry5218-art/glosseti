@@ -9,7 +9,23 @@ interface Props {
   onUpgrade: (tier: SubscriptionTier) => void;
 }
 
-const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => (
+const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
+  const [purchasing, setPurchasing] = useState(false);
+
+  const handleUpgrade = async () => {
+    if (!isIAPAvailable()) {
+      alert("Subscriptions are available in the Glosseti app. Download from the App Store to subscribe.");
+      return;
+    }
+    setPurchasing(true);
+    try {
+      await purchaseSubscription("premium", "monthly");
+    } finally {
+      setPurchasing(false);
+    }
+  };
+
+  return (
   <div style={{
     position: "fixed", inset: 0, zIndex: 190,
     background: "hsla(0 0% 0% / 0.6)", backdropFilter: "blur(8px)",
