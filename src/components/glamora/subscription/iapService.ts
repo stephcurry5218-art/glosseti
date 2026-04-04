@@ -59,7 +59,7 @@ export async function initializeIAP(
 
     // Register all subscription products
     const products: any[] = [];
-    for (const [tier, ids] of Object.entries(IAP_PRODUCT_IDS)) {
+    for (const [_tier, ids] of Object.entries(IAP_PRODUCT_IDS)) {
       for (const [, productId] of Object.entries(ids)) {
         if (productId) {
           products.push({
