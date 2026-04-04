@@ -27,7 +27,7 @@ const formatPrice = (amount: number): string => {
 };
 
 const DynamicPriceCard = ({ items }: Props) => {
-  const [activeTier, setActiveTier] = useState<TierKey>("mid");
+  const [activeTier, setActiveTier] = useState<TierKey>("budget");
   const [expanded, setExpanded] = useState(false);
 
   if (items.length === 0) return null;
