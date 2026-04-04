@@ -91,7 +91,7 @@ export async function initializeIAP(
       }
     });
 
-    await store.initialize([CdvPurchase.Platform.APPLE_APPSTORE]);
+    await store.initialize([CdvPurchase.Platform?.APPLE_APPSTORE || "ios-appstore"]);
     initialized = true;
     console.log("[IAP] Store initialized successfully");
   } catch (err) {
