@@ -83,6 +83,14 @@ const GlamoraApp = () => {
     return () => authSub.unsubscribe();
   }, []);
 
+  // Initialize Apple IAP
+  useEffect(() => {
+    initializeIAP(
+      (tier) => upgradeTo(tier),
+      (error) => console.error("[IAP] Purchase error:", error),
+    );
+  }, [upgradeTo]);
+
   const go = useCallback((s: Screen) => setScreen(s), []);
 
   const handleSignOut = async () => {
