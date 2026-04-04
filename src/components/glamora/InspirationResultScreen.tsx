@@ -268,6 +268,18 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
           </div>
         )}
 
+        {/* Look Price Summary */}
+        {hasStyled && (() => {
+          const allShopItems: ShopItem[] = [
+            ...getHotspotShopItems("makeup"),
+            ...getHotspotShopItems("top"),
+            ...getHotspotShopItems("bottom"),
+            ...getHotspotShopItems("shoes"),
+            ...getHotspotShopItems("accessories"),
+          ];
+          return allShopItems.length > 0 ? <DynamicPriceCard items={allShopItems} /> : null;
+        })()}
+
         {/* Image display */}
         {viewMode === "compare" && hasOriginal && hasStyled ? (
           <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22, position: "relative" }}>
