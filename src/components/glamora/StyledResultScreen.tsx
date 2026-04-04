@@ -205,6 +205,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
+        {/* Look Price Breakdown */}
+        {hasStyled && looks[0] && (
+          <LookPriceCard lookName={looks[0].name} />
+        )}
+
         {/* View mode toggle */}
         <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
           {([
