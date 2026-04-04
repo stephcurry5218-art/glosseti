@@ -41,23 +41,33 @@ const DynamicPriceCard = ({ items }: Props) => {
 
   const activeTierMeta = tiers.find(t => t.key === activeTier)!;
 
+  const tierColors: Record<TierKey, { h: number; s: number; l: number }> = {
+    luxury: { h: 42, s: 90, l: 50 },
+    mid: { h: 340, s: 65, l: 55 },
+    budget: { h: 145, s: 60, l: 42 },
+  };
+  const tc = tierColors[activeTier];
+
   return (
     <div className="glamora-card anim-fadeUp" style={{
       padding: 0, overflow: "hidden", marginBottom: 16,
-      border: "2px solid hsla(42 90% 55% / 0.6)",
-      animation: "gold-pulse-glow 2.5s ease-in-out infinite",
+      border: `2px solid hsla(${tc.h} ${tc.s}% ${tc.l}% / 0.5)`,
+      animation: "gold-pulse-glow 3s ease-in-out infinite",
+      ["--glow-color" as any]: `hsla(${tc.h}, ${tc.s}%, ${tc.l}%, 0.25)`,
+      transition: "border-color 0.4s",
     }}>
       <div style={{
         padding: "18px 20px 14px",
-        background: "linear-gradient(135deg, hsl(42 90% 50%), hsl(38 85% 45%), hsl(45 95% 55%))",
-        borderBottom: "1px solid hsla(42 90% 60% / 0.4)",
+        background: `linear-gradient(135deg, hsl(${tc.h} ${tc.s}% ${tc.l}%), hsl(${tc.h - 4} ${tc.s - 5}% ${tc.l - 5}%), hsl(${tc.h + 3} ${tc.s + 5}% ${tc.l + 5}%))`,
+        borderBottom: `1px solid hsla(${tc.h} ${tc.s}% ${tc.l + 10}% / 0.4)`,
         position: "relative", overflow: "hidden",
+        transition: "background 0.4s",
       }}>
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          background: "linear-gradient(105deg, transparent 30%, hsla(0 0% 100% / 0.5) 45%, hsla(0 0% 100% / 0.7) 50%, hsla(0 0% 100% / 0.5) 55%, transparent 70%)",
+          background: "linear-gradient(105deg, transparent 30%, hsla(0 0% 100% / 0.45) 45%, hsla(0 0% 100% / 0.6) 50%, hsla(0 0% 100% / 0.45) 55%, transparent 70%)",
           backgroundSize: "250% 100%",
-          animation: "gold-shimmer 2s ease-in-out infinite",
+          animation: "gold-shimmer 2.5s ease-in-out infinite",
         }} />
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
@@ -66,10 +76,11 @@ const DynamicPriceCard = ({ items }: Props) => {
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, position: "relative", zIndex: 1 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 14,
-            background: "linear-gradient(135deg, hsl(42 95% 60%), hsl(35 90% 45%))",
+            background: `linear-gradient(135deg, hsl(${tc.h} ${tc.s + 5}% ${tc.l + 10}%), hsl(${tc.h - 7} ${tc.s}% ${tc.l - 5}%))`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 4px 14px hsla(42 90% 50% / 0.5)",
+            boxShadow: `0 4px 14px hsla(${tc.h} ${tc.s}% ${tc.l}% / 0.4)`,
             border: "1px solid hsla(0 0% 100% / 0.3)",
+            transition: "background 0.4s, box-shadow 0.4s",
           }}>
             <ShoppingBag size={20} color="white" />
           </div>
