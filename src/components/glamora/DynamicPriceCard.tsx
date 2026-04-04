@@ -27,7 +27,7 @@ const formatPrice = (amount: number): string => {
 };
 
 const DynamicPriceCard = ({ items }: Props) => {
-  const [activeTier, setActiveTier] = useState<TierKey>("mid");
+  const [activeTier, setActiveTier] = useState<TierKey>("budget");
   const [expanded, setExpanded] = useState(false);
 
   if (items.length === 0) return null;
@@ -49,9 +49,16 @@ const DynamicPriceCard = ({ items }: Props) => {
     }}>
       <div style={{
         padding: "18px 20px 14px",
-        background: `linear-gradient(135deg, hsla(${activeTierMeta.color} / 0.08), hsla(${activeTierMeta.bg} / 0.04))`,
+        background: `linear-gradient(135deg, hsla(${activeTierMeta.color} / 0.12), hsla(${activeTierMeta.bg} / 0.06))`,
         borderBottom: `1px solid hsla(${activeTierMeta.color} / 0.1)`,
+        position: "relative", overflow: "hidden",
       }}>
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          background: "linear-gradient(105deg, transparent 40%, hsla(0 0% 100% / 0.25) 50%, transparent 60%)",
+          backgroundSize: "200% 100%",
+          animation: "gold-shimmer 3s ease-in-out infinite",
+        }} />
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 14,
