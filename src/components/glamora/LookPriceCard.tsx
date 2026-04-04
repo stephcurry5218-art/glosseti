@@ -62,8 +62,8 @@ const LookPriceCard = ({ lookName }: Props) => {
   return (
     <div className="glamora-card anim-fadeUp" style={{
       padding: 0, overflow: "hidden", marginBottom: 16,
-      border: "1.5px solid hsla(42 90% 55% / 0.5)",
-      boxShadow: "0 6px 28px hsla(42 90% 50% / 0.25), 0 0 20px hsla(42 90% 55% / 0.15), inset 0 1px 0 hsla(0 0% 100% / 0.15)",
+      border: "2px solid hsla(42 90% 55% / 0.6)",
+      animation: "gold-pulse-glow 2.5s ease-in-out infinite",
     }}>
       {/* Header with total price */}
       <div style={{
