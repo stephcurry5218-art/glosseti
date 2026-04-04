@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Sparkles, Bookmark, Share2, RefreshCw, Download, Palette, Shirt, Gem, Scissors, Info, ExternalLink, Watch, CircleDot, Footprints } from "lucide-react";
 import type { UserPrefs, PhotoType } from "./GlamoraApp";
 import type { StyleProfile } from "./InspirationLoadingScreen";
@@ -7,6 +7,7 @@ import { getShopUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
+import DynamicPriceCard from "./DynamicPriceCard";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
