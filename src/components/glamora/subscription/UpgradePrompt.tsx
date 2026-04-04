@@ -88,6 +88,7 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default UpgradePrompt;
