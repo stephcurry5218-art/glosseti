@@ -7,6 +7,7 @@ import { getShopUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
+import LookPriceCard from "./LookPriceCard";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -203,6 +204,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             </div>
           ))}
         </div>
+
+        {/* Look Price Breakdown */}
+        {hasStyled && looks[0] && (
+          <LookPriceCard lookName={looks[0].name} />
+        )}
 
         {/* View mode toggle */}
         <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>

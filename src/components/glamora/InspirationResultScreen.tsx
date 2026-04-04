@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Sparkles, Bookmark, Share2, RefreshCw, Download, Palette, Shirt, Gem, Scissors, Info, ExternalLink, Watch, CircleDot, Footprints } from "lucide-react";
 import type { UserPrefs, PhotoType } from "./GlamoraApp";
 import type { StyleProfile } from "./InspirationLoadingScreen";
@@ -7,6 +7,7 @@ import { getShopUrl } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
+import DynamicPriceCard from "./DynamicPriceCard";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -266,6 +267,18 @@ const InspirationResultScreen = ({ prefs, styledImageUrl, styleProfile, onBack, 
             <div style={{ fontSize: 14, color: "hsl(var(--glamora-char))", lineHeight: 1.5 }}>{profile.overallVibe}</div>
           </div>
         )}
+
+        {/* Look Price Summary */}
+        {hasStyled && (() => {
+          const allShopItems: ShopItem[] = [
+            ...getHotspotShopItems("makeup"),
+            ...getHotspotShopItems("top"),
+            ...getHotspotShopItems("bottom"),
+            ...getHotspotShopItems("shoes"),
+            ...getHotspotShopItems("accessories"),
+          ];
+          return allShopItems.length > 0 ? <DynamicPriceCard items={allShopItems} /> : null;
+        })()}
 
         {/* Image display */}
         {viewMode === "compare" && hasOriginal && hasStyled ? (
