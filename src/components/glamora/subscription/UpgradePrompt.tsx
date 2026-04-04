@@ -64,17 +64,18 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
         </div>
 
         <button
-          onClick={() => onUpgrade("premium")}
+          onClick={handleUpgrade}
+          disabled={purchasing}
           style={{
             width: "100%", padding: "14px", borderRadius: 14, border: "none",
-            cursor: "pointer", fontFamily: "'Jost', sans-serif",
-            fontSize: 14, fontWeight: 700,
+            cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
+            fontSize: 14, fontWeight: 700, opacity: purchasing ? 0.6 : 1,
             background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
             color: "white", marginBottom: 10,
             boxShadow: "0 6px 24px hsla(28 40% 52% / 0.3)",
           }}
         >
-          Upgrade — $14.99/mo
+          {purchasing ? "Processing…" : "Upgrade — $14.99/mo"}
         </button>
 
         <button onClick={onClose} style={{
