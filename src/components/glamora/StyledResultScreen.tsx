@@ -131,7 +131,8 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const isMale = prefs.gender === "male";
   const isMakeup = prefs.styleCategory === "makeup-only";
   const looks = styleLooks[prefs.styleCategory] || styleLooks["full-style"];
-  const hotspotPositions = getHotspotPositions(isMale);
+  const userCustomDetails = parseCustomDetails(prefs.styleSubcategory);
+  const hotspotPositions = getHotspotPositions(isMale, userCustomDetails);
 
   const analysisCards: { label: string; value: string; Icon: LucideIcon }[] = isMakeup
     ? [
