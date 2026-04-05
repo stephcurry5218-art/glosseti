@@ -3,7 +3,7 @@ import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
-import { getShopUrl } from "./affiliateUrls";
+import { getShopUrl, detectStoreFromText } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
@@ -356,25 +356,32 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 const isActive = activeHotspot === id;
                 // Build a specific shop link from the actual look data
                 const getSpecificShopLink = () => {
-                  const lookName = looks[0]?.name;
-                  const categoryMap: Record<HotspotId, Category> = {
-                    makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
-                  };
-                  const cat = categoryMap[id as HotspotId];
-                  const steps = lookName && lookData[lookName]?.[cat];
-                  if (steps && steps.length > 0) {
-                    const firstWithShop = steps.find(s => s.shop);
-                    if (firstWithShop?.shop) {
-                      const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
-                      // If user specified a custom detail for this hotspot category, use it as search term
-                      const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
-                      return customTerm ? getShopUrl(tier.store, customTerm) : getShopUrl(tier.store, tier.item);
-                    }
-                  }
-                  // Fallback — use custom detail if available, otherwise generic search
-                  const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
-                  return getShopUrl("Amazon", customTerm || pos.searchTerm);
-                };
+                   const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                   // If user typed a custom detail, detect brand name and route to that store
+                   if (customTerm) {
+                     const detected = detectStoreFromText(customTerm);
+                     if (detected) {
+                       return getShopUrl(detected.store, detected.query);
+                     }
+                     // No brand detected — search Amazon with the full custom term
+                     return getShopUrl("Amazon", customTerm);
+                   }
+                   // No custom detail — fall back to lookData shop links
+                   const lookName = looks[0]?.name;
+                   const categoryMap: Record<HotspotId, Category> = {
+                     makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
+                   };
+                   const cat = categoryMap[id as HotspotId];
+                   const steps = lookName && lookData[lookName]?.[cat];
+                   if (steps && steps.length > 0) {
+                     const firstWithShop = steps.find(s => s.shop);
+                     if (firstWithShop?.shop) {
+                       const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
+                       return getShopUrl(tier.store, tier.item);
+                     }
+                   }
+                   return getShopUrl("Amazon", pos.searchTerm);
+                 };
                 return (
                   <button
                     key={id}
@@ -415,12 +422,30 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               };
               const cat = categoryMap[activeHotspot];
               const data = lookName && lookData[lookName]?.[cat];
-              const shopItems: ShopItem[] = data
-                ? data.filter(step => step.shop).map(step => ({
-                    label: step.title,
-                    stores: step.shop!,
-                  }))
-                : [];
+              const customTerm = getCustomDetailForHotspot(activeHotspot, userCustomDetails);
+              const detected = customTerm ? detectStoreFromText(customTerm) : null;
+
+              let shopItems: ShopItem[];
+              if (customTerm) {
+                // User specified a custom item — build a single shop entry routing to the right store
+                const targetStore = detected?.store || "Amazon";
+                const searchQuery = detected?.query || customTerm;
+                shopItems = [{
+                  label: customTerm,
+                  stores: {
+                    luxury: { store: targetStore, item: searchQuery, price: "$$$$" },
+                    mid: { store: targetStore, item: searchQuery, price: "$$$" },
+                    budget: { store: "Amazon", item: customTerm, price: "$$" },
+                  },
+                }];
+              } else {
+                shopItems = data
+                  ? data.filter(step => step.shop).map(step => ({
+                      label: step.title,
+                      stores: step.shop!,
+                    }))
+                  : [];
+              }
 
               return (
                 <div className="anim-fadeUp" style={{ marginTop: 14 }}>

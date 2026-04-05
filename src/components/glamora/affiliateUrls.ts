@@ -133,3 +133,18 @@ export const getShopUrl = (store: string, item: string): string => {
 export const getAmazonSearchUrl = (searchTerm: string): string => {
   return `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}&tag=${AFFILIATE_TAG}&${UTM}`;
 };
+
+/** Detect a known store/brand name inside free-text and return { store, query } */
+const storeNames = Object.keys(storeConfigs);
+export const detectStoreFromText = (text: string): { store: string; query: string } | null => {
+  const lower = text.toLowerCase();
+  // Sort by length descending so "Under Armour" matches before "Armour"
+  for (const name of storeNames.sort((a, b) => b.length - a.length)) {
+    if (lower.includes(name.toLowerCase())) {
+      // Remove the brand name from the query to get the product term
+      const query = text.replace(new RegExp(name, "i"), "").trim() || text;
+      return { store: name, query };
+    }
+  }
+  return null;
+};
