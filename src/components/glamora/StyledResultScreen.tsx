@@ -73,6 +73,13 @@ const categoryToHotspot: Record<string, HotspotId> = {
   "fitness": "top",
   "celebrity-hair": "makeup",
 };
+/** Find the custom detail for a given hotspot by checking all category mappings */
+const getCustomDetailForHotspot = (hotspotId: HotspotId, customDetails: Record<string, string>): string | null => {
+  for (const [catId, detail] of Object.entries(customDetails)) {
+    if (categoryToHotspot[catId] === hotspotId) return detail;
+  }
+  return null;
+};
 
 const getHotspotPositions = (isMale: boolean, customDetails?: Record<string, string>): Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> => {
   // Find custom details relevant to each hotspot
