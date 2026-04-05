@@ -422,12 +422,30 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               };
               const cat = categoryMap[activeHotspot];
               const data = lookName && lookData[lookName]?.[cat];
-              const shopItems: ShopItem[] = data
-                ? data.filter(step => step.shop).map(step => ({
-                    label: step.title,
-                    stores: step.shop!,
-                  }))
-                : [];
+              const customTerm = getCustomDetailForHotspot(activeHotspot, userCustomDetails);
+              const detected = customTerm ? detectStoreFromText(customTerm) : null;
+
+              let shopItems: ShopItem[];
+              if (customTerm) {
+                // User specified a custom item — build a single shop entry routing to the right store
+                const targetStore = detected?.store || "Amazon";
+                const searchQuery = detected?.query || customTerm;
+                shopItems = [{
+                  label: customTerm,
+                  stores: {
+                    luxury: { store: targetStore, item: searchQuery, price: "$$$$" },
+                    mid: { store: targetStore, item: searchQuery, price: "$$$" },
+                    budget: { store: "Amazon", item: customTerm, price: "$$" },
+                  },
+                }];
+              } else {
+                shopItems = data
+                  ? data.filter(step => step.shop).map(step => ({
+                      label: step.title,
+                      stores: step.shop!,
+                    }))
+                  : [];
+              }
 
               return (
                 <div className="anim-fadeUp" style={{ marginTop: 14 }}>
