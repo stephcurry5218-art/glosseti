@@ -147,10 +147,24 @@ serve(async (req) => {
       return normalized;
     };
 
+    // Sub-style specific overrides for swimwear
+    const swimwearSubStyleOverrides: Record<string, string> = {
+      "beach-goddess": "IMPORTANT: Style as a luxurious one-piece swimsuit with plunging neckline OR a high-end matching bikini set. Add gold body chains, a flowing sheer sarong, strappy gold sandals, and oversized sunglasses. Goddess-like beach editorial aesthetic.",
+      "sporty-swim": "IMPORTANT: Style as a sporty athletic swimsuit — racerback bikini top or high-neck crop top with matching boyshort or high-waist bottoms. Bold color blocking (neon, cobalt, coral). Sporty sandals and a visor cap. Active beachwear editorial.",
+      "tropical-glam": "IMPORTANT: Style as a vibrant tropical-print two-piece bikini set — bold floral or palm print bikini top with matching bikini bottoms. Add a colorful sarong, platform espadrilles, shell jewelry, and a straw tote. Resort editorial style.",
+      "two-piece-set": "CRITICAL: This MUST be a clearly visible coordinated two-piece bikini set showing BOTH a separate bikini top AND separate matching bikini bottoms as distinct pieces. The bikini top and bikini bottom must both be clearly visible. Classic triangle or bandeau bikini top with matching high-cut or brazilian-cut bikini bottoms. Solid color or simple elegant pattern. Styled with sandals and sunglasses. Fashion editorial beach photography.",
+      "monokini": "IMPORTANT: Style as a designer cut-out one-piece swimsuit with strategic cutouts at the sides or waist, creating a modern sculpted silhouette. Bold solid color. Minimal accessories — just sunglasses and sandals. High-fashion editorial.",
+      "swim-with-jewelry": "IMPORTANT: Style as a sleek solid-color two-piece bikini set accessorized with layered waterproof gold chains, body chains draped across the waist, anklets, stacking rings, and statement earrings. The jewelry is the focal point. Beach editorial with golden-hour lighting.",
+    };
+
+    const swimwearOverride = (styleCategory === "swimwear" && styleSubcategory && swimwearSubStyleOverrides[styleSubcategory])
+      ? `\n\n${swimwearSubStyleOverrides[styleSubcategory]}`
+      : "";
+
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
-      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.`
-      : "";
+      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${swimwearOverride}`
+      : swimwearOverride;
 
     // Makeup preference for female users
     const makeupNote = (!isMale && makeupPreference)
