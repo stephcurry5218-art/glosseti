@@ -675,7 +675,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                     type="text"
                     value={customDetails[catId] || ""}
                     onChange={(e) => setCustomDetails(prev => ({ ...prev, [catId]: e.target.value }))}
-                    placeholder={`e.g. "Retro Jordan 1s", "Oversized denim jacket"...`}
+                    placeholder={customDetailPlaceholders[catId] || 'e.g. "Specific item or brand you want"...'}
                     style={{
                       width: "100%", padding: "10px 14px", borderRadius: 12,
                       border: `1.5px solid hsla(var(${accent}) / ${customDetails[catId] ? "0.4" : "0.15"})`,
