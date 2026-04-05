@@ -94,10 +94,14 @@ const Privacy = () => {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen overflow-y-auto"
       style={{
         background:
           "linear-gradient(160deg, hsl(var(--background)) 0%, hsl(18 20% 5%) 100%)",
+        height: "100vh",
+        position: "fixed",
+        inset: 0,
+        zIndex: 999,
       }}
     >
       {/* Header */}
