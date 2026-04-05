@@ -728,7 +728,14 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
         <button
           className="btn-primary btn-rose"
           disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
-          onClick={() => onNext(current.id, celebrityGuide || undefined, selectedSub || undefined)}
+          onClick={() => {
+            // Combine all selected sub-styles: "fitness:yoga-pants-set + shoes-sneakers:retro-jordans"
+            const combinedSubs = Object.entries(selectedSubs)
+              .filter(([, v]) => v)
+              .map(([catId, subId]) => `${catId}:${subId}`)
+              .join(" + ");
+            onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
+          }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
             background: isMale
