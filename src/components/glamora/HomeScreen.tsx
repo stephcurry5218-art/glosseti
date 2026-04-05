@@ -1,4 +1,4 @@
-import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart, Shirt, Dumbbell } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import type { Gender, StyleCategory } from "./GlamoraApp";
@@ -256,65 +256,6 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
-      {/* Extra style buttons row */}
-      <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-        <div className="glamora-card" onClick={() => onGetStyled("wedding-gowns")} style={{
-          padding: "14px 8px", cursor: "pointer", textAlign: "center",
-          background: "linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))",
-          border: "1px solid hsla(0 0% 100% / 0.08)",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-        }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: "linear-gradient(135deg, hsla(var(--glamora-rose) / 0.18), hsla(var(--glamora-gold) / 0.1))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Heart size={18} color="hsl(var(--glamora-gold))" />
-          </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>Wedding Gowns</div>
-            <div style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>Bridal elegance</div>
-          </div>
-        </div>
-
-        <div className="glamora-card" onClick={() => onGetStyled("tuxedos")} style={{
-          padding: "14px 8px", cursor: "pointer", textAlign: "center",
-          background: "linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))",
-          border: "1px solid hsla(0 0% 100% / 0.08)",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-        }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.18), hsla(var(--glamora-gold-light) / 0.1))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Shirt size={18} color="hsl(var(--glamora-gold))" />
-          </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>Tuxedos</div>
-            <div style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>Black-tie ready</div>
-          </div>
-        </div>
-
-        <div className="glamora-card" onClick={() => onGetStyled("fitness")} style={{
-          padding: "14px 8px", cursor: "pointer", textAlign: "center",
-          background: "linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))",
-          border: "1px solid hsla(0 0% 100% / 0.08)",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-        }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.18), hsla(var(--glamora-gold-light) / 0.1))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Dumbbell size={18} color="hsl(var(--glamora-gold))" />
-          </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)" }}>Fitness</div>
-            <div style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.45)", marginTop: 1 }}>Activewear looks</div>
-          </div>
-        </div>
-      </div>
 
       {/* Style Inspiration CTA */}
       <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0" }}>
