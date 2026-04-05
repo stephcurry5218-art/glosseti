@@ -459,6 +459,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
       if (prev.includes(id)) {
         if (prev.length <= 1) return prev;
         setSelectedSubs(s => { const copy = { ...s }; delete copy[id]; return copy; });
+        setCustomDetails(s => { const copy = { ...s }; delete copy[id]; return copy; });
         return prev.filter(c => c !== id);
       }
       return [...prev, id];
