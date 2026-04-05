@@ -457,11 +457,11 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
     setSelected(prev => {
       if (prev.includes(id)) {
         if (prev.length <= 1) return prev;
+        setSelectedSubs(s => { const copy = { ...s }; delete copy[id]; return copy; });
         return prev.filter(c => c !== id);
       }
       return [...prev, id];
     });
-    setSelectedSub(null);
   };
 
   // Show detail for the most recently selected and use it as the primary generation style
