@@ -56,6 +56,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         localStorage.setItem("glamora_dev_mode", "unlocked");
       }
       setShowPin(false);
+      // Force reload so subscription hook picks up the new dev mode state
+      setTimeout(() => window.location.reload(), 100);
     } else {
       setPinError(true);
       setPin("");
