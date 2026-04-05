@@ -3,7 +3,7 @@ import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
-import { getShopUrl } from "./affiliateUrls";
+import { getShopUrl, detectStoreFromText } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
