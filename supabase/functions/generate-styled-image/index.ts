@@ -125,10 +125,15 @@ serve(async (req) => {
 
       if (styleCategory === "swimwear") {
         normalized = normalized
-          .replace(/\bbikini\b/gi, "luxury two-piece swim set")
-          .replace(/\btwo-piece\b/gi, "coordinated two-piece swim set")
-          .replace(/\bstring bikini\b/gi, "elegant minimal swim set")
-          .replace(/\bred\b/gi, "rich crimson");
+          .replace(/\bbikini\b/gi, "luxury coordinated two-piece swim set with structured bikini top and matching bikini bottoms")
+          .replace(/\btwo-piece\b/gi, "coordinated two-piece bikini set with separate top and bottom pieces")
+          .replace(/\bstring bikini\b/gi, "elegant minimal string two-piece swim set")
+          .replace(/\bone-piece\b/gi, "sculpted designer one-piece swimsuit")
+          .replace(/\bmonokini\b/gi, "designer cut-out one-piece swimsuit")
+          .replace(/\bred\b/gi, "rich crimson")
+          .replace(/\bnude\b/gi, "warm sand")
+          .replace(/\bblack\b/gi, "jet black")
+          .replace(/\bwhite\b/gi, "crisp ivory");
       }
 
       if (styleCategory === "lingerie") {
