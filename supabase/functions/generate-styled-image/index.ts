@@ -54,8 +54,8 @@ serve(async (req) => {
         male: "wearing a confident, alluring outfit: a fitted black V-neck shirt showing off physique, slim dark jeans, polished Chelsea boots, a statement watch, and styled hair with subtle cologne vibes.",
       },
       swimwear: {
-        female: "in a professional fashion editorial beach photoshoot, wearing a stylish two-piece swimsuit set with a matching sarong wrap at the waist, strappy sandals, oversized designer sunglasses, a wide-brim sun hat, and a woven beach tote bag. Tropical beach resort setting with palm trees and turquoise water. Professional fashion photography, editorial lighting.",
-        male: "in a professional fashion editorial beach photoshoot, wearing tailored swim shorts with a relaxed open linen shirt draped over shoulders, slide sandals, aviator sunglasses, and a waterproof sport watch. Tropical beach resort setting. Professional fashion photography, editorial lighting.",
+        female: "in a luxury fashion editorial beach photoshoot, wearing a flattering coordinated two-piece bikini set — a structured bikini top with adjustable straps and matching high-cut bikini bottoms in a rich solid color or elegant print. The bikini top and bottom are clearly visible as separate coordinated pieces. Styled with a sheer sarong tied at the waist, strappy flat sandals, oversized designer sunglasses, gold layered body chains, and a wide-brim straw hat. Beautiful tropical beach resort setting with turquoise water and palm trees. Professional fashion magazine editorial photography, golden-hour lighting, full body shot showing the complete swimwear look.",
+        male: "in a professional fashion editorial beach photoshoot, wearing tailored mid-length swim trunks in a bold print or solid color, paired with an open linen camp-collar shirt draped casually over shoulders, leather slide sandals, aviator sunglasses, a waterproof sport watch, and a woven beach tote. Tropical beach resort setting with clear blue water. Professional fashion photography, editorial lighting.",
       },
       "urban-hiphop": {
         female: "wearing urban hip-hop style: oversized graphic jersey, baggy low-rise jeans, chunky platform sneakers, layered gold chains, hoop earrings, and a designer belt bag.",
@@ -125,10 +125,15 @@ serve(async (req) => {
 
       if (styleCategory === "swimwear") {
         normalized = normalized
-          .replace(/\bbikini\b/gi, "luxury two-piece swim set")
-          .replace(/\btwo-piece\b/gi, "coordinated two-piece swim set")
-          .replace(/\bstring bikini\b/gi, "elegant minimal swim set")
-          .replace(/\bred\b/gi, "rich crimson");
+          .replace(/\bbikini\b/gi, "luxury coordinated two-piece swim set with structured bikini top and matching bikini bottoms")
+          .replace(/\btwo-piece\b/gi, "coordinated two-piece bikini set with separate top and bottom pieces")
+          .replace(/\bstring bikini\b/gi, "elegant minimal string two-piece swim set")
+          .replace(/\bone-piece\b/gi, "sculpted designer one-piece swimsuit")
+          .replace(/\bmonokini\b/gi, "designer cut-out one-piece swimsuit")
+          .replace(/\bred\b/gi, "rich crimson")
+          .replace(/\bnude\b/gi, "warm sand")
+          .replace(/\bblack\b/gi, "jet black")
+          .replace(/\bwhite\b/gi, "crisp ivory");
       }
 
       if (styleCategory === "lingerie") {
@@ -142,10 +147,24 @@ serve(async (req) => {
       return normalized;
     };
 
+    // Sub-style specific overrides for swimwear
+    const swimwearSubStyleOverrides: Record<string, string> = {
+      "beach-goddess": "IMPORTANT: Style as a luxurious one-piece swimsuit with plunging neckline OR a high-end matching bikini set. Add gold body chains, a flowing sheer sarong, strappy gold sandals, and oversized sunglasses. Goddess-like beach editorial aesthetic.",
+      "sporty-swim": "IMPORTANT: Style as a sporty athletic swimsuit — racerback bikini top or high-neck crop top with matching boyshort or high-waist bottoms. Bold color blocking (neon, cobalt, coral). Sporty sandals and a visor cap. Active beachwear editorial.",
+      "tropical-glam": "IMPORTANT: Style as a vibrant tropical-print two-piece bikini set — bold floral or palm print bikini top with matching bikini bottoms. Add a colorful sarong, platform espadrilles, shell jewelry, and a straw tote. Resort editorial style.",
+      "two-piece-set": "CRITICAL: This MUST be a clearly visible coordinated two-piece bikini set showing BOTH a separate bikini top AND separate matching bikini bottoms as distinct pieces. The bikini top and bikini bottom must both be clearly visible. Classic triangle or bandeau bikini top with matching high-cut or brazilian-cut bikini bottoms. Solid color or simple elegant pattern. Styled with sandals and sunglasses. Fashion editorial beach photography.",
+      "monokini": "IMPORTANT: Style as a designer cut-out one-piece swimsuit with strategic cutouts at the sides or waist, creating a modern sculpted silhouette. Bold solid color. Minimal accessories — just sunglasses and sandals. High-fashion editorial.",
+      "swim-with-jewelry": "IMPORTANT: Style as a sleek solid-color two-piece bikini set accessorized with layered waterproof gold chains, body chains draped across the waist, anklets, stacking rings, and statement earrings. The jewelry is the focal point. Beach editorial with golden-hour lighting.",
+    };
+
+    const swimwearOverride = (styleCategory === "swimwear" && styleSubcategory && swimwearSubStyleOverrides[styleSubcategory])
+      ? `\n\n${swimwearSubStyleOverrides[styleSubcategory]}`
+      : "";
+
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
-      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.`
-      : "";
+      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${swimwearOverride}`
+      : swimwearOverride;
 
     // Makeup preference for female users
     const makeupNote = (!isMale && makeupPreference)
@@ -250,8 +269,8 @@ serve(async (req) => {
     if (!generatedImage) {
       const fallbackDescriptions: Record<string, string> = {
         swimwear: isMannequin
-          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in elevated resortwear with layered cover-up pieces, tasteful beach accessories, and luxury vacation styling. Clean studio-quality editorial image.`
-          : `Restyle this ${genderWord} into a tasteful luxury resortwear editorial look. Keep the person's identity and body shape, use elegant coordinated beachwear with a chic cover-up or wrap, and prioritize sophisticated fashion styling over exposed skin. Premium magazine photography.` ,
+          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin displaying a coordinated two-piece bikini set — a structured bikini top and matching high-cut bikini bottoms in an elegant solid color, styled with a sheer sarong, strappy sandals, and oversized sunglasses. Clean studio-quality editorial image with luxury beach accessories.`
+          : `Restyle this ${genderWord} into a luxury swimwear editorial look. Dress them in a flattering coordinated two-piece bikini set with a structured top and matching bottoms, add a sarong, sandals, and beach accessories. Keep the person's identity and body shape. Change background to a beautiful tropical beach resort. Premium magazine photography with golden-hour lighting.`,
         lingerie: isMannequin
           ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in luxury sleepwear and elegant loungewear, including a satin set and robe. Sophisticated editorial studio lighting.`
           : `Restyle this ${genderWord} into a luxury sleepwear editorial look. Keep the person's identity and body shape, dress them in elegant premium loungewear such as a satin set or silk robe, and make it polished, tasteful, and fashion-forward. Premium editorial photography.`,
