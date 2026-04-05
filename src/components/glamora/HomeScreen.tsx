@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
@@ -26,6 +27,42 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
 
+  // Secret dev mode toggle
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout>>();
+  const [showPin, setShowPin] = useState(false);
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState(false);
+
+  const handleLogoTap = () => {
+    tapCount.current += 1;
+    clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      setShowPin(true);
+      setPin("");
+      setPinError(false);
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    }
+  };
+
+  const handlePinSubmit = () => {
+    if (pin === "5218") {
+      const isActive = localStorage.getItem("glamora_dev_mode") === "unlocked";
+      if (isActive) {
+        localStorage.removeItem("glamora_dev_mode");
+      } else {
+        localStorage.setItem("glamora_dev_mode", "unlocked");
+      }
+      setShowPin(false);
+    } else {
+      setPinError(true);
+      setPin("");
+      setTimeout(() => setPinError(false), 1500);
+    }
+  };
+
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingTop: 64, paddingBottom: 20 }}>
       {/* Compact hero */}
@@ -41,8 +78,8 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         {/* Top bar */}
         <div style={{ position: "relative", zIndex: 5, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "44px 20px 0" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <img src="/glosseti-icon-only.png" alt="Glosseti" style={{
-              width: 40, height: 40, objectFit: "contain",
+            <img src="/glosseti-icon-only.png" alt="Glosseti" onClick={handleLogoTap} style={{
+              width: 40, height: 40, objectFit: "contain", cursor: "pointer",
               filter: "drop-shadow(0 2px 8px hsla(var(--glamora-gold) / 0.4))",
             }} />
             <span className="serif" style={{
@@ -369,6 +406,58 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <button className="nav-btn" onClick={onSaved}><span className="nav-icon"><Bookmark size={20} /></span><span className="nav-label">Saved</span></button>
         <button className="nav-btn" onClick={onProfile}><span className="nav-icon"><User size={20} /></span><span className="nav-label">Profile</span></button>
       </div>
+
+      {/* Secret PIN overlay */}
+      {showPin && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 999,
+          background: "rgba(14,10,9,0.92)", backdropFilter: "blur(12px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
+            padding: "30px 24px", borderRadius: 20,
+            background: "rgba(30,22,18,0.95)",
+            border: "1px solid rgba(196,151,74,0.2)",
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(251,246,240,0.7)", letterSpacing: 1 }}>
+              Enter PIN
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {[0, 1, 2, 3].map(i => (
+                <div key={i} style={{
+                  width: 40, height: 48, borderRadius: 10,
+                  border: pinError ? "2px solid rgba(255,80,80,0.6)" : pin[i] ? "2px solid rgba(196,151,74,0.6)" : "2px solid rgba(196,151,74,0.2)",
+                  background: pin[i] ? "rgba(196,151,74,0.1)" : "rgba(255,255,255,0.03)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 20, fontWeight: 700, color: "rgba(196,151,74,0.9)", transition: "all 0.2s",
+                }}>
+                  {pin[i] ? "•" : ""}
+                </div>
+              ))}
+            </div>
+            <input
+              type="tel" inputMode="numeric" maxLength={4} value={pin} autoFocus
+              onChange={(e) => { setPin(e.target.value.replace(/\D/g, "").slice(0, 4)); setPinError(false); }}
+              onKeyDown={(e) => { if (e.key === "Enter" && pin.length === 4) handlePinSubmit(); }}
+              style={{ position: "absolute", opacity: 0, width: 1, height: 1 }}
+            />
+            {pinError && <div style={{ fontSize: 11, color: "rgba(255,80,80,0.8)", fontWeight: 500 }}>Incorrect PIN</div>}
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setShowPin(false)} style={{
+                padding: "8px 20px", borderRadius: 10, border: "1px solid rgba(196,151,74,0.2)",
+                background: "transparent", color: "rgba(251,246,240,0.5)", fontSize: 12, fontWeight: 600, cursor: "pointer",
+              }}>Cancel</button>
+              <button onClick={handlePinSubmit} disabled={pin.length < 4} style={{
+                padding: "8px 20px", borderRadius: 10, border: "none",
+                background: pin.length === 4 ? "rgba(196,151,74,0.8)" : "rgba(196,151,74,0.2)",
+                color: pin.length === 4 ? "white" : "rgba(251,246,240,0.3)",
+                fontSize: 12, fontWeight: 600, cursor: pin.length === 4 ? "pointer" : "default", transition: "all 0.2s",
+              }}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
