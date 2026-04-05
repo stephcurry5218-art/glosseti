@@ -356,25 +356,32 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 const isActive = activeHotspot === id;
                 // Build a specific shop link from the actual look data
                 const getSpecificShopLink = () => {
-                  const lookName = looks[0]?.name;
-                  const categoryMap: Record<HotspotId, Category> = {
-                    makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
-                  };
-                  const cat = categoryMap[id as HotspotId];
-                  const steps = lookName && lookData[lookName]?.[cat];
-                  if (steps && steps.length > 0) {
-                    const firstWithShop = steps.find(s => s.shop);
-                    if (firstWithShop?.shop) {
-                      const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
-                      // If user specified a custom detail for this hotspot category, use it as search term
-                      const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
-                      return customTerm ? getShopUrl(tier.store, customTerm) : getShopUrl(tier.store, tier.item);
-                    }
-                  }
-                  // Fallback — use custom detail if available, otherwise generic search
-                  const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
-                  return getShopUrl("Amazon", customTerm || pos.searchTerm);
-                };
+                   const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                   // If user typed a custom detail, detect brand name and route to that store
+                   if (customTerm) {
+                     const detected = detectStoreFromText(customTerm);
+                     if (detected) {
+                       return getShopUrl(detected.store, detected.query);
+                     }
+                     // No brand detected — search Amazon with the full custom term
+                     return getShopUrl("Amazon", customTerm);
+                   }
+                   // No custom detail — fall back to lookData shop links
+                   const lookName = looks[0]?.name;
+                   const categoryMap: Record<HotspotId, Category> = {
+                     makeup: "makeup", top: "top", bottom: "bottom", shoes: "shoes", accessories: "accessories",
+                   };
+                   const cat = categoryMap[id as HotspotId];
+                   const steps = lookName && lookData[lookName]?.[cat];
+                   if (steps && steps.length > 0) {
+                     const firstWithShop = steps.find(s => s.shop);
+                     if (firstWithShop?.shop) {
+                       const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
+                       return getShopUrl(tier.store, tier.item);
+                     }
+                   }
+                   return getShopUrl("Amazon", pos.searchTerm);
+                 };
                 return (
                   <button
                     key={id}
