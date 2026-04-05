@@ -439,7 +439,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
-  const [selectedSub, setSelectedSub] = useState<string | null>(null);
+  const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
   const [celebrityGuide, setCelebrityGuide] = useState("");
   const isMale = prefs.gender === "male";
 
@@ -457,11 +457,11 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
     setSelected(prev => {
       if (prev.includes(id)) {
         if (prev.length <= 1) return prev;
+        setSelectedSubs(s => { const copy = { ...s }; delete copy[id]; return copy; });
         return prev.filter(c => c !== id);
       }
       return [...prev, id];
     });
-    setSelectedSub(null);
   };
 
   // Show detail for the most recently selected and use it as the primary generation style
@@ -570,59 +570,67 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           </div>
         </div>
 
-        {/* Subcategory selector */}
-        {current.subs.length > 0 && (
-          <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14 }}>
-            <div className="section-label" style={{ marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
-              <Sparkles size={14} color={`hsl(var(${accent}))`} />
-              Refine Your Vibe
-            </div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
-              Pick a sub-style for a more tailored result (optional)
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {current.subs.map(sub => {
-                const isActive = selectedSub === sub.id;
-                return (
-                  <div
-                    key={sub.id}
-                    onClick={() => setSelectedSub(isActive ? null : sub.id)}
-                    style={{
-                      padding: "12px 14px", borderRadius: 14, cursor: "pointer",
-                      border: isActive
-                        ? `2px solid hsl(var(${accent}))`
-                        : `1.5px solid hsla(var(--glamora-gold) / 0.1)`,
-                      background: isActive
-                        ? `linear-gradient(135deg, hsla(var(${accentLight}) / 0.12), hsla(var(${accent}) / 0.05))`
-                        : "hsl(var(--card))",
-                      transition: "all 0.2s",
-                      display: "flex", alignItems: "center", gap: 12,
-                    }}
-                  >
-                    <div style={{
-                      width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-                      background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.08)`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s", fontSize: 16,
-                    }}>
-                      {isActive
-                        ? <Check size={14} color="white" />
-                        : <span>{sub.emoji}</span>}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
-                        {sub.label}
+        {/* Subcategory selectors for ALL selected categories */}
+        {selected.map(catId => {
+          const cat = filtered.find(c => c.id === catId);
+          if (!cat || cat.subs.length === 0) return null;
+          const catLabel = cat.genderLabel ? cat.genderLabel[prefs.gender] : cat.label;
+          return (
+            <div key={catId} className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14 }}>
+              <div className="section-label" style={{ marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
+                <cat.Icon size={14} color={`hsl(var(${accent}))`} />
+                {catLabel} — Refine Your Vibe
+              </div>
+              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
+                Pick a sub-style for {catLabel.toLowerCase()} (optional)
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {cat.subs.map(sub => {
+                  const isActive = selectedSubs[catId] === sub.id;
+                  return (
+                    <div
+                      key={sub.id}
+                      onClick={() => setSelectedSubs(prev => ({
+                        ...prev,
+                        [catId]: isActive ? undefined as any : sub.id,
+                      }))}
+                      style={{
+                        padding: "12px 14px", borderRadius: 14, cursor: "pointer",
+                        border: isActive
+                          ? `2px solid hsl(var(${accent}))`
+                          : `1.5px solid hsla(var(--glamora-gold) / 0.1)`,
+                        background: isActive
+                          ? `linear-gradient(135deg, hsla(var(${accentLight}) / 0.12), hsla(var(${accent}) / 0.05))`
+                          : "hsl(var(--card))",
+                        transition: "all 0.2s",
+                        display: "flex", alignItems: "center", gap: 12,
+                      }}
+                    >
+                      <div style={{
+                        width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+                        background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.08)`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        transition: "all 0.2s", fontSize: 16,
+                      }}>
+                        {isActive
+                          ? <Check size={14} color="white" />
+                          : <span>{sub.emoji}</span>}
                       </div>
-                      <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.3 }}>
-                        {sub.desc}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
+                          {sub.label}
+                        </div>
+                        <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.3 }}>
+                          {sub.desc}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })}
         {selected.length > 1 && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
             {selected.map(id => {
@@ -720,7 +728,14 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
         <button
           className="btn-primary btn-rose"
           disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
-          onClick={() => onNext(current.id, celebrityGuide || undefined, selectedSub || undefined)}
+          onClick={() => {
+            // Combine all selected sub-styles: "fitness:yoga-pants-set + shoes-sneakers:retro-jordans"
+            const combinedSubs = Object.entries(selectedSubs)
+              .filter(([, v]) => v)
+              .map(([catId, subId]) => `${catId}:${subId}`)
+              .join(" + ");
+            onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
+          }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
             background: isMale
