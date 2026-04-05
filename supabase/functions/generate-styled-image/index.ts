@@ -269,8 +269,8 @@ serve(async (req) => {
     if (!generatedImage) {
       const fallbackDescriptions: Record<string, string> = {
         swimwear: isMannequin
-          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in elevated resortwear with layered cover-up pieces, tasteful beach accessories, and luxury vacation styling. Clean studio-quality editorial image.`
-          : `Restyle this ${genderWord} into a tasteful luxury resortwear editorial look. Keep the person's identity and body shape, use elegant coordinated beachwear with a chic cover-up or wrap, and prioritize sophisticated fashion styling over exposed skin. Premium magazine photography.` ,
+          ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin displaying a coordinated two-piece bikini set — a structured bikini top and matching high-cut bikini bottoms in an elegant solid color, styled with a sheer sarong, strappy sandals, and oversized sunglasses. Clean studio-quality editorial image with luxury beach accessories.`
+          : `Restyle this ${genderWord} into a luxury swimwear editorial look. Dress them in a flattering coordinated two-piece bikini set with a structured top and matching bottoms, add a sarong, sandals, and beach accessories. Keep the person's identity and body shape. Change background to a beautiful tropical beach resort. Premium magazine photography with golden-hour lighting.`,
         lingerie: isMannequin
           ? `Fashion lookbook image of a ${isMale ? "male" : "female"} mannequin in luxury sleepwear and elegant loungewear, including a satin set and robe. Sophisticated editorial studio lighting.`
           : `Restyle this ${genderWord} into a luxury sleepwear editorial look. Keep the person's identity and body shape, dress them in elegant premium loungewear such as a satin set or silk robe, and make it polished, tasteful, and fashion-forward. Premium editorial photography.`,
