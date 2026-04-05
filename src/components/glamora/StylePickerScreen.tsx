@@ -762,10 +762,13 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           className="btn-primary btn-rose"
           disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
           onClick={() => {
-            // Combine all selected sub-styles: "fitness:yoga-pants-set + shoes-sneakers:retro-jordans"
+            // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
               .filter(([, v]) => v)
-              .map(([catId, subId]) => `${catId}:${subId}`)
+              .map(([catId, subId]) => {
+                const detail = customDetails[catId]?.trim();
+                return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
+              })
               .join(" + ");
             onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
           }}
