@@ -865,6 +865,21 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Meadow Dream": { match: 95, desc: "Cottagecore romance — florals, linen, straw hats, wicker baskets" },
   "Bag Edit": { match: 95, desc: "The perfect bag to complete any look — totes, clutches, crossbodies" },
   "Shoe Edit": { match: 95, desc: "Designer kicks and heels — the focal point of your fit" },
+  "Yoga Flow": { match: 95, desc: "Zen-ready yoga set — leggings, crop top, mat" },
+  "Nike 2-Piece (Men)": { match: 94, desc: "Matching Nike Dri-FIT top and shorts" },
+  "Nike 2-Piece (Women)": { match: 94, desc: "Nike sports bra and biker shorts combo" },
+  "Running Kit": { match: 93, desc: "Lightweight running gear — tank, shorts, trainers" },
+  "MMA Fighter": { match: 95, desc: "Full MMA gear — rash guard, fight shorts, gloves" },
+  "CrossFit Beast": { match: 93, desc: "Functional fitness — Metcons, shorts, grips" },
+  "Gym Power": { match: 94, desc: "Bodybuilding basics — stringer, joggers, lifting belt" },
+  "Classic Ball Gown": { match: 96, desc: "Dramatic full-skirt bridal ball gown" },
+  "Modern Bride": { match: 94, desc: "Sleek minimal column gown or bridal jumpsuit" },
+  "Boho Bride": { match: 93, desc: "Flowing bohemian lace with flower crown" },
+  "Mermaid Bride": { match: 95, desc: "Body-hugging silhouette with dramatic flare" },
+  "Classic Black Tux": { match: 96, desc: "Peak lapel black tuxedo — timeless elegance" },
+  "Midnight Blue Tux": { match: 94, desc: "Navy tuxedo with black satin shawl lapel" },
+  "Velvet Tux": { match: 93, desc: "Rich velvet dinner jacket — burgundy or emerald" },
+  "White Dinner Jacket": { match: 95, desc: "Ivory shawl-collar dinner jacket — James Bond style" },
 };
 
 // Shoe-specific look data for shopping
