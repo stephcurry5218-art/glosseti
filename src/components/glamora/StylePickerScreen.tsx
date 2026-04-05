@@ -440,6 +440,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
+  const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [celebrityGuide, setCelebrityGuide] = useState("");
   const isMale = prefs.gender === "male";
 
@@ -458,6 +459,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
       if (prev.includes(id)) {
         if (prev.length <= 1) return prev;
         setSelectedSubs(s => { const copy = { ...s }; delete copy[id]; return copy; });
+        setCustomDetails(s => { const copy = { ...s }; delete copy[id]; return copy; });
         return prev.filter(c => c !== id);
       }
       return [...prev, id];
@@ -628,6 +630,38 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                   );
                 })}
               </div>
+              {/* Custom detail input when a substyle is selected */}
+              {selectedSubs[catId] && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 6, lineHeight: 1.4 }}>
+                    ✏️ Specify exactly what you want (optional)
+                  </div>
+                  <input
+                    type="text"
+                    value={customDetails[catId] || ""}
+                    onChange={(e) => setCustomDetails(prev => ({ ...prev, [catId]: e.target.value }))}
+                    placeholder={`e.g. "Retro Jordan 1s", "Oversized denim jacket"...`}
+                    style={{
+                      width: "100%", padding: "10px 14px", borderRadius: 12,
+                      border: `1.5px solid hsla(var(${accent}) / ${customDetails[catId] ? "0.4" : "0.15"})`,
+                      background: customDetails[catId] ? `hsla(var(${accent}) / 0.05)` : "hsl(var(--card))",
+                      fontSize: 13, fontFamily: "'Jost', sans-serif",
+                      color: "hsl(var(--glamora-char))", outline: "none",
+                      transition: "all 0.2s",
+                    }}
+                    onFocus={(e) => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
+                    onBlur={(e) => { e.target.style.borderColor = `hsla(var(${accent}) / ${customDetails[catId] ? "0.4" : "0.15"})`; }}
+                  />
+                  {customDetails[catId] && (
+                    <div style={{
+                      marginTop: 6, fontSize: 10, color: `hsl(var(${accent}))`, fontWeight: 500,
+                      display: "flex", alignItems: "center", gap: 5,
+                    }}>
+                      <Sparkles size={10} /> AI will incorporate "{customDetails[catId]}" into your look
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
@@ -729,10 +763,13 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           className="btn-primary btn-rose"
           disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
           onClick={() => {
-            // Combine all selected sub-styles: "fitness:yoga-pants-set + shoes-sneakers:retro-jordans"
+            // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
               .filter(([, v]) => v)
-              .map(([catId, subId]) => `${catId}:${subId}`)
+              .map(([catId, subId]) => {
+                const detail = customDetails[catId]?.trim();
+                return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
+              })
               .join(" + ");
             onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
           }}
