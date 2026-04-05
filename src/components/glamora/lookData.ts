@@ -618,6 +618,226 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
       { title: "Hair Ribbon", detail: "Satin or gingham hair ribbon tied in a bow, or fresh flowers tucked behind the ear.", shop: { luxury: { store: "Net-a-Porter", item: "Jennifer Behr Silk Hair Ribbon", price: "$48" }, mid: { store: "Free People", item: "Bow Hair Ribbon Set", price: "$18" }, budget: { store: "Amazon", item: "Satin Hair Ribbon 6-Pack", price: "$8" } } },
     ],
   },
+  "Yoga Flow": {
+    top: [
+      { title: "Sports Bra", detail: "Supportive longline sports bra in sage, lavender, or black.", shop: { luxury: { store: "Alo Yoga", item: "Alo Yoga Airlift Intrigue Bra", price: "$72" }, mid: { store: "Lululemon", item: "Lululemon Align Reversible Bra", price: "$52" }, budget: { store: "Amazon", item: "CRZ YOGA Longline Sports Bra", price: "$22" } } },
+      { title: "Crop Tank", detail: "Cropped tank with built-in shelf bra for hot yoga or layering.", shop: { luxury: { store: "Alo Yoga", item: "Alo Yoga Aspire Tank", price: "$62" }, mid: { store: "Athleta", item: "Athleta Chi Tank", price: "$44" }, budget: { store: "Amazon", item: "ATTRACO Crop Tank with Built-in Bra", price: "$18" } } },
+    ],
+    bottom: [
+      { title: "High-Waist Leggings", detail: "Buttery-soft high-waist leggings, squat-proof fabric.", shop: { luxury: { store: "Lululemon", item: "Lululemon Align 25\" High-Rise Pant", price: "$98" }, mid: { store: "Athleta", item: "Athleta Elation Ultra High Rise Tight", price: "$89" }, budget: { store: "Amazon", item: "IUGA High Waist Yoga Pants", price: "$22" } } },
+      { title: "Flare Yoga Pants", detail: "Retro-inspired flared yoga pants with fold-over waistband.", shop: { luxury: { store: "Alo Yoga", item: "Alo Yoga Airbrush Flutter Legging", price: "$108" }, mid: { store: "Athleta", item: "Athleta Elation Flare", price: "$89" }, budget: { store: "Amazon", item: "ODODOS Boot-Cut Yoga Pants", price: "$24" } } },
+    ],
+    shoes: [
+      { title: "Training Shoes", detail: "Lightweight, flexible training shoes with studio floor grip.", shop: { luxury: { store: "Nike", item: "Nike Metcon 9", price: "$150" }, mid: { store: "Reebok", item: "Reebok Nano X3", price: "$135" }, budget: { store: "Amazon", item: "New Balance Minimus TR", price: "$65" } } },
+      { title: "Grip Socks", detail: "Non-slip grip socks for barre and Pilates.", shop: { luxury: { store: "Lululemon", item: "Lululemon Studio Grip Sock", price: "$18" }, mid: { store: "Amazon", item: "Tavi Noir Grip Socks", price: "$14" }, budget: { store: "Amazon", item: "ELUTONG Grip Socks 3-Pack", price: "$10" } } },
+    ],
+    accessories: [
+      { title: "Yoga Mat", detail: "Non-slip yoga mat, 5mm thickness for joint cushioning.", shop: { luxury: { store: "Lululemon", item: "Lululemon The Mat 5mm", price: "$88" }, mid: { store: "Amazon", item: "Manduka PROlite Yoga Mat", price: "$80" }, budget: { store: "Amazon", item: "BalanceFrom GoYoga Mat", price: "$18" } } },
+      { title: "Water Bottle", detail: "Insulated water bottle, keeps drinks cold for hours.", shop: { luxury: { store: "Amazon", item: "Hydro Flask 32oz Wide Mouth", price: "$45" }, mid: { store: "Amazon", item: "YETI Rambler 26oz", price: "$35" }, budget: { store: "Amazon", item: "Iron Flask Sports Water Bottle 32oz", price: "$17" } } },
+    ],
+  },
+  "Nike 2-Piece Men": {
+    top: [
+      { title: "Nike Dri-FIT Tee", detail: "Moisture-wicking Nike Dri-FIT training tee.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT ADV AeroSwift Tee", price: "$90" }, mid: { store: "Nike", item: "Nike Dri-FIT Legend Training Tee", price: "$30" }, budget: { store: "Amazon", item: "Nike Men's Dri-FIT T-Shirt", price: "$22" } } },
+      { title: "Nike Windbreaker", detail: "Lightweight windbreaker for outdoor runs with reflective details.", shop: { luxury: { store: "Nike", item: "Nike Windrunner Jacket", price: "$100" }, mid: { store: "Nike", item: "Nike Repel Miler Jacket", price: "$75" }, budget: { store: "Dick's Sporting Goods", item: "Nike Sportswear Windrunner", price: "$55" } } },
+    ],
+    bottom: [
+      { title: "Nike Training Shorts", detail: "9\" Dri-FIT training shorts with drawcord.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT ADV A.P.S. Short", price: "$68" }, mid: { store: "Nike", item: "Nike Dri-FIT Totality 9\" Shorts", price: "$40" }, budget: { store: "Dick's Sporting Goods", item: "Nike Dri-FIT Icon Shorts", price: "$25" } } },
+      { title: "Nike Joggers", detail: "Nike Tech Fleece or Sportswear Club joggers.", shop: { luxury: { store: "Nike", item: "Nike Sportswear Tech Fleece Jogger", price: "$110" }, mid: { store: "Nike", item: "Nike Therma-FIT Tapered Jogger", price: "$65" }, budget: { store: "Amazon", item: "Nike Sportswear Club Fleece Joggers", price: "$40" } } },
+    ],
+    shoes: [
+      { title: "Training Shoes", detail: "Nike Metcon or Free for weightlifting and HIIT.", shop: { luxury: { store: "Nike", item: "Nike Metcon 9", price: "$150" }, mid: { store: "Nike", item: "Nike Free Metcon 5", price: "$120" }, budget: { store: "Dick's Sporting Goods", item: "Nike Defy All Day", price: "$55" } } },
+      { title: "Running Shoes", detail: "Nike Pegasus for cardio days.", shop: { luxury: { store: "Nike", item: "Nike Vaporfly 3", price: "$260" }, mid: { store: "Nike", item: "Nike Air Zoom Pegasus 40", price: "$130" }, budget: { store: "Nike", item: "Nike Revolution 6", price: "$55" } } },
+    ],
+    accessories: [
+      { title: "Nike Gym Bag", detail: "Nike Brasilia duffel or drawstring bag.", shop: { luxury: { store: "Nike", item: "Nike Brasilia 9.5 Training Duffel", price: "$50" }, mid: { store: "Nike", item: "Nike Brasilia Drawstring Bag", price: "$22" }, budget: { store: "Amazon", item: "Nike Heritage Drawstring Bag", price: "$16" } } },
+      { title: "Nike Socks", detail: "Nike Everyday Cushion crew socks, Dri-FIT.", shop: { luxury: { store: "Nike", item: "Nike Multiplier Running Crew 2pk", price: "$28" }, mid: { store: "Nike", item: "Nike Everyday Cushion Crew 6pk", price: "$24" }, budget: { store: "Amazon", item: "Nike Everyday Cotton Crew 6pk", price: "$16" } } },
+    ],
+  },
+  "Nike 2-Piece Women": {
+    top: [
+      { title: "Nike Sports Bra", detail: "Nike Swoosh Medium-Support or Indy Light-Support bra.", shop: { luxury: { store: "Nike", item: "Nike Alate All U High-Support Bra", price: "$70" }, mid: { store: "Nike", item: "Nike Swoosh Medium-Support Bra", price: "$40" }, budget: { store: "Dick's Sporting Goods", item: "Nike Dri-FIT Indy Sports Bra", price: "$30" } } },
+      { title: "Nike Crop Top", detail: "Nike One cropped training top or racerback tank.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT ADV Aura Slim Tank", price: "$65" }, mid: { store: "Nike", item: "Nike One Classic Crop Tank", price: "$35" }, budget: { store: "Amazon", item: "Nike Women's Dri-FIT Crop Tee", price: "$22" } } },
+    ],
+    bottom: [
+      { title: "Nike Biker Shorts", detail: "Nike One 7\" biker shorts, high-rise with hidden pocket.", shop: { luxury: { store: "Nike", item: "Nike Go Firm-Support 8\" Shorts", price: "$62" }, mid: { store: "Nike", item: "Nike One 7\" Biker Shorts", price: "$40" }, budget: { store: "Dick's Sporting Goods", item: "Nike Pro 365 Shorts 5\"", price: "$30" } } },
+      { title: "Nike Leggings", detail: "Nike One or Zenvy high-rise leggings.", shop: { luxury: { store: "Nike", item: "Nike Zenvy High-Waisted Legging", price: "$100" }, mid: { store: "Nike", item: "Nike One High-Waisted Legging", price: "$60" }, budget: { store: "Dick's Sporting Goods", item: "Nike Dri-FIT One Legging", price: "$45" } } },
+    ],
+    shoes: [
+      { title: "Training Shoes", detail: "Nike Metcon or SuperRep for studio workouts.", shop: { luxury: { store: "Nike", item: "Nike Metcon 9", price: "$150" }, mid: { store: "Nike", item: "Nike Free Metcon 5", price: "$120" }, budget: { store: "Nike", item: "Nike Defy All Day", price: "$55" } } },
+    ],
+    accessories: [
+      { title: "Nike Gym Bag", detail: "Nike One Training tote or Brasilia duffel.", shop: { luxury: { store: "Nike", item: "Nike One Training Tote", price: "$55" }, mid: { store: "Nike", item: "Nike Brasilia 9.5 Duffel Small", price: "$35" }, budget: { store: "Amazon", item: "Nike Drawstring Gym Bag", price: "$16" } } },
+      { title: "Hair Accessories", detail: "Nike Swoosh headband and sport scrunchie set.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT Swoosh Headband", price: "$14" }, mid: { store: "Nike", item: "Nike Flex Hair Ties 3pk", price: "$10" }, budget: { store: "Amazon", item: "Nike Ponytail Holders 9pk", price: "$8" } } },
+    ],
+  },
+  "MMA Fighter": {
+    top: [
+      { title: "Rash Guard", detail: "Compression rash guard for grappling and striking.", shop: { luxury: { store: "Venum", item: "Venum Contender 6.0 Rash Guard", price: "$65" }, mid: { store: "Hayabusa", item: "Hayabusa Arrow Rash Guard", price: "$55" }, budget: { store: "Amazon", item: "TSLA Men's UPF 50+ Rash Guard", price: "$20" } } },
+      { title: "Fight Shorts", detail: "Flexible MMA fight shorts with side slits for kicks.", shop: { luxury: { store: "Venum", item: "Venum UFC Pro Line Fight Shorts", price: "$90" }, mid: { store: "Hayabusa", item: "Hayabusa Hex Fight Shorts", price: "$60" }, budget: { store: "Amazon", item: "Sanabul Essential MMA Shorts", price: "$22" } } },
+    ],
+    bottom: [
+      { title: "Compression Pants", detail: "Full-length compression tights under fight shorts.", shop: { luxury: { store: "Venum", item: "Venum Contender 6.0 Compression Pants", price: "$55" }, mid: { store: "Under Armour", item: "UA HeatGear Compression Legging", price: "$40" }, budget: { store: "Amazon", item: "Tesla Men's Compression Pants", price: "$18" } } },
+    ],
+    shoes: [
+      { title: "Wrestling Shoes", detail: "Low-profile wrestling shoes for MMA training.", shop: { luxury: { store: "Amazon", item: "ASICS Matflex 7 Wrestling Shoe", price: "$70" }, mid: { store: "Dick's Sporting Goods", item: "Nike Fury Wrestling Shoes", price: "$80" }, budget: { store: "Amazon", item: "Rongbuk Wrestling Shoes", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Boxing Gloves", detail: "12-16oz boxing gloves for bag work and sparring.", shop: { luxury: { store: "Hayabusa", item: "Hayabusa T3 Boxing Gloves 16oz", price: "$160" }, mid: { store: "Venum", item: "Venum Challenger 3.0 Gloves", price: "$55" }, budget: { store: "Amazon", item: "Everlast Pro Style Training Gloves", price: "$25" } } },
+      { title: "MMA Gloves", detail: "4oz competition or 7oz sparring MMA gloves.", shop: { luxury: { store: "Hayabusa", item: "Hayabusa T3 MMA Gloves", price: "$100" }, mid: { store: "Venum", item: "Venum Challenger 3.0 MMA Gloves", price: "$40" }, budget: { store: "Amazon", item: "Liberlupus MMA Gloves", price: "$18" } } },
+      { title: "Hand Wraps", detail: "180\" hand wraps for wrist and knuckle protection.", shop: { luxury: { store: "Hayabusa", item: "Hayabusa Perfect Stretch Hand Wraps", price: "$20" }, mid: { store: "Venum", item: "Venum Kontact Hand Wraps", price: "$12" }, budget: { store: "Amazon", item: "Sanabul Elastic Hand Wraps", price: "$8" } } },
+      { title: "Shin Guards", detail: "Padded shin guards for Muay Thai and MMA sparring.", shop: { luxury: { store: "Hayabusa", item: "Hayabusa T3 Shin Guards", price: "$100" }, mid: { store: "Venum", item: "Venum Challenger Shin Guards", price: "$45" }, budget: { store: "Amazon", item: "Sanabul Essential Shin Guards", price: "$22" } } },
+    ],
+  },
+  "CrossFit Beast": {
+    top: [
+      { title: "Training Tee", detail: "Durable sweat-wicking performance tee.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT ADV Training Tee", price: "$80" }, mid: { store: "Reebok", item: "Reebok CrossFit Activchill Tee", price: "$40" }, budget: { store: "Amazon", item: "NELEUS Dry Fit Athletic Tee 3-Pack", price: "$26" } } },
+    ],
+    bottom: [
+      { title: "CrossFit Shorts", detail: "5-7\" training shorts, reinforced seams for rope climbs.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT Flex Rep Pro 5\" Shorts", price: "$58" }, mid: { store: "Reebok", item: "Reebok CrossFit Austin II Shorts", price: "$45" }, budget: { store: "Amazon", item: "MIER Men's Workout Shorts 7\"", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "CrossFit Shoes", detail: "Flat stable sole for lifts, flexible forefoot for rope climbs.", shop: { luxury: { store: "Nike", item: "Nike Metcon 9", price: "$150" }, mid: { store: "Reebok", item: "Reebok Nano X3", price: "$135" }, budget: { store: "Amazon", item: "Inov-8 F-Lite 235 V3", price: "$95" } } },
+    ],
+    accessories: [
+      { title: "Weightlifting Belt", detail: "Nylon or leather lifting belt.", shop: { luxury: { store: "Rogue Fitness", item: "Rogue 4\" Nylon Lifting Belt", price: "$35" }, mid: { store: "Amazon", item: "Dark Iron Fitness Leather Belt", price: "$30" }, budget: { store: "Amazon", item: "Gymreapers Quick Locking Belt", price: "$22" } } },
+      { title: "Hand Grips", detail: "Leather grips for pull-ups and bar work.", shop: { luxury: { store: "Rogue Fitness", item: "Rogue V2 Gymnastics Grips", price: "$35" }, mid: { store: "Amazon", item: "Bear KompleX Carbon Grips", price: "$40" }, budget: { store: "Amazon", item: "JerkFit WODies Hand Grips", price: "$20" } } },
+      { title: "Knee Sleeves", detail: "7mm neoprene knee sleeves for squat support.", shop: { luxury: { store: "Rogue Fitness", item: "Rehband RX Knee Sleeves 7mm", price: "$80" }, mid: { store: "Amazon", item: "Nordic Lifting Knee Sleeves", price: "$40" }, budget: { store: "Amazon", item: "Gymreapers Knee Sleeves 5mm", price: "$25" } } },
+    ],
+  },
+  "Gym Power": {
+    top: [
+      { title: "Stringer Tank", detail: "Deep-cut stringer or Y-back tank.", shop: { luxury: { store: "Gymshark", item: "Gymshark Legacy Stringer", price: "$30" }, mid: { store: "Under Armour", item: "UA Project Rock Payoff Tank", price: "$35" }, budget: { store: "Amazon", item: "Muscle Killer Y-Back Stringer 3pk", price: "$24" } } },
+      { title: "Oversized Gym Tee", detail: "Dropped shoulder oversized tee, breathable cotton-blend.", shop: { luxury: { store: "Gymshark", item: "Gymshark Power Oversized T-Shirt", price: "$38" }, mid: { store: "Nike", item: "Nike Dri-FIT Hyverse Tee", price: "$40" }, budget: { store: "Amazon", item: "Champion Men's Classic Tee", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Gym Shorts", detail: "Above-the-knee shorts with liner, 5-7\" length.", shop: { luxury: { store: "Gymshark", item: "Gymshark Arrival 5\" Shorts", price: "$35" }, mid: { store: "Under Armour", item: "UA Launch Run 5\" Shorts", price: "$40" }, budget: { store: "Amazon", item: "MIER Men's 5\" Workout Shorts", price: "$18" } } },
+      { title: "Tapered Joggers", detail: "Slim-fit joggers with zippered ankles.", shop: { luxury: { store: "Gymshark", item: "Gymshark Crest Joggers", price: "$50" }, mid: { store: "Nike", item: "Nike Dri-FIT Taper Fleece Pants", price: "$55" }, budget: { store: "Amazon", item: "BROKIG Slim Fit Joggers", price: "$28" } } },
+    ],
+    shoes: [
+      { title: "Lifting Shoes", detail: "Elevated heel for squats, hard non-compressible sole.", shop: { luxury: { store: "Nike", item: "Nike Romaleos 4", price: "$200" }, mid: { store: "Adidas", item: "Adidas Adipower Weightlifting III", price: "$170" }, budget: { store: "Amazon", item: "NOBULL Lifter", price: "$149" } } },
+    ],
+    accessories: [
+      { title: "Lifting Straps", detail: "Cotton or nylon lifting straps for heavy pulls.", shop: { luxury: { store: "Rogue Fitness", item: "Rogue Ohio Lifting Straps", price: "$22" }, mid: { store: "Amazon", item: "Harbinger Padded Lifting Straps", price: "$10" }, budget: { store: "Amazon", item: "GYMREAPERS Lifting Straps", price: "$10" } } },
+      { title: "Weightlifting Belt", detail: "Leather powerlifting belt for heavy lifts.", shop: { luxury: { store: "Rogue Fitness", item: "Rogue Ohio Leather Belt 10mm", price: "$110" }, mid: { store: "Amazon", item: "Dark Iron Fitness Leather Belt", price: "$30" }, budget: { store: "Amazon", item: "Gymreapers Quick Locking Belt", price: "$22" } } },
+      { title: "Shaker Bottle", detail: "BPA-free protein shaker with mixing ball.", shop: { luxury: { store: "Amazon", item: "BlenderBottle Pro45 Shaker", price: "$18" }, mid: { store: "Amazon", item: "BlenderBottle Classic 28oz", price: "$10" }, budget: { store: "Amazon", item: "Helimix Vortex Shaker Bottle", price: "$13" } } },
+    ],
+  },
+  "Classic Ball Gown": {
+    top: [
+      { title: "Ball Gown Dress", detail: "Dramatic full-skirt ball gown with sweetheart or illusion neckline.", shop: { luxury: { store: "Vera Wang", item: "Vera Wang Bride Ball Gown", price: "$6,500" }, mid: { store: "BHLDN", item: "BHLDN Watters Ball Gown", price: "$1,200" }, budget: { store: "David's Bridal", item: "Strapless Tulle Ball Gown", price: "$399" } } },
+      { title: "Bridal Veil", detail: "Cathedral-length veil with lace appliqué trim.", shop: { luxury: { store: "Nordstrom", item: "Oscar de la Renta Chantilly Lace Veil", price: "$1,890" }, mid: { store: "BHLDN", item: "BHLDN Cathedral Veil", price: "$250" }, budget: { store: "Amazon", item: "Cathedral Length Bridal Veil", price: "$25" } } },
+    ],
+    shoes: [
+      { title: "Bridal Heels", detail: "White or ivory satin pumps with embellishment.", shop: { luxury: { store: "Nordstrom", item: "Jimmy Choo Romy Bridal Pump", price: "$675" }, mid: { store: "Nordstrom", item: "Badgley Mischka Embellished Pump", price: "$198" }, budget: { store: "Amazon", item: "IDIFU Bridal Block Heel Pump", price: "$40" } } },
+    ],
+    accessories: [
+      { title: "Bridal Jewelry Set", detail: "Pearl or crystal necklace and earring set.", shop: { luxury: { store: "Nordstrom", item: "Mikimoto Akoya Pearl Studs", price: "$380" }, mid: { store: "BHLDN", item: "BHLDN Crystal Drop Earrings Set", price: "$120" }, budget: { store: "Amazon", item: "EVER FAITH Bridal Jewelry Set", price: "$20" } } },
+      { title: "Tiara / Headpiece", detail: "Crystal tiara or jeweled headband.", shop: { luxury: { store: "Nordstrom", item: "Brides & Hairpins Crystal Crown", price: "$395" }, mid: { store: "BHLDN", item: "BHLDN Crystal Hair Comb", price: "$85" }, budget: { store: "Amazon", item: "SWEETV Crystal Tiara", price: "$18" } } },
+      { title: "Bridal Clutch", detail: "Small pearl or satin clutch for essentials.", shop: { luxury: { store: "Nordstrom", item: "Jimmy Choo Ellipse Pearl Clutch", price: "$1,650" }, mid: { store: "Nordstrom", item: "Ted Baker Bridal Satin Clutch", price: "$95" }, budget: { store: "Amazon", item: "Dasein Satin Evening Clutch", price: "$16" } } },
+    ],
+  },
+  "Modern Bride": {
+    top: [
+      { title: "Sleek Column Dress", detail: "Minimal column or sheath wedding dress in crepe.", shop: { luxury: { store: "Nordstrom", item: "Carolina Herrera Crepe Column Gown", price: "$4,990" }, mid: { store: "BHLDN", item: "BHLDN Modern Crepe Column Gown", price: "$800" }, budget: { store: "David's Bridal", item: "Simple Crepe Sheath Dress", price: "$299" } } },
+      { title: "Bridal Jumpsuit", detail: "Chic bridal jumpsuit or pantsuit in white or ivory.", shop: { luxury: { store: "Nordstrom", item: "Stella McCartney Bridal Jumpsuit", price: "$3,800" }, mid: { store: "BHLDN", item: "BHLDN Bridal Jumpsuit", price: "$350" }, budget: { store: "David's Bridal", item: "Bridal V-Neck Jumpsuit", price: "$199" } } },
+    ],
+    shoes: [
+      { title: "Statement Heels", detail: "Sculptural heels or architectural mules in white.", shop: { luxury: { store: "Nordstrom", item: "Amina Muaddi Gilda Sandal", price: "$1,090" }, mid: { store: "Steve Madden", item: "Steve Madden Luxe Heel Sandal", price: "$100" }, budget: { store: "Amazon", item: "Vivianly Clear Strap Block Heel", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Minimal Jewelry", detail: "Thin gold chain necklace, delicate studs.", shop: { luxury: { store: "Mejuri", item: "Mejuri Diamond Studs + Chain", price: "$350" }, mid: { store: "Gorjana", item: "Gorjana Super Star Stud + Chain", price: "$95" }, budget: { store: "Amazon", item: "PAVOI 14K Gold Dainty Chain + Studs", price: "$14" } } },
+    ],
+  },
+  "Boho Bride": {
+    top: [
+      { title: "Bohemian Lace Gown", detail: "Flowing lace wedding dress with bell sleeves.", shop: { luxury: { store: "Nordstrom", item: "Monique Lhuillier Lace A-Line Gown", price: "$5,990" }, mid: { store: "BHLDN", item: "BHLDN Bohemian Lace Gown", price: "$1,100" }, budget: { store: "David's Bridal", item: "Boho Lace Long Sleeve Dress", price: "$449" } } },
+    ],
+    shoes: [
+      { title: "Bridal Sandals", detail: "Lace-up gladiator or embellished flat sandals.", shop: { luxury: { store: "Nordstrom", item: "Aquazzura Boheme Bridal Sandal", price: "$895" }, mid: { store: "Free People", item: "Free People Bridal Lace-Up Sandal", price: "$128" }, budget: { store: "Amazon", item: "Dream Pairs Gladiator Sandal", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Flower Crown", detail: "Fresh or dried flower crown in whites and greenery.", shop: { luxury: { store: "Etsy", item: "Custom Fresh Flower Crown", price: "$120" }, mid: { store: "Amazon", item: "Handmade Dried Flower Crown", price: "$35" }, budget: { store: "Amazon", item: "Floral Crown Headband White Rose", price: "$12" } } },
+      { title: "Boho Jewelry", detail: "Layered gold chains, turquoise, crystal pendants.", shop: { luxury: { store: "Free People", item: "Free People Bridal Crystal Set", price: "$148" }, mid: { store: "Anthropologie", item: "Anthropologie Layered Necklace", price: "$58" }, budget: { store: "Amazon", item: "Boho Gold Layered Chain Set", price: "$14" } } },
+    ],
+  },
+  "Mermaid Bride": {
+    top: [
+      { title: "Mermaid Fit Gown", detail: "Body-hugging mermaid gown with dramatic flare at the knee.", shop: { luxury: { store: "Vera Wang", item: "Vera Wang Mermaid Gown", price: "$5,800" }, mid: { store: "BHLDN", item: "BHLDN Fitted Mermaid Gown", price: "$1,400" }, budget: { store: "David's Bridal", item: "Lace Mermaid Wedding Dress", price: "$499" } } },
+    ],
+    shoes: [
+      { title: "Platform Heels", detail: "Satin platform heels for height under the silhouette.", shop: { luxury: { store: "Nordstrom", item: "Jimmy Choo Heloise Platform", price: "$895" }, mid: { store: "Steve Madden", item: "Steve Madden Lessa Platform", price: "$100" }, budget: { store: "Amazon", item: "DREAM PAIRS Platform Block Heel", price: "$40" } } },
+    ],
+    accessories: [
+      { title: "Statement Earrings", detail: "Crystal chandelier or pearl drop earrings.", shop: { luxury: { store: "Nordstrom", item: "Oscar de la Renta Crystal Earrings", price: "$590" }, mid: { store: "BHLDN", item: "BHLDN Chandelier Earrings", price: "$68" }, budget: { store: "Amazon", item: "BriLove Chandelier Dangle Earrings", price: "$15" } } },
+      { title: "Bridal Belt", detail: "Crystal or beaded bridal sash to cinch the waist.", shop: { luxury: { store: "BHLDN", item: "BHLDN Jeweled Bridal Sash", price: "$250" }, mid: { store: "Amazon", item: "SWEETV Crystal Bridal Belt", price: "$30" }, budget: { store: "Amazon", item: "Yanstar Rhinestone Bridal Belt", price: "$12" } } },
+    ],
+  },
+  "Classic Black Tux": {
+    top: [
+      { title: "Tuxedo Jacket", detail: "Peak lapel tuxedo jacket in black wool, satin lapels.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Purple Label Tuxedo", price: "$4,995" }, mid: { store: "SuitSupply", item: "SuitSupply Black Tuxedo Jacket", price: "$599" }, budget: { store: "Men's Wearhouse", item: "Joseph Abboud Black Tuxedo", price: "$299" } } },
+      { title: "Tuxedo Shirt", detail: "White formal shirt with French cuffs.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren French Cuff Shirt", price: "$295" }, mid: { store: "Brooks Brothers", item: "Brooks Brothers Tuxedo Shirt", price: "$148" }, budget: { store: "Amazon", item: "Marquis French Cuff Dress Shirt", price: "$25" } } },
+      { title: "Bow Tie", detail: "Black silk self-tie bow tie.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Silk Bow Tie", price: "$95" }, mid: { store: "Brooks Brothers", item: "Brooks Brothers Satin Bow Tie", price: "$59" }, budget: { store: "Amazon", item: "HISDERN Self-Tie Silk Bow Tie", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Tuxedo Trousers", detail: "Flat-front tuxedo pants with satin stripe.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Tuxedo Pants", price: "$895" }, mid: { store: "SuitSupply", item: "SuitSupply Black Tuxedo Trousers", price: "$249" }, budget: { store: "Men's Wearhouse", item: "Joseph Abboud Tuxedo Pants", price: "$99" } } },
+    ],
+    shoes: [
+      { title: "Patent Leather Oxfords", detail: "Black patent leather Oxford shoes.", shop: { luxury: { store: "Nordstrom", item: "Ferragamo Patent Oxford", price: "$795" }, mid: { store: "Cole Haan", item: "Cole Haan Patent Oxford", price: "$200" }, budget: { store: "Amazon", item: "Bruno Marc Patent Oxford", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Cufflinks", detail: "Silver or onyx cufflinks.", shop: { luxury: { store: "Nordstrom", item: "Montblanc Onyx Cufflinks", price: "$320" }, mid: { store: "Nordstrom", item: "BOSS Silver Knot Cufflinks", price: "$78" }, budget: { store: "Amazon", item: "Cufflinks Inc. Silver Knot Set", price: "$20" } } },
+      { title: "Pocket Square", detail: "White silk pocket square, presidential fold.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Silk Pocket Square", price: "$75" }, mid: { store: "Brooks Brothers", item: "Brooks Brothers Silk Pocket Square", price: "$45" }, budget: { store: "Amazon", item: "SHLAX&WING White Silk Pocket Square", price: "$8" } } },
+      { title: "Dress Watch", detail: "Slim dress watch with leather strap.", shop: { luxury: { store: "Nordstrom", item: "Jaeger-LeCoultre Reverso", price: "$7,400" }, mid: { store: "Nordstrom", item: "Tissot Gentleman Powermatic", price: "$450" }, budget: { store: "Amazon", item: "Orient Bambino V2", price: "$130" } } },
+    ],
+  },
+  "Midnight Blue Tux": {
+    top: [
+      { title: "Navy Tuxedo Jacket", detail: "Midnight blue tuxedo with black satin shawl lapel.", shop: { luxury: { store: "Hugo Boss", item: "BOSS Midnight Blue Tuxedo", price: "$1,295" }, mid: { store: "SuitSupply", item: "SuitSupply Navy Shawl Lapel Tux", price: "$649" }, budget: { store: "Men's Wearhouse", item: "Calvin Klein Navy Tux", price: "$349" } } },
+      { title: "Dress Shirt", detail: "White or pale blue dress shirt.", shop: { luxury: { store: "Brooks Brothers", item: "Brooks Brothers Milano Dress Shirt", price: "$148" }, mid: { store: "Nordstrom", item: "David Donahue Trim Fit Shirt", price: "$95" }, budget: { store: "Amazon", item: "Van Heusen Fitted Dress Shirt", price: "$20" } } },
+    ],
+    bottom: [
+      { title: "Navy Tuxedo Pants", detail: "Matching midnight blue trousers with satin stripe.", shop: { luxury: { store: "Hugo Boss", item: "BOSS Navy Tuxedo Trousers", price: "$395" }, mid: { store: "SuitSupply", item: "SuitSupply Navy Tuxedo Trousers", price: "$269" }, budget: { store: "Men's Wearhouse", item: "Calvin Klein Navy Tux Pants", price: "$120" } } },
+    ],
+    shoes: [
+      { title: "Velvet Loafers", detail: "Navy or black velvet loafers with satin trim.", shop: { luxury: { store: "Gucci", item: "Gucci Horsebit Velvet Loafer", price: "$920" }, mid: { store: "Cole Haan", item: "Cole Haan Velvet Loafer", price: "$180" }, budget: { store: "Amazon", item: "ELANROMAN Velvet Loafers", price: "$45" } } },
+    ],
+    accessories: [
+      { title: "Lapel Pin", detail: "Subtle lapel pin or boutonnière.", shop: { luxury: { store: "Nordstrom", item: "Lanvin Crystal Lapel Pin", price: "$195" }, mid: { store: "Nordstrom", item: "BOSS Enamel Lapel Pin", price: "$48" }, budget: { store: "Amazon", item: "Rhungift Lapel Pin Set 12pcs", price: "$12" } } },
+      { title: "Blue Dial Watch", detail: "Blue-dial dress watch to complement the midnight palette.", shop: { luxury: { store: "Nordstrom", item: "Omega Aqua Terra Blue Dial", price: "$5,900" }, mid: { store: "Amazon", item: "Seiko Presage Blue Moon", price: "$350" }, budget: { store: "Amazon", item: "Orient Bambino Blue Dial", price: "$130" } } },
+    ],
+  },
+  "Velvet Tux": {
+    top: [
+      { title: "Velvet Dinner Jacket", detail: "Rich velvet dinner jacket in burgundy, emerald, or midnight.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Velvet Dinner Jacket", price: "$2,495" }, mid: { store: "SuitSupply", item: "SuitSupply Burgundy Velvet Jacket", price: "$499" }, budget: { store: "Amazon", item: "COOFANDY Men's Velvet Blazer", price: "$55" } } },
+    ],
+    bottom: [
+      { title: "Black Dress Pants", detail: "Slim-fit black dress pants paired with velvet jacket.", shop: { luxury: { store: "Hugo Boss", item: "BOSS Genesis Slim Fit Trousers", price: "$248" }, mid: { store: "Nordstrom", item: "Bonobos Weekday Warrior Pants", price: "$119" }, budget: { store: "Amazon", item: "Amazon Essentials Slim Fit Dress Pants", price: "$30" } } },
+    ],
+    shoes: [
+      { title: "Patent Shoes", detail: "Black patent leather loafers or Derbies.", shop: { luxury: { store: "Nordstrom", item: "Christian Louboutin Patent Loafer", price: "$895" }, mid: { store: "Cole Haan", item: "Cole Haan Patent Loafer", price: "$180" }, budget: { store: "Amazon", item: "Bruno Marc Patent Leather Loafer", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Pocket Square", detail: "Contrasting silk pocket square.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Silk Pocket Square", price: "$75" }, mid: { store: "Nordstrom", item: "Nordstrom Silk Pocket Square", price: "$25" }, budget: { store: "Amazon", item: "SHLAX&WING Pocket Square Set", price: "$10" } } },
+      { title: "Statement Ring", detail: "Bold signet or onyx ring.", shop: { luxury: { store: "Nordstrom", item: "David Yurman Signet Ring", price: "$550" }, mid: { store: "Amazon", item: "CRAFTD London Signet Ring", price: "$50" }, budget: { store: "Amazon", item: "PROSTEEL Stainless Steel Signet Ring", price: "$12" } } },
+    ],
+  },
+  "White Dinner Jacket": {
+    top: [
+      { title: "White Dinner Jacket", detail: "Ivory or white shawl-collar dinner jacket.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren White Dinner Jacket", price: "$2,995" }, mid: { store: "SuitSupply", item: "SuitSupply Off-White Dinner Jacket", price: "$549" }, budget: { store: "Men's Wearhouse", item: "Joseph Abboud Cream Dinner Jacket", price: "$249" } } },
+      { title: "Black Bow Tie", detail: "Black silk self-tie bow tie.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Silk Bow Tie", price: "$95" }, mid: { store: "Brooks Brothers", item: "Brooks Brothers Satin Bow Tie", price: "$59" }, budget: { store: "Amazon", item: "HISDERN Self-Tie Bow Tie Set", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Black Dress Trousers", detail: "Black flat-front trousers with satin stripe.", shop: { luxury: { store: "Ralph Lauren", item: "Ralph Lauren Tuxedo Trousers", price: "$895" }, mid: { store: "SuitSupply", item: "SuitSupply Black Tuxedo Trousers", price: "$249" }, budget: { store: "Jos. A. Bank", item: "Jos. A. Bank Tuxedo Pants", price: "$99" } } },
+    ],
+    shoes: [
+      { title: "Black Oxford", detail: "Polished black leather cap-toe Oxfords.", shop: { luxury: { store: "Nordstrom", item: "John Lobb City II Oxford", price: "$1,590" }, mid: { store: "Cole Haan", item: "Cole Haan Cap Toe Oxford", price: "$180" }, budget: { store: "Amazon", item: "Bruno Marc Cap Toe Oxford", price: "$35" } } },
+    ],
+    accessories: [
+      { title: "Cufflinks & Studs", detail: "Matching onyx cufflinks and shirt studs set.", shop: { luxury: { store: "Nordstrom", item: "Tiffany & Co. Onyx Cufflinks", price: "$450" }, mid: { store: "Nordstrom", item: "David Donahue Onyx Cufflinks & Studs", price: "$135" }, budget: { store: "Amazon", item: "Cufflinks Inc. Onyx Stud & Link Set", price: "$28" } } },
+      { title: "Dress Watch", detail: "Ultra-thin gold or silver dress watch.", shop: { luxury: { store: "Nordstrom", item: "Cartier Tank Must", price: "$2,920" }, mid: { store: "Amazon", item: "Tissot Le Locle Powermatic 80", price: "$525" }, budget: { store: "Amazon", item: "Orient Bambino V2 Gold", price: "$130" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
