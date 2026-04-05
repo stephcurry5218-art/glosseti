@@ -406,6 +406,58 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <button className="nav-btn" onClick={onSaved}><span className="nav-icon"><Bookmark size={20} /></span><span className="nav-label">Saved</span></button>
         <button className="nav-btn" onClick={onProfile}><span className="nav-icon"><User size={20} /></span><span className="nav-label">Profile</span></button>
       </div>
+
+      {/* Secret PIN overlay */}
+      {showPin && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 999,
+          background: "rgba(14,10,9,0.92)", backdropFilter: "blur(12px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
+            padding: "30px 24px", borderRadius: 20,
+            background: "rgba(30,22,18,0.95)",
+            border: "1px solid rgba(196,151,74,0.2)",
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(251,246,240,0.7)", letterSpacing: 1 }}>
+              Enter PIN
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {[0, 1, 2, 3].map(i => (
+                <div key={i} style={{
+                  width: 40, height: 48, borderRadius: 10,
+                  border: pinError ? "2px solid rgba(255,80,80,0.6)" : pin[i] ? "2px solid rgba(196,151,74,0.6)" : "2px solid rgba(196,151,74,0.2)",
+                  background: pin[i] ? "rgba(196,151,74,0.1)" : "rgba(255,255,255,0.03)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 20, fontWeight: 700, color: "rgba(196,151,74,0.9)", transition: "all 0.2s",
+                }}>
+                  {pin[i] ? "•" : ""}
+                </div>
+              ))}
+            </div>
+            <input
+              type="tel" inputMode="numeric" maxLength={4} value={pin} autoFocus
+              onChange={(e) => { setPin(e.target.value.replace(/\D/g, "").slice(0, 4)); setPinError(false); }}
+              onKeyDown={(e) => { if (e.key === "Enter" && pin.length === 4) handlePinSubmit(); }}
+              style={{ position: "absolute", opacity: 0, width: 1, height: 1 }}
+            />
+            {pinError && <div style={{ fontSize: 11, color: "rgba(255,80,80,0.8)", fontWeight: 500 }}>Incorrect PIN</div>}
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setShowPin(false)} style={{
+                padding: "8px 20px", borderRadius: 10, border: "1px solid rgba(196,151,74,0.2)",
+                background: "transparent", color: "rgba(251,246,240,0.5)", fontSize: 12, fontWeight: 600, cursor: "pointer",
+              }}>Cancel</button>
+              <button onClick={handlePinSubmit} disabled={pin.length < 4} style={{
+                padding: "8px 20px", borderRadius: 10, border: "none",
+                background: pin.length === 4 ? "rgba(196,151,74,0.8)" : "rgba(196,151,74,0.2)",
+                color: pin.length === 4 ? "white" : "rgba(251,246,240,0.3)",
+                fontSize: 12, fontWeight: 600, cursor: pin.length === 4 ? "pointer" : "default", transition: "all 0.2s",
+              }}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
