@@ -27,6 +27,42 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
 
+  // Secret dev mode toggle
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout>>();
+  const [showPin, setShowPin] = useState(false);
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState(false);
+
+  const handleLogoTap = () => {
+    tapCount.current += 1;
+    clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      setShowPin(true);
+      setPin("");
+      setPinError(false);
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    }
+  };
+
+  const handlePinSubmit = () => {
+    if (pin === "5218") {
+      const isActive = localStorage.getItem("glamora_dev_mode") === "unlocked";
+      if (isActive) {
+        localStorage.removeItem("glamora_dev_mode");
+      } else {
+        localStorage.setItem("glamora_dev_mode", "unlocked");
+      }
+      setShowPin(false);
+    } else {
+      setPinError(true);
+      setPin("");
+      setTimeout(() => setPinError(false), 1500);
+    }
+  };
+
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingTop: 64, paddingBottom: 20 }}>
       {/* Compact hero */}
