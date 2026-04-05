@@ -437,6 +437,41 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
   },
 ];
 
+const customDetailPlaceholders: Record<string, string> = {
+  "full-style": 'e.g. "Navy linen blazer", "White Stan Smiths"...',
+  "streetwear": 'e.g. "Supreme box logo hoodie", "Nike Dunk Lows"...',
+  "minimalist": 'e.g. "Cream cashmere sweater", "White Common Projects"...',
+  "vintage": 'e.g. "70s bell-bottom jeans", "Round John Lennon glasses"...',
+  "athleisure": 'e.g. "Lululemon Align leggings", "Nike Air Max 90s"...',
+  "formal": 'e.g. "Navy double-breasted suit", "Ferragamo loafers"...',
+  "casual": 'e.g. "Oversized white tee", "Vintage Levi 501s"...',
+  "bohemian": 'e.g. "Crochet maxi dress", "Turquoise layered necklace"...',
+  "preppy": 'e.g. "Ralph Lauren cable knit", "Penny loafers"...',
+  "edgy": 'e.g. "Studded leather jacket", "Dr. Martens 1460s"...',
+  "resort": 'e.g. "Linen camp collar shirt", "Gucci slides"...',
+  "makeup-only": 'e.g. "Charlotte Tilbury Pillow Talk lip", "Soft smokey eye"...',
+  "grooming": 'e.g. "Mid skin fade", "Full beard with lined edges"...',
+  "sexy": 'e.g. "Red satin slip dress", "Strappy gold heels"...',
+  "swimwear": 'e.g. "High-waist bikini in emerald", "Straw sun hat"...',
+  "urban-hiphop": 'e.g. "Cuban link chain", "Air Force 1s all white"...',
+  "rugged": 'e.g. "Red Wing Iron Rangers", "Waxed canvas jacket"...',
+  "techwear": 'e.g. "ACG cargo pants", "ACRONYM J1A jacket"...',
+  "date-night": 'e.g. "Silk midi dress", "Tom Ford cologne"...',
+  "lingerie": 'e.g. "Black lace bodysuit", "Silk robe in champagne"...',
+  "y2k": 'e.g. "Butterfly clips", "Low-rise flare jeans"...',
+  "cottagecore": 'e.g. "Puff-sleeve floral dress", "Wicker basket bag"...',
+  "jewelry-accessories": 'e.g. "Cartier Love bracelet", "Diamond studs"...',
+  "sunglasses-eyewear": 'e.g. "Ray-Ban Aviators gold", "Celine cat-eye frames"...',
+  "hats-headwear": 'e.g. "Yankees fitted cap", "Straw Panama hat"...',
+  "celebrity-makeup": 'e.g. "Glossy lips", "Soft contour"...',
+  "celebrity-hair": 'e.g. "Waist-length box braids", "Platinum blonde pixie"...',
+  "bags-purses": 'e.g. "Chanel Classic Flap", "Bottega Veneta Pouch"...',
+  "shoes-sneakers": 'e.g. "Retro Jordan 1 Chicago", "Adidas Samba OGs"...',
+  "wedding-gowns": 'e.g. "Off-shoulder lace bodice", "Cathedral-length veil"...',
+  "tuxedos": 'e.g. "Burgundy velvet jacket", "Black satin bow tie"...',
+  "fitness": 'e.g. "Nike Dri-FIT matching set", "Gymshark compression shorts"...',
+};
+
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
