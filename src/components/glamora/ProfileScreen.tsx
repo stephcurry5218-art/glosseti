@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X } from "lucide-react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
