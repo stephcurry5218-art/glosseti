@@ -135,8 +135,11 @@ export function useSubscription() {
   }, [userId, state.tier, anonUsage]);
 
   const tryGenerate = useCallback((): boolean => {
+    if (isDevMode()) {
+      recordGeneration();
+      return true;
+    }
     if (!userId && anonUsage >= FREE_DAILY_LIMIT) {
-      // Anonymous user exhausted free tries — require sign-up
       setRequireAuth(true);
       setShowPaywall(true);
       return false;
