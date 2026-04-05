@@ -1114,6 +1114,11 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "MMA Fighter", desc: "Full MMA gear — rash guard, fight shorts, gloves", match: 95 },
     { name: "CrossFit Beast", desc: "Functional fitness — Metcons, shorts, grips", match: 93 },
     { name: "Gym Power", desc: "Bodybuilding basics — stringer, joggers, lifting belt", match: 94 },
+    { name: "Pilates Set", desc: "Sculpted matching set — reformer-ready pastels", match: 94 },
+    { name: "Dance Workout", desc: "Colorful, flexible dance fits for Zumba & hip-hop", match: 93 },
+    { name: "Hiking Fit", desc: "Trail-ready layers — boots, fleece, daypack", match: 95 },
+    { name: "Tennis Outfit", desc: "Court-ready — skort, polo, performance shoes", match: 94 },
+    { name: "Lounge Recovery", desc: "Post-workout chill — hoodie, joggers, slides", match: 92 },
   ],
   "wedding-gowns": [
     { name: "Classic Ball Gown", desc: "Dramatic full-skirt bridal ball gown", match: 96 },
