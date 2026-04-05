@@ -103,7 +103,10 @@ const Privacy = () => {
       {/* Header */}
       <div className="flex items-center gap-3 px-5 pt-6 pb-4">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            if (window.history.length > 1) navigate(-1);
+            else navigate("/");
+          }}
           className="w-9 h-9 rounded-full flex items-center justify-center"
           style={{
             background: "hsl(var(--card))",

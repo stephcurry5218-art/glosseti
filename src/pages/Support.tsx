@@ -144,9 +144,18 @@ const Support = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs mt-10" style={{ color: "hsl(var(--glamora-gray-light))" }}>
-          © {new Date().getFullYear()} Glosseti. All rights reserved.
-        </p>
+        <div className="text-center mt-10 space-y-2">
+          <a
+            href="/privacy"
+            className="text-xs underline"
+            style={{ color: "hsl(var(--accent))" }}
+          >
+            Privacy Policy
+          </a>
+          <p className="text-xs" style={{ color: "hsl(var(--glamora-gray-light))" }}>
+            © {new Date().getFullYear()} Glosseti. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   );
