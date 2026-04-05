@@ -24,7 +24,7 @@ import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
 import { useStyleHistory } from "./useStyleHistory";
 
-export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night" | "lingerie" | "y2k" | "cottagecore" | "celebrity-makeup" | "celebrity-hair" | "jewelry-accessories" | "sunglasses-eyewear" | "hats-headwear" | "bags-purses" | "shoes-sneakers";
+export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night" | "lingerie" | "y2k" | "cottagecore" | "celebrity-makeup" | "celebrity-hair" | "jewelry-accessories" | "sunglasses-eyewear" | "hats-headwear" | "bags-purses" | "shoes-sneakers" | "wedding-gowns" | "tuxedos" | "fitness";
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
