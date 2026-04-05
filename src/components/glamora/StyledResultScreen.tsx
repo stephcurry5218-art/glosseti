@@ -205,6 +205,25 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
+        {/* Shop This Look CTA — always visible when image generated */}
+        {hasStyled && (
+          <button
+            className="anim-fadeUp"
+            onClick={() => onLookSelect(looks[0]?.name || "Full Style")}
+            style={{
+              width: "100%", padding: "16px 24px", marginBottom: 16, borderRadius: 16,
+              background: "linear-gradient(135deg, hsl(142 60% 42%), hsl(152 55% 48%))",
+              color: "#fff", fontSize: 16, fontWeight: 700, border: "none", cursor: "pointer",
+              fontFamily: "'Jost', sans-serif",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              boxShadow: "0 6px 24px hsla(142 60% 42% / 0.4)",
+              animation: "pulse2 3s ease-in-out infinite",
+            }}
+          >
+            <ShoppingBag size={20} /> Shop This Look
+          </button>
+        )}
+
         {/* Look Price Breakdown */}
         {hasStyled && looks[0] && (
           <LookPriceCard lookName={looks[0].name} />
