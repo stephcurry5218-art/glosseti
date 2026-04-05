@@ -262,7 +262,7 @@ const GlamoraApp = () => {
         <UpgradePrompt feature={lockedFeature} onClose={() => setShowUpgradePrompt(false)}
           onUpgrade={(tier) => upgradeTo(tier)} />
       )}
-      <AppDownloadSheet />
+      {/* <AppDownloadSheet /> */}
     </div>
   );
 };
