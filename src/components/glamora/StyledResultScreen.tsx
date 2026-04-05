@@ -24,13 +24,81 @@ interface Props {
 
 type HotspotId = "top" | "bottom" | "shoes" | "accessories" | "makeup";
 
-const getHotspotPositions = (isMale: boolean): Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> => ({
-  makeup: { top: "8%", left: "62%", label: isMale ? "Grooming" : "Makeup", Icon: Palette, searchTerm: isMale ? "men grooming kit skincare" : "makeup kit set" },
-  top: { top: "28%", left: "18%", label: "Top", Icon: Shirt, searchTerm: isMale ? "men shirt top" : "women top blouse" },
-  accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch, searchTerm: isMale ? "men accessories watch" : "women fashion accessories jewelry" },
-  bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot, searchTerm: isMale ? "men pants trousers" : "women pants trousers" },
-  shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints, searchTerm: isMale ? "men shoes sneakers" : "women shoes heels" },
-});
+/** Parse custom details from styleSubcategory string (format: "catId:subId[detail] + catId2:subId2[detail2]") */
+const parseCustomDetails = (styleSubcategory?: string): Record<string, string> => {
+  if (!styleSubcategory) return {};
+  const details: Record<string, string> = {};
+  const parts = styleSubcategory.split(" + ");
+  for (const part of parts) {
+    const bracketMatch = part.match(/^([^:]+):.*?\[(.+)\]$/);
+    if (bracketMatch) {
+      details[bracketMatch[1]] = bracketMatch[2];
+    }
+  }
+  return details;
+};
+
+/** Map style category IDs to hotspot IDs */
+const categoryToHotspot: Record<string, HotspotId> = {
+  "shoes-sneakers": "shoes",
+  "bags-purses": "accessories",
+  "jewelry-accessories": "accessories",
+  "sunglasses-eyewear": "accessories",
+  "hats-headwear": "accessories",
+  "makeup-only": "makeup",
+  "celebrity-makeup": "makeup",
+  "grooming": "makeup",
+  "full-style": "top",
+  "streetwear": "top",
+  "formal": "top",
+  "casual": "top",
+  "minimalist": "top",
+  "vintage": "top",
+  "athleisure": "top",
+  "preppy": "top",
+  "edgy": "top",
+  "techwear": "top",
+  "y2k": "top",
+  "cottagecore": "top",
+  "bohemian": "top",
+  "resort": "top",
+  "urban-hiphop": "top",
+  "rugged": "top",
+  "sexy": "top",
+  "date-night": "top",
+  "swimwear": "top",
+  "lingerie": "top",
+  "wedding-gowns": "top",
+  "tuxedos": "top",
+  "fitness": "top",
+  "celebrity-hair": "makeup",
+};
+/** Find the custom detail for a given hotspot by checking all category mappings */
+const getCustomDetailForHotspot = (hotspotId: HotspotId, customDetails: Record<string, string>): string | null => {
+  for (const [catId, detail] of Object.entries(customDetails)) {
+    if (categoryToHotspot[catId] === hotspotId) return detail;
+  }
+  return null;
+};
+
+const getHotspotPositions = (isMale: boolean, customDetails?: Record<string, string>): Record<HotspotId, { top: string; left: string; label: string; Icon: LucideIcon; searchTerm: string }> => {
+  // Find custom details relevant to each hotspot
+  const getCustomSearchTerm = (hotspotId: HotspotId, fallback: string): string => {
+    if (!customDetails) return fallback;
+    for (const [catId, detail] of Object.entries(customDetails)) {
+      if (categoryToHotspot[catId] === hotspotId) return detail;
+    }
+    return fallback;
+  };
+
+  return {
+    makeup: { top: "8%", left: "62%", label: isMale ? "Grooming" : "Makeup", Icon: Palette, searchTerm: getCustomSearchTerm("makeup", isMale ? "men grooming kit skincare" : "makeup kit set") },
+    top: { top: "28%", left: "18%", label: "Top", Icon: Shirt, searchTerm: getCustomSearchTerm("top", isMale ? "men shirt top" : "women top blouse") },
+    accessories: { top: "22%", left: "78%", label: "Accessories", Icon: Watch, searchTerm: getCustomSearchTerm("accessories", isMale ? "men accessories watch" : "women fashion accessories jewelry") },
+    bottom: { top: "58%", left: "22%", label: "Bottoms", Icon: CircleDot, searchTerm: getCustomSearchTerm("bottom", isMale ? "men pants trousers" : "women pants trousers") },
+    shoes: { top: "82%", left: "55%", label: "Shoes", Icon: Footprints, searchTerm: getCustomSearchTerm("shoes", isMale ? "men shoes sneakers" : "women shoes heels") },
+  };
+};
 
 const analysis = {
   bodyType: "Athletic",
@@ -70,7 +138,8 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const isMale = prefs.gender === "male";
   const isMakeup = prefs.styleCategory === "makeup-only";
   const looks = styleLooks[prefs.styleCategory] || styleLooks["full-style"];
-  const hotspotPositions = getHotspotPositions(isMale);
+  const userCustomDetails = parseCustomDetails(prefs.styleSubcategory);
+  const hotspotPositions = getHotspotPositions(isMale, userCustomDetails);
 
   const analysisCards: { label: string; value: string; Icon: LucideIcon }[] = isMakeup
     ? [
@@ -296,13 +365,15 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                   if (steps && steps.length > 0) {
                     const firstWithShop = steps.find(s => s.shop);
                     if (firstWithShop?.shop) {
-                      // Use mid-tier as default direct link (most common price point)
                       const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
-                      return getShopUrl(tier.store, tier.item);
+                      // If user specified a custom detail for this hotspot category, use it as search term
+                      const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                      return customTerm ? getShopUrl(tier.store, customTerm) : getShopUrl(tier.store, tier.item);
                     }
                   }
-                  // Fallback to generic Amazon search
-                  return getShopUrl("Amazon", pos.searchTerm);
+                  // Fallback — use custom detail if available, otherwise generic search
+                  const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                  return getShopUrl("Amazon", customTerm || pos.searchTerm);
                 };
                 return (
                   <button
