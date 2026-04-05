@@ -1015,4 +1015,25 @@ export const styleLooks: Record<string, { name: string; desc: string; match: num
     { name: "Urban Edge", desc: "Sneakers and boots with street credibility", match: 90 },
     { name: "Soft Glam", desc: "Elegant heels and flats in neutral tones", match: 88 },
   ],
+  fitness: [
+    { name: "Yoga Flow", desc: "High-waist leggings with matching crop top", match: 95 },
+    { name: "Nike 2-Piece (Men)", desc: "Matching Nike Dri-FIT top and shorts", match: 94 },
+    { name: "Nike 2-Piece (Women)", desc: "Nike sports bra and biker shorts combo", match: 94 },
+    { name: "Running Kit", desc: "Lightweight running gear — tank, shorts, trainers", match: 93 },
+    { name: "MMA Fighter", desc: "Full MMA gear — rash guard, fight shorts, gloves", match: 95 },
+    { name: "CrossFit Beast", desc: "Functional fitness — Metcons, shorts, grips", match: 93 },
+    { name: "Gym Power", desc: "Bodybuilding basics — stringer, joggers, lifting belt", match: 94 },
+  ],
+  "wedding-gowns": [
+    { name: "Classic Ball Gown", desc: "Dramatic full-skirt bridal ball gown", match: 96 },
+    { name: "Modern Bride", desc: "Sleek minimal column gown or bridal jumpsuit", match: 94 },
+    { name: "Boho Bride", desc: "Flowing bohemian lace with flower crown", match: 93 },
+    { name: "Mermaid Bride", desc: "Body-hugging silhouette with dramatic flare", match: 95 },
+  ],
+  tuxedos: [
+    { name: "Classic Black Tux", desc: "Peak lapel black tuxedo — timeless elegance", match: 96 },
+    { name: "Midnight Blue Tux", desc: "Navy tuxedo with black satin shawl lapel", match: 94 },
+    { name: "Velvet Tux", desc: "Rich velvet dinner jacket — burgundy or emerald", match: 93 },
+    { name: "White Dinner Jacket", desc: "Ivory shawl-collar dinner jacket — James Bond style", match: 95 },
+  ],
 };
