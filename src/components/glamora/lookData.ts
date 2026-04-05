@@ -838,6 +838,92 @@ export const lookData: Record<string, Partial<Record<Category, Step[]>>> = {
       { title: "Dress Watch", detail: "Ultra-thin gold or silver dress watch.", shop: { luxury: { store: "Nordstrom", item: "Cartier Tank Must", price: "$2,920" }, mid: { store: "Amazon", item: "Tissot Le Locle Powermatic 80", price: "$525" }, budget: { store: "Amazon", item: "Orient Bambino V2 Gold", price: "$130" } } },
     ],
   },
+  "Pilates Set": {
+    top: [
+      { title: "Sculpt Tank", detail: "Ribbed longline tank or cropped tank in pastel tones.", shop: { luxury: { store: "Nordstrom", item: "Alo Yoga Rib Support Tank", price: "$62" }, mid: { store: "Nike", item: "Nike Yoga Dri-FIT Luxe Tank", price: "$45" }, budget: { store: "Amazon", item: "CRZ YOGA Butterluxe Crop Tank", price: "$22" } } },
+      { title: "Matching Sports Bra", detail: "Light-support sports bra in matching color.", shop: { luxury: { store: "Nordstrom", item: "Alo Yoga Airlift Bra", price: "$62" }, mid: { store: "Nike", item: "Nike Indy Light-Support Bra", price: "$40" }, budget: { store: "Amazon", item: "CRZ YOGA Longline Sports Bra", price: "$18" } } },
+    ],
+    bottom: [
+      { title: "High-Waist Leggings", detail: "Buttery-soft 7/8 leggings with no front seam.", shop: { luxury: { store: "Lululemon", item: "Lululemon Align 25\" Pant", price: "$98" }, mid: { store: "Nike", item: "Nike Zenvy Gentle-Support Legging", price: "$100" }, budget: { store: "Amazon", item: "CRZ YOGA Naked Feeling Legging", price: "$28" } } },
+      { title: "Flare Leggings", detail: "Bootcut flare yoga pants for studio flow.", shop: { luxury: { store: "Nordstrom", item: "Alo Yoga Airbrush Flutter Legging", price: "$118" }, mid: { store: "Target", item: "All in Motion Flare Yoga Pant", price: "$30" }, budget: { store: "Amazon", item: "IUGA Bootcut Yoga Pants", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Grip Socks", detail: "Non-slip Pilates grip socks for reformer.", shop: { luxury: { store: "Nordstrom", item: "Tavi Noir Grip Socks", price: "$22" }, mid: { store: "Amazon", item: "Toesox Half Toe Grip Socks", price: "$16" }, budget: { store: "Amazon", item: "Ozaiic Non-Slip Grip Socks 3pk", price: "$10" } } },
+    ],
+    accessories: [
+      { title: "Yoga Mat", detail: "Non-slip exercise mat for Pilates reformer or mat work.", shop: { luxury: { store: "Lululemon", item: "Lululemon The Mat 5mm", price: "$88" }, mid: { store: "Target", item: "All in Motion Natural Rubber Mat", price: "$30" }, budget: { store: "Amazon", item: "BalanceFrom GoYoga Mat", price: "$18" } } },
+      { title: "Hair Accessories", detail: "Claw clips and scrunchies to keep hair secured.", shop: { luxury: { store: "Nordstrom", item: "Slip Silk Scrunchie Set", price: "$39" }, mid: { store: "Target", item: "Kitsch Claw Clip Set", price: "$12" }, budget: { store: "Amazon", item: "LADES Claw Clips 6pk", price: "$8" } } },
+    ],
+  },
+  "Dance Workout": {
+    top: [
+      { title: "Crop Top", detail: "Breathable crop top or racerback tank in bold colors.", shop: { luxury: { store: "Nordstrom", item: "Adidas by Stella McCartney Crop Top", price: "$65" }, mid: { store: "Nike", item: "Nike Dri-FIT One Crop Tank", price: "$35" }, budget: { store: "Amazon", item: "RUNNING GIRL Padded Sports Bra Tank", price: "$16" } } },
+      { title: "Loose Dance Tee", detail: "Oversized off-shoulder tee for Zumba and hip-hop dance.", shop: { luxury: { store: "Nike", item: "Nike Sportswear Oversized Dance Tee", price: "$40" }, mid: { store: "Adidas", item: "Adidas Dance Crop Tee", price: "$35" }, budget: { store: "Amazon", item: "Mippo Workout Crop Top", price: "$15" } } },
+    ],
+    bottom: [
+      { title: "Dance Leggings", detail: "High-waist colorful leggings with 4-way stretch.", shop: { luxury: { store: "Lululemon", item: "Lululemon Wunder Train 25\" Tight", price: "$98" }, mid: { store: "Nike", item: "Nike One Mid-Rise 7/8 Leggings", price: "$60" }, budget: { store: "Amazon", item: "Colorfulkoala High Waisted Leggings", price: "$22" } } },
+      { title: "Dance Shorts", detail: "Loose-fit or biker shorts for freedom of movement.", shop: { luxury: { store: "Nike", item: "Nike Dri-FIT Swoosh Run Shorts", price: "$45" }, mid: { store: "Adidas", item: "Adidas Pacer 3-Stripes Shorts", price: "$25" }, budget: { store: "Amazon", item: "BALEAF High Waist Biker Shorts", price: "$16" } } },
+    ],
+    shoes: [
+      { title: "Dance Sneakers", detail: "Lightweight pivot-point sneakers for dance classes.", shop: { luxury: { store: "Nike", item: "Nike Metcon 9 AMP", price: "$150" }, mid: { store: "Nike", item: "Nike Free Metcon 5", price: "$120" }, budget: { store: "Amazon", item: "Ryka Devotion XT Training Shoe", price: "$55" } } },
+    ],
+    accessories: [
+      { title: "Sweatband Set", detail: "Wristbands and headband to keep sweat at bay.", shop: { luxury: { store: "Nike", item: "Nike Swoosh Headband + Wristband Set", price: "$18" }, mid: { store: "Adidas", item: "Adidas Interval Reversible Headband", price: "$12" }, budget: { store: "Amazon", item: "ONUPGO Sweatband Set 6pk", price: "$9" } } },
+      { title: "Water Bottle", detail: "Insulated water bottle for intense sessions.", shop: { luxury: { store: "Amazon", item: "Hydro Flask 32oz Wide Mouth", price: "$45" }, mid: { store: "Nike", item: "Nike Fuel Jug 64oz", price: "$38" }, budget: { store: "Amazon", item: "Iron Flask Sports Water Bottle 32oz", price: "$18" } } },
+    ],
+  },
+  "Hiking Fit": {
+    top: [
+      { title: "Moisture-Wicking Tee", detail: "Lightweight merino or synthetic hiking tee.", shop: { luxury: { store: "Nordstrom", item: "Arc'teryx Cormac Crew Tee", price: "$65" }, mid: { store: "REI", item: "REI Co-op Active Pursuits Tee", price: "$35" }, budget: { store: "Amazon", item: "Hanes Cool DRI Moisture Wicking Tee", price: "$10" } } },
+      { title: "Fleece Mid-Layer", detail: "Quarter-zip fleece or softshell jacket for layering.", shop: { luxury: { store: "Nordstrom", item: "Patagonia Better Sweater 1/4 Zip", price: "$139" }, mid: { store: "Nike", item: "Nike Therma-FIT Element Half-Zip", price: "$75" }, budget: { store: "Amazon", item: "Amazon Essentials Quarter-Zip Fleece", price: "$22" } } },
+    ],
+    bottom: [
+      { title: "Hiking Pants", detail: "Stretch nylon hiking pants with zip pockets.", shop: { luxury: { store: "REI", item: "Arc'teryx Gamma Pant", price: "$179" }, mid: { store: "REI", item: "prAna Stretch Zion Pant", price: "$85" }, budget: { store: "Amazon", item: "CQR Flex Stretch Tactical Pants", price: "$35" } } },
+      { title: "Hiking Shorts", detail: "Quick-dry shorts with built-in liner and zip pockets.", shop: { luxury: { store: "Nordstrom", item: "Patagonia Quandary Shorts", price: "$69" }, mid: { store: "REI", item: "REI Co-op Sahara Shorts", price: "$45" }, budget: { store: "Amazon", item: "MIER Quick Dry Hiking Shorts", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Trail Hiking Boots", detail: "Waterproof mid-cut hiking boots with ankle support.", shop: { luxury: { store: "REI", item: "Salomon X Ultra 4 Mid GTX", price: "$175" }, mid: { store: "Amazon", item: "Merrell Moab 3 Mid Waterproof", price: "$135" }, budget: { store: "Amazon", item: "Columbia Newton Ridge Plus II Boot", price: "$75" } } },
+      { title: "Trail Running Shoes", detail: "Lightweight trail shoes for fast hikes.", shop: { luxury: { store: "Nike", item: "Nike Pegasus Trail 5 GTX", price: "$170" }, mid: { store: "Amazon", item: "HOKA Speedgoat 5", price: "$155" }, budget: { store: "Amazon", item: "Merrell Trail Glove 7", price: "$100" } } },
+    ],
+    accessories: [
+      { title: "Hiking Backpack", detail: "20-30L daypack with hydration sleeve.", shop: { luxury: { store: "REI", item: "Osprey Talon 22 Pack", price: "$140" }, mid: { store: "Amazon", item: "Deuter Speed Lite 21 Backpack", price: "$80" }, budget: { store: "Amazon", item: "Venture Pal 40L Lightweight Daypack", price: "$20" } } },
+      { title: "Trekking Poles", detail: "Collapsible carbon or aluminum trekking poles.", shop: { luxury: { store: "REI", item: "Black Diamond Distance Carbon Z", price: "$170" }, mid: { store: "Amazon", item: "TrailBuddy Trekking Poles", price: "$35" }, budget: { store: "Amazon", item: "Cascade Mountain Tech Carbon Fiber Poles", price: "$28" } } },
+      { title: "Sun Hat", detail: "Wide-brim UPF 50+ sun hat for trail protection.", shop: { luxury: { store: "Nordstrom", item: "Sunday Afternoons Ultra Adventure Hat", price: "$46" }, mid: { store: "REI", item: "REI Co-op Sahara Shade Hat", price: "$30" }, budget: { store: "Amazon", item: "GearTOP UPF 50+ Wide Brim Sun Hat", price: "$14" } } },
+    ],
+  },
+  "Tennis Outfit": {
+    top: [
+      { title: "Tennis Polo / Tank", detail: "Performance polo or racerback tank in white or bright color.", shop: { luxury: { store: "Nike", item: "Nike Court Dri-FIT Victory Polo", price: "$65" }, mid: { store: "Adidas", item: "Adidas Club Tennis Tank Top", price: "$35" }, budget: { store: "Amazon", item: "BALEAF Tennis Tank Racerback", price: "$20" } } },
+      { title: "Tennis Dress", detail: "One-piece tennis dress with built-in shorts.", shop: { luxury: { store: "Nike", item: "Nike Court Dri-FIT Advantage Dress", price: "$90" }, mid: { store: "Adidas", item: "Adidas Tennis Y-Dress", price: "$65" }, budget: { store: "Amazon", item: "JACK SMITH Tennis Dress with Shorts", price: "$30" } } },
+    ],
+    bottom: [
+      { title: "Tennis Skort", detail: "Pleated or A-line skort with ball pocket.", shop: { luxury: { store: "Nike", item: "Nike Court Dri-FIT Victory Skirt", price: "$65" }, mid: { store: "Adidas", item: "Adidas Club Pleated Skort", price: "$40" }, budget: { store: "Amazon", item: "BALEAF Pleated Tennis Skort", price: "$22" } } },
+    ],
+    shoes: [
+      { title: "Tennis Shoes", detail: "Court-specific shoes with herringbone tread.", shop: { luxury: { store: "Nike", item: "Nike Court Air Zoom Vapor Pro 2", price: "$150" }, mid: { store: "Adidas", item: "Adidas Barricade Tennis Shoes", price: "$140" }, budget: { store: "Amazon", item: "New Balance 696v5 Tennis Shoe", price: "$75" } } },
+    ],
+    accessories: [
+      { title: "Tennis Visor", detail: "Adjustable performance visor.", shop: { luxury: { store: "Nike", item: "Nike Court Advantage Visor", price: "$28" }, mid: { store: "Adidas", item: "Adidas Aeroready Visor", price: "$18" }, budget: { store: "Amazon", item: "Nike Dri-FIT Ace Visor", price: "$16" } } },
+      { title: "Tennis Bag", detail: "Racket bag or backpack with shoe compartment.", shop: { luxury: { store: "Nike", item: "Nike Court Advantage Duffel Bag", price: "$80" }, mid: { store: "Adidas", item: "Adidas Tour Tennis Racquet Bag", price: "$50" }, budget: { store: "Amazon", item: "HEAD Tour Team Tennis Backpack", price: "$35" } } },
+    ],
+  },
+  "Lounge Recovery": {
+    top: [
+      { title: "Oversized Hoodie", detail: "Heavyweight oversized hoodie for post-workout chill.", shop: { luxury: { store: "Nike", item: "Nike Sportswear Phoenix Fleece Hoodie", price: "$75" }, mid: { store: "Adidas", item: "Adidas Essentials Fleece Hoodie", price: "$50" }, budget: { store: "Amazon", item: "Champion Powerblend Fleece Hoodie", price: "$25" } } },
+      { title: "Crewneck Sweatshirt", detail: "Relaxed-fit crewneck in neutral or earth tones.", shop: { luxury: { store: "Nordstrom", item: "Alo Yoga Accolade Sweatshirt", price: "$108" }, mid: { store: "Nike", item: "Nike Sportswear Club Fleece Crew", price: "$55" }, budget: { store: "Amazon", item: "Hanes EcoSmart Fleece Sweatshirt", price: "$12" } } },
+    ],
+    bottom: [
+      { title: "Joggers", detail: "Tapered joggers with elastic cuffs.", shop: { luxury: { store: "Nike", item: "Nike Sportswear Tech Fleece Joggers", price: "$110" }, mid: { store: "Adidas", item: "Adidas Essentials Fleece Joggers", price: "$45" }, budget: { store: "Amazon", item: "Amazon Essentials Fleece Jogger", price: "$18" } } },
+      { title: "Sweatpants", detail: "Relaxed wide-leg sweatpants for ultimate comfort.", shop: { luxury: { store: "Lululemon", item: "Lululemon Softstreme High-Rise Pant", price: "$118" }, mid: { store: "Nike", item: "Nike Phoenix Fleece Wide-Leg Pants", price: "$75" }, budget: { store: "Target", item: "All in Motion Cozy Fleece Pants", price: "$25" } } },
+    ],
+    shoes: [
+      { title: "Recovery Slides", detail: "Cushioned slides for post-workout recovery.", shop: { luxury: { store: "Nike", item: "Nike Calm Slide", price: "$55" }, mid: { store: "Adidas", item: "Adidas Adilette Comfort Slides", price: "$35" }, budget: { store: "Amazon", item: "Pillow Slides Cloud Slippers", price: "$16" } } },
+    ],
+    accessories: [
+      { title: "Massage Gun", detail: "Percussion massage gun for muscle recovery.", shop: { luxury: { store: "Amazon", item: "Theragun Prime Massage Gun", price: "$249" }, mid: { store: "Amazon", item: "Ekrin Athletics B37 Massage Gun", price: "$130" }, budget: { store: "Amazon", item: "BOB AND BRAD Q2 Mini Massage Gun", price: "$36" } } },
+      { title: "Foam Roller", detail: "High-density foam roller for self-myofascial release.", shop: { luxury: { store: "Amazon", item: "TriggerPoint GRID Foam Roller", price: "$37" }, mid: { store: "Amazon", item: "LuxFit Premium Foam Roller", price: "$14" }, budget: { store: "Amazon", item: "Amazon Basics Foam Roller 36\"", price: "$12" } } },
+    ],
+  },
 };
 
 export const lookMeta: Record<string, { match: number; desc: string }> = {
