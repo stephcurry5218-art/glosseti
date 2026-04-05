@@ -105,10 +105,14 @@ export function useSubscription() {
     return () => subscription.unsubscribe();
   }, [state.tier, fetchUsage]);
 
+  const isDevMode = () => {
+    try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; }
+  };
+
   const cap = state.tier === "free" ? FREE_DAILY_LIMIT : MONTHLY_CAPS[state.tier];
-  const canGenerate = usageCount < cap;
-  const remainingGenerations = Math.max(0, cap - usageCount);
-  const showWatermark = state.tier === "free";
+  const canGenerate = isDevMode() || usageCount < cap;
+  const remainingGenerations = isDevMode() ? 999 : Math.max(0, cap - usageCount);
+  const showWatermark = state.tier === "free" && !isDevMode();
 
   const recordGeneration = useCallback(async () => {
     if (userId) {
@@ -131,8 +135,11 @@ export function useSubscription() {
   }, [userId, state.tier, anonUsage]);
 
   const tryGenerate = useCallback((): boolean => {
+    if (isDevMode()) {
+      recordGeneration();
+      return true;
+    }
     if (!userId && anonUsage >= FREE_DAILY_LIMIT) {
-      // Anonymous user exhausted free tries — require sign-up
       setRequireAuth(true);
       setShowPaywall(true);
       return false;

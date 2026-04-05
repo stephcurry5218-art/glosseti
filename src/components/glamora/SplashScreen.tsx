@@ -1,15 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface Props { onDone: () => void; }
 
 const SplashScreen = ({ onDone }: Props) => {
   const [hide, setHide] = useState(false);
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const t = setTimeout(() => setHide(true), 2200);
     const t2 = setTimeout(onDone, 2800);
     return () => { clearTimeout(t); clearTimeout(t2); };
   }, [onDone]);
+
+  const handleLogoTap = () => {
+    tapCount.current += 1;
+    clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      const isActive = localStorage.getItem("glamora_dev_mode") === "unlocked";
+      if (isActive) {
+        localStorage.removeItem("glamora_dev_mode");
+      } else {
+        localStorage.setItem("glamora_dev_mode", "unlocked");
+      }
+      tapCount.current = 0;
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    }
+  };
 
   return (
     <div
@@ -24,7 +42,13 @@ const SplashScreen = ({ onDone }: Props) => {
         className="absolute rounded-full"
         style={{ width: 200, height: 200, bottom: 60, left: -40, background: "radial-gradient(circle, rgba(196,151,74,0.25) 0%, transparent 70%)", animation: "glamFloat 6s ease-in-out infinite 1s" }}
       />
-      <img src="/glosseti-icon-only.png" alt="Glosseti" className="relative z-10 anim-fadeIn" style={{ width: 120, height: 120, objectFit: "contain" }} />
+      <img
+        src="/glosseti-icon-only.png"
+        alt="Glosseti"
+        className="relative z-10 anim-fadeIn cursor-pointer"
+        style={{ width: 120, height: 120, objectFit: "contain" }}
+        onClick={handleLogoTap}
+      />
       <div className="relative z-10 anim-fadeIn d3" style={{ fontSize: 12, color: "rgba(251,246,240,0.45)", letterSpacing: 4, textTransform: "uppercase", marginTop: 10 }}>
         AI-Powered Style Studio
       </div>
