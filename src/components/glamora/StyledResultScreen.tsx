@@ -358,13 +358,15 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                   if (steps && steps.length > 0) {
                     const firstWithShop = steps.find(s => s.shop);
                     if (firstWithShop?.shop) {
-                      // Use mid-tier as default direct link (most common price point)
                       const tier = firstWithShop.shop.mid || firstWithShop.shop.budget || firstWithShop.shop.luxury;
-                      return getShopUrl(tier.store, tier.item);
+                      // If user specified a custom detail for this hotspot category, use it as search term
+                      const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                      return customTerm ? getShopUrl(tier.store, customTerm) : getShopUrl(tier.store, tier.item);
                     }
                   }
-                  // Fallback to generic Amazon search
-                  return getShopUrl("Amazon", pos.searchTerm);
+                  // Fallback — use custom detail if available, otherwise generic search
+                  const customTerm = getCustomDetailForHotspot(id as HotspotId, userCustomDetails);
+                  return getShopUrl("Amazon", customTerm || pos.searchTerm);
                 };
                 return (
                   <button
