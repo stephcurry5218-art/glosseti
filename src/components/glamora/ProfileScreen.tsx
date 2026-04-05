@@ -83,7 +83,8 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
     { Icon: Settings, label: "Settings", action: undefined },
-    { Icon: MessageCircle, label: "Support", action: undefined },
+    { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
+    { Icon: Shield, label: "Privacy Policy", action: () => { window.location.href = "/privacy"; } },
     { Icon: Star, label: "Rate Glosseti", action: undefined },
   ];
 
