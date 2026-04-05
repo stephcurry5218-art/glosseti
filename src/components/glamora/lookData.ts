@@ -966,6 +966,11 @@ export const lookMeta: Record<string, { match: number; desc: string }> = {
   "Midnight Blue Tux": { match: 94, desc: "Navy tuxedo with black satin shawl lapel" },
   "Velvet Tux": { match: 93, desc: "Rich velvet dinner jacket — burgundy or emerald" },
   "White Dinner Jacket": { match: 95, desc: "Ivory shawl-collar dinner jacket — James Bond style" },
+  "Pilates Set": { match: 94, desc: "Sculpted matching set — reformer-ready pastels" },
+  "Dance Workout": { match: 93, desc: "Colorful, flexible, movement-friendly dance fits" },
+  "Hiking Fit": { match: 95, desc: "Trail-ready layers — boots, fleece, daypack" },
+  "Tennis Outfit": { match: 94, desc: "Court-ready style — skort, polo, performance shoes" },
+  "Lounge Recovery": { match: 92, desc: "Post-workout chill — oversized hoodie, joggers, slides" },
 };
 
 // Shoe-specific look data for shopping
