@@ -56,10 +56,6 @@ const GlamoraApp = () => {
     generationMode: "on-me",
   });
 
-  // Inspiration state
-  const [inspirationIcon, setInspirationIcon] = useState("");
-  const [inspirationImageUrl, setInspirationImageUrl] = useState<string | null>(null);
-  const [inspirationProfile, setInspirationProfile] = useState<StyleProfile | null>(null);
 
   const {
     subscription, canGenerate, remainingGenerations, showWatermark,
