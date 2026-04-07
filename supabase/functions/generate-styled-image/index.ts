@@ -181,8 +181,8 @@ serve(async (req) => {
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
-      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${swimwearOverride}`
-      : swimwearOverride;
+      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${combinedOverride}`
+      : combinedOverride;
 
     // Makeup preference for female users
     const makeupNote = (!isMale && makeupPreference)
