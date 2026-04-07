@@ -120,6 +120,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   scrollbar-width: none;
   transition: opacity 0.35s ease, transform 0.35s ease;
   background: hsl(var(--glamora-cream));
@@ -128,6 +129,12 @@
 .screen.enter { opacity: 1; transform: translateX(0); }
 .screen.exit-left { opacity: 0; transform: translateX(-30px); pointer-events: none; }
 .screen.exit-right { opacity: 0; transform: translateX(30px); pointer-events: none; }
+
+/* Native app feel — prevent text selection on UI chrome */
+button, .nav-btn, .bottom-nav, .back-btn, .pill-tag, .glamora-card, .btn-primary, .btn-rose, .btn-gold, .btn-ghost {
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 /* Typography */
 .display, .serif { font-family: 'Playfair Display', serif; }
