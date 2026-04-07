@@ -401,3 +401,8 @@ button, .nav-btn, .bottom-nav, .back-btn, .pill-tag, .glamora-card, .btn-primary
 @keyframes growBar {
   from { width: 0%; }
 }
+@keyframes launchProgress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
