@@ -10,6 +10,7 @@ import UsageBadge from "./subscription/UsageBadge";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
+  onDailyLook: () => void;
   onProfile: () => void;
   onSaved: () => void;
   savedCount: number;
@@ -22,7 +23,7 @@ interface Props {
   onSignIn: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn }: Props) => {
+const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -292,7 +293,7 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
 
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
-        <DailyLookCard onGenerate={() => onGetStyled()} />
+        <DailyLookCard onGenerate={onDailyLook} gender={gender} />
       </div>
 
       {/* Two action cards — side by side */}

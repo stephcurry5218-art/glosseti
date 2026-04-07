@@ -112,6 +112,20 @@ const GlamoraApp = () => {
             if (initialCategory) setPrefs(p => ({ ...p, styleCategory: initialCategory }));
             go("style-picker");
           }}
+          onDailyLook={() => {
+            // Daily Look: set category to full-style
+            setPrefs(p => ({ ...p, styleCategory: "full-style" }));
+            // If user has already uploaded a photo before, skip upload and go straight to generate
+            const hasPhoto = prefs.photoBase64 || prefs.photoFile;
+            if (hasPhoto) {
+              if (!tryGenerate()) return;
+              recordStyle({ styleCategory: "full-style", gender: prefs.gender, generationMode: prefs.generationMode });
+              go("loading");
+            } else {
+              // First time — need a photo so AI knows them
+              go("upload");
+            }
+          }}
           onProfile={() => go("profile")}
           onSaved={() => go("saved")}
           savedCount={savedStyles.length}
