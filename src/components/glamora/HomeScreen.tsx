@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
+import DailyLookCard from "./DailyLookCard";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
