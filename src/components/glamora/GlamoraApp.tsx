@@ -127,13 +127,11 @@ const GlamoraApp = () => {
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
       {screen === "style-picker" && (
         <StylePickerScreen prefs={prefs} onBack={() => go("home")}
-          onNext={(category: StyleCategory, celebrityGuide?: string, subcategory?: string) => {
-            const needsCelebrityGuide = category === "celebrity-makeup" || category === "celebrity-hair";
+          onNext={(category: StyleCategory, _celebrityGuide?: string, subcategory?: string) => {
             setPrefs(p => ({
               ...p,
               styleCategory: category,
               styleSubcategory: subcategory,
-              celebrityGuide: needsCelebrityGuide ? celebrityGuide : undefined,
             }));
             go("upload");
           }} />
