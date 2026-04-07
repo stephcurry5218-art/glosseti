@@ -433,8 +433,6 @@ const customDetailPlaceholders: Record<string, string> = {
   "jewelry-accessories": 'e.g. "Cartier Love bracelet", "Diamond studs"...',
   "sunglasses-eyewear": 'e.g. "Ray-Ban Aviators gold", "Celine cat-eye frames"...',
   "hats-headwear": 'e.g. "Yankees fitted cap", "Straw Panama hat"...',
-  "celebrity-makeup": 'e.g. "Glossy lips", "Soft contour"...',
-  "celebrity-hair": 'e.g. "Waist-length box braids", "Platinum blonde pixie"...',
   "bags-purses": 'e.g. "Chanel Classic Flap", "Bottega Veneta Pouch"...',
   "shoes-sneakers": 'e.g. "Retro Jordan 1 Chicago", "Adidas Samba OGs"...',
   "wedding-gowns": 'e.g. "Off-shoulder lace bodice", "Cathedral-length veil"...',
