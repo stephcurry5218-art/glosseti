@@ -187,14 +187,8 @@ const GlamoraApp = () => {
             if (!tryGenerate()) return;
             // Store Gio's suggestion in prefs metadata for the generation pipeline
             localStorage.setItem("glamora_gio_refinement", gioSuggestion);
-            if (screen === "inspiration-results") {
-              setInspirationImageUrl(null);
-              setInspirationProfile(null);
-              go("inspiration-loading");
-            } else {
-              setStyledImageUrl(null);
-              go("loading");
-            }
+            setStyledImageUrl(null);
+            go("loading");
           }}
         />
       )}
