@@ -17,7 +17,6 @@ interface Props {
   subscription: SubscriptionState;
   remainingGenerations: number;
   onShowPaywall: () => void;
-  onInspiration: () => void;
   isLoggedIn: boolean;
   onSignIn: () => void;
 }
