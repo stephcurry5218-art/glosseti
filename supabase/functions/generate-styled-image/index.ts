@@ -170,13 +170,6 @@ serve(async (req) => {
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
       : "";
 
-    // Add celebrity style guide — mandatory for celebrity-makeup and celebrity-hair
-    const isCelebrityCategory = styleCategory === "celebrity-makeup" || styleCategory === "celebrity-hair";
-    const celebrityNote = celebrityGuide
-      ? isCelebrityCategory
-        ? `\n\nCRITICAL — CELEBRITY TARGET: ${celebrityGuide}. You MUST recreate ${celebrityGuide}'s EXACT ${styleCategory === "celebrity-makeup" ? "makeup/beauty" : "hairstyle"} look. Study their signature style and replicate it precisely on this person. Keep the person's face and identity but transform their ${styleCategory === "celebrity-makeup" ? "makeup, skin finish, brows, lips, and eye look" : "hair cut, color, texture, and styling"} to match ${celebrityGuide}'s iconic look. Do NOT change their face shape or identity.`
-        : `\n\nSTYLE INSPIRATION: Channel the fashion aesthetic and styling sensibility of ${celebrityGuide}. Adapt their signature style elements (color palette, fits, accessories, overall vibe) to this look. Do NOT replicate their face or identity.`
-      : "";
 
     const requestImage = async (messages: any[]) => {
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
