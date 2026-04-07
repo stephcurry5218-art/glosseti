@@ -10,6 +10,7 @@ import UsageBadge from "./subscription/UsageBadge";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
+  onDailyLook: () => void;
   onProfile: () => void;
   onSaved: () => void;
   savedCount: number;
