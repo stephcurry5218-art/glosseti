@@ -293,7 +293,7 @@ const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, 
 
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
-        <DailyLookCard onGenerate={onDailyLook} gender={gender} />
+        <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
       </div>
 
       {/* Two action cards — side by side */}
