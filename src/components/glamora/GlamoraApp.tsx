@@ -178,42 +178,6 @@ const GlamoraApp = () => {
           onGetStyled={() => go("style-picker")} gender={prefs.gender} />
       )}
 
-      {/* Inspiration flow */}
-      {screen === "inspiration" && (
-        <InspirationScreen prefs={prefs} onBack={() => go("home")} onGenerate={handleInspirationGenerate} />
-      )}
-      {screen === "inspiration-loading" && (prefs.photoBase64 || prefs.generationMode === "mannequin") && (
-        <InspirationLoadingScreen
-          iconName={inspirationIcon}
-          photoBase64={prefs.photoBase64}
-          photoType={prefs.photoType}
-          gender={prefs.gender}
-          generationMode={prefs.generationMode}
-          onDone={(imageUrl, styleProfile) => {
-            setInspirationImageUrl(imageUrl);
-            setInspirationProfile(styleProfile);
-            go("inspiration-results");
-          }}
-        />
-      )}
-      {screen === "inspiration-results" && (
-        <InspirationResultScreen
-          prefs={prefs}
-          styledImageUrl={inspirationImageUrl}
-          styleProfile={inspirationProfile}
-          onBack={() => go("inspiration")}
-          onHome={() => go("home")}
-          onSave={(lookName) => {
-            setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
-          }}
-          onRegenerate={() => {
-            const styleName = inspirationProfile?.styleName || "inspired";
-            const prompt = `I just generated a "${styleName}" inspiration look and I want to refine it. What tweaks would you suggest — different clothing pieces, color palette changes, or accessory swaps? Give me specific ideas to make the look even better.`;
-            chatRef.current?.openWithPrompt(prompt);
-          }}
-          showWatermark={showWatermark}
-        />
-      )}
 
       {screen !== "splash" && screen !== "entrance" && screen !== "auth" && (
         <StylistChat
