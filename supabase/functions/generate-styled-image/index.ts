@@ -206,38 +206,55 @@ serve(async (req) => {
 
 
     const requestImage = async (messages: any[]) => {
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-3.1-flash-image-preview",
-          messages,
-          modalities: ["image", "text"],
-        }),
-      });
+      const maxRetries = 3;
+      let lastError: Error | null = null;
 
-      if (!response.ok) {
-        if (response.status === 429) {
-          throw new Error("RATE_LIMITED");
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        if (attempt > 0) {
+          // Exponential backoff: 2s, 4s
+          await new Promise((r) => setTimeout(r, 2000 * attempt));
         }
+
+        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3.1-flash-image-preview",
+            messages,
+            modalities: ["image", "text"],
+          }),
+        });
+
+        if (response.status === 429) {
+          console.warn(`Rate limited on attempt ${attempt + 1}/${maxRetries}, retrying...`);
+          lastError = new Error("RATE_LIMITED");
+          continue;
+        }
+
         if (response.status === 402) {
           throw new Error("CREDITS_EXHAUSTED");
         }
-        const errText = await response.text();
-        console.error("AI gateway error:", response.status, errText);
-        throw new Error("GENERATION_FAILED");
+
+        if (!response.ok) {
+          const errText = await response.text();
+          console.error("AI gateway error:", response.status, errText);
+          throw new Error("GENERATION_FAILED");
+        }
+
+        const data = await response.json();
+        const firstImage = data.choices?.[0]?.message?.images?.[0];
+
+        return {
+          generatedImage: firstImage?.image_url?.url ?? firstImage?.url ?? null,
+          textResponse: data.choices?.[0]?.message?.content || "",
+        };
       }
 
-      const data = await response.json();
-      const firstImage = data.choices?.[0]?.message?.images?.[0];
-
-      return {
-        generatedImage: firstImage?.image_url?.url ?? firstImage?.url ?? null,
-        textResponse: data.choices?.[0]?.message?.content || "",
-      };
+      // All retries exhausted
+      throw lastError || new Error("RATE_LIMITED");
     };
 
     let editPrompt: string;
