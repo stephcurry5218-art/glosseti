@@ -295,6 +295,38 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
       </div>
 
 
+      {/* Icon Looks CTA */}
+      <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0" }}>
+        <div
+          className="glamora-card"
+          onClick={() => onGetStyled("icon-looks" as StyleCategory)}
+          style={{
+            padding: "16px 14px", cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 12,
+            background: `linear-gradient(160deg, hsla(280 60% 50% / 0.1), hsla(var(--glamora-gold) / 0.08))`,
+            border: `1.5px solid hsla(280 60% 50% / 0.2)`,
+            position: "relative", overflow: "hidden",
+          }}
+        >
+          <div style={{
+            width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+            background: "linear-gradient(135deg, hsla(280 60% 50% / 0.25), hsla(var(--glamora-gold) / 0.15))",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Star size={20} color="hsl(280 60% 65%)" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
+              ✨ Icon Looks
+            </div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+              Channel iconic style archetypes — get the vibe
+            </div>
+          </div>
+          <ArrowRight size={16} color="hsl(280 60% 65%)" />
+        </div>
+      </div>
+
       {/* Saved & Tiers — compact inline row */}
       <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0", display: "flex", gap: 10 }}>
         <div className="glamora-card" onClick={onSaved} style={{

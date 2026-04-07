@@ -457,6 +457,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "wedding-gowns": 'e.g. "Off-shoulder lace bodice", "Cathedral-length veil"...',
   "tuxedos": 'e.g. "Burgundy velvet jacket", "Black satin bow tie"...',
   "fitness": 'e.g. "Nike Dri-FIT matching set", "Gymshark compression shorts"...',
+  "icon-looks": 'e.g. "Old Hollywood waves", "Oversized blazer with sneakers"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
