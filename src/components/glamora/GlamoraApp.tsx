@@ -120,7 +120,6 @@ const GlamoraApp = () => {
           subscription={subscription}
           remainingGenerations={remainingGenerations}
           onShowPaywall={() => setShowPaywall(true)}
-          onInspiration={() => go("inspiration")}
           isLoggedIn={!!user}
           onSignIn={() => go("auth")}
         />
