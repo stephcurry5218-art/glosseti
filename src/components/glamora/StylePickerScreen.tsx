@@ -709,7 +709,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
             background: isMale
               ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
               : undefined,
-            opacity: (current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim() ? 0.5 : 1,
+            opacity: 1,
           }}>
           Continue — Upload Photo <ArrowRight size={16} />
         </button>
