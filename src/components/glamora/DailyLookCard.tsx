@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Sparkles, Clock, TrendingUp, ArrowRight } from "lucide-react";
-import type { Gender } from "./GlamoraApp";
+import { Sparkles, Clock, TrendingUp, ArrowRight, ShoppingBag } from "lucide-react";
+import type { Gender, StyleCategory } from "./GlamoraApp";
 
 interface Props {
   onGenerate: () => void;
+  onGetStyled: (category: StyleCategory) => void;
   gender: Gender;
 }
 
@@ -17,31 +18,31 @@ interface Particle {
 }
 
 const TREND_PILLS_FEMALE = [
-  { label: "Bold Glam", color: "hsla(0 70% 55% / 0.85)", bg: "hsla(0 70% 55% / 0.14)", border: "hsla(0 70% 55% / 0.3)" },
-  { label: "Minimalist", color: "hsla(220 70% 60% / 0.9)", bg: "hsla(220 70% 60% / 0.14)", border: "hsla(220 70% 60% / 0.3)" },
-  { label: "Boho", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)" },
-  { label: "Soft Fem", color: "hsla(340 55% 60% / 0.9)", bg: "hsla(340 55% 60% / 0.14)", border: "hsla(340 55% 60% / 0.3)" },
+  { label: "Bold Glam", color: "hsla(0 70% 55% / 0.85)", bg: "hsla(0 70% 55% / 0.14)", border: "hsla(0 70% 55% / 0.3)", category: "formal" as StyleCategory },
+  { label: "Minimalist", color: "hsla(220 70% 60% / 0.9)", bg: "hsla(220 70% 60% / 0.14)", border: "hsla(220 70% 60% / 0.3)", category: "minimalist" as StyleCategory },
+  { label: "Boho", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)", category: "bohemian" as StyleCategory },
+  { label: "Soft Fem", color: "hsla(340 55% 60% / 0.9)", bg: "hsla(340 55% 60% / 0.14)", border: "hsla(340 55% 60% / 0.3)", category: "cottagecore" as StyleCategory },
 ];
 
 const TREND_PILLS_MALE = [
-  { label: "Sharp & Clean", color: "hsla(220 60% 55% / 0.9)", bg: "hsla(220 60% 55% / 0.14)", border: "hsla(220 60% 55% / 0.3)" },
-  { label: "Streetwear", color: "hsla(35 80% 55% / 0.9)", bg: "hsla(35 80% 55% / 0.14)", border: "hsla(35 80% 55% / 0.3)" },
-  { label: "Rugged", color: "hsla(25 50% 45% / 0.9)", bg: "hsla(25 50% 45% / 0.14)", border: "hsla(25 50% 45% / 0.3)" },
-  { label: "Athletic", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)" },
+  { label: "Sharp & Clean", color: "hsla(220 60% 55% / 0.9)", bg: "hsla(220 60% 55% / 0.14)", border: "hsla(220 60% 55% / 0.3)", category: "formal" as StyleCategory },
+  { label: "Streetwear", color: "hsla(35 80% 55% / 0.9)", bg: "hsla(35 80% 55% / 0.14)", border: "hsla(35 80% 55% / 0.3)", category: "streetwear" as StyleCategory },
+  { label: "Rugged", color: "hsla(25 50% 45% / 0.9)", bg: "hsla(25 50% 45% / 0.14)", border: "hsla(25 50% 45% / 0.3)", category: "rugged" as StyleCategory },
+  { label: "Athletic", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)", category: "athleisure" as StyleCategory },
 ];
 
 const TRENDS_FEMALE = [
-  { label: "Quiet Luxury", pct: 87, color: "hsla(0 70% 55% / 0.8)" },
-  { label: "Coastal Cowgirl", pct: 72, color: "hsla(220 70% 60% / 0.8)" },
-  { label: "Dark Romantic", pct: 64, color: "hsla(280 55% 55% / 0.8)" },
-  { label: "Athleisure Chic", pct: 51, color: "hsla(140 55% 50% / 0.8)" },
+  { label: "Quiet Luxury", pct: 87, color: "hsla(0 70% 55% / 0.8)", category: "minimalist" as StyleCategory },
+  { label: "Coastal Cowgirl", pct: 72, color: "hsla(220 70% 60% / 0.8)", category: "bohemian" as StyleCategory },
+  { label: "Dark Romantic", pct: 64, color: "hsla(280 55% 55% / 0.8)", category: "edgy" as StyleCategory },
+  { label: "Athleisure Chic", pct: 51, color: "hsla(140 55% 50% / 0.8)", category: "athleisure" as StyleCategory },
 ];
 
 const TRENDS_MALE = [
-  { label: "Quiet Luxury", pct: 84, color: "hsla(220 60% 55% / 0.8)" },
-  { label: "Techwear", pct: 71, color: "hsla(200 55% 50% / 0.8)" },
-  { label: "New Preppy", pct: 63, color: "hsla(140 50% 45% / 0.8)" },
-  { label: "Gorpcore", pct: 55, color: "hsla(25 50% 45% / 0.8)" },
+  { label: "Quiet Luxury", pct: 84, color: "hsla(220 60% 55% / 0.8)", category: "minimalist" as StyleCategory },
+  { label: "Techwear", pct: 71, color: "hsla(200 55% 50% / 0.8)", category: "techwear" as StyleCategory },
+  { label: "New Preppy", pct: 63, color: "hsla(140 50% 45% / 0.8)", category: "preppy" as StyleCategory },
+  { label: "Gorpcore", pct: 55, color: "hsla(25 50% 45% / 0.8)", category: "streetwear" as StyleCategory },
 ];
 
 function getCountdown(): string {
@@ -55,7 +56,7 @@ function getCountdown(): string {
   return `${h}h ${String(m).padStart(2, "0")}m`;
 }
 
-const DailyLookCard = ({ onGenerate, gender }: Props) => {
+const DailyLookCard = ({ onGenerate, onGetStyled, gender }: Props) => {
   const isMale = gender === "male";
   const [countdown, setCountdown] = useState(getCountdown);
   const [tapped, setTapped] = useState(false);
@@ -152,7 +153,6 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
 
         {/* Card content */}
         <div style={{ position: "relative", zIndex: 5, padding: "20px 18px" }}>
-          {/* Countdown */}
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
             <Clock size={13} color={isMale ? "hsla(220 60% 65% / 0.9)" : "hsla(260 60% 75% / 0.9)"} />
             <span style={{
@@ -165,17 +165,14 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
             </span>
           </div>
 
-          {/* Title */}
           <div className="serif" style={{
             fontSize: 22, fontWeight: 600, lineHeight: 1.2,
-            color: "hsla(0 0% 100% / 0.95)",
-            marginBottom: 6,
+            color: "hsla(0 0% 100% / 0.95)", marginBottom: 6,
           }}>
             {isMale ? "Your Daily Fit" : "Your Daily Look"}
           </div>
           <div style={{
-            fontSize: 12, color: "hsla(0 0% 100% / 0.55)", lineHeight: 1.4,
-            marginBottom: 16,
+            fontSize: 12, color: "hsla(0 0% 100% / 0.55)", lineHeight: 1.4, marginBottom: 16,
           }}>
             {isMale
               ? "AI-curated outfit based on your style & today's trends"
@@ -189,31 +186,24 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
             transition: "height 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
             overflow: "hidden",
           }}>
-            {/* Generate button state */}
             <div style={{
               opacity: tapped ? 0 : 1,
               transform: tapped ? "translateY(-20px)" : "translateY(0)",
               transition: "all 0.3s ease",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              gap: 10,
-              padding: "14px 20px",
-              borderRadius: 14,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              padding: "14px 20px", borderRadius: 14,
               background: isMale
                 ? "linear-gradient(135deg, hsla(220 50% 50% / 0.35), hsla(200 45% 45% / 0.35))"
                 : "linear-gradient(135deg, hsla(340 50% 65% / 0.35), hsla(260 55% 60% / 0.35))",
               border: "1px solid hsla(0 0% 100% / 0.15)",
             }}>
               <Sparkles size={16} color="hsla(0 0% 100% / 0.9)" />
-              <span style={{
-                fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)",
-                letterSpacing: 0.5,
-              }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.9)", letterSpacing: 0.5 }}>
                 {isMale ? "Tap to Reveal Today's Fit" : "Tap to Reveal Today's Look"}
               </span>
               <ArrowRight size={14} color="hsla(0 0% 100% / 0.7)" />
             </div>
 
-            {/* Morph animation state */}
             {tapped && (
               <div style={{
                 position: "absolute", inset: 0,
@@ -266,25 +256,35 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
         </div>
       </div>
 
-      {/* ══ Trending Now Pills ══ */}
+      {/* ══ Trending Now Pills — tappable ══ */}
       <div style={{
         display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center",
         marginTop: 14, padding: "0 4px",
       }}>
         {trendPills.map((pill) => (
-          <div key={pill.label} style={{
-            padding: "6px 14px", borderRadius: 100,
-            background: pill.bg,
-            border: `1px solid ${pill.border}`,
-            fontSize: 11, fontWeight: 600, color: pill.color,
-            letterSpacing: 0.3,
-          }}>
-            {pill.label}
-          </div>
+          <button
+            key={pill.label}
+            onClick={(e) => { e.stopPropagation(); onGetStyled(pill.category); }}
+            style={{
+              padding: "6px 14px", borderRadius: 100,
+              background: pill.bg,
+              border: `1px solid ${pill.border}`,
+              fontSize: 11, fontWeight: 600, color: pill.color,
+              letterSpacing: 0.3,
+              cursor: "pointer",
+              fontFamily: "'Jost', sans-serif",
+              transition: "transform 0.15s, box-shadow 0.15s",
+              display: "flex", alignItems: "center", gap: 5,
+            }}
+            onPointerDown={(e) => (e.currentTarget.style.transform = "scale(0.95)")}
+            onPointerUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <ShoppingBag size={10} /> {pill.label}
+          </button>
         ))}
       </div>
 
-      {/* ══ Trends of the Week ══ */}
+      {/* ══ Trends of the Week — tappable ══ */}
       <div style={{ marginTop: 18, padding: "0 4px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
           <TrendingUp size={14} color={isMale ? "hsla(220 55% 60% / 0.9)" : "hsla(260 55% 70% / 0.9)"} />
@@ -298,15 +298,38 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {trends.map((trend) => (
-            <div key={trend.label}>
+            <button
+              key={trend.label}
+              onClick={(e) => { e.stopPropagation(); onGetStyled(trend.category); }}
+              style={{
+                background: "none", border: "none", padding: 0,
+                cursor: "pointer", textAlign: "left", width: "100%",
+                borderRadius: 10, transition: "background 0.15s",
+              }}
+              onPointerDown={(e) => (e.currentTarget.style.background = "hsla(0 0% 100% / 0.04)")}
+              onPointerUp={(e) => (e.currentTarget.style.background = "none")}
+            >
               <div style={{
-                display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4,
+                display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4,
+                padding: "6px 8px 0",
               }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.8)" }}>{trend.label}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: trend.color }}>+{trend.pct}%</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.8)" }}>{trend.label}</span>
+                  <ArrowRight size={11} color="hsla(0 0% 100% / 0.3)" />
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: trend.color }}>+{trend.pct}%</span>
+                  <span style={{
+                    fontSize: 9, fontWeight: 600, color: "hsla(0 0% 100% / 0.4)",
+                    padding: "2px 6px", borderRadius: 6,
+                    background: "hsla(0 0% 100% / 0.06)",
+                  }}>
+                    Style & Shop →
+                  </span>
+                </div>
               </div>
               <div style={{
-                height: 5, borderRadius: 5,
+                height: 5, borderRadius: 5, margin: "0 8px 4px",
                 background: "hsla(0 0% 100% / 0.06)", overflow: "hidden",
               }}>
                 <div style={{
@@ -316,7 +339,7 @@ const DailyLookCard = ({ onGenerate, gender }: Props) => {
                   animation: "growBar 1.2s ease-out forwards",
                 }} />
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
