@@ -411,8 +411,9 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
               onClick={() => onGetStyled()}
               style={{
                 minWidth: 130, padding: "14px 12px", cursor: "pointer",
-                border: `1px solid hsla(0 0% 100% / 0.08)`,
-                background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsla(0 0% 100% / 0.03))`,
+                border: `1.5px solid hsla(0 0% 100% / 0.12)`,
+                background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.1), hsla(0 0% 100% / 0.05))`,
+                boxShadow: "0 4px 14px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
               }}
             >
               <item.icon size={16} color={`hsl(${accent})`} style={{ marginBottom: 6 }} />
