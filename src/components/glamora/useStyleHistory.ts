@@ -20,7 +20,6 @@ export function useStyleHistory() {
         user_id: user.id,
         style_category: params.styleCategory,
         style_name: params.styleName || null,
-        celebrity_inspiration: params.celebrityInspiration || null,
         gender: params.gender,
         generation_mode: params.generationMode,
         metadata: params.metadata || {},
