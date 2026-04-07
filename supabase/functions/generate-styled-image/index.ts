@@ -157,6 +157,28 @@ serve(async (req) => {
       ? `\n\n${swimwearSubStyleOverrides[styleSubcategory]}`
       : "";
 
+    // Icon Looks sub-style overrides — descriptive archetypes, no celebrity names
+    const iconLooksSubStyleOverrides: Record<string, string> = {
+      "old-hollywood-siren": "IMPORTANT: Channel vintage 1950s Hollywood glamour — a figure-hugging satin or silk gown, deep red lips, perfectly set finger waves or soft curls, fur stole or feather boa, diamond drop earrings, and a classic clutch. Old-money elegance with sultry confidence. Black-and-white movie-star energy brought to life in color.",
+      "red-carpet-royalty": "IMPORTANT: Style as a modern red-carpet show-stopper — an architectural couture gown with dramatic silhouette (mermaid, ball gown, or sculptural), statement jewelry, flawless makeup, swept-up hair or sleek straight, and sky-high heels. The look should feel award-show-ready and camera-perfect.",
+      "streetwear-mogul": "IMPORTANT: Style as a fashion-forward streetwear visionary — oversized designer pieces, earth tones or neutrals, chunky boots or rare sneakers, layered necklaces, statement outerwear (puffer, trench, or leather), and an air of creative direction. The look should feel expensive, intentional, and trendsetting.",
+      "pop-diva": "IMPORTANT: Channel peak pop-star energy — a sequined or metallic bodysuit or mini dress, thigh-high boots, bold statement jewelry, dramatic eye makeup, voluminous styled hair, and an attitude of total confidence. Stage-ready glamour adapted for the street.",
+      "minimalist-it-girl": "IMPORTANT: Style as the ultimate clean-girl aesthetic — slicked-back hair or effortless bun, neutral monochrome palette (beige, cream, black), perfectly tailored oversized blazer or matching set, minimal gold jewelry, clean white sneakers or pointed-toe mules, designer tote, and barely-there makeup. Quiet luxury perfected.",
+      "rock-legend": "IMPORTANT: Channel rock-star rebellion — fitted leather pants or skinny jeans, a statement leather or velvet jacket, band-tee or sheer blouse, Chelsea boots or platform boots, layered silver rings and chains, smudged eyeliner, and tousled hair. Equal parts dangerous and glamorous.",
+      "90s-supermodel": "IMPORTANT: Channel 90s off-duty supermodel style — a satin slip dress with a blazer thrown over, or high-waisted jeans with a simple bodysuit, minimal gold hoops, rectangular sunglasses, pointed-toe boots, and effortlessly tousled hair. The look should feel like paparazzi caught you looking incredible without trying.",
+      "fashion-forward-icon": "IMPORTANT: Style as an avant-garde fashion pioneer — unexpected proportions, bold color or pattern mixing, sculptural accessories, architectural shoes, statement headwear or eyewear, and editorial-level makeup. This look should feel like it walked off a runway or a Vogue editorial spread.",
+      "suave-gentleman": "IMPORTANT: Channel classic gentleman sophistication — an impeccably tailored double-breasted suit or three-piece in navy, charcoal, or cream, silk pocket square, polished oxford shoes, a luxury watch, subtle cologne vibes, slicked-back or perfectly parted hair, and an air of old-world charm and confidence.",
+      "hip-hop-royalty": "IMPORTANT: Style as hip-hop royalty — heavy Cuban link chains, diamond-encrusted watch, designer tracksuit or oversized designer ensemble, pristine fresh sneakers or boots, statement sunglasses, and commanding presence. The look should feel like wealth, power, and cultural influence personified.",
+      "bohemian-muse": "IMPORTANT: Channel the ultimate bohemian free-spirit — flowing maxi dress or wide-leg pants with a cropped top, layered turquoise and silver jewelry, fringe bag, embroidered boots or gladiator sandals, headband or flower crown, natural wavy hair, and dewy sun-kissed makeup. Festival headliner energy.",
+      "athletic-icon": "IMPORTANT: Style as a global athletic icon off-duty — premium matching athletic set or track suit in a bold color, box-fresh limited-edition sneakers, sport watch, sleek sunglasses, perfectly styled hair, and an aura of peak physical confidence. The look bridges sport and high fashion effortlessly.",
+    };
+
+    const iconOverride = (styleCategory === "icon-looks" && styleSubcategory && iconLooksSubStyleOverrides[styleSubcategory])
+      ? `\n\n${iconLooksSubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride;
+
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
       ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${swimwearOverride}`
