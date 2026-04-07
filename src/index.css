@@ -372,3 +372,21 @@
 .stylist-chat-md a { color: hsl(var(--glamora-rose-dark)); text-decoration: underline; }
 
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Daily Look Card animations */
+@keyframes dailyShimmer {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+@keyframes sparkleFloat {
+  0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+  50% { opacity: 1; transform: translateY(-8px) scale(1.3); }
+}
+@keyframes morphIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes growBar {
+  from { width: 0%; }
+}

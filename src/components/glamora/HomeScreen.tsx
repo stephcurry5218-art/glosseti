@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
+import DailyLookCard from "./DailyLookCard";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
@@ -287,6 +288,11 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
           </div>
           <ArrowRight size={16} color="hsl(280 60% 65%)" style={{ position: "relative", zIndex: 2 }} />
         </div>
+      </div>
+
+      {/* Daily Look Card */}
+      <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
+        <DailyLookCard onGenerate={() => onGetStyled()} />
       </div>
 
       {/* Two action cards — side by side */}
