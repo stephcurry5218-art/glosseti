@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check, Clock } from "lucide-react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { Search, Ruler, Palette, Sparkles, ShoppingBag, Shirt, Check, Clock, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoStyledImage } from "./demoMode";
 import type { UserPrefs } from "./GlamoraApp";
@@ -37,7 +37,92 @@ const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
   ];
 };
 
-const ESTIMATED_TIME = 30; // seconds
+/* ── Fashion tips pool, tagged by category & gender ── */
+type TipTag = "all" | "female" | "male" | string;
+
+interface FashionTip {
+  tip: string;
+  tags: TipTag[];
+}
+
+const FASHION_TIPS: FashionTip[] = [
+  // Universal
+  { tip: "A well-fitted outfit always looks more expensive than an oversized one.", tags: ["all"] },
+  { tip: "Invest in quality basics — they're the foundation of every great look.", tags: ["all"] },
+  { tip: "Monochrome outfits instantly create a sleek, put-together vibe.", tags: ["all"] },
+  { tip: "Rolling your sleeves adds instant casual polish.", tags: ["all"] },
+  { tip: "Your shoes make the first impression — keep them clean.", tags: ["all"] },
+  { tip: "When in doubt, underdress rather than overdress.", tags: ["all"] },
+  { tip: "Accessorize with intention — one statement piece is enough.", tags: ["all"] },
+  { tip: "Tailoring a $50 piece can make it look like $500.", tags: ["all"] },
+  { tip: "Neutral tones photograph beautifully in any lighting.", tags: ["all"] },
+  { tip: "Confidence is the best outfit. Rock it and own it.", tags: ["all"] },
+  { tip: "Layer textures, not just colors, for depth.", tags: ["all"] },
+  { tip: "Dark colors near your face sharpen your features in photos.", tags: ["all"] },
+  { tip: "Match your metals — gold jewelry with warm tones, silver with cool.", tags: ["all"] },
+
+  // Female-leaning
+  { tip: "A structured blazer elevates any outfit from casual to chic.", tags: ["female", "formal", "minimalist"] },
+  { tip: "Cinch at the waist to create an hourglass silhouette.", tags: ["female"] },
+  { tip: "Nude heels elongate the legs — a stylist's secret weapon.", tags: ["female", "formal", "date-night"] },
+  { tip: "Mix high-end pieces with affordable basics for an effortless look.", tags: ["female"] },
+  { tip: "A silk scarf can transform a bag, ponytail, or neckline.", tags: ["female", "minimalist", "vintage"] },
+  { tip: "Red lipstick + white tee + jeans = timeless.", tags: ["female", "casual", "icon-looks"] },
+  { tip: "Pointed-toe shoes make any outfit look more polished.", tags: ["female", "formal"] },
+  { tip: "Statement earrings can replace a necklace — don't double up.", tags: ["female", "jewelry-accessories"] },
+
+  // Male-leaning
+  { tip: "A quality watch is the easiest upgrade to any outfit.", tags: ["male", "formal"] },
+  { tip: "Your belt should match your shoes — always.", tags: ["male", "formal"] },
+  { tip: "Cuff your jeans to show off your sneakers.", tags: ["male", "streetwear", "casual"] },
+  { tip: "A fitted crew-neck tee under a blazer is modern power-casual.", tags: ["male", "casual", "minimalist"] },
+  { tip: "No-show socks keep low-top sneakers looking clean.", tags: ["male", "casual", "streetwear"] },
+  { tip: "Dark denim is the most versatile piece in a guy's wardrobe.", tags: ["male", "casual"] },
+  { tip: "A bomber jacket over a hoodie = instant street style.", tags: ["male", "streetwear", "urban-hiphop"] },
+  { tip: "Grooming is part of the outfit — never skip it.", tags: ["male", "grooming"] },
+
+  // Category-specific
+  { tip: "Streetwear rule: oversized top + slim bottom, or vice versa.", tags: ["streetwear"] },
+  { tip: "Athleisure works best when you mix sporty and tailored pieces.", tags: ["athleisure", "fitness"] },
+  { tip: "Bohemian style shines with natural fabrics like linen and cotton.", tags: ["bohemian", "cottagecore"] },
+  { tip: "Minimalism is about perfect fit, not boring colors.", tags: ["minimalist"] },
+  { tip: "Vintage styling tip: pick one era and commit.", tags: ["vintage", "y2k"] },
+  { tip: "For resort wear, breathable fabrics are non-negotiable.", tags: ["resort", "swimwear"] },
+  { tip: "Techwear is function first — every pocket should have a purpose.", tags: ["techwear", "edgy"] },
+  { tip: "Date night secret: wear something that makes YOU feel amazing.", tags: ["date-night", "sexy"] },
+  { tip: "Wedding guest rule: never outshine the couple.", tags: ["wedding-gowns", "tuxedos"] },
+  { tip: "The right sunglasses shape can redefine your entire face.", tags: ["sunglasses-eyewear"] },
+  { tip: "A great bag ties the whole outfit together.", tags: ["bags-purses"] },
+];
+
+const getTipsForPrefs = (prefs: UserPrefs): string[] => {
+  const { gender, styleCategory } = prefs;
+  const genderTag = gender === "male" ? "male" : "female";
+
+  // Score each tip by relevance
+  const scored = FASHION_TIPS.map((t) => {
+    let score = 0;
+    if (t.tags.includes("all")) score += 1;
+    if (t.tags.includes(genderTag)) score += 3;
+    if (t.tags.includes(styleCategory)) score += 5;
+    // Exclude tips tagged only for the opposite gender
+    const oppositeGender = gender === "male" ? "female" : "male";
+    if (t.tags.includes(oppositeGender) && !t.tags.includes("all") && !t.tags.includes(genderTag)) return { ...t, score: -1 };
+    return { ...t, score };
+  })
+    .filter((t) => t.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  // Take top relevant, then shuffle for variety
+  const top = scored.slice(0, 12);
+  for (let i = top.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [top[i], top[j]] = [top[j], top[i]];
+  }
+  return top.map((t) => t.tip);
+};
+
+const ESTIMATED_TIME = 30;
 
 const LoadingScreen = ({ prefs, onDone }: Props) => {
   const steps = getSteps(prefs);
@@ -51,6 +136,24 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const aiCalledRef = useRef(false);
   const navigatedRef = useRef(false);
   const startTimeRef = useRef(Date.now());
+
+  // Fashion tips state
+  const tips = useMemo(() => getTipsForPrefs(prefs), [prefs.gender, prefs.styleCategory]);
+  const [tipIdx, setTipIdx] = useState(0);
+  const [tipVisible, setTipVisible] = useState(true);
+
+  // Rotate tips every 4s with fade
+  useEffect(() => {
+    if (aiDone && !aiError) return;
+    const interval = setInterval(() => {
+      setTipVisible(false);
+      setTimeout(() => {
+        setTipIdx((i) => (i + 1) % tips.length);
+        setTipVisible(true);
+      }, 400);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [tips.length, aiDone, aiError]);
 
   const handleRetry = useCallback(() => {
     generatedUrlRef.current = null;
@@ -67,7 +170,6 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
   useEffect(() => {
     if (aiCalledRef.current) return;
-    // For mannequin mode, no photo needed
     if (prefs.generationMode !== "mannequin" && !prefs.photoBase64) return;
     aiCalledRef.current = true;
 
@@ -91,7 +193,6 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             gender: prefs.gender,
             generationMode: prefs.generationMode,
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
-            
             ...(prefs.makeupPreference ? { makeupPreference: prefs.makeupPreference } : {}),
           },
         });
@@ -126,7 +227,6 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     generateImage();
   }, [prefs, retryNonce]);
 
-  // Navigate when BOTH animation and AI are done
   useEffect(() => {
     if (aiDone && animDone && !aiError && !navigatedRef.current) {
       navigatedRef.current = true;
@@ -134,7 +234,6 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
     }
   }, [aiDone, aiError, animDone, onDone]);
 
-  // Elapsed timer
   useEffect(() => {
     if (aiDone && !aiError) return;
     const timer = setInterval(() => {
@@ -164,23 +263,24 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const CurrentIcon = steps[step].Icon;
 
   return (
-    <div className="screen enter" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "0 40px" }}>
-      <div style={{ position: "relative", width: 140, height: 140, marginBottom: 48 }}>
+    <div className="screen enter" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "0 32px" }}>
+      {/* Spinner + icon */}
+      <div style={{ position: "relative", width: 120, height: 120, marginBottom: 32 }}>
         <div style={{
-          width: 140, height: 140, borderRadius: "50%",
+          width: 120, height: 120, borderRadius: "50%",
           border: "3px solid hsla(var(--glamora-gold) / 0.15)",
           borderTopColor: "hsl(var(--glamora-gold))",
           animation: "spin 1.2s linear infinite",
         }} />
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <CurrentIcon size={48} color="hsl(var(--glamora-rose-dark))" strokeWidth={1.2} />
+          <CurrentIcon size={40} color="hsl(var(--glamora-rose-dark))" strokeWidth={1.2} />
         </div>
       </div>
 
-      <div className="serif" style={{ fontSize: 24, color: "hsl(var(--glamora-char))", marginBottom: 8, textAlign: "center" }}>
+      <div className="serif" style={{ fontSize: 22, color: "hsl(var(--glamora-char))", marginBottom: 6, textAlign: "center" }}>
         {prefs.styleCategory === "makeup-only" ? "Analyzing Beauty..." : "Building Your Style..."}
       </div>
-      <div style={{ fontSize: 13, color: aiError ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))", marginBottom: aiError?.includes("credits") ? 12 : 28, textAlign: "center" }}>
+      <div style={{ fontSize: 13, color: aiError ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))", marginBottom: aiError?.includes("credits") ? 12 : 20, textAlign: "center" }}>
         {aiError || (animDone && !aiDone ? "Almost there, finalizing your look..." : (prefs.styleCategory === "makeup-only" ? "Personalizing your beauty profile" : "AI is generating your styled look"))}
       </div>
       {aiError?.includes("credits") && (
@@ -190,7 +290,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
           rel="noopener noreferrer"
           style={{
             display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "10px 24px", marginBottom: 28, borderRadius: 12,
+            padding: "10px 24px", marginBottom: 20, borderRadius: 12,
             background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-rose-dark)))",
             color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none",
             boxShadow: "0 4px 16px hsla(var(--glamora-gold) / 0.35)",
@@ -205,25 +305,56 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         <button
           className="btn-primary btn-rose"
           onClick={handleRetry}
-          style={{ marginBottom: 24 }}
+          style={{ marginBottom: 20 }}
         >
           Try Again
         </button>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
+      {/* ── Fashion Tip Card ── */}
+      {!aiError && (
+        <div style={{
+          width: "100%",
+          marginBottom: 20,
+          padding: "14px 16px",
+          borderRadius: 14,
+          background: "hsla(var(--glamora-gold) / 0.06)",
+          border: "1px solid hsla(var(--glamora-gold) / 0.12)",
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 10,
+          minHeight: 64,
+        }}>
+          <Lightbulb size={16} style={{ marginTop: 2, flexShrink: 0, color: "hsl(var(--glamora-gold))" }} />
+          <div style={{
+            flex: 1,
+            fontSize: 13,
+            lineHeight: 1.5,
+            color: "hsl(var(--glamora-char))",
+            fontStyle: "italic",
+            opacity: tipVisible ? 1 : 0,
+            transform: tipVisible ? "translateY(0)" : "translateY(4px)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
+          }}>
+            {tips[tipIdx]}
+          </div>
+        </div>
+      )}
+
+      {/* Steps list */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
         {steps.map((s, i) => {
           const StepIcon = s.Icon;
           return (
             <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 12, opacity: i <= step ? 1 : 0.3, transition: "opacity 0.4s ease" }}>
               <div style={{
-                width: 32, height: 32, borderRadius: 10,
+                width: 30, height: 30, borderRadius: 9,
                 background: i < step ? "hsla(var(--glamora-success) / 0.15)" : i === step ? "hsla(var(--glamora-rose-dark) / 0.15)" : "hsla(var(--glamora-char) / 0.05)",
                 display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.4s",
               }}>
-                {i < step ? <Check size={16} color="hsl(var(--glamora-success))" /> : <StepIcon size={16} color={i === step ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />}
+                {i < step ? <Check size={14} color="hsl(var(--glamora-success))" /> : <StepIcon size={14} color={i === step ? "hsl(var(--glamora-rose-dark))" : "hsl(var(--glamora-gray))"} />}
               </div>
-              <span style={{ fontSize: 13, color: i <= step ? "hsl(var(--glamora-char))" : "hsl(var(--glamora-gray-light))", fontWeight: i === step ? 600 : 400 }}>
+              <span style={{ fontSize: 12, color: i <= step ? "hsl(var(--glamora-char))" : "hsl(var(--glamora-gray-light))", fontWeight: i === step ? 600 : 400 }}>
                 {s.label}
               </span>
             </div>
@@ -231,8 +362,9 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         })}
       </div>
 
-      <div style={{ marginTop: 24, width: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+      {/* Progress bar */}
+      <div style={{ marginTop: 20, width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
             <Clock size={12} />
             {aiDone ? "Complete!" : elapsed > 0 ? `${elapsed}s elapsed` : "Starting..."}
