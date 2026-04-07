@@ -5,7 +5,6 @@ import type { StyleCategory, Gender, GenerationMode } from "./GlamoraApp";
 interface RecordStyleParams {
   styleCategory: StyleCategory;
   styleName?: string;
-  celebrityInspiration?: string;
   gender: Gender;
   generationMode: GenerationMode;
   metadata?: Record<string, any>;
