@@ -1,37 +1,127 @@
 import { useEffect, useState } from "react";
 
-interface Props { onDone: () => void; }
+interface Props {
+  onDone: () => void;
+}
 
 const SplashScreen = ({ onDone }: Props) => {
-  const [hide, setHide] = useState(false);
+  const [phase, setPhase] = useState<"logo" | "reveal" | "exit">("logo");
 
   useEffect(() => {
-    const t = setTimeout(() => setHide(true), 2200);
-    const t2 = setTimeout(onDone, 2800);
-    return () => { clearTimeout(t); clearTimeout(t2); };
+    // Phase 1: Logo + wordmark fade in (already visible via CSS)
+    // Phase 2: Reveal tagline + subtle ring
+    const t1 = setTimeout(() => setPhase("reveal"), 900);
+    // Phase 3: Exit
+    const t2 = setTimeout(() => setPhase("exit"), 2400);
+    const t3 = setTimeout(onDone, 3000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onDone]);
 
   return (
     <div
-      className={`absolute inset-0 flex flex-col items-center justify-center z-[200] transition-opacity duration-[600ms] ${hide ? "opacity-0 pointer-events-none" : ""}`}
-      style={{ background: "linear-gradient(160deg, #2A1E1A 0%, #1A1210 60%, #0E0A09 100%)" }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 200,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "hsl(18 22% 4%)",
+        opacity: phase === "exit" ? 0 : 1,
+        transition: "opacity 0.6s ease",
+        pointerEvents: phase === "exit" ? "none" : "auto",
+      }}
     >
-      <div
-        className="absolute rounded-full"
-        style={{ width: 280, height: 280, top: -60, right: -60, background: "radial-gradient(circle, rgba(184,107,89,0.35) 0%, transparent 70%)", animation: "glamFloat 5s ease-in-out infinite" }}
+      {/* Centered radial glow behind logo */}
+      <div style={{
+        position: "absolute",
+        width: 320,
+        height: 320,
+        borderRadius: "50%",
+        background: "radial-gradient(circle, hsla(32 55% 52% / 0.12) 0%, transparent 70%)",
+        filter: "blur(40px)",
+        animation: "glamFloat 6s ease-in-out infinite",
+      }} />
+
+      {/* Logo icon */}
+      <img
+        src="/glosseti-icon-only.png"
+        alt="Glosseti"
+        style={{
+          width: 88,
+          height: 88,
+          objectFit: "contain",
+          position: "relative",
+          zIndex: 2,
+          opacity: phase === "logo" || phase === "reveal" ? 1 : 0,
+          transform: phase === "logo" ? "scale(0.9)" : "scale(1)",
+          transition: "opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          filter: "drop-shadow(0 4px 20px hsla(32 55% 52% / 0.35))",
+        }}
       />
+
+      {/* Wordmark */}
       <div
-        className="absolute rounded-full"
-        style={{ width: 200, height: 200, bottom: 60, left: -40, background: "radial-gradient(circle, rgba(196,151,74,0.25) 0%, transparent 70%)", animation: "glamFloat 6s ease-in-out infinite 1s" }}
-      />
-      <img src="/glosseti-icon-only.png" alt="Glosseti" className="relative z-10 anim-fadeIn" style={{ width: 120, height: 120, objectFit: "contain" }} />
-      <div className="relative z-10 anim-fadeIn d3" style={{ fontSize: 12, color: "rgba(251,246,240,0.45)", letterSpacing: 4, textTransform: "uppercase", marginTop: 10 }}>
+        className="serif"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          marginTop: 16,
+          fontSize: 28,
+          fontWeight: 700,
+          letterSpacing: 3,
+          background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          opacity: phase === "logo" ? 0 : 1,
+          transform: phase === "logo" ? "translateY(8px)" : "translateY(0)",
+          transition: "opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s",
+        }}
+      >
+        GLOSSETI
+      </div>
+
+      {/* Tagline — iOS style, minimal */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          marginTop: 8,
+          fontSize: 11,
+          fontWeight: 500,
+          letterSpacing: 3,
+          textTransform: "uppercase",
+          color: "hsla(0 0% 100% / 0.35)",
+          fontFamily: "'Jost', sans-serif",
+          opacity: phase === "reveal" ? 1 : 0,
+          transform: phase === "reveal" ? "translateY(0)" : "translateY(6px)",
+          transition: "opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s",
+        }}
+      >
         AI-Powered Style Studio
       </div>
-      <div
-        className="relative z-10 anim-fadeIn d5"
-        style={{ marginTop: 60, width: 44, height: 44, borderRadius: "50%", border: "2px solid rgba(196,151,74,0.2)", borderTopColor: "hsl(var(--glamora-gold))", animation: "spin 1s linear infinite" }}
-      />
+
+      {/* Subtle loading indicator — thin line */}
+      <div style={{
+        position: "absolute",
+        bottom: "calc(env(safe-area-inset-bottom, 20px) + 40px)",
+        width: 40,
+        height: 2,
+        borderRadius: 2,
+        overflow: "hidden",
+        background: "hsla(0 0% 100% / 0.06)",
+        opacity: phase === "reveal" ? 1 : 0,
+        transition: "opacity 0.4s ease",
+      }}>
+        <div style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: 2,
+          background: "linear-gradient(90deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+          animation: "launchProgress 1.5s ease-in-out infinite",
+        }} />
+      </div>
     </div>
   );
 };
