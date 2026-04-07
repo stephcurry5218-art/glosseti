@@ -444,7 +444,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
-  const [celebrityGuide, setCelebrityGuide] = useState("");
+  
   const isMale = prefs.gender === "male";
 
   const filtered = categories.filter(c => {
