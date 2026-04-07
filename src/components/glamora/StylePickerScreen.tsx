@@ -692,7 +692,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
 
         <button
           className="btn-primary btn-rose"
-          disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
+          disabled={false}
           onClick={() => {
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
