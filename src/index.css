@@ -236,14 +236,17 @@
 .bottom-nav {
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 56px;
+  height: calc(56px + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   background: hsla(20 18% 9% / 0.96);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid hsla(24 38% 48% / 0.1);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 8px;
+  padding-left: 8px;
+  padding-right: 8px;
   z-index: 90;
 }
 .nav-btn {
