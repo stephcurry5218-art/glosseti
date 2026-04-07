@@ -313,36 +313,6 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
-    id: "celebrity-makeup", label: "Influencer Makeup", Icon: Crown,
-    genderLabel: { male: "Influencer Grooming", female: "Influencer Makeup" },
-    desc: "Get your makeup styled like your favorite influencer or celebrity",
-    includes: ["Signature Lip Look", "Eye Makeup Technique", "Skin Finish", "Brow Style"],
-    subs: [],
-  },
-  {
-    id: "celebrity-hair", label: "Influencer Hair", Icon: Scissors,
-    desc: "Recreate iconic hairstyles from influencers and celebrities",
-    includes: ["Cut & Shape", "Color & Highlights", "Styling & Texture", "Accessories & Updos"],
-    subs: [
-      { id: "silk-press", label: "Silk Press", desc: "Sleek, shiny, straight finish on natural hair", emoji: "✨" },
-      { id: "box-braids", label: "Box Braids", desc: "Protective braids — knotless, jumbo, or micro", emoji: "🪢" },
-      { id: "locs", label: "Locs / Faux Locs", desc: "Starter locs, butterfly locs, or faux loc styles", emoji: "🦁" },
-      { id: "twist-out", label: "Twist Out", desc: "Defined curls from two-strand twists — volume and texture", emoji: "🌀" },
-      { id: "bantu-knots", label: "Bantu Knots", desc: "Coiled knots for a bold, cultural look", emoji: "👑" },
-      { id: "cornrows", label: "Cornrows", desc: "Braided close to the scalp — classic to creative patterns", emoji: "💈" },
-      { id: "beach-waves", label: "Beach Waves", desc: "Loose, tousled waves — effortless and sun-kissed", emoji: "🌊" },
-      { id: "curtain-bangs", label: "Curtain Bangs", desc: "Face-framing layers parted down the middle", emoji: "💇" },
-      { id: "pixie-cut", label: "Pixie Cut", desc: "Short, chic, and bold — statement confidence", emoji: "⚡" },
-      { id: "wolf-cut", label: "Wolf Cut", desc: "Shaggy, layered, and effortlessly edgy", emoji: "🐺" },
-      { id: "slicked-back", label: "Slicked Back", desc: "Polished and sleek — gel or pomade finish", emoji: "🪮" },
-      { id: "afro", label: "Natural Afro", desc: "Full, voluminous natural hair — pick it out and own it", emoji: "✊" },
-      { id: "fade-taper", label: "Fade / Taper", desc: "Clean skin fade, mid fade, or low taper", emoji: "💈" },
-      { id: "braided-updo", label: "Braided Updo", desc: "Elegant braided styles pinned up for formal occasions", emoji: "🎀" },
-      { id: "blowout", label: "Blowout", desc: "Voluminous bouncy blowout with body and movement", emoji: "💨" },
-      { id: "buzz-cut", label: "Buzz Cut", desc: "Ultra-short, clean, and low-maintenance", emoji: "🔲" },
-    ],
-  },
-  {
     id: "bags-purses", label: "Bags & Purses", Icon: ShoppingBag,
     desc: "Carry in style — totes, crossbodies, clutches, backpacks, and designer bags",
     includes: ["Tote Bags", "Crossbody Bags", "Clutches", "Backpacks", "Shoulder Bags"],
@@ -463,8 +433,6 @@ const customDetailPlaceholders: Record<string, string> = {
   "jewelry-accessories": 'e.g. "Cartier Love bracelet", "Diamond studs"...',
   "sunglasses-eyewear": 'e.g. "Ray-Ban Aviators gold", "Celine cat-eye frames"...',
   "hats-headwear": 'e.g. "Yankees fitted cap", "Straw Panama hat"...',
-  "celebrity-makeup": 'e.g. "Glossy lips", "Soft contour"...',
-  "celebrity-hair": 'e.g. "Waist-length box braids", "Platinum blonde pixie"...',
   "bags-purses": 'e.g. "Chanel Classic Flap", "Bottega Veneta Pouch"...',
   "shoes-sneakers": 'e.g. "Retro Jordan 1 Chicago", "Adidas Samba OGs"...',
   "wedding-gowns": 'e.g. "Off-shoulder lace bodice", "Cathedral-length veil"...',
@@ -476,7 +444,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
-  const [celebrityGuide, setCelebrityGuide] = useState("");
+  
   const isMale = prefs.gender === "male";
 
   const filtered = categories.filter(c => {
@@ -721,82 +689,10 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           </div>
         )}
 
-        {/* Celebrity / Influencer Style Guide */}
-        {(() => {
-          const isCelebrityCategory = current.id === "celebrity-makeup" || current.id === "celebrity-hair";
-          const isRequired = isCelebrityCategory;
-          const categoryLabel = current.id === "celebrity-makeup"
-            ? (isMale ? "grooming" : "makeup")
-            : current.id === "celebrity-hair" ? "hair" : "style";
-          return (
-            <div className="glamora-card anim-fadeUp" style={{
-              padding: "14px 16px", marginBottom: 14,
-              border: isRequired ? `2px solid hsl(var(${accent}))` : undefined,
-              background: isRequired ? `hsla(var(${accent}) / 0.03)` : undefined,
-            }}>
-              <div className="section-label" style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                {isRequired ? <Crown size={14} color={`hsl(var(${accent}))`} /> : <Star size={14} color={`hsl(var(${accent}))`} />}
-                {isRequired
-                  ? `Who's ${categoryLabel} do you want?`
-                  : "Style Inspired By (Optional)"}
-                {isRequired && (
-                  <span style={{
-                    marginLeft: "auto", padding: "2px 8px", borderRadius: 100,
-                    background: `hsl(var(${accent}))`, color: "white",
-                    fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5,
-                  }}>Required</span>
-                )}
-              </div>
-              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>
-                {isRequired
-                  ? `Enter a celebrity or influencer name to recreate their ${categoryLabel} look on you`
-                  : "Enter a celebrity or influencer name to guide the AI's styling direction"}
-              </div>
-              <input
-                type="text"
-                value={celebrityGuide}
-                onChange={(e) => setCelebrityGuide(e.target.value)}
-                placeholder={
-                  current.id === "celebrity-makeup"
-                    ? (isMale ? "e.g. Brad Pitt, Timothée Chalamet..." : "e.g. Rihanna, Kim Kardashian, Hailey Bieber...")
-                    : current.id === "celebrity-hair"
-                      ? (isMale ? "e.g. Chris Hemsworth, Bad Bunny..." : "e.g. Sabrina Carpenter, Ariana Grande, Dua Lipa...")
-                      : (isMale ? "e.g. David Beckham, A$AP Rocky..." : "e.g. Zendaya, Hailey Bieber...")
-                }
-                style={{
-                  width: "100%", padding: "12px 14px", borderRadius: 12,
-                  border: `1.5px solid hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`,
-                  background: celebrityGuide ? `hsla(var(${accent}) / 0.05)` : "hsl(var(--card))",
-                  fontSize: 13, fontFamily: "'Jost', sans-serif",
-                  color: "hsl(var(--glamora-char))", outline: "none",
-                  transition: "all 0.2s",
-                }}
-                onFocus={(e) => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
-                onBlur={(e) => { e.target.style.borderColor = `hsla(var(${accent}) / ${celebrityGuide ? "0.4" : "0.15"})`; }}
-              />
-              {celebrityGuide && (
-                <div style={{
-                  marginTop: 8, fontSize: 10, color: `hsl(var(${accent}))`, fontWeight: 500,
-                  display: "flex", alignItems: "center", gap: 5,
-                }}>
-                  <Star size={10} /> AI will recreate {celebrityGuide}'s {categoryLabel} on you
-                </div>
-              )}
-              {isRequired && !celebrityGuide && (
-                <div style={{
-                  marginTop: 8, fontSize: 10, color: "hsl(var(--glamora-gray))", fontWeight: 500,
-                  fontStyle: "italic",
-                }}>
-                  ⚠ Enter a name above to continue
-                </div>
-              )}
-            </div>
-          );
-        })()}
 
         <button
           className="btn-primary btn-rose"
-          disabled={(current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim()}
+          disabled={false}
           onClick={() => {
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
@@ -806,14 +702,14 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
               })
               .join(" + ");
-            onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
+            onNext(current.id, undefined, combinedSubs || undefined);
           }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
             background: isMale
               ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
               : undefined,
-            opacity: (current.id === "celebrity-makeup" || current.id === "celebrity-hair") && !celebrityGuide.trim() ? 0.5 : 1,
+            opacity: 1,
           }}>
           Continue — Upload Photo <ArrowRight size={16} />
         </button>

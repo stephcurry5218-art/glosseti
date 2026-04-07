@@ -14,22 +14,18 @@ import ProfileScreen from "./ProfileScreen";
 import SavedLooksScreen from "./SavedLooksScreen";
 import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
-import InspirationScreen from "./InspirationScreen";
-import InspirationLoadingScreen from "./InspirationLoadingScreen";
-import InspirationResultScreen from "./InspirationResultScreen";
-import type { StyleProfile } from "./InspirationLoadingScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
 import { useStyleHistory } from "./useStyleHistory";
 
-export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night" | "lingerie" | "y2k" | "cottagecore" | "celebrity-makeup" | "celebrity-hair" | "jewelry-accessories" | "sunglasses-eyewear" | "hats-headwear" | "bags-purses" | "shoes-sneakers" | "wedding-gowns" | "tuxedos" | "fitness";
+export type StyleCategory = "full-style" | "streetwear" | "formal" | "casual" | "makeup-only" | "minimalist" | "vintage" | "athleisure" | "bohemian" | "preppy" | "edgy" | "resort" | "grooming" | "sexy" | "swimwear" | "urban-hiphop" | "rugged" | "techwear" | "date-night" | "lingerie" | "y2k" | "cottagecore" | "jewelry-accessories" | "sunglasses-eyewear" | "hats-headwear" | "bags-purses" | "shoes-sneakers" | "wedding-gowns" | "tuxedos" | "fitness";
 export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "inspiration" | "inspiration-loading" | "inspiration-results";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -39,7 +35,7 @@ export interface UserPrefs {
   photoBase64: string | null;
   gender: Gender;
   generationMode: GenerationMode;
-  celebrityGuide?: string;
+  
   makeupPreference?: "natural" | "glam";
 }
 
@@ -60,10 +56,6 @@ const GlamoraApp = () => {
     generationMode: "on-me",
   });
 
-  // Inspiration state
-  const [inspirationIcon, setInspirationIcon] = useState("");
-  const [inspirationImageUrl, setInspirationImageUrl] = useState<string | null>(null);
-  const [inspirationProfile, setInspirationProfile] = useState<StyleProfile | null>(null);
 
   const {
     subscription, canGenerate, remainingGenerations, showWatermark,
@@ -107,14 +99,6 @@ const GlamoraApp = () => {
     go("loading");
   }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
-  const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
-    if (!tryGenerate()) return;
-    setInspirationIcon(iconName);
-    const genMode = mode || "on-me";
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
-    recordStyle({ styleCategory: prefs.styleCategory, celebrityInspiration: iconName, gender: prefs.gender, generationMode: genMode });
-    go("inspiration-loading");
-  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   return (
     <div className="phone">
@@ -136,7 +120,6 @@ const GlamoraApp = () => {
           subscription={subscription}
           remainingGenerations={remainingGenerations}
           onShowPaywall={() => setShowPaywall(true)}
-          onInspiration={() => go("inspiration")}
           isLoggedIn={!!user}
           onSignIn={() => go("auth")}
         />
@@ -144,13 +127,11 @@ const GlamoraApp = () => {
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
       {screen === "style-picker" && (
         <StylePickerScreen prefs={prefs} onBack={() => go("home")}
-          onNext={(category: StyleCategory, celebrityGuide?: string, subcategory?: string) => {
-            const needsCelebrityGuide = category === "celebrity-makeup" || category === "celebrity-hair";
+          onNext={(category: StyleCategory, _celebrityGuide?: string, subcategory?: string) => {
             setPrefs(p => ({
               ...p,
               styleCategory: category,
               styleSubcategory: subcategory,
-              celebrityGuide: needsCelebrityGuide ? celebrityGuide : undefined,
             }));
             go("upload");
           }} />
@@ -197,42 +178,6 @@ const GlamoraApp = () => {
           onGetStyled={() => go("style-picker")} gender={prefs.gender} />
       )}
 
-      {/* Inspiration flow */}
-      {screen === "inspiration" && (
-        <InspirationScreen prefs={prefs} onBack={() => go("home")} onGenerate={handleInspirationGenerate} />
-      )}
-      {screen === "inspiration-loading" && (prefs.photoBase64 || prefs.generationMode === "mannequin") && (
-        <InspirationLoadingScreen
-          iconName={inspirationIcon}
-          photoBase64={prefs.photoBase64}
-          photoType={prefs.photoType}
-          gender={prefs.gender}
-          generationMode={prefs.generationMode}
-          onDone={(imageUrl, styleProfile) => {
-            setInspirationImageUrl(imageUrl);
-            setInspirationProfile(styleProfile);
-            go("inspiration-results");
-          }}
-        />
-      )}
-      {screen === "inspiration-results" && (
-        <InspirationResultScreen
-          prefs={prefs}
-          styledImageUrl={inspirationImageUrl}
-          styleProfile={inspirationProfile}
-          onBack={() => go("inspiration")}
-          onHome={() => go("home")}
-          onSave={(lookName) => {
-            setSavedStyles(prev => [...new Set([...prev, lookName])]); go("home");
-          }}
-          onRegenerate={() => {
-            const styleName = inspirationProfile?.styleName || "inspired";
-            const prompt = `I just generated a "${styleName}" inspiration look and I want to refine it. What tweaks would you suggest — different clothing pieces, color palette changes, or accessory swaps? Give me specific ideas to make the look even better.`;
-            chatRef.current?.openWithPrompt(prompt);
-          }}
-          showWatermark={showWatermark}
-        />
-      )}
 
       {screen !== "splash" && screen !== "entrance" && screen !== "auth" && (
         <StylistChat
@@ -242,14 +187,8 @@ const GlamoraApp = () => {
             if (!tryGenerate()) return;
             // Store Gio's suggestion in prefs metadata for the generation pipeline
             localStorage.setItem("glamora_gio_refinement", gioSuggestion);
-            if (screen === "inspiration-results") {
-              setInspirationImageUrl(null);
-              setInspirationProfile(null);
-              go("inspiration-loading");
-            } else {
-              setStyledImageUrl(null);
-              go("loading");
-            }
+            setStyledImageUrl(null);
+            go("loading");
           }}
         />
       )}

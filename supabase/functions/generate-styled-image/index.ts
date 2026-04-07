@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, celebrityGuide, makeupPreference } = await req.json();
+    const { imageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -84,14 +84,6 @@ serve(async (req) => {
       cottagecore: {
         female: "wearing cottagecore aesthetic: a flowing floral midi dress with puff sleeves and smocked bodice, a woven straw sun hat, brown leather mary-jane shoes, a wicker basket purse, dainty daisy chain jewelry, and natural dewy makeup with rosy cheeks. Countryside meadow setting with wildflowers.",
         male: "wearing cottagecore aesthetic: a relaxed linen button-up shirt in cream or sage, high-waisted brown corduroy trousers, brown leather boots, a woven straw hat, a canvas crossbody bag, and a simple leather-strap watch. Countryside setting with fields and greenery.",
-      },
-      "celebrity-makeup": {
-        female: `with a complete celebrity-inspired makeup transformation. Recreate the EXACT signature makeup style, techniques, and aesthetic of the specified celebrity/influencer. Focus on: their iconic eye makeup technique, signature lip color and finish, skin prep and base, brow shape and fill, contouring and highlight placement. Make the makeup look identical to how the celebrity does theirs. Professional beauty editorial lighting.`,
-        male: `with a celebrity-inspired grooming transformation. Recreate the EXACT grooming aesthetic of the specified celebrity/influencer. Focus on: their skincare finish, brow grooming, facial hair styling, and overall groomed appearance. Professional portrait lighting.`,
-      },
-      "celebrity-hair": {
-        female: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and shape, color and highlight placement, texture and styling technique, volume and movement, parting and framing. Make the hair look identical to the celebrity's signature style. Professional beauty lighting.`,
-        male: `with a celebrity-inspired hair transformation. Recreate the EXACT signature hairstyle of the specified celebrity/influencer. Focus on: their iconic cut and length, texture and styling, color if distinctive, facial hair pairing. Make the hair look identical to the celebrity's signature style. Professional portrait lighting.`,
       },
       "jewelry-accessories": {
         female: "styled with statement jewelry and accessories: layered gold necklaces, stacked rings including a diamond cocktail ring, a luxury bracelet stack, elegant drop earrings, and a designer watch. Close-up editorial styling with warm, luxurious lighting.",
@@ -178,13 +170,6 @@ serve(async (req) => {
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
       : "";
 
-    // Add celebrity style guide — mandatory for celebrity-makeup and celebrity-hair
-    const isCelebrityCategory = styleCategory === "celebrity-makeup" || styleCategory === "celebrity-hair";
-    const celebrityNote = celebrityGuide
-      ? isCelebrityCategory
-        ? `\n\nCRITICAL — CELEBRITY TARGET: ${celebrityGuide}. You MUST recreate ${celebrityGuide}'s EXACT ${styleCategory === "celebrity-makeup" ? "makeup/beauty" : "hairstyle"} look. Study their signature style and replicate it precisely on this person. Keep the person's face and identity but transform their ${styleCategory === "celebrity-makeup" ? "makeup, skin finish, brows, lips, and eye look" : "hair cut, color, texture, and styling"} to match ${celebrityGuide}'s iconic look. Do NOT change their face shape or identity.`
-        : `\n\nSTYLE INSPIRATION: Channel the fashion aesthetic and styling sensibility of ${celebrityGuide}. Adapt their signature style elements (color palette, fits, accessories, overall vibe) to this look. Do NOT replicate their face or identity.`
-      : "";
 
     const requestImage = async (messages: any[]) => {
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -226,7 +211,7 @@ serve(async (req) => {
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${celebrityNote}${refinementNote}`;
+      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${refinementNote}`;
 
       messages = [
         {
@@ -247,8 +232,8 @@ serve(async (req) => {
             ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${makeupNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${celebrityNote}${makeupNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${makeupNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${makeupNote}${refinementNote}`;
 
       messages = [
         {

@@ -40,8 +40,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
     }
   };
 
-  const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "celebrity-makeup" || prefs.styleCategory === "grooming";
-  const isHairOnly = prefs.styleCategory === "celebrity-hair";
+  const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "grooming";
+  const isHairOnly = false;
   const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
   const canProceed = isMannequin || !!file;

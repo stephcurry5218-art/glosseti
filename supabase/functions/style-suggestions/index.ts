@@ -45,7 +45,7 @@ serve(async (req) => {
       ? history.map((h: any) => {
           let desc = `Category: ${h.style_category}`;
           if (h.style_name) desc += `, Look: ${h.style_name}`;
-          if (h.celebrity_inspiration) desc += `, Inspired by: ${h.celebrity_inspiration}`;
+          
           return desc;
         }).join("\n")
       : "No previous style history yet.";
