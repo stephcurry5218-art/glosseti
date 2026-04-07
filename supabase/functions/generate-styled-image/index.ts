@@ -105,6 +105,10 @@ serve(async (req) => {
         female: "wearing stunning designer shoes as the hero piece — perfectly styled with a coordinated outfit that showcases the footwear. Full-body or knee-down editorial shot with dramatic lighting highlighting shoe details, materials, and silhouette. The shoes should be the clear focal point. Premium fashion photography.",
         male: "wearing premium designer shoes or sneakers as the hero piece — perfectly styled with a coordinated outfit that puts the footwear center stage. Full-body or knee-down editorial shot with dramatic lighting highlighting shoe details, construction, and colorway. Premium fashion photography.",
       },
+      "icon-looks": {
+        female: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement pieces, perfectly coordinated accessories, and a confident, commanding presence. The styling should feel legendary — the kind of look that defines an era. Premium magazine photography with dramatic lighting.",
+        male: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement accessories, perfectly tailored fit, and effortless star power. The styling should feel legendary and era-defining. Premium magazine photography with dramatic lighting.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
