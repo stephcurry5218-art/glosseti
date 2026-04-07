@@ -99,14 +99,6 @@ const GlamoraApp = () => {
     go("loading");
   }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
-  const handleInspirationGenerate = useCallback((iconName: string, file: File | null, photoType: PhotoType, base64: string | null, mode?: import("./GlamoraApp").GenerationMode) => {
-    if (!tryGenerate()) return;
-    setInspirationIcon(iconName);
-    const genMode = mode || "on-me";
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode }));
-    recordStyle({ styleCategory: prefs.styleCategory, celebrityInspiration: iconName, gender: prefs.gender, generationMode: genMode });
-    go("inspiration-loading");
-  }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
 
   return (
     <div className="phone">
