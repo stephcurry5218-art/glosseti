@@ -247,18 +247,62 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         </div>
       </div>
 
+      {/* Icon Looks CTA — with shimmer */}
+      <div className="anim-fadeUp d1" style={{ padding: "10px 20px 0", position: "relative", zIndex: 10 }}>
+        <div
+          className="glamora-card"
+          onClick={() => onGetStyled("icon-looks" as StyleCategory)}
+          style={{
+            padding: "16px 14px", cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 12,
+            background: `linear-gradient(160deg, hsla(280 60% 50% / 0.12), hsla(var(--glamora-gold) / 0.1))`,
+            border: `1.5px solid hsla(280 60% 50% / 0.3)`,
+            position: "relative", overflow: "hidden",
+            boxShadow: "0 4px 20px hsla(280 60% 50% / 0.15), inset 0 1px 0 hsla(0 0% 100% / 0.08)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* Shimmer — only on Icon Looks */}
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+            background: "linear-gradient(105deg, transparent 40%, hsla(280 60% 65% / 0.12) 45%, hsla(280 60% 70% / 0.2) 50%, hsla(280 60% 65% / 0.12) 55%, transparent 60%)",
+            backgroundSize: "200% 100%",
+            animation: "gold-shimmer 3s ease-in-out infinite",
+          }} />
+          <div style={{
+            width: 42, height: 42, borderRadius: 12, flexShrink: 0, position: "relative", zIndex: 2,
+            background: "linear-gradient(135deg, hsla(280 60% 50% / 0.3), hsla(var(--glamora-gold) / 0.2))",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 3px 10px hsla(280 60% 50% / 0.2)",
+          }}>
+            <Star size={20} color="hsl(280 60% 65%)" />
+          </div>
+          <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
+              ✨ Icon Looks
+            </div>
+            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+              Channel iconic style archetypes — get the vibe
+            </div>
+          </div>
+          <ArrowRight size={16} color="hsl(280 60% 65%)" style={{ position: "relative", zIndex: 2 }} />
+        </div>
+      </div>
+
       {/* Two action cards — side by side */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
           padding: "16px 12px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
-          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
-          border: `1px solid hsla(0 0% 100% / 0.08)`,
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.12), hsla(0 0% 100% / 0.05))`,
+          border: `1.5px solid hsla(var(--glamora-gold) / 0.2)`,
+          boxShadow: "0 4px 16px hsla(0 0% 0% / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
-            background: `linear-gradient(135deg, hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose)"} / 0.18), hsla(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"} / 0.1))`,
+            background: `linear-gradient(135deg, hsla(var(--glamora-gold) / 0.25), hsla(var(--glamora-gold-light) / 0.15))`,
             display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 3px 8px hsla(var(--glamora-gold) / 0.15)",
           }}>
             <Eye size={18} color={`hsl(${accent})`} />
           </div>
@@ -273,13 +317,15 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <div className="glamora-card" onClick={() => onGetStyled(isMale ? "grooming" : "makeup-only")} style={{
           padding: "16px 12px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
-          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.03))`,
-          border: "1px solid hsla(0 0% 100% / 0.08)",
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.12), hsla(0 0% 100% / 0.05))`,
+          border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",
+          boxShadow: "0 4px 16px hsla(0 0% 0% / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
         }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
-            background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.18), hsla(var(--glamora-gold-light) / 0.1))",
+            background: "linear-gradient(135deg, hsla(var(--glamora-gold) / 0.25), hsla(var(--glamora-gold-light) / 0.15))",
             display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 3px 8px hsla(var(--glamora-gold) / 0.15)",
           }}>
             {isMale ? <Scissors size={18} color="hsl(var(--glamora-gold))" /> : <Palette size={18} color="hsl(var(--glamora-gold))" />}
           </div>
@@ -295,43 +341,14 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
       </div>
 
 
-      {/* Icon Looks CTA */}
-      <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0" }}>
-        <div
-          className="glamora-card"
-          onClick={() => onGetStyled("icon-looks" as StyleCategory)}
-          style={{
-            padding: "16px 14px", cursor: "pointer",
-            display: "flex", alignItems: "center", gap: 12,
-            background: `linear-gradient(160deg, hsla(280 60% 50% / 0.1), hsla(var(--glamora-gold) / 0.08))`,
-            border: `1.5px solid hsla(280 60% 50% / 0.2)`,
-            position: "relative", overflow: "hidden",
-          }}
-        >
-          <div style={{
-            width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-            background: "linear-gradient(135deg, hsla(280 60% 50% / 0.25), hsla(var(--glamora-gold) / 0.15))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Star size={20} color="hsl(280 60% 65%)" />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
-              ✨ Icon Looks
-            </div>
-            <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
-              Channel iconic style archetypes — get the vibe
-            </div>
-          </div>
-          <ArrowRight size={16} color="hsl(280 60% 65%)" />
-        </div>
-      </div>
-
       {/* Saved & Tiers — compact inline row */}
       <div className="anim-fadeUp d2" style={{ padding: "10px 20px 0", display: "flex", gap: 10 }}>
         <div className="glamora-card" onClick={onSaved} style={{
           flex: 1, padding: "12px 14px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10, position: "relative",
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.04))`,
+          border: "1.5px solid hsla(0 0% 100% / 0.12)",
+          boxShadow: "0 4px 16px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
         }}>
           <Bookmark size={16} color={`hsl(${accent})`} />
           <div>
@@ -350,6 +367,9 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
         <div className="glamora-card" onClick={() => onGetStyled()} style={{
           flex: 1, padding: "12px 14px", cursor: "pointer",
           display: "flex", alignItems: "center", gap: 10,
+          background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.08), hsla(0 0% 100% / 0.04))`,
+          border: "1.5px solid hsla(0 0% 100% / 0.12)",
+          boxShadow: "0 4px 16px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
         }}>
           <Zap size={16} color="hsl(var(--glamora-success))" />
           <div>
@@ -391,8 +411,9 @@ const HomeScreen = ({ onGetStyled, onProfile, onSaved, savedCount, gender, onGen
               onClick={() => onGetStyled()}
               style={{
                 minWidth: 130, padding: "14px 12px", cursor: "pointer",
-                border: `1px solid hsla(0 0% 100% / 0.08)`,
-                background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.06), hsla(0 0% 100% / 0.03))`,
+                border: `1.5px solid hsla(0 0% 100% / 0.12)`,
+                background: `linear-gradient(160deg, hsla(var(--glamora-gold) / 0.1), hsla(0 0% 100% / 0.05))`,
+                boxShadow: "0 4px 14px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
               }}
             >
               <item.icon size={16} color={`hsl(${accent})`} style={{ marginBottom: 6 }} />
