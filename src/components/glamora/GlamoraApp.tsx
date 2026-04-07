@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { SplashScreen as CapSplash } from "@capacitor/splash-screen";
 import SplashScreen from "./SplashScreen";
 import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
@@ -102,7 +103,7 @@ const GlamoraApp = () => {
 
   return (
     <div className="phone">
-      {screen === "splash" && <SplashScreen onDone={() => go("entrance")} />}
+      {screen === "splash" && <SplashScreen onDone={() => { CapSplash.hide().catch(() => {}); go("entrance"); }} />}
       {screen === "entrance" && (
         <EntranceScreen onEnter={(gender) => { setPrefs(p => ({ ...p, gender })); go("home"); }} />
       )}
