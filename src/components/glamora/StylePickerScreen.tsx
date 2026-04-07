@@ -702,7 +702,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
               })
               .join(" + ");
-            onNext(current.id, celebrityGuide || undefined, combinedSubs || undefined);
+            onNext(current.id, undefined, combinedSubs || undefined);
           }}
           style={{
             display: "flex", alignItems: "center", gap: 8,
