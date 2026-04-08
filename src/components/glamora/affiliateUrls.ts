@@ -134,6 +134,10 @@ export const getAmazonSearchUrl = (searchTerm: string): string => {
   return `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}&tag=${AFFILIATE_TAG}&${UTM}`;
 };
 
+export const getGoogleShoppingUrl = (store: string, item: string): string => {
+  return `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(`${item} ${store}`)}&${UTM}`;
+};
+
 /** Detect a known store/brand name inside free-text and return { store, query } */
 const storeNames = Object.keys(storeConfigs);
 export const detectStoreFromText = (text: string): { store: string; query: string } | null => {
