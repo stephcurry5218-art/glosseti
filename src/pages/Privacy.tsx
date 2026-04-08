@@ -60,26 +60,42 @@ For users in the European Economic Area (EEA), you have additional rights under 
 For California residents, you have rights under the CCPA, including the right to know what personal information is collected and the right to request deletion.`,
   },
   {
-    title: "6. Children's Privacy",
+    title: "6. Facial & Biometric Data",
+    content: `Photos you upload to Glosseti may contain your facial features. We want to be transparent about how these images are handled:
+
+• **No Biometric Identifiers**: Glosseti does **not** extract, compute, or store biometric identifiers such as faceprints, facial geometry maps, or any other biometric data as defined under the Illinois Biometric Information Privacy Act (BIPA) or similar laws.
+
+• **No Facial Recognition**: We do **not** perform facial recognition, facial comparison, or identity verification of any kind. Our AI analyzes overall style, clothing, and aesthetics — not individual facial features for identification purposes.
+
+• **Temporary Processing Only**: Photos containing faces are processed in-memory solely to generate style recommendations. They are **not** stored on our servers after processing is complete, and are never used to build facial profiles or templates.
+
+• **No Sharing of Facial Data**: We do **not** sell, lease, trade, or otherwise share photos containing facial features with any third party for purposes of facial recognition or biometric analysis.
+
+• **Your Consent**: By uploading a photo, you consent to its temporary processing for style recommendation purposes only. You may withdraw this consent at any time by discontinuing use of the photo upload feature.
+
+If you have concerns about how your photos are handled, please contact us at support@glosseti.com.`,
+  },
+  {
+    title: "7. Children's Privacy",
     content: `Glosseti is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have inadvertently collected personal data from a child under 13, we will take steps to delete such information promptly. If you believe a child under 13 has provided us with personal information, please contact us at support@glosseti.com.`,
   },
   {
-    title: "7. Data Retention",
+    title: "8. Data Retention",
     content: `• **Photos**: Deleted immediately after style generation is complete; not stored on our servers.
 • **Account Data**: Retained for as long as your account is active. Upon account deletion request, all data is removed within 30 days.
 • **Usage Analytics**: Anonymous analytics data may be retained for up to 24 months to improve our services.
 • **Support Communications**: Retained for up to 12 months after resolution to ensure quality of service.`,
   },
   {
-    title: "8. International Data Transfers",
+    title: "9. International Data Transfers",
     content: `Your information may be transferred to and processed in countries other than your country of residence. We ensure that appropriate safeguards are in place to protect your data in accordance with this privacy policy and applicable data protection laws.`,
   },
   {
-    title: "9. Changes to This Policy",
+    title: "10. Changes to This Policy",
     content: `We may update this Privacy Policy from time to time. When we make material changes, we will notify you through the app or via email. Your continued use of Glosseti after changes are posted constitutes your acceptance of the updated policy. We encourage you to review this policy periodically.`,
   },
   {
-    title: "10. Contact Us",
+    title: "11. Contact Us",
     content: `If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:
 
 • **Email**: support@glosseti.com
