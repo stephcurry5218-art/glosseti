@@ -59,8 +59,8 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
           Premium Feature
         </div>
         <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginBottom: 20, lineHeight: 1.5 }}>
-          <strong style={{ color: "hsl(var(--glamora-char))" }}>{feature}</strong> is available with Premium or Pro.
-          Upgrade to unlock the full Glamora experience.
+          <strong style={{ color: "hsl(var(--glamora-char))" }}>{feature}</strong> is available with Premium.
+          Upgrade to unlock the full Glosseti experience.
         </div>
 
         <button

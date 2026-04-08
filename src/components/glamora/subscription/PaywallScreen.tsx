@@ -12,7 +12,7 @@ interface Props {
 }
 
 const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature }: Props) => {
-  const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">("yearly");
+  const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly">("weekly");
   const [purchasing, setPurchasing] = useState(false);
 
   const handlePurchase = async (tier: SubscriptionTier) => {
@@ -38,7 +38,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
     }
   };
 
-  const tierIcons: Record<string, typeof Crown> = { free: Zap, premium: Crown, pro: Star };
+  const tierIcons: Record<string, typeof Crown> = { free: Zap, premium: Crown };
 
   return (
     <div style={{
@@ -74,7 +74,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           </div>
           <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginTop: 8, lineHeight: 1.5 }}>
             {lockedFeature
-              ? `"${lockedFeature}" requires a Premium or Pro plan`
+              ? `"${lockedFeature}" requires a Premium plan`
               : remainingGenerations <= 0
                 ? "You've used all your free looks this month"
                 : "Get more AI generations and premium features"}
@@ -87,7 +87,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           background: "hsla(var(--glamora-char) / 0.05)", borderRadius: 100,
           padding: 3, maxWidth: 260, margin: "0 auto 24px",
         }}>
-          {(["weekly", "monthly", "yearly"] as const).map(cycle => (
+          {(["weekly", "monthly"] as const).map(cycle => (
             <button key={cycle} onClick={() => setBillingCycle(cycle)} style={{
               flex: 1, padding: "8px 0", borderRadius: 100, border: "none", cursor: "pointer",
               background: billingCycle === cycle
@@ -97,7 +97,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
               fontSize: 11, fontWeight: 600, fontFamily: "'Jost', sans-serif",
               transition: "all 0.2s",
             }}>
-              {cycle === "yearly" ? "Yearly" : cycle === "monthly" ? "Monthly" : "Weekly"}
+              {cycle === "monthly" ? "Monthly" : "Weekly"}
             </button>
           ))}
         </div>
@@ -106,19 +106,12 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {PLANS.filter(p => p.tier !== "free").map((plan) => {
             const Icon = tierIcons[plan.tier];
-            const price = billingCycle === "yearly" && plan.yearlyPrice
-              ? plan.yearlyPrice
-              : billingCycle === "weekly" && plan.weeklyPrice
-                ? plan.weeklyPrice
-                : plan.monthlyPrice;
-            const periodLabel = billingCycle === "yearly" && plan.yearlyPrice
-              ? "yr"
-              : billingCycle === "weekly" && plan.weeklyPrice
-                ? "wk"
-                : "mo";
-            const perMonth = billingCycle === "yearly" && plan.yearlyPrice
-              ? (plan.yearlyPrice / 12).toFixed(2)
-              : null;
+            const price = billingCycle === "weekly" && plan.weeklyPrice
+              ? plan.weeklyPrice
+              : plan.monthlyPrice;
+            const periodLabel = billingCycle === "weekly" && plan.weeklyPrice
+              ? "wk"
+              : "mo";
             const isHighlighted = plan.highlighted;
 
             return (
@@ -167,11 +160,6 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                           /{periodLabel}
                         </span>
                       </div>
-                      {perMonth && (
-                        <div style={{ fontSize: 11, color: "hsl(var(--glamora-gold))" }}>
-                          ${perMonth}/mo
-                        </div>
-                      )}
                     </div>
                   </div>
 
