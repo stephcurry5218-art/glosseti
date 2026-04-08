@@ -153,7 +153,7 @@ export function useSubscription() {
   }, [userId, anonUsage, usageCount, cap, recordGeneration]);
 
   const checkFeatureAccess = useCallback((feature: string, requiredTier: SubscriptionTier = "premium"): boolean => {
-    const tierLevel = { free: 0, premium: 1, pro: 2 };
+    const tierLevel = { free: 0, premium: 1 };
     if (tierLevel[state.tier] >= tierLevel[requiredTier]) return true;
     setLockedFeature(feature);
     setShowUpgradePrompt(true);

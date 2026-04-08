@@ -17,7 +17,7 @@ const UsageBadge = ({ tier, remaining, onUpgrade }: Props) => {
         border: "1px solid hsla(var(--glamora-gold) / 0.2)",
         fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-gold))",
       }}>
-        <Crown size={12} /> {tier === "pro" ? "Pro" : "Premium"}
+        <Crown size={12} /> Premium
       </div>
     );
   }

@@ -11,15 +11,10 @@ import type { SubscriptionTier } from "./types";
 export const IAP_PRODUCT_IDS: Record<Exclude<SubscriptionTier, "free">, {
   weekly?: string;
   monthly: string;
-  yearly?: string;
 }> = {
   premium: {
     weekly: "com.glosseti.premium.weekly",
     monthly: "com.glosseti.premium.monthly",
-    yearly: "com.glosseti.premium.yearly",
-  },
-  pro: {
-    monthly: "com.glosseti.pro.monthly",
   },
 };
 

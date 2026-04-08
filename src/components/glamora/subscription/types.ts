@@ -1,4 +1,4 @@
-export type SubscriptionTier = "free" | "premium" | "pro";
+export type SubscriptionTier = "free" | "premium";
 
 export interface SubscriptionPlan {
   tier: SubscriptionTier;
@@ -23,7 +23,6 @@ export interface SubscriptionState {
 export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
   free: 3,   // daily cap (not monthly) — handled separately
   premium: 30,
-  pro: 75,
 };
 
 /** Free tier uses a daily limit */
@@ -49,7 +48,7 @@ export const PLANS: SubscriptionPlan[] = [
     name: "Premium",
     monthlyPrice: 14.99,
     weeklyPrice: 4.99,
-    yearlyPrice: 99,
+    yearlyPrice: null,
     highlighted: true,
     badge: "Most Popular",
     monthlyGenerationCap: 30,
@@ -60,24 +59,6 @@ export const PLANS: SubscriptionPlan[] = [
       "Full makeup & outfit tutorials",
       "Shop recommended items",
       "Save & organize looks",
-      
-    ],
-  },
-  {
-    tier: "pro",
-    name: "Pro",
-    monthlyPrice: 24.99,
-    weeklyPrice: null,
-    yearlyPrice: null,
-    badge: "Creator",
-    monthlyGenerationCap: 75,
-    features: [
-      "75 AI generations per month",
-      "Everything in Premium",
-      "Priority AI processing",
-      "Exclusive styles & early access",
-      "Creator tools & public sharing",
-      "Trend-based recommendations",
     ],
   },
 ];
