@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ShoppingBag, Crown, Sparkles, Coins, ExternalLink, ChevronDown } from "lucide-react";
-import { getShopUrl } from "./affiliateUrls";
+import { getShopUrl, getGoogleShoppingUrl } from "./affiliateUrls";
 import type { Category, PriceTier } from "./lookData";
 import { lookData, categoryLabels, categoryOrder } from "./lookData";
 
@@ -174,36 +174,54 @@ const LookPriceCard = ({ lookName }: Props) => {
             {allItems.map((item, idx) => {
               const tierData = item.shop[activeTier];
               return (
-                <a
-                  key={idx}
-                  href={getShopUrl(tierData.store, tierData.item)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    padding: "10px 12px", borderRadius: 10,
-                    background: `hsla(${activeTierMeta.bg} / 0.05)`,
-                    border: `1px solid hsla(${activeTierMeta.color} / 0.08)`,
-                    textDecoration: "none", transition: "all 0.15s", cursor: "pointer",
-                  }}
-                >
-                  <div style={{
-                    width: 6, height: 6, borderRadius: "50%",
-                    background: `hsl(${activeTierMeta.color})`, flexShrink: 0,
-                  }} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
-                      {item.title}
+                <div key={idx} style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                  <a
+                    href={getShopUrl(tierData.store, tierData.item)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "flex", alignItems: "center", gap: 10,
+                      padding: "10px 12px", borderRadius: "10px 10px 0 0",
+                      background: `hsla(${activeTierMeta.bg} / 0.05)`,
+                      border: `1px solid hsla(${activeTierMeta.color} / 0.08)`,
+                      borderBottom: "none",
+                      textDecoration: "none", transition: "all 0.15s", cursor: "pointer",
+                    }}
+                  >
+                    <div style={{
+                      width: 6, height: 6, borderRadius: "50%",
+                      background: `hsl(${activeTierMeta.color})`, flexShrink: 0,
+                    }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                        {item.title}
+                      </div>
+                      <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>
+                        {categoryLabels[item.category]?.label} · {tierData.store}
+                      </div>
                     </div>
-                    <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>
-                      {categoryLabels[item.category]?.label} · {tierData.store}
+                    <div style={{ fontSize: 13, fontWeight: 700, color: `hsl(${activeTierMeta.color})`, whiteSpace: "nowrap" }}>
+                      {tierData.price}
                     </div>
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: `hsl(${activeTierMeta.color})`, whiteSpace: "nowrap" }}>
-                    {tierData.price}
-                  </div>
-                  <ExternalLink size={11} color="hsl(var(--glamora-gray))" />
-                </a>
+                    <ExternalLink size={11} color="hsl(var(--glamora-gray))" />
+                  </a>
+                  <a
+                    href={getGoogleShoppingUrl(tierData.store, tierData.item)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+                      padding: "5px 12px", borderRadius: "0 0 10px 10px",
+                      background: `hsla(${activeTierMeta.bg} / 0.03)`,
+                      border: `1px solid hsla(${activeTierMeta.color} / 0.08)`,
+                      textDecoration: "none", cursor: "pointer",
+                      fontSize: 10, fontWeight: 500, color: "hsl(var(--glamora-gray))",
+                      fontFamily: "'Jost', sans-serif",
+                    }}
+                  >
+                    🔍 Find exact product on Google Shopping
+                  </a>
+                </div>
               );
             })}
           </div>
