@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ShoppingBag, Crown, Sparkles, Coins, ExternalLink, ChevronDown } from "lucide-react";
-import { getShopUrl } from "./affiliateUrls";
+import { getShopUrl, getGoogleShoppingUrl } from "./affiliateUrls";
 import type { ShopItem } from "./ShopPanel";
 
 interface Props {
