@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Crown, Check, Sparkles, Zap, X, Star } from "lucide-react";
+import { Crown, Check, Zap, X } from "lucide-react";
 import { PLANS } from "./types";
 import type { SubscriptionTier } from "./types";
 import { purchaseSubscription, isIAPAvailable } from "./iapService";
