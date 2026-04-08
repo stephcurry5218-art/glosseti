@@ -49,8 +49,7 @@ export const PLANS: SubscriptionPlan[] = [
     monthlyPrice: 14.99,
     weeklyPrice: 4.99,
     yearlyPrice: null,
-    highlighted: true,
-    badge: "Most Popular",
+    highlighted: false,
     monthlyGenerationCap: 30,
     features: [
       "30 AI generations per month",
