@@ -80,22 +80,22 @@ If you have concerns about how your photos are handled, please contact us at sup
     content: `Glosseti is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have inadvertently collected personal data from a child under 13, we will take steps to delete such information promptly. If you believe a child under 13 has provided us with personal information, please contact us at support@glosseti.com.`,
   },
   {
-    title: "7. Data Retention",
+    title: "8. Data Retention",
     content: `• **Photos**: Deleted immediately after style generation is complete; not stored on our servers.
 • **Account Data**: Retained for as long as your account is active. Upon account deletion request, all data is removed within 30 days.
 • **Usage Analytics**: Anonymous analytics data may be retained for up to 24 months to improve our services.
 • **Support Communications**: Retained for up to 12 months after resolution to ensure quality of service.`,
   },
   {
-    title: "8. International Data Transfers",
+    title: "9. International Data Transfers",
     content: `Your information may be transferred to and processed in countries other than your country of residence. We ensure that appropriate safeguards are in place to protect your data in accordance with this privacy policy and applicable data protection laws.`,
   },
   {
-    title: "9. Changes to This Policy",
+    title: "10. Changes to This Policy",
     content: `We may update this Privacy Policy from time to time. When we make material changes, we will notify you through the app or via email. Your continued use of Glosseti after changes are posted constitutes your acceptance of the updated policy. We encourage you to review this policy periodically.`,
   },
   {
-    title: "10. Contact Us",
+    title: "11. Contact Us",
     content: `If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:
 
 • **Email**: support@glosseti.com
