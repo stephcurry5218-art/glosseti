@@ -60,7 +60,23 @@ For users in the European Economic Area (EEA), you have additional rights under 
 For California residents, you have rights under the CCPA, including the right to know what personal information is collected and the right to request deletion.`,
   },
   {
-    title: "6. Children's Privacy",
+    title: "6. Facial & Biometric Data",
+    content: `Photos you upload to Glosseti may contain your facial features. We want to be transparent about how these images are handled:
+
+• **No Biometric Identifiers**: Glosseti does **not** extract, compute, or store biometric identifiers such as faceprints, facial geometry maps, or any other biometric data as defined under the Illinois Biometric Information Privacy Act (BIPA) or similar laws.
+
+• **No Facial Recognition**: We do **not** perform facial recognition, facial comparison, or identity verification of any kind. Our AI analyzes overall style, clothing, and aesthetics — not individual facial features for identification purposes.
+
+• **Temporary Processing Only**: Photos containing faces are processed in-memory solely to generate style recommendations. They are **not** stored on our servers after processing is complete, and are never used to build facial profiles or templates.
+
+• **No Sharing of Facial Data**: We do **not** sell, lease, trade, or otherwise share photos containing facial features with any third party for purposes of facial recognition or biometric analysis.
+
+• **Your Consent**: By uploading a photo, you consent to its temporary processing for style recommendation purposes only. You may withdraw this consent at any time by discontinuing use of the photo upload feature.
+
+If you have concerns about how your photos are handled, please contact us at support@glosseti.com.`,
+  },
+  {
+    title: "7. Children's Privacy",
     content: `Glosseti is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have inadvertently collected personal data from a child under 13, we will take steps to delete such information promptly. If you believe a child under 13 has provided us with personal information, please contact us at support@glosseti.com.`,
   },
   {
