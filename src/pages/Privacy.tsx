@@ -183,7 +183,7 @@ const Privacy = () => {
             className="text-xs mt-3"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Effective Date: April 5, 2026 &nbsp;|&nbsp; Last Updated: April 5,
+            Effective Date: April 5, 2026 &nbsp;|&nbsp; Last Updated: April 8,
             2026
           </p>
         </div>
