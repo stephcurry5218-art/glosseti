@@ -32,6 +32,9 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   const [isEditingName, setIsEditingName] = useState(false);
   const [editValue, setEditValue] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
