@@ -289,6 +289,71 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
           ))}
         </div>
       </div>
+
+      {/* Delete Account Confirmation */}
+      {showDeleteConfirm && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 100,
+          background: "rgba(0,0,0,0.6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 24,
+        }}>
+          <div style={{
+            background: "hsl(var(--glamora-cream))",
+            borderRadius: 16, padding: 28, maxWidth: 340, width: "100%",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+          }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: "hsl(var(--glamora-char))", marginBottom: 8 }}>
+              Delete Account
+            </div>
+            <div style={{ fontSize: 14, color: "hsl(var(--glamora-gray))", lineHeight: 1.5, marginBottom: 6 }}>
+              This will permanently delete your account and all associated data including saved styles, usage history, and uploaded images.
+            </div>
+            <div style={{ fontSize: 14, color: "hsl(var(--glamora-gray))", lineHeight: 1.5, marginBottom: 16 }}>
+              This action <strong style={{ color: "#c00" }}>cannot be undone</strong>. Type <strong>DELETE</strong> to confirm.
+            </div>
+            <input
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              placeholder="Type DELETE"
+              style={{
+                width: "100%", padding: "10px 14px", fontSize: 15,
+                border: "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
+                borderRadius: 10, marginBottom: 16, fontFamily: "inherit",
+                color: "hsl(var(--glamora-char))", background: "hsla(var(--glamora-gray-light) / 0.06)",
+                outline: "none",
+              }}
+            />
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(""); }}
+                style={{
+                  flex: 1, padding: "12px 0", borderRadius: 10,
+                  border: "1.5px solid hsla(var(--glamora-gray-light) / 0.3)",
+                  background: "transparent", fontSize: 14, fontWeight: 600,
+                  color: "hsl(var(--glamora-char))", cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmText !== "DELETE" || deleting}
+                style={{
+                  flex: 1, padding: "12px 0", borderRadius: 10,
+                  border: "none",
+                  background: deleteConfirmText === "DELETE" ? "#c00" : "hsla(var(--glamora-gray-light) / 0.2)",
+                  color: deleteConfirmText === "DELETE" ? "#fff" : "hsl(var(--glamora-gray))",
+                  fontSize: 14, fontWeight: 600, cursor: deleteConfirmText === "DELETE" ? "pointer" : "default",
+                  opacity: deleting ? 0.6 : 1,
+                }}
+              >
+                {deleting ? "Deleting…" : "Delete Account"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
