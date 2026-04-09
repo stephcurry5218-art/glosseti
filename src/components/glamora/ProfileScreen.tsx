@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw } from "lucide-react";
 import { restorePurchases, isIAPAvailable } from "./subscription/iapService";
-import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
