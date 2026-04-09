@@ -160,7 +160,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                     </div>
                   )}
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                     <div style={{
                       width: 40, height: 40, borderRadius: 12,
                       background: `linear-gradient(135deg, hsla(var(--glamora-gold) / 0.15), hsla(var(--glamora-gold-light) / 0.1))`,
@@ -169,7 +169,9 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       <Icon size={20} color="hsl(var(--glamora-gold))" />
                     </div>
                     <div>
-                      <div style={{ fontSize: 18, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>{plan.name}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
+                        {billingCycle === "weekly" ? "Glosseti Weekly" : "Glosseti Monthly"}
+                      </div>
                     </div>
                     <div style={{ marginLeft: "auto", textAlign: "right" }}>
                       <div style={{ fontSize: 24, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
@@ -179,6 +181,11 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                         </span>
                       </div>
                     </div>
+                  </div>
+                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, paddingLeft: 50 }}>
+                    {billingCycle === "weekly"
+                      ? `Billed Weekly · $${plan.weeklyPrice}/week`
+                      : `Billed Monthly · $${plan.monthlyPrice}/month`}
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
