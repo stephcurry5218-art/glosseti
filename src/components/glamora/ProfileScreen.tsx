@@ -81,6 +81,27 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     toast.success("Avatar updated");
   };
 
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== "DELETE") return;
+    setDeleting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not signed in");
+      const res = await supabase.functions.invoke("delete-account", {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (res.error) throw res.error;
+      toast.success("Account deleted");
+      setShowDeleteConfirm(false);
+      await supabase.auth.signOut();
+      onSignOut();
+    } catch {
+      toast.error("Failed to delete account");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const userName = displayName || user?.email?.split("@")[0] || "Glosseti User";
 
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
