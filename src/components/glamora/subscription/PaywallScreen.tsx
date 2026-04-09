@@ -160,7 +160,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                     </div>
                   )}
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                     <div style={{
                       width: 40, height: 40, borderRadius: 12,
                       background: `linear-gradient(135deg, hsla(var(--glamora-gold) / 0.15), hsla(var(--glamora-gold-light) / 0.1))`,
@@ -169,7 +169,9 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                       <Icon size={20} color="hsl(var(--glamora-gold))" />
                     </div>
                     <div>
-                      <div style={{ fontSize: 18, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>{plan.name}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
+                        {billingCycle === "weekly" ? "Glosseti Weekly" : "Glosseti Monthly"}
+                      </div>
                     </div>
                     <div style={{ marginLeft: "auto", textAlign: "right" }}>
                       <div style={{ fontSize: 24, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
@@ -179,6 +181,11 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
                         </span>
                       </div>
                     </div>
+                  </div>
+                  <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, paddingLeft: 50 }}>
+                    {billingCycle === "weekly"
+                      ? `Billed Weekly · $${plan.weeklyPrice}/week`
+                      : `Billed Monthly · $${plan.monthlyPrice}/month`}
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
@@ -240,6 +247,32 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           }}>
             Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left this month` : "resets next month"})
           </button>
+        </div>
+
+        {/* Legal links */}
+        <div style={{
+          textAlign: "center", marginTop: 20, paddingBottom: 12,
+          fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.6,
+        }}>
+          <span>Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless cancelled at least 24 hours before the end of the current period.</span>
+          <div style={{ marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+            >
+              Terms of Use (EULA)
+            </a>
+          </div>
         </div>
       </div>
     </div>
