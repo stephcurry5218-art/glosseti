@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield } from "lucide-react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw } from "lucide-react";
+import { restorePurchases, isIAPAvailable } from "./subscription/iapService";
+import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
@@ -86,6 +88,19 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
     { Icon: Shield, label: "Privacy Policy", action: () => { window.location.href = "/privacy"; } },
     { Icon: Star, label: "Rate Glosseti", action: undefined },
+    { Icon: RotateCcw, label: "Restore Purchases", action: async () => {
+      if (!isIAPAvailable()) {
+        toast.info("Restore is available in the Glosseti app on iOS.");
+        return;
+      }
+      toast.loading("Restoring purchases…", { id: "restore" });
+      try {
+        await restorePurchases();
+        toast.success("Purchases restored!", { id: "restore" });
+      } catch {
+        toast.error("Could not restore purchases", { id: "restore" });
+      }
+    }},
   ];
 
   if (user) {
