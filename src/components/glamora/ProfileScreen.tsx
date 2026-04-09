@@ -127,6 +127,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   ];
 
   if (user) {
+    menuItems.push({ Icon: Trash2, label: "Delete Account", action: () => setShowDeleteConfirm(true) });
     menuItems.push({ Icon: LogOut, label: "Sign Out", action: onSignOut });
   } else {
     menuItems.unshift({ Icon: LogIn, label: "Sign In / Sign Up", action: onSignIn });
