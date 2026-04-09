@@ -248,6 +248,32 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             Continue with Free ({remainingGenerations > 0 ? `${remainingGenerations} left this month` : "resets next month"})
           </button>
         </div>
+
+        {/* Legal links */}
+        <div style={{
+          textAlign: "center", marginTop: 20, paddingBottom: 12,
+          fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.6,
+        }}>
+          <span>Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless cancelled at least 24 hours before the end of the current period.</span>
+          <div style={{ marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+            >
+              Terms of Use (EULA)
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
