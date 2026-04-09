@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Crown, Check, Zap, X } from "lucide-react";
+import { Crown, Check, Zap, X, RotateCcw } from "lucide-react";
 import { PLANS } from "./types";
 import type { SubscriptionTier } from "./types";
-import { purchaseSubscription, isIAPAvailable } from "./iapService";
+import { purchaseSubscription, restorePurchases, isIAPAvailable } from "./iapService";
+import { toast } from "sonner";
 
 interface Props {
   onClose: () => void;
@@ -14,6 +15,23 @@ interface Props {
 const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature }: Props) => {
   const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly">("weekly");
   const [purchasing, setPurchasing] = useState(false);
+  const [restoring, setRestoring] = useState(false);
+
+  const handleRestore = async () => {
+    if (!isIAPAvailable()) {
+      toast.info("Restore is available in the Glosseti app on iOS.");
+      return;
+    }
+    setRestoring(true);
+    try {
+      await restorePurchases();
+      toast.success("Purchases restored!");
+    } catch {
+      toast.error("Could not restore purchases");
+    } finally {
+      setRestoring(false);
+    }
+  };
 
   const handlePurchase = async (tier: SubscriptionTier) => {
     if (tier === "free") return;
@@ -196,11 +214,25 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           })}
         </div>
 
-        {/* Free tier note */}
+        {/* Restore + Free tier */}
         <div style={{
           textAlign: "center", marginTop: 20,
-          fontSize: 12, color: "hsl(var(--glamora-gray))",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
         }}>
+          <button
+            onClick={handleRestore}
+            disabled={restoring}
+            style={{
+              background: "none", border: "none", cursor: restoring ? "not-allowed" : "pointer",
+              color: "hsl(var(--glamora-gold))", fontFamily: "'Jost', sans-serif",
+              fontSize: 13, fontWeight: 600,
+              display: "flex", alignItems: "center", gap: 6,
+              opacity: restoring ? 0.6 : 1,
+            }}
+          >
+            <RotateCcw size={14} />
+            {restoring ? "Restoring…" : "Restore Purchases"}
+          </button>
           <button onClick={onClose} style={{
             background: "none", border: "none", cursor: "pointer",
             color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
