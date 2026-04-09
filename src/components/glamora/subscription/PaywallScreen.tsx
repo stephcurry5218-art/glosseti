@@ -221,25 +221,8 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           })}
         </div>
 
-        {/* Restore + Free tier */}
-        <div style={{
-          textAlign: "center", marginTop: 20,
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
-        }}>
-          <button
-            onClick={handleRestore}
-            disabled={restoring}
-            style={{
-              background: "none", border: "none", cursor: restoring ? "not-allowed" : "pointer",
-              color: "hsl(var(--glamora-gold))", fontFamily: "'Jost', sans-serif",
-              fontSize: 13, fontWeight: 600,
-              display: "flex", alignItems: "center", gap: 6,
-              opacity: restoring ? 0.6 : 1,
-            }}
-          >
-            <RotateCcw size={14} />
-            {restoring ? "Restoring…" : "Restore Purchases"}
-          </button>
+        {/* Free tier */}
+        <div style={{ textAlign: "center", marginTop: 20 }}>
           <button onClick={onClose} style={{
             background: "none", border: "none", cursor: "pointer",
             color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
@@ -249,28 +232,42 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
           </button>
         </div>
 
-        {/* Legal links */}
+        {/* Restore · Privacy · Terms */}
         <div style={{
           textAlign: "center", marginTop: 20, paddingBottom: 12,
           fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.6,
         }}>
           <span>Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless cancelled at least 24 hours before the end of the current period.</span>
-          <div style={{ marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
+          <div style={{ marginTop: 8, display: "flex", justifyContent: "center", alignItems: "center", gap: 6 }}>
+            <button
+              onClick={handleRestore}
+              disabled={restoring}
+              style={{
+                background: "none", border: "none", cursor: restoring ? "not-allowed" : "pointer",
+                color: "hsl(var(--glamora-gold))", fontFamily: "'Jost', sans-serif",
+                fontSize: 11, padding: 0, textDecoration: "underline",
+                opacity: restoring ? 0.6 : 1,
+              }}
+            >
+              {restoring ? "Restoring…" : "Restore Purchases"}
+            </button>
+            <span>·</span>
             <a
               href="/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer", fontSize: 11 }}
             >
               Privacy Policy
             </a>
+            <span>·</span>
             <a
               href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer" }}
+              style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer", fontSize: 11 }}
             >
-              Terms of Use (EULA)
+              Terms of Use
             </a>
           </div>
         </div>
