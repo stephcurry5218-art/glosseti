@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Glosseti</string>
+    <string name="title_activity_main">Glosseti</string>
+    <string name="package_name">com.glosseti.app</string>
+    <string name="custom_url_scheme">com.glosseti.app</string>
+</resources>
