@@ -52,7 +52,7 @@ workflows:
     environment:
       android_signing:
         - Glosseti - keystore
-      node: 18
+      node: 22
     scripts:
       - name: Install dependencies
         script: npm install
