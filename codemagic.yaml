@@ -61,8 +61,12 @@ workflows:
       - name: Sync Capacitor
         script: npx cap sync android
       - name: Build Android
-        script: |
-          cd android
-          ./gradlew bundleRelease
+      script: |
+        cd android
+        export JAVA_HOME=$(/usr/libexec/java_home -v 17) 2>/dev/null || export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+        ./gradlew bundleRelease
+        
+          
+          
     artifacts:
       - android/app/build/outputs/bundle/release/*.aab
