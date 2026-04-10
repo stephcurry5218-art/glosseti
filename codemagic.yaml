@@ -52,6 +52,7 @@ workflows:
       android_signing:
         - Glosseti - keystore
       node: 22
+      java: 21
     scripts:
       - name: Install dependencies
         script: npm install
@@ -62,7 +63,7 @@ workflows:
       - name: Build Android
         script: |
           cd android
-          export JAVA_HOME=$(/usr/libexec/java_home -v 17) 2>/dev/null || export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           ./gradlew bundleRelease
     artifacts:
-      - android/app/build/outputs/bundle/release/*.aab          
+      - android/app/build/outputs/bundle/release/*.aab
+Paste
