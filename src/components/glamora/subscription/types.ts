@@ -22,7 +22,7 @@ export interface SubscriptionState {
 /** Monthly caps for paid tiers */
 export const MONTHLY_CAPS: Record<SubscriptionTier, number> = {
   free: 3,   // daily cap (not monthly) — handled separately
-  premium: 30,
+  premium: 50,
 };
 
 /** Free tier uses a daily limit */
@@ -50,9 +50,9 @@ export const PLANS: SubscriptionPlan[] = [
     weeklyPrice: 4.99,
     yearlyPrice: null,
     highlighted: false,
-    monthlyGenerationCap: 30,
+    monthlyGenerationCap: 50,
     features: [
-      "30 AI generations per month",
+      "50 AI generations per month",
       "No watermark on images",
       "Advanced personalization",
       "Full makeup & outfit tutorials",
