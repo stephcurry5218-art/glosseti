@@ -109,6 +109,14 @@ serve(async (req) => {
         female: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement pieces, perfectly coordinated accessories, and a confident, commanding presence. The styling should feel legendary — the kind of look that defines an era. Premium magazine photography with dramatic lighting.",
         male: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement accessories, perfectly tailored fit, and effortless star power. The styling should feel legendary and era-defining. Premium magazine photography with dramatic lighting.",
       },
+      fitness: {
+        female: "wearing a stylish women's athletic outfit: a fitted sports bra or crop top in a bold color, high-waisted compression leggings, women's running sneakers, a sleek smartwatch, and a matching headband or hair tie. Feminine athletic build, gym or outdoor fitness setting. Women's activewear fashion editorial photography.",
+        male: "wearing a men's performance workout outfit: fitted compression tee or muscle tank, athletic shorts or tapered joggers, men's training sneakers, a sport watch, and wireless earbuds. Athletic build, gym or outdoor fitness setting. Men's activewear fashion editorial photography.",
+      },
+      cosplay: {
+        female: "wearing a detailed, high-quality women's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate makeup, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly feminine and tailored for a woman's body.",
+        male: "wearing a detailed, high-quality men's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate grooming, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly masculine and tailored for a man's body.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
