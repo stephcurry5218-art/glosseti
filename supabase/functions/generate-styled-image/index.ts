@@ -121,6 +121,10 @@ serve(async (req) => {
         female: "a cute baby girl or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
         male: "a cute baby boy or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
       },
+      "parent-child": {
+        female: "a mother and her baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
+        male: "a father and his baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
@@ -275,6 +279,28 @@ serve(async (req) => {
       "baby-twin-matching": "IMPORTANT: Style the baby/toddler in a matching outfit designed for sibling or parent-child coordination — same colors, complementary patterns. Show coordinated styling.",
     };
 
+    // Parent-Child matching sub-style overrides
+    const parentChildSubStyleOverrides: Record<string, string> = {
+      "pc-casual-match": "IMPORTANT: Show a parent and baby/toddler both wearing matching casual outfits — coordinated graphic tees or solid-color tops, matching jeans or joggers, and similar sneakers. Relaxed lifestyle setting.",
+      "pc-denim-duo": "IMPORTANT: Show a parent and baby/toddler in coordinated denim — matching denim jackets, jeans, and white tees. Classic Americana family editorial photography.",
+      "pc-sporty-match": "IMPORTANT: Show a parent and baby/toddler in matching athletic wear — coordinated Nike or Adidas sets, matching sneakers, and sporty accessories. Active lifestyle setting.",
+      "pc-streetwear-mini": "IMPORTANT: Show a parent and baby/toddler in matching streetwear — coordinated Jordans or trendy sneakers, matching hoodies or graphic tees, and cool accessories. Urban lifestyle editorial.",
+      "pc-cozy-match": "IMPORTANT: Show a parent and baby/toddler in matching cozy knitwear — coordinated chunky sweaters, beanies, and warm-toned outfits. Warm, cozy indoor setting.",
+      "pc-formal-match": "IMPORTANT: Show a parent and baby/toddler in coordinated formal outfits — matching suits or dresses scaled to size. Elegant event-ready styling.",
+      "pc-holiday-match": "IMPORTANT: Show a parent and baby/toddler in matching holiday-themed outfits — coordinated Christmas pajamas, Halloween costumes, or Easter pastels. Festive family setting.",
+      "pc-wedding-match": "IMPORTANT: Show a parent and baby/toddler in coordinated wedding guest attire — elegant complementary outfits suitable for a ceremony. Beautiful venue setting.",
+      "pc-birthday-match": "IMPORTANT: Show a parent and baby/toddler in matching birthday party outfits — coordinated theme colors, fun accessories, and celebratory styling.",
+      "pc-boho-match": "IMPORTANT: Show a parent and baby/toddler in matching boho outfits — coordinated earthy tones, floral prints, and natural fabrics. Outdoor meadow setting.",
+      "pc-monochrome-match": "IMPORTANT: Show a parent and baby/toddler in a single-color coordinated look — all-white, all-black, or single color palette. Clean, editorial styling.",
+      "pc-pastel-match": "IMPORTANT: Show a parent and baby/toddler in matching soft pastel outfits — lavender, mint, or blush tones. Gentle, dreamy photography.",
+      "pc-tropical-match": "IMPORTANT: Show a parent and baby/toddler in matching tropical prints — coordinated Hawaiian shirts/dresses and resort wear. Vacation/beach setting.",
+      "pc-preppy-match": "IMPORTANT: Show a parent and baby/toddler in matching preppy outfits — coordinated polo shirts, khakis, and boat shoes. Country club aesthetic.",
+      "pc-mommy-daughter": "IMPORTANT: Show a MOTHER and her DAUGHTER in beautifully matching feminine outfits — coordinated dresses, headbands, and accessories. Warm, loving mother-daughter lifestyle photography.",
+      "pc-mommy-son": "IMPORTANT: Show a MOTHER and her SON in coordinated outfits — complementary colors and styles. The mother's outfit is chic and the son's is a mini-gentleman version. Warm lifestyle photography.",
+      "pc-daddy-daughter": "IMPORTANT: Show a FATHER and his DAUGHTER in coordinated outfits — dad in a sharp look, daughter in a miniature feminine complement. Heartwarming family editorial.",
+      "pc-daddy-son": "IMPORTANT: Show a FATHER and his SON in matching outfits — coordinated suits, sneakers, or jerseys. Like father like son energy. Family lifestyle photography.",
+    };
+
     const cosplayOverride = (styleCategory === "cosplay" && styleSubcategory && cosplaySubStyleOverrides[styleSubcategory])
       ? `\n\n${cosplaySubStyleOverrides[styleSubcategory]}`
       : "";
@@ -283,7 +309,11 @@ serve(async (req) => {
       ? `\n\n${babySubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride;
+    const parentChildOverride = (styleCategory === "parent-child" && styleSubcategory && parentChildSubStyleOverrides[styleSubcategory])
+      ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
@@ -355,11 +385,14 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
-    // Strong gender enforcement (skip for baby category)
+    // Strong gender enforcement (skip for baby and parent-child categories)
     const isBaby = styleCategory === "baby-toddler";
+    const isParentChild = styleCategory === "parent-child";
     const genderEnforcement = isBaby
       ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Keep the child's face and appearance.`
-      : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
+      : isParentChild
+        ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
+        : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
 
     let editPrompt: string;
     let messages: any[];
