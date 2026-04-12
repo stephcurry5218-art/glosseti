@@ -497,6 +497,25 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "steampunk-explorer", label: "Steampunk Explorer", desc: "Brass goggles, corset, gears, and Victorian-industrial adventure gear", emoji: "⚙️" },
     ],
   },
+  {
+    id: "baby-toddler", label: "Baby & Toddler", Icon: Heart,
+    desc: "Adorable outfits for babies and toddlers — dress your little one in style",
+    includes: ["Onesies & Rompers", "Matching Sets", "Shoes & Booties", "Accessories & Hats"],
+    subs: [
+      { id: "baby-formal", label: "Formal / Occasion", desc: "Tiny suits, dresses, and bow ties for special events", emoji: "🎩" },
+      { id: "baby-casual", label: "Everyday Casual", desc: "Comfy cotton sets, graphic onesies, and soft leggings", emoji: "👶" },
+      { id: "baby-matching-set", label: "Matching Set", desc: "Coordinated top and bottom — effortlessly put-together", emoji: "🧸" },
+      { id: "baby-sporty", label: "Sporty / Athletic", desc: "Mini sneakers, joggers, and team-inspired fits", emoji: "⚽" },
+      { id: "baby-princess", label: "Princess / Tutu", desc: "Tulle skirts, sparkly headbands, and fairy-tale charm", emoji: "👑" },
+      { id: "baby-denim", label: "Denim Cutie", desc: "Mini jeans, denim jackets, and rugged-cute combos", emoji: "👖" },
+      { id: "baby-cozy", label: "Cozy & Warm", desc: "Knit sweaters, fleece onesies, and fuzzy booties", emoji: "🧤" },
+      { id: "baby-summer", label: "Summer Fun", desc: "Sunhats, rompers, sandals, and bright patterns", emoji: "☀️" },
+      { id: "baby-holiday", label: "Holiday Outfit", desc: "Christmas, Halloween, Easter — themed adorable looks", emoji: "🎄" },
+      { id: "baby-boho", label: "Boho Baby", desc: "Earthy tones, floral prints, and natural fabrics", emoji: "🌻" },
+      { id: "baby-streetwear", label: "Mini Streetwear", desc: "Tiny Jordans, graphic tees, and cool-kid energy", emoji: "🔥" },
+      { id: "baby-twin-matching", label: "Sibling Matching", desc: "Coordinated outfits for siblings or parent-child duo", emoji: "👯" },
+    ],
+  },
 ];
 
 const customDetailPlaceholders: Record<string, string> = {
@@ -532,6 +551,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "fitness": 'e.g. "Nike Dri-FIT matching set", "Gymshark compression shorts"...',
   "icon-looks": 'e.g. "Old Hollywood waves", "Oversized blazer with sneakers"...',
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
+  "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
