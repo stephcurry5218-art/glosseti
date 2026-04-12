@@ -110,6 +110,13 @@ const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam
   "Indochino": { base: (q) => `https://www.indochino.com/search?q=${encodeURIComponent(q)}` },
   // Other Popular Brands
   "Patagonia": { base: (q) => `https://www.patagonia.com/search/?q=${encodeURIComponent(q)}` },
+  // Cosplay & Costume Stores
+  "Spirit Halloween": { base: (q) => `https://www.spirithalloween.com/search?q=${encodeURIComponent(q)}` },
+  "EZCosplay": { base: (q) => `https://www.ezcosplay.com/catalogsearch/result/?q=${encodeURIComponent(q)}` },
+  "Miccostumes": { base: (q) => `https://www.miccostumes.com/search?q=${encodeURIComponent(q)}` },
+  "CosplayShopper": { base: (q) => `https://www.cosplayshopper.com/search?q=${encodeURIComponent(q)}` },
+  "Party City": { base: (q) => `https://www.partycity.com/search?q=${encodeURIComponent(q)}` },
+  "Hot Topic": { base: (q) => `https://www.hottopic.com/search?q=${encodeURIComponent(q)}` },
   "The North Face": { base: (q) => `https://www.thenorthface.com/en-us/search?q=${encodeURIComponent(q)}` },
   "ASOS": { base: (q) => `https://www.asos.com/us/search/?q=${encodeURIComponent(q)}` },
   "SHEIN": { base: (q) => `https://us.shein.com/pdsearch/${encodeURIComponent(q)}/` },

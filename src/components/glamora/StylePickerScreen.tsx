@@ -727,6 +727,25 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {cat.subs.map(sub => {
+                  // Section header
+                  if (sub.id.startsWith("_section_")) {
+                    return (
+                      <div key={sub.id} style={{
+                        padding: "10px 0 4px",
+                        marginTop: 4,
+                        borderBottom: `1px solid hsla(var(${accent}) / 0.12)`,
+                      }}>
+                        <span style={{
+                          fontSize: 13, fontWeight: 700,
+                          color: `hsl(var(${accent}))`,
+                          fontFamily: "'Playfair Display', serif",
+                          letterSpacing: 0.3,
+                        }}>
+                          {sub.label}
+                        </span>
+                      </div>
+                    );
+                  }
                   const isActive = selectedSubs[catId] === sub.id;
                   return (
                     <div
