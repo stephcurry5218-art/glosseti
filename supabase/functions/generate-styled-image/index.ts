@@ -426,16 +426,19 @@ serve(async (req) => {
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
         : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
 
+      const contentParts: any[] = [
+        { type: "text", text: editPrompt },
+        { type: "image_url", image_url: { url: imageBase64 } },
+      ];
+      // Add second photo for dual-photo parent-child mode
+      if (hasDualPhotos) {
+        contentParts.push({ type: "image_url", image_url: { url: secondImageBase64 } });
+      }
+
       messages = [
         {
           role: "user",
-          content: [
-            { type: "text", text: editPrompt },
-            {
-              type: "image_url",
-              image_url: { url: imageBase64 },
-            },
-          ],
+          content: contentParts,
         },
       ];
     }
