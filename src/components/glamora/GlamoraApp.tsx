@@ -34,6 +34,8 @@ export interface UserPrefs {
   photoType: PhotoType;
   photoFile: File | null;
   photoBase64: string | null;
+  secondPhotoFile: File | null;
+  secondPhotoBase64: string | null;
   gender: Gender;
   generationMode: GenerationMode;
   
@@ -53,6 +55,8 @@ const GlamoraApp = () => {
     photoType: "selfie",
     photoFile: null,
     photoBase64: null,
+    secondPhotoFile: null,
+    secondPhotoBase64: null,
     gender: "female",
     generationMode: "on-me",
   });
@@ -92,10 +96,10 @@ const GlamoraApp = () => {
     go("home");
   };
 
-  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: GenerationMode, makeupPref?: "natural" | "glam") => {
+  const handleStartGeneration = useCallback((file: File | null, photoType: PhotoType, base64: string | null, mode?: GenerationMode, makeupPref?: "natural" | "glam", secondFile?: File | null, secondBase64?: string | null) => {
     if (!tryGenerate()) return;
     const genMode = mode || "on-me";
-    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode, makeupPreference: makeupPref }));
+    setPrefs(p => ({ ...p, photoFile: file, photoType, photoBase64: base64, generationMode: genMode, makeupPreference: makeupPref, secondPhotoFile: secondFile || null, secondPhotoBase64: secondBase64 || null }));
     recordStyle({ styleCategory: prefs.styleCategory, gender: prefs.gender, generationMode: genMode });
     go("loading");
   }, [tryGenerate, go, prefs.styleCategory, prefs.gender, recordStyle]);
