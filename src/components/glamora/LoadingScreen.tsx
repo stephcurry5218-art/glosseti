@@ -187,6 +187,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
+            secondImageBase64: prefs.secondPhotoBase64 || undefined,
             styleCategory: prefs.styleCategory,
             styleSubcategory: prefs.styleSubcategory || undefined,
             photoType: prefs.photoType,
