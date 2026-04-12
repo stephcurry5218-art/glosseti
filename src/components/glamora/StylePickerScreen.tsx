@@ -432,6 +432,37 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "lounge-recovery", label: "Lounge & Recovery", desc: "Oversized hoodie, joggers, and slides — post-workout chill", emoji: "🛋️" },
     ],
   },
+  {
+    id: "cosplay", label: "Cosplay & Character", Icon: Sparkles,
+    desc: "Transform into iconic character-inspired looks — anime, cartoon, gaming, and pop culture aesthetics",
+    includes: ["Full Costumes", "Wigs & Hair", "Props & Accessories", "Makeup & Body Paint"],
+    subs: [
+      { id: "saiyan-warrior", label: "Saiyan Warrior", desc: "Spiky-haired martial artist in orange gi — power-up energy", emoji: "🔥" },
+      { id: "magical-moon-guardian", label: "Moon Guardian", desc: "Sailor-skirted magical heroine with tiara and bows", emoji: "🌙" },
+      { id: "ninja-shinobi", label: "Ninja Shinobi", desc: "Orange-clad ninja with headband and determined spirit", emoji: "🍥" },
+      { id: "retro-mouse-icon", label: "Retro Mouse Icon", desc: "Polka-dot dress, round ears, and cheerful bow — classic cartoon charm", emoji: "🎀" },
+      { id: "kung-fu-fighter", label: "Kung-Fu Fighter", desc: "Blue qipao-style outfit with ox-horn buns and spiked bracelets", emoji: "👊" },
+      { id: "mystery-sleuth", label: "Mystery Sleuth", desc: "Purple dress, orange hair, headband — groovy detective vibes", emoji: "🔍" },
+      { id: "electric-pocket-creature", label: "Pocket Creature Trainer", desc: "Cap, vest, and belt — ready to catch them all", emoji: "⚡" },
+      { id: "mecha-pilot", label: "Mecha Pilot", desc: "Plugsuit or flight suit — giant robot cockpit energy", emoji: "🤖" },
+      { id: "plumber-hero", label: "Plumber Hero", desc: "Red cap, blue overalls, and iconic mustache — let's-a-go!", emoji: "🍄" },
+      { id: "space-bounty-hunter", label: "Space Bounty Hunter", desc: "Armored suit with visor helmet — intergalactic warrior", emoji: "🚀" },
+      { id: "demon-slayer-warrior", label: "Demon Slayer", desc: "Checkered haori and katana — protecting humanity at dawn", emoji: "⚔️" },
+      { id: "spirit-detective", label: "Spirit Detective", desc: "Green school uniform and slicked-back hair — supernatural fighter", emoji: "👻" },
+      { id: "magical-girl-wand", label: "Magical Girl", desc: "Frilly transformation outfit with wand and ribbons", emoji: "🪄" },
+      { id: "cyber-hacker", label: "Cyber Hacker", desc: "Black trench coat, sunglasses, and Matrix-style noir", emoji: "🕶️" },
+      { id: "elven-archer", label: "Elven Archer", desc: "Pointed ears, tunic, and enchanted bow — fantasy woodland warrior", emoji: "🧝" },
+      { id: "pirate-captain", label: "Pirate Captain", desc: "Straw hat, vest, and swashbuckling adventure vibes", emoji: "🏴‍☠️" },
+      { id: "cat-girl-kawaii", label: "Cat Girl / Kawaii", desc: "Cat ears, maid outfit, and cute stockings — anime café aesthetic", emoji: "🐱" },
+      { id: "android-heroine", label: "Android Heroine", desc: "Gothic-lolita blindfolded warrior — elegant yet deadly", emoji: "🗡️" },
+      { id: "superhero-classic", label: "Classic Superhero", desc: "Cape, emblem, and boots — generic comic book hero styling", emoji: "🦸" },
+      { id: "villain-dark-lord", label: "Dark Villain", desc: "Black cape, armor, and ominous presence — embrace the dark side", emoji: "😈" },
+      { id: "schoolgirl-anime", label: "Anime Schoolgirl", desc: "Pleated skirt, sailor collar, and knee-high socks", emoji: "📚" },
+      { id: "rpg-knight", label: "RPG Knight", desc: "Full plate armor, shield, and sword — fantasy quest ready", emoji: "🛡️" },
+      { id: "witch-sorceress", label: "Witch / Sorceress", desc: "Pointy hat, flowing robes, and mystical accessories", emoji: "🧙" },
+      { id: "zombie-cosplay", label: "Zombie / Undead", desc: "Tattered clothes, SFX makeup, and horror aesthetics", emoji: "🧟" },
+    ],
+  },
 ];
 
 const customDetailPlaceholders: Record<string, string> = {
@@ -466,6 +497,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "tuxedos": 'e.g. "Burgundy velvet jacket", "Black satin bow tie"...',
   "fitness": 'e.g. "Nike Dri-FIT matching set", "Gymshark compression shorts"...',
   "icon-looks": 'e.g. "Old Hollywood waves", "Oversized blazer with sneakers"...',
+  "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
