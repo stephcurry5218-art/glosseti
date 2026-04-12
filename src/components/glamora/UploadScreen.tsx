@@ -1,19 +1,23 @@
 import { useRef, useState } from "react";
-import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem } from "lucide-react";
+import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem, Users, Heart } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 import { fixImageOrientation } from "./fixImageOrientation";
 
 interface Props {
   prefs: UserPrefs;
   onBack: () => void;
-  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode, makeupPref?: "natural" | "glam") => void;
+  onAnalyze: (file: File | null, photoType: PhotoType, base64: string | null, mode: GenerationMode, makeupPref?: "natural" | "glam", secondFile?: File | null, secondBase64?: string | null) => void;
 }
 
 const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const fileRef = useRef<HTMLInputElement>(null);
+  const secondFileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [base64, setBase64] = useState<string | null>(null);
+  const [secondPreview, setSecondPreview] = useState<string | null>(null);
+  const [secondFile, setSecondFile] = useState<File | null>(null);
+  const [secondBase64, setSecondBase64] = useState<string | null>(null);
   const [photoType, setPhotoType] = useState<PhotoType>(prefs.photoType);
   const [mode, setMode] = useState<GenerationMode>(prefs.generationMode);
   const [makeupPref, setMakeupPref] = useState<"natural" | "glam">(prefs.makeupPreference || "natural");
@@ -21,15 +25,15 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
+  const isDualPhotoCategory = prefs.styleCategory === "parent-child";
+
   const handleFile = async (f: File) => {
     setFile(f);
     try {
-      // Draw to canvas to strip EXIF orientation and normalize the image
       const normalizedBase64 = await fixImageOrientation(f);
       setPreview(normalizedBase64);
       setBase64(normalizedBase64);
     } catch {
-      // Fallback to raw FileReader if canvas fails
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
@@ -40,11 +44,28 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
     }
   };
 
+  const handleSecondFile = async (f: File) => {
+    setSecondFile(f);
+    try {
+      const normalizedBase64 = await fixImageOrientation(f);
+      setSecondPreview(normalizedBase64);
+      setSecondBase64(normalizedBase64);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setSecondPreview(result);
+        setSecondBase64(result);
+      };
+      reader.readAsDataURL(f);
+    }
+  };
+
   const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "grooming";
   const isHairOnly = false;
   const isFaceCategory = isMakeup || isHairOnly;
   const isMannequin = mode === "mannequin";
-  const canProceed = isMannequin || !!file;
+  const canProceed = isMannequin || (isDualPhotoCategory ? !!file : !!file);
   const showMakeupPref = !isMale && !isMakeup && !isHairOnly;
 
   return (
@@ -52,20 +73,24 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
       <div className="screen-header">
         <button className="back-btn" onClick={onBack}>←</button>
         <div>
-          <div className="header-title">{isMannequin ? "Mannequin Preview" : "Upload Photo"}</div>
+          <div className="header-title">
+            {isDualPhotoCategory ? "Family Photo Mode" : isMannequin ? "Mannequin Preview" : "Upload Photo"}
+          </div>
           <div className="header-sub">
-            {isMannequin
-              ? "See the outfit on a mannequin — no photo needed"
-              : isFaceCategory
-                ? "Upload a face photo — selfie, portrait, or any clear shot"
-                : "Selfie or full body for best styling"}
+            {isDualPhotoCategory
+              ? "Upload photos of both people for coordinated styling"
+              : isMannequin
+                ? "See the outfit on a mannequin — no photo needed"
+                : isFaceCategory
+                  ? "Upload a face photo — selfie, portrait, or any clear shot"
+                  : "Selfie or full body for best styling"}
           </div>
         </div>
       </div>
 
       <div style={{ padding: "0 22px", marginTop: 16 }}>
-        {/* Mode toggle: On Me vs Mannequin */}
-        {!isFaceCategory && (
+        {/* Mode toggle: On Me vs Mannequin — hide for dual photo categories */}
+        {!isFaceCategory && !isDualPhotoCategory && (
           <div className="anim-fadeUp" style={{
             display: "flex", gap: 6, marginBottom: 16,
             background: "hsl(var(--card))",
@@ -104,8 +129,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         )}
 
-        {/* Photo type selector — only for "on-me" mode */}
-        {!isFaceCategory && !isMannequin && (
+        {/* Photo type selector — only for "on-me" mode, non-dual */}
+        {!isFaceCategory && !isMannequin && !isDualPhotoCategory && (
           <div className="anim-fadeUp" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             {([
               { id: "selfie" as PhotoType, label: "Selfie", Icon: Camera, desc: "Face & upper body" },
@@ -135,8 +160,109 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         )}
 
-        {/* Upload area — only for "on-me" mode */}
-        {!isMannequin ? (
+        {/* Dual photo upload for parent-child */}
+        {isDualPhotoCategory && !isMannequin ? (
+          <>
+            {/* Family mode banner */}
+            <div className="anim-fadeUp" style={{
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "12px 16px", borderRadius: 14, marginBottom: 16,
+              background: `hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)"} / 0.08)`,
+              border: `1px solid hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)"} / 0.15)`,
+            }}>
+              <Users size={18} color={`hsl(${accent})`} />
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                  Family Photo Mode
+                </div>
+                <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.4 }}>
+                  Upload photos of both people — we'll style them together in coordinated outfits
+                </div>
+              </div>
+            </div>
+
+            {/* Two photo upload areas side by side */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+              {/* Parent/Person 1 photo */}
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <UserRound size={14} color={`hsl(${accent})`} />
+                  {prefs.styleCategory === "parent-child" ? "Parent" : "Person 1"}
+                </div>
+                <div
+                  className="glamora-card anim-fadeUp d1"
+                  onClick={() => fileRef.current?.click()}
+                  style={{
+                    minHeight: 180, display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: 10,
+                    cursor: "pointer",
+                    border: preview ? "none" : `2px dashed hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)"} / 0.4)`,
+                    padding: preview ? 0 : 16, overflow: "hidden",
+                  }}
+                >
+                  {preview ? (
+                    <img src={preview} alt="Parent preview" style={{ width: "100%", height: 180, objectFit: "cover", borderRadius: 22 }} />
+                  ) : (
+                    <>
+                      <Camera size={36} color="hsl(var(--glamora-gray))" strokeWidth={1} />
+                      <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center" }}>
+                        Tap to upload
+                      </div>
+                    </>
+                  )}
+                </div>
+                <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
+                  onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+              </div>
+
+              {/* Child/Person 2 photo */}
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                  <Heart size={14} color={`hsl(${accent})`} />
+                  {prefs.styleCategory === "parent-child" ? "Child" : "Person 2"}
+                </div>
+                <div
+                  className="glamora-card anim-fadeUp d2"
+                  onClick={() => secondFileRef.current?.click()}
+                  style={{
+                    minHeight: 180, display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: 10,
+                    cursor: "pointer",
+                    border: secondPreview ? "none" : `2px dashed hsla(${isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)"} / 0.4)`,
+                    padding: secondPreview ? 0 : 16, overflow: "hidden",
+                  }}
+                >
+                  {secondPreview ? (
+                    <img src={secondPreview} alt="Child preview" style={{ width: "100%", height: 180, objectFit: "cover", borderRadius: 22 }} />
+                  ) : (
+                    <>
+                      <Camera size={36} color="hsl(var(--glamora-gray))" strokeWidth={1} />
+                      <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center" }}>
+                        Tap to upload
+                      </div>
+                      <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", textAlign: "center", opacity: 0.7 }}>
+                        (Optional)
+                      </div>
+                    </>
+                  )}
+                </div>
+                <input ref={secondFileRef} type="file" accept="image/*" style={{ display: "none" }}
+                  onChange={(e) => e.target.files?.[0] && handleSecondFile(e.target.files[0])} />
+              </div>
+            </div>
+
+            {/* Helper text */}
+            <div className="anim-fadeUp d3" style={{
+              padding: "10px 14px", borderRadius: 12, marginBottom: 14,
+              background: "hsla(var(--glamora-gold) / 0.05)",
+              border: "1px solid hsla(var(--glamora-gold) / 0.1)",
+            }}>
+              <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.5 }}>
+                💡 <strong>Tip:</strong> Upload both photos for best results. If you only upload the parent's photo, we'll generate a coordinated child outfit alongside them.
+              </div>
+            </div>
+          </>
+        ) : !isMannequin ? (
           <>
             <div
               className="glamora-card anim-fadeUp d1"
@@ -204,17 +330,17 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           <Target size={18} color="hsl(var(--glamora-gold))" />
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
-              {isMannequin ? "Mode: Mannequin Preview" : "Styling for:"}{" "}
-              {prefs.styleCategory === "full-style" ? "Full Style" : prefs.styleCategory === "makeup-only" ? "Makeup & Grooming" : prefs.styleCategory.charAt(0).toUpperCase() + prefs.styleCategory.slice(1)}
+              {isMannequin ? "Mode: Mannequin Preview" : isDualPhotoCategory ? "Mode: Family Matching" : "Styling for:"}{" "}
+              {!isDualPhotoCategory && (prefs.styleCategory === "full-style" ? "Full Style" : prefs.styleCategory === "makeup-only" ? "Makeup & Grooming" : prefs.styleCategory.charAt(0).toUpperCase() + prefs.styleCategory.slice(1))}
             </div>
             <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>
-              {isMannequin ? "Outfit displayed on a dress form" : photoType === "full-body" ? "Full body analysis" : "Face & features analysis"}
+              {isMannequin ? "Outfit displayed on a dress form" : isDualPhotoCategory ? `${file ? "✓" : "○"} Parent photo  ${secondFile ? "✓" : "○"} Child photo` : photoType === "full-body" ? "Full body analysis" : "Face & features analysis"}
             </div>
           </div>
         </div>
 
         {/* Makeup preference for female users */}
-        {showMakeupPref && !isMannequin && (
+        {showMakeupPref && !isMannequin && !isDualPhotoCategory && (
           <div className="anim-fadeUp d2" style={{
             marginTop: 16, display: "flex", gap: 6,
             background: "hsl(var(--card))",
@@ -253,7 +379,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         )}
 
-        {!isMannequin && (
+        {!isMannequin && !isDualPhotoCategory && (
           <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
             <div className="section-label">Tips for Best Results</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -284,6 +410,25 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         )}
 
+        {isDualPhotoCategory && !isMannequin && (
+          <div className="anim-fadeUp d3" style={{ marginTop: 20 }}>
+            <div className="section-label">Tips for Family Photos</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {[
+                { Icon: Sun, text: "Good lighting for both photos" },
+                { Icon: Camera, text: "Clear face shots work best" },
+                { Icon: Users, text: "Full body shots show outfit coordination better" },
+                { Icon: Heart, text: "Child photo is optional — AI will create a matching child look" },
+              ].map((tip) => (
+                <div key={tip.text} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "hsl(var(--glamora-gray))" }}>
+                  <tip.Icon size={14} color="hsl(var(--glamora-gold))" />
+                  {tip.text}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style={{ marginTop: 28, paddingBottom: 40 }}>
           <button
             className={`btn-primary ${canProceed ? "btn-rose" : ""}`}
@@ -292,13 +437,15 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               opacity: canProceed ? 1 : 0.5, display: "flex", alignItems: "center", gap: 8,
               ...(canProceed && isMale ? { background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))" } : {}),
             }}
-            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode, showMakeupPref ? makeupPref : undefined)}
+            onClick={() => canProceed && onAnalyze(file, photoType, base64, mode, showMakeupPref ? makeupPref : undefined, isDualPhotoCategory ? secondFile : undefined, isDualPhotoCategory ? secondBase64 : undefined)}
           >
             {isMannequin
               ? (<>Generate Mannequin Look <ShirtIcon size={16} /></>)
-              : file
-                ? (<>Analyze My Style <Sparkles size={16} /></>)
-                : "Upload a Photo First"}
+              : isDualPhotoCategory
+                ? (<>Style Us Together <Users size={16} /></>)
+                : file
+                  ? (<>Analyze My Style <Sparkles size={16} /></>)
+                  : "Upload a Photo First"}
           </button>
         </div>
       </div>
