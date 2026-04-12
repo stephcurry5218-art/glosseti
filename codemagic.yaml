@@ -4,7 +4,7 @@ workflows:
     name: Glosseti iOS
     max_build_duration: 120
     integrations:
-      app_store_connect: Codemagic admin
+      app_store_connect: Personal Account
     environment:
       ios_signing:
         distribution_type: app_store
