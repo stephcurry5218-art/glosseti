@@ -109,6 +109,14 @@ serve(async (req) => {
         female: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement pieces, perfectly coordinated accessories, and a confident, commanding presence. The styling should feel legendary — the kind of look that defines an era. Premium magazine photography with dramatic lighting.",
         male: "in a high-fashion editorial photoshoot channeling an iconic style archetype. Wearing a signature head-to-toe look with statement accessories, perfectly tailored fit, and effortless star power. The styling should feel legendary and era-defining. Premium magazine photography with dramatic lighting.",
       },
+      fitness: {
+        female: "wearing a stylish women's athletic outfit: a fitted sports bra or crop top in a bold color, high-waisted compression leggings, women's running sneakers, a sleek smartwatch, and a matching headband or hair tie. Feminine athletic build, gym or outdoor fitness setting. Women's activewear fashion editorial photography.",
+        male: "wearing a men's performance workout outfit: fitted compression tee or muscle tank, athletic shorts or tapered joggers, men's training sneakers, a sport watch, and wireless earbuds. Athletic build, gym or outdoor fitness setting. Men's activewear fashion editorial photography.",
+      },
+      cosplay: {
+        female: "wearing a detailed, high-quality women's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate makeup, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly feminine and tailored for a woman's body.",
+        male: "wearing a detailed, high-quality men's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate grooming, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly masculine and tailored for a man's body.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
@@ -185,7 +193,39 @@ serve(async (req) => {
       ? `\n\n${iconLooksSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride;
+    // Cosplay sub-style overrides — descriptive archetypes only
+    const cosplaySubStyleOverrides: Record<string, string> = {
+      "saiyan-warrior": "IMPORTANT: Style as a martial arts warrior in an orange and blue fighting gi with a dark undershirt, blue wristbands, blue boots, and spiky upswept hair. Powerful fighting stance with energy aura effects.",
+      "magical-moon-guardian": "IMPORTANT: Style as a magical sailor-skirted heroine — white leotard with a navy sailor collar, pleated navy mini skirt, red bow on the chest, tiara with a gem, elbow-length white gloves, red knee-high boots, and long flowing blonde pigtails with bun accents.",
+      "ninja-shinobi": "IMPORTANT: Style in an orange and black tracksuit-style ninja outfit with a metal headband (forehead protector), blue open-toe sandals, and spiky blonde hair. Determined expression, action-ready pose.",
+      "retro-mouse-icon": "IMPORTANT: Style in a red polka-dot dress or skirt with white polka dots, a yellow high-heeled shoe, round black mouse ears with a bow, white gloves, and a cheerful pose. Classic cartoon character aesthetic.",
+      "kung-fu-fighter": "IMPORTANT: Style in a blue qipao-style fighting dress with gold accents, brown tights, white boots, spiked metal bracelets, and ox-horn hair buns with silk covers. Athletic martial arts stance.",
+      "mystery-sleuth": "IMPORTANT: Style in a purple mini dress, pink tights or go-go boots, a green scarf or headband, and flowing ginger/auburn hair. 70s retro detective aesthetic, confident investigative pose.",
+      "electric-pocket-creature": "IMPORTANT: Style as a creature trainer — red and white baseball cap, blue and white jacket or vest, black t-shirt, jeans, and a belt with small spherical containers. Adventurous outdoor setting.",
+      "mecha-pilot": "IMPORTANT: Style in a form-fitting plugsuit or flight suit with bold color panels (white, blue, red, or purple), neural interface headpieces, and a futuristic cockpit or hangar setting.",
+      "plumber-hero": "IMPORTANT: Style in blue denim overalls over a red long-sleeve shirt, white gloves, brown shoes, and a red cap with a circular emblem. Cheerful, heroic stance.",
+      "space-bounty-hunter": "IMPORTANT: Style in a full orange and red power suit of armor with a green visor helmet, arm cannon, and bulky shoulder pads. Sci-fi space station or alien planet setting.",
+      "demon-slayer-warrior": "IMPORTANT: Style in a black and green checkered haori jacket over a black uniform, white belt, straw sandals, and carrying a katana in a wooden sheath. Determined warrior expression.",
+      "spirit-detective": "IMPORTANT: Style in a green school uniform jacket, white undershirt, and slicked-back dark hair with a confident, supernatural fighter's stance. Urban rooftop setting.",
+      "magical-girl-wand": "IMPORTANT: Style in a frilly pastel magical girl transformation outfit with ribbons, bows, a star or heart-topped wand, knee-high boots, and flowing styled hair with magical sparkle effects.",
+      "cyber-hacker": "IMPORTANT: Style in a long black leather trench coat, black fitted clothes underneath, slim dark sunglasses, and slicked-back hair. Dramatic green-tinted lighting, digital rain effects.",
+      "elven-archer": "IMPORTANT: Style in a green or brown leather tunic, leaf-shaped brooch, leather bracers, tall boots, a cloak, and carrying an ornate longbow. Pointed ear prosthetics, enchanted forest setting.",
+      "pirate-captain": "IMPORTANT: Style in a red vest or captain's coat, white shirt, sash belt, knee-length pants, sandals, and a straw hat with a red band. Adventurous ship deck or ocean setting.",
+      "cat-girl-kawaii": "IMPORTANT: Style with cat ear headband or hair clips, a maid-style dress or kawaii outfit with apron, thigh-high stockings, mary-jane shoes, and a bell collar choker. Cute café or pastel setting.",
+      "android-heroine": "IMPORTANT: Style in a black gothic-lolita inspired short dress with white accents, thigh-high boots, long white/silver hair, and a black fabric blindfold. Elegant yet warrior-like pose with a large sword.",
+      "superhero-classic": "IMPORTANT: Style in a generic superhero costume — form-fitting suit in bold primary colors (red, blue, yellow), a cape, boots, gloves, and a chest emblem. Heroic pose with city skyline backdrop.",
+      "villain-dark-lord": "IMPORTANT: Style in dramatic dark villain attire — flowing black cape, dark armor or robes, a horned or crowned helmet, glowing accents, and an imposing stance. Dark throne room or volcanic setting.",
+      "schoolgirl-anime": "IMPORTANT: Style in a classic Japanese school uniform — white sailor-collar blouse with colored trim, pleated skirt, knee-high socks, loafers, and a school bag. Cherry blossom or school campus setting.",
+      "rpg-knight": "IMPORTANT: Style in full medieval fantasy plate armor — breastplate, pauldrons, gauntlets, greaves, a shield, and a longsword. Dramatic castle or battlefield setting with cinematic lighting.",
+      "witch-sorceress": "IMPORTANT: Style in flowing dark robes or a witch's dress, a pointed hat, a magical staff or wand, mystical jewelry, and dramatic makeup. Enchanted library or moonlit forest setting.",
+      "zombie-cosplay": "IMPORTANT: Style with SFX zombie makeup — pale skin, dark eye circles, faux wounds and blood effects, tattered and ripped everyday clothing, and a shambling undead pose. Dark, foggy graveyard setting.",
+    };
+
+    const cosplayOverride = (styleCategory === "cosplay" && styleSubcategory && cosplaySubStyleOverrides[styleSubcategory])
+      ? `\n\n${cosplaySubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
@@ -257,12 +297,15 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
+    // Strong gender enforcement
+    const genderEnforcement = `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
+
     let editPrompt: string;
     let messages: any[];
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${refinementNote}`;
+      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${refinementNote}`;
 
       messages = [
         {
@@ -283,8 +326,8 @@ serve(async (req) => {
             ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
             : "Keep face, body, background. Realistic clothing, warm lighting.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${makeupNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${makeupNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
 
       messages = [
         {
