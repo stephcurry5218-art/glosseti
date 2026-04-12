@@ -121,6 +121,10 @@ serve(async (req) => {
         female: "a cute baby girl or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
         male: "a cute baby boy or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
       },
+      "parent-child": {
+        female: "a mother and her baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
+        male: "a father and his baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];

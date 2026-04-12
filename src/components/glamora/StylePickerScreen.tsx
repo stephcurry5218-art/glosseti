@@ -522,6 +522,35 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "baby-twin-matching", label: "Sibling Matching", desc: "Coordinated outfits for siblings or parent-child duo", emoji: "👯" },
     ],
   },
+  {
+    id: "parent-child", label: "Parent-Child Matching", Icon: Heart,
+    desc: "Coordinated outfits for parent and baby — twinning never looked so good",
+    includes: ["Matching Sets", "Coordinated Colors", "Family Photo Outfits", "Mommy & Me / Daddy & Me"],
+    subs: [
+      { id: "_section_everyday", label: "👨‍👩‍👧 Everyday Matching", desc: "", emoji: "" },
+      { id: "pc-casual-match", label: "Casual Twinning", desc: "Matching graphic tees, jeans, and sneakers — effortless parent-child cool", emoji: "👕" },
+      { id: "pc-denim-duo", label: "Denim Duo", desc: "Coordinated denim jackets, jeans, and white tees — classic Americana", emoji: "👖" },
+      { id: "pc-sporty-match", label: "Sporty Match", desc: "Matching Nike/Adidas sets, sneakers, and athletic energy", emoji: "🏃" },
+      { id: "pc-streetwear-mini", label: "Street Mini-Me", desc: "Matching Jordans, graphic hoodies, and cool-kid swagger", emoji: "🔥" },
+      { id: "pc-cozy-match", label: "Cozy Twinning", desc: "Matching knit sweaters, beanies, and warm tones — snuggle vibes", emoji: "🧶" },
+      { id: "_section_special", label: "✨ Special Occasions", desc: "", emoji: "" },
+      { id: "pc-formal-match", label: "Formal Duo", desc: "Mini suit + big suit, or matching dresses — event-ready elegance", emoji: "🎩" },
+      { id: "pc-holiday-match", label: "Holiday Twinning", desc: "Matching Christmas PJs, Halloween costumes, or Easter pastels", emoji: "🎄" },
+      { id: "pc-wedding-match", label: "Wedding Duo", desc: "Coordinated wedding guest outfits — parent and flower girl/ring bearer", emoji: "💒" },
+      { id: "pc-birthday-match", label: "Birthday Match", desc: "Themed matching outfits for birthday party celebrations", emoji: "🎂" },
+      { id: "_section_aesthetic", label: "🎨 Aesthetic Matching", desc: "", emoji: "" },
+      { id: "pc-boho-match", label: "Boho Family", desc: "Earthy tones, floral prints, and natural fabrics — meadow vibes", emoji: "🌻" },
+      { id: "pc-monochrome-match", label: "Monochrome Duo", desc: "All-white, all-black, or single-color family coordination", emoji: "⬛" },
+      { id: "pc-pastel-match", label: "Pastel Pair", desc: "Soft lavender, mint, blush — gentle matching tones", emoji: "🩷" },
+      { id: "pc-tropical-match", label: "Tropical Duo", desc: "Matching Hawaiian prints, resort wear, and vacation energy", emoji: "🌴" },
+      { id: "pc-preppy-match", label: "Preppy Pair", desc: "Polo shirts, khakis, and boat shoes — mini country club vibes", emoji: "⛳" },
+      { id: "_section_gender", label: "💕 Mommy & Me / Daddy & Me", desc: "", emoji: "" },
+      { id: "pc-mommy-daughter", label: "Mommy & Daughter", desc: "Matching dresses, headbands, and feminine coordinated looks", emoji: "👩‍👧" },
+      { id: "pc-mommy-son", label: "Mommy & Son", desc: "Coordinated colors and styles — mama bear + little man", emoji: "👩‍👦" },
+      { id: "pc-daddy-daughter", label: "Daddy & Daughter", desc: "Dad in a sharp outfit, daughter in a mini version — heart-melting", emoji: "👨‍👧" },
+      { id: "pc-daddy-son", label: "Daddy & Son", desc: "Matching suits, sneakers, or jerseys — like father like son", emoji: "👨‍👦" },
+    ],
+  },
 ];
 
 const customDetailPlaceholders: Record<string, string> = {
@@ -558,6 +587,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "icon-looks": 'e.g. "Old Hollywood waves", "Oversized blazer with sneakers"...',
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
   "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
+  "parent-child": 'e.g. "Matching denim jackets", "Mommy & me floral dresses"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
