@@ -1,10 +1,7 @@
 
-workflows:
-  ios-workflow:
+ios-workflow:
     name: Glosseti iOS
     max_build_duration: 120
-    integrations:
-      app_store_connect: Personal Account
     environment:
       ios_signing:
         distribution_type: app_store
@@ -26,12 +23,6 @@ workflows:
         script: |
           cd ios/App
           pod install
-      - name: Set up code signing
-        script: xcode-project use-profiles
-      - name: Increment build number
-        script: |
-          cd ios/App
-          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
       - name: Build iOS app
         script: |
           xcode-project build-ipa \
@@ -39,35 +30,8 @@ workflows:
             --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
         submit_to_app_store: false
-
-  android-workflow:
-    name: Glosseti Android
-    max_build_duration: 120
-    environment:
-      android_signing:
-        - Glosseti - keystore
-      node: 22
-      java: 21
-    scripts:
-      - name: Install dependencies
-        script: npm install
-      - name: Build web assets
-        script: npm run build
-      - name: Sync Capacitor
-        script: npx cap sync android
-      - name: Build Android
-        script: |
-          cd android
-          ./gradlew bundleRelease \
-            -Pandroid.injected.signing.store.file=$CM_KEYSTORE_PATH \
-            -Pandroid.injected.signing.store.password=$CM_KEYSTORE_PASSWORD \
-            -Pandroid.injected.signing.key.alias=$CM_KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$CM_KEY_PASSWORD
-    artifacts:
-      - android/app/build/outputs/bundle/release/*.aab
