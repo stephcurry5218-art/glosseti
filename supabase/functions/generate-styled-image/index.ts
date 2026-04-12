@@ -388,11 +388,14 @@ serve(async (req) => {
     // Strong gender enforcement (skip for baby and parent-child categories)
     const isBaby = styleCategory === "baby-toddler";
     const isParentChild = styleCategory === "parent-child";
+    const hasDualPhotos = isParentChild && secondImageBase64;
     const genderEnforcement = isBaby
       ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Keep the child's face and appearance.`
-      : isParentChild
-        ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
-        : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
+      : isParentChild && hasDualPhotos
+        ? `\n\nCRITICAL PARENT-CHILD MATCHING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is the PARENT (a ${genderWord}) and the SECOND image is the CHILD. Generate a single image showing BOTH people together wearing beautifully coordinated matching outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. The parent's outfit should be stylish and the child's should be a miniature complementary version. Professional family fashion editorial photography.`
+        : isParentChild
+          ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
+          : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
 
     let editPrompt: string;
     let messages: any[];
