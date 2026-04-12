@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag } from "lucide-react";
+import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag, Search, X } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 
@@ -594,6 +594,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
+  const [cosplaySearch, setCosplaySearch] = useState("");
   
   const isMale = prefs.gender === "male";
 
@@ -755,8 +756,50 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
                 Pick a sub-style for {catLabel.toLowerCase()} (optional)
               </div>
+              {/* Search bar for cosplay */}
+              {catId === "cosplay" && (
+                <div style={{
+                  position: "relative", marginBottom: 10,
+                }}>
+                  <Search size={14} style={{
+                    position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
+                    color: "hsl(var(--glamora-gray))", pointerEvents: "none",
+                  }} />
+                  <input
+                    type="text"
+                    value={cosplaySearch}
+                    onChange={e => setCosplaySearch(e.target.value)}
+                    placeholder="Search characters..."
+                    style={{
+                      width: "100%", padding: "10px 34px 10px 34px", borderRadius: 12,
+                      border: `1.5px solid hsla(var(${accent}) / 0.15)`,
+                      background: "hsl(var(--card))", fontSize: 13,
+                      fontFamily: "'Jost', sans-serif", color: "hsl(var(--glamora-char))",
+                      outline: "none", transition: "all 0.2s",
+                    }}
+                    onFocus={e => { e.target.style.borderColor = `hsl(var(${accent}))`; }}
+                    onBlur={e => { e.target.style.borderColor = `hsla(var(${accent}) / 0.15)`; }}
+                  />
+                  {cosplaySearch && (
+                    <button onClick={() => setCosplaySearch("")} style={{
+                      position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
+                      background: "none", border: "none", cursor: "pointer", padding: 2,
+                      color: "hsl(var(--glamora-gray))",
+                    }}>
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+              )}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {cat.subs.map(sub => {
+                {(catId === "cosplay" && cosplaySearch.trim()
+                  ? cat.subs.filter(sub => {
+                      if (sub.id.startsWith("_section_")) return false;
+                      const q = cosplaySearch.toLowerCase();
+                      return sub.label.toLowerCase().includes(q) || sub.desc.toLowerCase().includes(q);
+                    })
+                  : cat.subs
+                ).map(sub => {
                   // Section header
                   if (sub.id.startsWith("_section_")) {
                     return (
