@@ -117,6 +117,10 @@ serve(async (req) => {
         female: "wearing a detailed, high-quality women's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate makeup, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly feminine and tailored for a woman's body.",
         male: "wearing a detailed, high-quality men's cosplay costume with accurate character-inspired styling. Complete with themed wig or styled hair, character-appropriate grooming, props and accessories. Professional cosplay photoshoot with themed backdrop and dramatic lighting. The costume should be clearly masculine and tailored for a man's body.",
       },
+      "baby-toddler": {
+        female: "a cute baby girl or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
+        male: "a cute baby boy or toddler wearing an adorable, age-appropriate outfit. The clothing should be soft, comfortable, and stylish — perfect for a children's fashion editorial. Bright, cheerful lighting with a clean, family-friendly setting. Professional kids' fashion photography.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
