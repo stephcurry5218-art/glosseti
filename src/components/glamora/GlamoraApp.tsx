@@ -55,6 +55,8 @@ const GlamoraApp = () => {
     photoType: "selfie",
     photoFile: null,
     photoBase64: null,
+    secondPhotoFile: null,
+    secondPhotoBase64: null,
     gender: "female",
     generationMode: "on-me",
   });
