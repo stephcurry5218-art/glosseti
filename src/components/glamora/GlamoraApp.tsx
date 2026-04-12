@@ -34,6 +34,8 @@ export interface UserPrefs {
   photoType: PhotoType;
   photoFile: File | null;
   photoBase64: string | null;
+  secondPhotoFile: File | null;
+  secondPhotoBase64: string | null;
   gender: Gender;
   generationMode: GenerationMode;
   
