@@ -259,11 +259,31 @@ serve(async (req) => {
       "steampunk-explorer": "IMPORTANT: Style in a Victorian-inspired outfit with brass goggles on the forehead, a fitted corset or waistcoat with gear/cog details, high-waisted pants or layered skirts, leather boots with buckles, a utility belt with vials and tools, and a top hat with gears. Industrial workshop or airship deck setting with copper and steam elements.",
     };
 
+    // Baby & Toddler sub-style overrides
+    const babySubStyleOverrides: Record<string, string> = {
+      "baby-formal": "IMPORTANT: Style the baby/toddler in a tiny formal outfit — a mini suit with bow tie for boys, or a tulle dress with headband for girls. Patent leather shoes. Clean, bright nursery or garden party setting.",
+      "baby-casual": "IMPORTANT: Style the baby/toddler in comfortable everyday clothes — soft cotton graphic onesie or t-shirt, stretchy leggings or joggers, and soft-sole shoes. Playful, bright indoor or park setting.",
+      "baby-matching-set": "IMPORTANT: Style the baby/toddler in a perfectly coordinated matching set — top and bottom in the same pattern/color family. Clean, modern styling. Bright lifestyle photography.",
+      "baby-sporty": "IMPORTANT: Style the baby/toddler in mini athletic wear — tiny sneakers, joggers or shorts, and a sporty tee or hoodie. Team-inspired colors. Playful outdoor setting.",
+      "baby-princess": "IMPORTANT: Style the baby/toddler girl in a fluffy tutu skirt, sparkly headband or tiara, ballet-style shoes, and a cute top. Whimsical, fairytale-inspired setting.",
+      "baby-denim": "IMPORTANT: Style the baby/toddler in mini denim — tiny jeans or denim jacket, paired with a cute graphic tee and small sneakers. Casual, stylish kids' fashion editorial.",
+      "baby-cozy": "IMPORTANT: Style the baby/toddler in cozy knitwear — chunky knit sweater, soft fleece onesie, fuzzy booties, and a knit beanie. Warm, cozy indoor setting with soft blankets.",
+      "baby-summer": "IMPORTANT: Style the baby/toddler in bright summer clothes — a colorful romper or sunsuit, tiny sandals, a floppy sun hat, and sunglasses. Sunny outdoor garden or beach setting.",
+      "baby-holiday": "IMPORTANT: Style the baby/toddler in a themed holiday outfit — Christmas elf/Santa outfit, Halloween costume, or Easter pastels. Festive, age-appropriate, and adorable.",
+      "baby-boho": "IMPORTANT: Style the baby/toddler in earthy boho tones — floral print romper or dress, moccasin shoes, a flower headband, and natural fabric textures. Outdoor meadow setting.",
+      "baby-streetwear": "IMPORTANT: Style the baby/toddler in mini streetwear — tiny Jordans or Nikes, a graphic tee, joggers or cargo pants, and a snapback cap. Cool-kid energy in a lifestyle editorial setting.",
+      "baby-twin-matching": "IMPORTANT: Style the baby/toddler in a matching outfit designed for sibling or parent-child coordination — same colors, complementary patterns. Show coordinated styling.",
+    };
+
     const cosplayOverride = (styleCategory === "cosplay" && styleSubcategory && cosplaySubStyleOverrides[styleSubcategory])
       ? `\n\n${cosplaySubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride;
+    const babyOverride = (styleCategory === "baby-toddler" && styleSubcategory && babySubStyleOverrides[styleSubcategory])
+      ? `\n\n${babySubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
