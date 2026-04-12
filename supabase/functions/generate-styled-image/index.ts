@@ -297,6 +297,9 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
+    // Strong gender enforcement
+    const genderEnforcement = `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
+
     let editPrompt: string;
     let messages: any[];
 
