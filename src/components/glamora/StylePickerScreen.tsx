@@ -437,30 +437,64 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Transform into iconic character-inspired looks — anime, cartoon, gaming, and pop culture aesthetics",
     includes: ["Full Costumes", "Wigs & Hair", "Props & Accessories", "Makeup & Body Paint"],
     subs: [
+      // Anime & Manga
       { id: "saiyan-warrior", label: "Saiyan Warrior", desc: "Spiky-haired martial artist in orange gi — power-up energy", emoji: "🔥" },
       { id: "magical-moon-guardian", label: "Moon Guardian", desc: "Sailor-skirted magical heroine with tiara and bows", emoji: "🌙" },
       { id: "ninja-shinobi", label: "Ninja Shinobi", desc: "Orange-clad ninja with headband and determined spirit", emoji: "🍥" },
+      { id: "demon-slayer-warrior", label: "Demon Slayer", desc: "Checkered haori and katana — protecting humanity at dawn", emoji: "⚔️" },
+      { id: "spirit-detective", label: "Spirit Detective", desc: "Green school uniform and slicked-back hair — supernatural fighter", emoji: "👻" },
+      { id: "magical-girl-wand", label: "Magical Girl", desc: "Frilly transformation outfit with wand and ribbons", emoji: "🪄" },
+      { id: "mecha-pilot", label: "Mecha Pilot", desc: "Plugsuit or flight suit — giant robot cockpit energy", emoji: "🤖" },
+      { id: "android-heroine", label: "Android Heroine", desc: "Gothic-lolita blindfolded warrior — elegant yet deadly", emoji: "🗡️" },
+      { id: "schoolgirl-anime", label: "Anime Schoolgirl", desc: "Pleated skirt, sailor collar, and knee-high socks", emoji: "📚" },
+      { id: "pirate-captain", label: "Pirate Captain", desc: "Straw hat, vest, and swashbuckling adventure vibes", emoji: "🏴‍☠️" },
+      { id: "cat-girl-kawaii", label: "Cat Girl / Kawaii", desc: "Cat ears, maid outfit, and cute stockings — anime café aesthetic", emoji: "🐱" },
+      { id: "alchemist-hero", label: "Alchemist Hero", desc: "Red coat, automail arm, and determined alchemist on a quest", emoji: "⚗️" },
+      { id: "titan-fighter", label: "Titan Fighter", desc: "Green cape, ODM gear harness, and Survey Corps uniform", emoji: "🏔️" },
+      // Classic Cartoon
       { id: "retro-mouse-icon", label: "Retro Mouse Icon", desc: "Polka-dot dress, round ears, and cheerful bow — classic cartoon charm", emoji: "🎀" },
       { id: "kung-fu-fighter", label: "Kung-Fu Fighter", desc: "Blue qipao-style outfit with ox-horn buns and spiked bracelets", emoji: "👊" },
       { id: "mystery-sleuth", label: "Mystery Sleuth", desc: "Purple dress, orange hair, headband — groovy detective vibes", emoji: "🔍" },
       { id: "electric-pocket-creature", label: "Pocket Creature Trainer", desc: "Cap, vest, and belt — ready to catch them all", emoji: "⚡" },
-      { id: "mecha-pilot", label: "Mecha Pilot", desc: "Plugsuit or flight suit — giant robot cockpit energy", emoji: "🤖" },
       { id: "plumber-hero", label: "Plumber Hero", desc: "Red cap, blue overalls, and iconic mustache — let's-a-go!", emoji: "🍄" },
-      { id: "space-bounty-hunter", label: "Space Bounty Hunter", desc: "Armored suit with visor helmet — intergalactic warrior", emoji: "🚀" },
-      { id: "demon-slayer-warrior", label: "Demon Slayer", desc: "Checkered haori and katana — protecting humanity at dawn", emoji: "⚔️" },
-      { id: "spirit-detective", label: "Spirit Detective", desc: "Green school uniform and slicked-back hair — supernatural fighter", emoji: "👻" },
-      { id: "magical-girl-wand", label: "Magical Girl", desc: "Frilly transformation outfit with wand and ribbons", emoji: "🪄" },
-      { id: "cyber-hacker", label: "Cyber Hacker", desc: "Black trench coat, sunglasses, and Matrix-style noir", emoji: "🕶️" },
-      { id: "elven-archer", label: "Elven Archer", desc: "Pointed ears, tunic, and enchanted bow — fantasy woodland warrior", emoji: "🧝" },
-      { id: "pirate-captain", label: "Pirate Captain", desc: "Straw hat, vest, and swashbuckling adventure vibes", emoji: "🏴‍☠️" },
-      { id: "cat-girl-kawaii", label: "Cat Girl / Kawaii", desc: "Cat ears, maid outfit, and cute stockings — anime café aesthetic", emoji: "🐱" },
-      { id: "android-heroine", label: "Android Heroine", desc: "Gothic-lolita blindfolded warrior — elegant yet deadly", emoji: "🗡️" },
+      // Disney Princess Archetypes
+      { id: "ice-queen", label: "Ice Queen", desc: "Shimmering blue gown, flowing platinum braid, and ice crystal magic", emoji: "❄️" },
+      { id: "ocean-voyager", label: "Ocean Voyager", desc: "Island warrior princess with tropical necklace and oar — the ocean chose her", emoji: "🌊" },
+      { id: "enchanted-rose-princess", label: "Rose Princess", desc: "Golden ball gown, rose motif, and classic fairy-tale elegance", emoji: "🌹" },
+      { id: "glass-slipper-belle", label: "Glass Slipper Belle", desc: "Sparkling blue gown, updo, choker, and midnight magic", emoji: "👠" },
+      { id: "desert-jewel-princess", label: "Desert Jewel", desc: "Turquoise harem outfit, gold jewelry, and magic lamp adventure", emoji: "🪔" },
+      { id: "forest-archer-princess", label: "Forest Archer", desc: "Emerald dress, wild curly red hair, and expert bow skills", emoji: "🏹" },
+      { id: "tower-dreamer", label: "Tower Dreamer", desc: "Purple dress, extremely long golden hair, and a cast-iron frying pan", emoji: "🗼" },
+      { id: "underwater-princess", label: "Underwater Princess", desc: "Seashell top, shimmering tail-inspired skirt, and flowing red hair", emoji: "🧜" },
+      { id: "sleeping-beauty-royal", label: "Sleeping Royal", desc: "Regal pink or blue gown, golden tiara, and enchanted grace", emoji: "👸" },
+      // Video Game Characters
+      { id: "space-bounty-hunter", label: "Space Bounty Hunter", desc: "Armored power suit with visor helmet — intergalactic warrior", emoji: "🚀" },
+      { id: "hylian-hero", label: "Hylian Hero", desc: "Green tunic, pointed hat, master sword, and Hylian shield", emoji: "🗡️" },
+      { id: "hedgehog-speedster", label: "Hedgehog Speedster", desc: "Blue spiky look, red shoes, and supersonic speed aesthetic", emoji: "💨" },
+      { id: "battle-royale-soldier", label: "Battle Royale Soldier", desc: "Tactical gear, colorful armor skins, and a victory dance pose", emoji: "🎯" },
+      { id: "block-builder", label: "Block Builder", desc: "Pixelated armor, diamond pickaxe, and blocky adventure aesthetic", emoji: "⛏️" },
+      { id: "street-fighter-warrior", label: "Street Fighter", desc: "White gi, red headband, and martial arts power stance", emoji: "🥋" },
+      { id: "racing-plumber", label: "Racing Champion", desc: "Racing jumpsuit, helmet, and go-kart energy — first place vibes", emoji: "🏎️" },
+      { id: "goddess-of-war", label: "God of War", desc: "Spartan armor, red war paint, and ancient Greek warrior rage", emoji: "⚔️" },
+      { id: "vault-dweller", label: "Vault Dweller", desc: "Blue and yellow jumpsuit, Pip-Boy device, and post-apocalyptic wasteland gear", emoji: "☢️" },
+      // Comic Book & Superhero
       { id: "superhero-classic", label: "Classic Superhero", desc: "Cape, emblem, and boots — generic comic book hero styling", emoji: "🦸" },
       { id: "villain-dark-lord", label: "Dark Villain", desc: "Black cape, armor, and ominous presence — embrace the dark side", emoji: "😈" },
-      { id: "schoolgirl-anime", label: "Anime Schoolgirl", desc: "Pleated skirt, sailor collar, and knee-high socks", emoji: "📚" },
+      { id: "web-slinger", label: "Web Slinger", desc: "Red and blue bodysuit with web pattern and mask — friendly neighborhood hero", emoji: "🕸️" },
+      { id: "dark-knight-vigilante", label: "Dark Vigilante", desc: "Black armored suit, cape, and cowl — justice from the shadows", emoji: "🦇" },
+      { id: "amazonian-warrior", label: "Amazonian Warrior", desc: "Golden tiara, red and blue armor, lasso, and bracers — divine warrior", emoji: "⭐" },
+      { id: "cosmic-captain", label: "Cosmic Captain", desc: "Star-spangled suit with shield — patriotic super soldier energy", emoji: "🛡️" },
+      { id: "thunder-god", label: "Thunder God", desc: "Flowing cape, winged helmet, and enchanted hammer — Norse power", emoji: "⚡" },
+      { id: "clawed-mutant", label: "Clawed Mutant", desc: "Yellow and blue suit, wild hair, and adamantium claws — berserker rage", emoji: "🐺" },
+      { id: "anti-hero-symbiote", label: "Symbiote Anti-Hero", desc: "Black organic suit with white spider emblem and sharp teeth — dark power", emoji: "🖤" },
+      // Fantasy & Horror
+      { id: "cyber-hacker", label: "Cyber Hacker", desc: "Black trench coat, sunglasses, and digital noir", emoji: "🕶️" },
+      { id: "elven-archer", label: "Elven Archer", desc: "Pointed ears, tunic, and enchanted bow — fantasy woodland warrior", emoji: "🧝" },
       { id: "rpg-knight", label: "RPG Knight", desc: "Full plate armor, shield, and sword — fantasy quest ready", emoji: "🛡️" },
       { id: "witch-sorceress", label: "Witch / Sorceress", desc: "Pointy hat, flowing robes, and mystical accessories", emoji: "🧙" },
       { id: "zombie-cosplay", label: "Zombie / Undead", desc: "Tattered clothes, SFX makeup, and horror aesthetics", emoji: "🧟" },
+      { id: "vampire-noble", label: "Vampire Noble", desc: "Gothic cape, fangs, pale makeup, and aristocratic dark elegance", emoji: "🧛" },
+      { id: "steampunk-explorer", label: "Steampunk Explorer", desc: "Brass goggles, corset, gears, and Victorian-industrial adventure gear", emoji: "⚙️" },
     ],
   },
 ];
@@ -634,6 +668,22 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
             {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
           </div>
         </div>
+
+        {/* Cosplay disclaimer */}
+        {selected.includes("cosplay") && (
+          <div className="anim-fadeUp" style={{
+            padding: "12px 14px", borderRadius: 14, marginBottom: 14,
+            background: "hsla(var(--glamora-gold) / 0.06)",
+            border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
+              ⚠️ Fan-Inspired Costumes — Not Officially Licensed
+            </div>
+            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", lineHeight: 1.5 }}>
+              All cosplay styles are original, fan-inspired aesthetic descriptions and are not affiliated with, endorsed by, or licensed by any character, franchise, or intellectual property owner. Costume shopping links lead to third-party fan-made or generic costume products. All trademarks belong to their respective owners.
+            </div>
+          </div>
+        )}
 
         {/* Subcategory selectors for ALL selected categories */}
         {selected.map(catId => {
