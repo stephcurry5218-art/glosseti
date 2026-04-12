@@ -669,6 +669,22 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           </div>
         </div>
 
+        {/* Cosplay disclaimer */}
+        {selected.includes("cosplay") && (
+          <div className="anim-fadeUp" style={{
+            padding: "12px 14px", borderRadius: 14, marginBottom: 14,
+            background: "hsla(var(--glamora-gold) / 0.06)",
+            border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
+              ⚠️ Fan-Inspired Costumes — Not Officially Licensed
+            </div>
+            <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))", lineHeight: 1.5 }}>
+              All cosplay styles are original, fan-inspired aesthetic descriptions and are not affiliated with, endorsed by, or licensed by any character, franchise, or intellectual property owner. Costume shopping links lead to third-party fan-made or generic costume products. All trademarks belong to their respective owners.
+            </div>
+          </div>
+        )}
+
         {/* Subcategory selectors for ALL selected categories */}
         {selected.map(catId => {
           const cat = filtered.find(c => c.id === catId);
