@@ -437,7 +437,8 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     desc: "Transform into iconic character-inspired looks — anime, cartoon, gaming, and pop culture aesthetics",
     includes: ["Full Costumes", "Wigs & Hair", "Props & Accessories", "Makeup & Body Paint"],
     subs: [
-      // Anime & Manga
+      // Anime & Manga — section marker via special id prefix
+      { id: "_section_anime", label: "🎌 Anime & Manga", desc: "", emoji: "" },
       { id: "saiyan-warrior", label: "Saiyan Warrior", desc: "Spiky-haired martial artist in orange gi — power-up energy", emoji: "🔥" },
       { id: "magical-moon-guardian", label: "Moon Guardian", desc: "Sailor-skirted magical heroine with tiara and bows", emoji: "🌙" },
       { id: "ninja-shinobi", label: "Ninja Shinobi", desc: "Orange-clad ninja with headband and determined spirit", emoji: "🍥" },
@@ -452,12 +453,14 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "alchemist-hero", label: "Alchemist Hero", desc: "Red coat, automail arm, and determined alchemist on a quest", emoji: "⚗️" },
       { id: "titan-fighter", label: "Titan Fighter", desc: "Green cape, ODM gear harness, and Survey Corps uniform", emoji: "🏔️" },
       // Classic Cartoon
+      { id: "_section_cartoon", label: "📺 Classic Cartoon", desc: "", emoji: "" },
       { id: "retro-mouse-icon", label: "Retro Mouse Icon", desc: "Polka-dot dress, round ears, and cheerful bow — classic cartoon charm", emoji: "🎀" },
       { id: "kung-fu-fighter", label: "Kung-Fu Fighter", desc: "Blue qipao-style outfit with ox-horn buns and spiked bracelets", emoji: "👊" },
       { id: "mystery-sleuth", label: "Mystery Sleuth", desc: "Purple dress, orange hair, headband — groovy detective vibes", emoji: "🔍" },
       { id: "electric-pocket-creature", label: "Pocket Creature Trainer", desc: "Cap, vest, and belt — ready to catch them all", emoji: "⚡" },
       { id: "plumber-hero", label: "Plumber Hero", desc: "Red cap, blue overalls, and iconic mustache — let's-a-go!", emoji: "🍄" },
       // Disney Princess Archetypes
+      { id: "_section_disney", label: "👸 Disney Princess Archetypes", desc: "", emoji: "" },
       { id: "ice-queen", label: "Ice Queen", desc: "Shimmering blue gown, flowing platinum braid, and ice crystal magic", emoji: "❄️" },
       { id: "ocean-voyager", label: "Ocean Voyager", desc: "Island warrior princess with tropical necklace and oar — the ocean chose her", emoji: "🌊" },
       { id: "enchanted-rose-princess", label: "Rose Princess", desc: "Golden ball gown, rose motif, and classic fairy-tale elegance", emoji: "🌹" },
@@ -468,6 +471,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "underwater-princess", label: "Underwater Princess", desc: "Seashell top, shimmering tail-inspired skirt, and flowing red hair", emoji: "🧜" },
       { id: "sleeping-beauty-royal", label: "Sleeping Royal", desc: "Regal pink or blue gown, golden tiara, and enchanted grace", emoji: "👸" },
       // Video Game Characters
+      { id: "_section_gaming", label: "🎮 Video Game Characters", desc: "", emoji: "" },
       { id: "space-bounty-hunter", label: "Space Bounty Hunter", desc: "Armored power suit with visor helmet — intergalactic warrior", emoji: "🚀" },
       { id: "hylian-hero", label: "Hylian Hero", desc: "Green tunic, pointed hat, master sword, and Hylian shield", emoji: "🗡️" },
       { id: "hedgehog-speedster", label: "Hedgehog Speedster", desc: "Blue spiky look, red shoes, and supersonic speed aesthetic", emoji: "💨" },
@@ -478,6 +482,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "goddess-of-war", label: "God of War", desc: "Spartan armor, red war paint, and ancient Greek warrior rage", emoji: "⚔️" },
       { id: "vault-dweller", label: "Vault Dweller", desc: "Blue and yellow jumpsuit, Pip-Boy device, and post-apocalyptic wasteland gear", emoji: "☢️" },
       // Comic Book & Superhero
+      { id: "_section_comics", label: "💥 Comic Book & Superhero", desc: "", emoji: "" },
       { id: "superhero-classic", label: "Classic Superhero", desc: "Cape, emblem, and boots — generic comic book hero styling", emoji: "🦸" },
       { id: "villain-dark-lord", label: "Dark Villain", desc: "Black cape, armor, and ominous presence — embrace the dark side", emoji: "😈" },
       { id: "web-slinger", label: "Web Slinger", desc: "Red and blue bodysuit with web pattern and mask — friendly neighborhood hero", emoji: "🕸️" },
@@ -488,6 +493,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "clawed-mutant", label: "Clawed Mutant", desc: "Yellow and blue suit, wild hair, and adamantium claws — berserker rage", emoji: "🐺" },
       { id: "anti-hero-symbiote", label: "Symbiote Anti-Hero", desc: "Black organic suit with white spider emblem and sharp teeth — dark power", emoji: "🖤" },
       // Fantasy & Horror
+      { id: "_section_fantasy", label: "🧙 Fantasy & Horror", desc: "", emoji: "" },
       { id: "cyber-hacker", label: "Cyber Hacker", desc: "Black trench coat, sunglasses, and digital noir", emoji: "🕶️" },
       { id: "elven-archer", label: "Elven Archer", desc: "Pointed ears, tunic, and enchanted bow — fantasy woodland warrior", emoji: "🧝" },
       { id: "rpg-knight", label: "RPG Knight", desc: "Full plate armor, shield, and sword — fantasy quest ready", emoji: "🛡️" },
@@ -721,6 +727,25 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {cat.subs.map(sub => {
+                  // Section header
+                  if (sub.id.startsWith("_section_")) {
+                    return (
+                      <div key={sub.id} style={{
+                        padding: "10px 0 4px",
+                        marginTop: 4,
+                        borderBottom: `1px solid hsla(var(${accent}) / 0.12)`,
+                      }}>
+                        <span style={{
+                          fontSize: 13, fontWeight: 700,
+                          color: `hsl(var(${accent}))`,
+                          fontFamily: "'Playfair Display', serif",
+                          letterSpacing: 0.3,
+                        }}>
+                          {sub.label}
+                        </span>
+                      </div>
+                    );
+                  }
                   const isActive = selectedSubs[catId] === sub.id;
                   return (
                     <div
