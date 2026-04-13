@@ -125,6 +125,10 @@ serve(async (req) => {
         female: "a mother and her baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
         male: "a father and his baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
       },
+      "couples": {
+        female: "a stylish couple — a woman and her partner — wearing beautifully coordinated matching or complementary outfits. Both are dressed to impress with harmonized colors, fabrics, and styles. Professional couples fashion editorial photography with romantic, warm lighting. The image shows both people together, showcasing how their outfits complement each other.",
+        male: "a stylish couple — a man and his partner — wearing beautifully coordinated matching or complementary outfits. Both are dressed to impress with harmonized colors, fabrics, and styles. Professional couples fashion editorial photography with romantic, warm lighting. The image shows both people together, showcasing how their outfits complement each other.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
@@ -313,7 +317,31 @@ serve(async (req) => {
       ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride;
+    // Couples sub-style overrides
+    const couplesSubStyleOverrides: Record<string, string> = {
+      "cp-casual-match": "IMPORTANT: Show a couple wearing coordinated casual outfits — matching or complementary tees, jeans, and sneakers. Relaxed lifestyle editorial.",
+      "cp-athleisure": "IMPORTANT: Show a couple in matching athletic wear — coordinated workout sets, matching sneakers, sporty accessories. Gym or active lifestyle setting.",
+      "cp-streetwear": "IMPORTANT: Show a couple in coordinated streetwear — matching Jordans, oversized hoodies, and hypebeast energy. Urban editorial.",
+      "cp-cozy-couple": "IMPORTANT: Show a couple in matching cozy outfits — coordinated knit sweaters, beanies, and warm tones. Cozy indoor or autumn setting.",
+      "cp-romantic-dinner": "IMPORTANT: Show a couple dressed elegantly for dinner — coordinated formal-casual looks, complementary colors. Candlelit restaurant ambiance.",
+      "cp-rooftop-drinks": "IMPORTANT: Show a couple in trendy coordinated outfits for a night out — stylish, complementary looks. Rooftop bar setting.",
+      "cp-club-night": "IMPORTANT: Show a couple in bold, coordinated outfits for clubbing — matching dark tones, statement pieces, and head-turning energy. Nightlife setting.",
+      "cp-wedding-guest": "IMPORTANT: Show a couple in coordinated formal wedding guest attire — complementary dress and suit. Elegant venue setting.",
+      "cp-gala-black-tie": "IMPORTANT: Show a couple in black-tie attire — stunning gown and tuxedo, perfectly coordinated. Red carpet editorial.",
+      "cp-holiday-match": "IMPORTANT: Show a couple in matching holiday-themed outfits — Christmas sweaters, Valentine's red, or festive coordination.",
+      "cp-vacation": "IMPORTANT: Show a couple in coordinated resort wear — linen, pastels, tropical prints. Beach or resort vacation setting.",
+      "cp-monochrome": "IMPORTANT: Show a couple in monochrome coordinated outfits — all-black, all-white, or single-color palette. Clean editorial styling.",
+      "cp-boho-couple": "IMPORTANT: Show a couple in coordinated boho outfits — earthy tones, flowing fabrics, natural textures. Outdoor meadow setting.",
+      "cp-preppy-pair": "IMPORTANT: Show a couple in coordinated preppy outfits — polos, blazers, clean lines. Country club aesthetic.",
+      "cp-edgy-couple": "IMPORTANT: Show a couple in coordinated edgy outfits — leather, chains, dark tones. Rebellious couple energy.",
+      "cp-vintage-duo": "IMPORTANT: Show a couple in coordinated retro-inspired outfits — 70s, 80s, or 90s aesthetic. Vintage editorial photography.",
+    };
+
+    const couplesOverride = (styleCategory === "couples" && styleSubcategory && couplesSubStyleOverrides[styleSubcategory])
+      ? `\n\n${couplesSubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
@@ -385,17 +413,22 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
-    // Strong gender enforcement (skip for baby and parent-child categories)
+    // Strong gender enforcement (skip for baby, parent-child, and couples categories)
     const isBaby = styleCategory === "baby-toddler";
     const isParentChild = styleCategory === "parent-child";
-    const hasDualPhotos = isParentChild && secondImageBase64;
+    const isCouples = styleCategory === "couples";
+    const hasDualPhotos = (isParentChild || isCouples) && secondImageBase64;
     const genderEnforcement = isBaby
       ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Keep the child's face and appearance.`
-      : isParentChild && hasDualPhotos
-        ? `\n\nCRITICAL PARENT-CHILD MATCHING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is the PARENT (a ${genderWord}) and the SECOND image is the CHILD. Generate a single image showing BOTH people together wearing beautifully coordinated matching outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. The parent's outfit should be stylish and the child's should be a miniature complementary version. Professional family fashion editorial photography.`
-        : isParentChild
-          ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
-          : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
+      : isCouples && hasDualPhotos
+        ? `\n\nCRITICAL COUPLES STYLING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is one partner and the SECOND image is the other partner. Generate a single image showing BOTH people together wearing beautifully coordinated complementary outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. Their outfits should harmonize in color, style, and vibe while each being flattering for the individual. Professional couples fashion editorial photography.`
+        : isCouples
+          ? `\n\nCRITICAL COUPLES STYLING: This is a couples outfit request. The uploaded photo is of one partner (a ${genderWord}). Generate an image showing this ${genderWord} alongside their partner, BOTH wearing beautifully coordinated complementary outfits. Show BOTH people together in the same image. Keep the uploaded person's face and appearance. Professional couples fashion editorial photography.`
+          : isParentChild && hasDualPhotos
+            ? `\n\nCRITICAL PARENT-CHILD MATCHING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is the PARENT (a ${genderWord}) and the SECOND image is the CHILD. Generate a single image showing BOTH people together wearing beautifully coordinated matching outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. The parent's outfit should be stylish and the child's should be a miniature complementary version. Professional family fashion editorial photography.`
+            : isParentChild
+              ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
+              : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
 
     let editPrompt: string;
     let messages: any[];
