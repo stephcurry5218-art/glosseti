@@ -125,6 +125,10 @@ serve(async (req) => {
         female: "a mother and her baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
         male: "a father and his baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
       },
+      "couples": {
+        female: "a stylish couple — a woman and her partner — wearing beautifully coordinated matching or complementary outfits. Both are dressed to impress with harmonized colors, fabrics, and styles. Professional couples fashion editorial photography with romantic, warm lighting. The image shows both people together, showcasing how their outfits complement each other.",
+        male: "a stylish couple — a man and his partner — wearing beautifully coordinated matching or complementary outfits. Both are dressed to impress with harmonized colors, fabrics, and styles. Professional couples fashion editorial photography with romantic, warm lighting. The image shows both people together, showcasing how their outfits complement each other.",
+      },
     };
 
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
@@ -313,7 +317,31 @@ serve(async (req) => {
       ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride;
+    // Couples sub-style overrides
+    const couplesSubStyleOverrides: Record<string, string> = {
+      "cp-casual-match": "IMPORTANT: Show a couple wearing coordinated casual outfits — matching or complementary tees, jeans, and sneakers. Relaxed lifestyle editorial.",
+      "cp-athleisure": "IMPORTANT: Show a couple in matching athletic wear — coordinated workout sets, matching sneakers, sporty accessories. Gym or active lifestyle setting.",
+      "cp-streetwear": "IMPORTANT: Show a couple in coordinated streetwear — matching Jordans, oversized hoodies, and hypebeast energy. Urban editorial.",
+      "cp-cozy-couple": "IMPORTANT: Show a couple in matching cozy outfits — coordinated knit sweaters, beanies, and warm tones. Cozy indoor or autumn setting.",
+      "cp-romantic-dinner": "IMPORTANT: Show a couple dressed elegantly for dinner — coordinated formal-casual looks, complementary colors. Candlelit restaurant ambiance.",
+      "cp-rooftop-drinks": "IMPORTANT: Show a couple in trendy coordinated outfits for a night out — stylish, complementary looks. Rooftop bar setting.",
+      "cp-club-night": "IMPORTANT: Show a couple in bold, coordinated outfits for clubbing — matching dark tones, statement pieces, and head-turning energy. Nightlife setting.",
+      "cp-wedding-guest": "IMPORTANT: Show a couple in coordinated formal wedding guest attire — complementary dress and suit. Elegant venue setting.",
+      "cp-gala-black-tie": "IMPORTANT: Show a couple in black-tie attire — stunning gown and tuxedo, perfectly coordinated. Red carpet editorial.",
+      "cp-holiday-match": "IMPORTANT: Show a couple in matching holiday-themed outfits — Christmas sweaters, Valentine's red, or festive coordination.",
+      "cp-vacation": "IMPORTANT: Show a couple in coordinated resort wear — linen, pastels, tropical prints. Beach or resort vacation setting.",
+      "cp-monochrome": "IMPORTANT: Show a couple in monochrome coordinated outfits — all-black, all-white, or single-color palette. Clean editorial styling.",
+      "cp-boho-couple": "IMPORTANT: Show a couple in coordinated boho outfits — earthy tones, flowing fabrics, natural textures. Outdoor meadow setting.",
+      "cp-preppy-pair": "IMPORTANT: Show a couple in coordinated preppy outfits — polos, blazers, clean lines. Country club aesthetic.",
+      "cp-edgy-couple": "IMPORTANT: Show a couple in coordinated edgy outfits — leather, chains, dark tones. Rebellious couple energy.",
+      "cp-vintage-duo": "IMPORTANT: Show a couple in coordinated retro-inspired outfits — 70s, 80s, or 90s aesthetic. Vintage editorial photography.",
+    };
+
+    const couplesOverride = (styleCategory === "couples" && styleSubcategory && couplesSubStyleOverrides[styleSubcategory])
+      ? `\n\n${couplesSubStyleOverrides[styleSubcategory]}`
+      : "";
+
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
