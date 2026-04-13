@@ -615,6 +615,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
   "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
   "parent-child": 'e.g. "Matching denim jackets", "Mommy & me floral dresses"...',
+  "couples": 'e.g. "Matching all-black outfits", "His & hers Jordans"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
