@@ -63,7 +63,17 @@ const GlamoraApp = () => {
   });
 
 
-  const {
+  // Network connectivity detection
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  useEffect(() => {
+    const goOffline = () => setIsOffline(true);
+    const goOnline = () => setIsOffline(false);
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
+    return () => { window.removeEventListener("offline", goOffline); window.removeEventListener("online", goOnline); };
+  }, []);
+
+
     subscription, canGenerate, remainingGenerations, showWatermark,
     showPaywall, setShowPaywall, showUpgradePrompt, setShowUpgradePrompt,
     lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
