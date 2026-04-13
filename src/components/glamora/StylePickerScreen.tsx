@@ -846,14 +846,31 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                       </div>
                     );
                   }
-                  const isActive = selectedSubs[catId] === sub.id;
+                  const isMultiSub = catId === "couples" || catId === "parent-child";
+                  const currentVal = selectedSubs[catId];
+                  const isActive = isMultiSub
+                    ? Array.isArray(currentVal) && currentVal.includes(sub.id)
+                    : currentVal === sub.id;
                   return (
                     <div
                       key={sub.id}
-                      onClick={() => setSelectedSubs(prev => ({
-                        ...prev,
-                        [catId]: isActive ? undefined as any : sub.id,
-                      }))}
+                      onClick={() => {
+                        if (isMultiSub) {
+                          setSelectedSubs(prev => {
+                            const arr = Array.isArray(prev[catId]) ? [...(prev[catId] as string[])] : prev[catId] ? [prev[catId] as string] : [];
+                            if (arr.includes(sub.id)) {
+                              const filtered = arr.filter(s => s !== sub.id);
+                              return { ...prev, [catId]: filtered.length ? filtered : undefined as any };
+                            }
+                            return { ...prev, [catId]: [...arr, sub.id] };
+                          });
+                        } else {
+                          setSelectedSubs(prev => ({
+                            ...prev,
+                            [catId]: isActive ? undefined as any : sub.id,
+                          }));
+                        }
+                      }}
                       style={{
                         padding: "12px 14px", borderRadius: 14, cursor: "pointer",
                         border: isActive
