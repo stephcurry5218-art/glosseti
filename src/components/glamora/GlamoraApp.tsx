@@ -93,6 +93,9 @@ const GlamoraApp = () => {
     return () => authSub.unsubscribe();
   }, []);
 
+  // Apply saved theme on mount
+  useEffect(() => { applyTheme(getStoredTheme()); }, []);
+
   // Initialize Apple IAP
   useEffect(() => {
     initializeIAP(
