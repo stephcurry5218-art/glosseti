@@ -497,7 +497,7 @@ serve(async (req) => {
 
       const fallbackPrompt = fallbackDescriptions[styleCategory] || (isMannequin
         ? `High-end fashion mannequin editorial showing ${styleDesc}. Sophisticated styling, realistic fabrics, luxury studio lighting.`
-        : `Restyle this ${genderWord} into a polished high-end fashion editorial look inspired by ${styleCategory.replace(/-/g, " ")}. Keep identity and body shape while prioritizing elegant, realistic styling and premium magazine photography.`);
+        : `Restyle this ${genderWord} into a polished high-end fashion editorial look inspired by ${styleCategory.replace(/-/g, " ")}. CRITICAL: Preserve this person's EXACT facial features — same eye shape, eye color, nose, lips, jawline, skin tone, hair color and texture. The person must be immediately recognizable. Change ONLY their clothing. Premium magazine photography.`);
 
       const fallbackMessages = isMannequin
         ? [{ role: "user", content: [{ type: "text", text: `${fallbackPrompt}${refinementNote}` }] }]
