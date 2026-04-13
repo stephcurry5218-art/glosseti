@@ -112,7 +112,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
     { Icon: Shield, label: "Privacy Policy", action: () => { window.location.href = "/privacy"; } },
     { Icon: Shield, label: "Terms of Use", action: () => { window.location.href = "/terms"; } },
-    { Icon: Star, label: "Rate Glosseti", action: undefined },
+    { Icon: Star, label: "Rate Glosseti", action: () => { window.open("https://apps.apple.com/app/id6761397052?action=write-review", "_blank"); } },
     { Icon: RotateCcw, label: "Restore Purchases", action: async () => {
       if (!isIAPAvailable()) {
         toast.info("Restore is available in the Glosseti app on iOS.");
