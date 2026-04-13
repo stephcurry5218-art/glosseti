@@ -74,6 +74,7 @@ const GlamoraApp = () => {
   }, []);
 
 
+  const {
     subscription, canGenerate, remainingGenerations, showWatermark,
     showPaywall, setShowPaywall, showUpgradePrompt, setShowUpgradePrompt,
     lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
