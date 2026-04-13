@@ -619,7 +619,7 @@ const customDetailPlaceholders: Record<string, string> = {
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
-  const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
+  const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
   
