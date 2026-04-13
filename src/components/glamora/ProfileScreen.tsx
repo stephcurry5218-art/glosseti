@@ -20,6 +20,7 @@ interface Props {
   onSignIn: () => void;
   subscription?: SubscriptionState;
   onShowPaywall?: () => void;
+  onSettings?: () => void;
 }
 
 const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall }: Props) => {
