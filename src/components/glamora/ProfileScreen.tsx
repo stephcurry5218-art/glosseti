@@ -21,9 +21,12 @@ interface Props {
   subscription?: SubscriptionState;
   onShowPaywall?: () => void;
   onSettings?: () => void;
+  onAdminSuggestions?: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings }: Props) => {
+const ADMIN_EMAIL = "admin@glosseti.com";
+
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
