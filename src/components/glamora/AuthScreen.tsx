@@ -170,15 +170,24 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
               const result = await lovable.auth.signInWithOAuth("apple", {
                 redirect_uri: window.location.origin,
               });
+              if (!result) {
+                toast.error("Sign in was cancelled");
+                return;
+              }
               if (result.error) {
-                toast.error(result.error.message || "Apple sign in failed");
+                const msg = result.error?.message || "Apple sign in failed";
+                console.error("[Apple Auth] Error:", msg);
+                toast.error(msg);
                 return;
               }
               if (result.redirected) return;
               toast.success("Welcome!");
               onSuccess();
             } catch (err: any) {
-              toast.error(err.message || "Apple sign in failed");
+              console.error("[Apple Auth] Caught error:", err);
+              const message = err?.message || "Apple sign in failed. Please try again.";
+              // Don't crash — show a user-friendly error
+              toast.error(message);
             } finally {
               setLoading(false);
             }
