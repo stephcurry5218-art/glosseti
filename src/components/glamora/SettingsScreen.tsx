@@ -162,6 +162,90 @@ const SettingsScreen = ({ onBack, gender }: Props) => {
           </div>
         </div>
 
+        {/* Suggestions */}
+        <div className="anim-fadeUp d3" style={{ marginBottom: 28 }}>
+          <div className="section-label" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <MessageSquarePlus size={14} color={`hsl(${accent})`} />
+            Suggest a Feature
+          </div>
+          <div className="glamora-card" style={{ padding: 16 }}>
+            {submitted ? (
+              <div style={{ textAlign: "center", padding: "12px 0" }}>
+                <div style={{ fontSize: 28, marginBottom: 8 }}>💛</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>Thank you!</div>
+                <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))" }}>Your suggestion helps make Glosseti better</div>
+              </div>
+            ) : (
+              <>
+                <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.5 }}>
+                  Have an idea to make Glosseti better? We'd love to hear it!
+                </div>
+                {/* Category pills */}
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+                  {[
+                    { id: "general", label: "General" },
+                    { id: "styles", label: "New Styles" },
+                    { id: "features", label: "Features" },
+                    { id: "ui", label: "Design / UI" },
+                    { id: "bug", label: "Bug Report" },
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSuggestionCategory(cat.id)}
+                      style={{
+                        padding: "6px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                        fontFamily: "'Jost', sans-serif", cursor: "pointer", border: "none",
+                        background: suggestionCategory === cat.id
+                          ? `hsl(${accent})`
+                          : "hsla(var(--glamora-gray-light) / 0.15)",
+                        color: suggestionCategory === cat.id ? "white" : "hsl(var(--glamora-gray))",
+                        transition: "all 0.2s",
+                      }}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Suggestion input */}
+                <textarea
+                  value={suggestion}
+                  onChange={e => setSuggestion(e.target.value)}
+                  placeholder="What would make Glosseti even better?"
+                  maxLength={500}
+                  rows={3}
+                  style={{
+                    width: "100%", padding: "12px 14px", borderRadius: 12,
+                    background: "hsla(var(--glamora-gray-light) / 0.08)",
+                    border: "1.5px solid hsla(var(--glamora-gray-light) / 0.15)",
+                    color: "hsl(var(--glamora-char))", fontSize: 13,
+                    fontFamily: "'Jost', sans-serif", resize: "none", outline: "none",
+                  }}
+                />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+                  <span style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>{suggestion.length}/500</span>
+                  <button
+                    onClick={handleSubmitSuggestion}
+                    disabled={submitting || !suggestion.trim()}
+                    style={{
+                      padding: "8px 20px", borderRadius: 10, border: "none",
+                      background: suggestion.trim()
+                        ? `linear-gradient(135deg, hsl(${accent}), hsl(var(--glamora-gold-light)))`
+                        : "hsla(var(--glamora-gray-light) / 0.2)",
+                      color: suggestion.trim() ? "white" : "hsl(var(--glamora-gray))",
+                      fontSize: 13, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+                      cursor: suggestion.trim() ? "pointer" : "default",
+                      display: "flex", alignItems: "center", gap: 6,
+                      opacity: submitting ? 0.7 : 1,
+                    }}
+                  >
+                    <Send size={13} /> {submitting ? "Sending…" : "Submit"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
         {/* Cache */}
         <div className="anim-fadeUp d3" style={{ paddingBottom: 40 }}>
           <button
