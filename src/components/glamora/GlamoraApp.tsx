@@ -18,6 +18,7 @@ import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
 import SettingsScreen, { applyTheme, getStoredTheme } from "./SettingsScreen";
+import AdminSuggestionsScreen from "./AdminSuggestionsScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
@@ -28,7 +29,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -218,10 +219,14 @@ const GlamoraApp = () => {
           onGetStyled={() => go("style-picker")} gender={prefs.gender} user={user}
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
           subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
-          onSettings={() => go("settings")} />
+          onSettings={() => go("settings")}
+          onAdminSuggestions={() => go("admin-suggestions")} />
       )}
       {screen === "settings" && (
         <SettingsScreen onBack={() => go("profile")} gender={prefs.gender} />
+      )}
+      {screen === "admin-suggestions" && (
+        <AdminSuggestionsScreen onBack={() => go("profile")} />
       )}
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
