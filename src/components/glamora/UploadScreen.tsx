@@ -28,36 +28,51 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const isDualPhotoCategory = prefs.styleCategory === "parent-child" || prefs.styleCategory === "couples";
 
   const handleFile = async (f: File) => {
-    setFile(f);
     try {
+      setFile(f);
+      // Use object URL for preview (memory efficient)
+      const previewUrl = URL.createObjectURL(f);
+      setPreview(previewUrl);
+      // Generate base64 for AI in background
       const normalizedBase64 = await fixImageOrientation(f);
-      setPreview(normalizedBase64);
       setBase64(normalizedBase64);
-    } catch {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setPreview(result);
-        setBase64(result);
-      };
-      reader.readAsDataURL(f);
+      // Revoke the preview URL once base64 is ready
+      URL.revokeObjectURL(previewUrl);
+      setPreview(normalizedBase64);
+    } catch (err) {
+      console.error("Photo processing error:", err);
+      // Fallback: use object URL for preview, skip base64 (will retry on submit)
+      try {
+        const previewUrl = URL.createObjectURL(f);
+        setPreview(previewUrl);
+        // Try a simpler base64 conversion with smaller size
+        const fallbackBase64 = await fixImageOrientation(f, 1024);
+        setBase64(fallbackBase64);
+      } catch {
+        console.error("Fallback photo processing also failed");
+      }
     }
   };
 
   const handleSecondFile = async (f: File) => {
-    setSecondFile(f);
     try {
+      setSecondFile(f);
+      const previewUrl = URL.createObjectURL(f);
+      setSecondPreview(previewUrl);
       const normalizedBase64 = await fixImageOrientation(f);
-      setSecondPreview(normalizedBase64);
       setSecondBase64(normalizedBase64);
-    } catch {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setSecondPreview(result);
-        setSecondBase64(result);
-      };
-      reader.readAsDataURL(f);
+      URL.revokeObjectURL(previewUrl);
+      setSecondPreview(normalizedBase64);
+    } catch (err) {
+      console.error("Second photo processing error:", err);
+      try {
+        const previewUrl = URL.createObjectURL(f);
+        setSecondPreview(previewUrl);
+        const fallbackBase64 = await fixImageOrientation(f, 1024);
+        setSecondBase64(fallbackBase64);
+      } catch {
+        console.error("Fallback second photo processing also failed");
+      }
     }
   };
 
