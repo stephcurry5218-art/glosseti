@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Sun, Moon, Monitor, Bell, BellOff, Globe, Lock, ChevronRight, Smartphone } from "lucide-react";
+import { ArrowLeft, Sun, Moon, Monitor, Bell, BellOff, Globe, Lock, ChevronRight, Smartphone, MessageSquarePlus, Send } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import type { Gender } from "./GlamoraApp";
 
 export type ThemeMode = "dark" | "light" | "system";
