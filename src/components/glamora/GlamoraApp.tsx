@@ -2,7 +2,16 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
-import { SplashScreen as CapSplash } from "@capacitor/splash-screen";
+let CapSplash: { hide: () => Promise<void> } | null = null;
+try {
+  // Dynamic-style guard: the static import is fine for Capacitor builds,
+  // but wrap usage in try/catch to avoid crashes on web/iPad if the module
+  // fails to initialise.
+  const mod = await import("@capacitor/splash-screen");
+  CapSplash = mod.SplashScreen;
+} catch {
+  // Not running in Capacitor — ignore
+}
 import SplashScreen from "./SplashScreen";
 import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
