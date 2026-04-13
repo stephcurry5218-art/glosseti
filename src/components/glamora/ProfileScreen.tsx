@@ -132,6 +132,9 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   ];
 
   if (user) {
+    if (user.email === ADMIN_EMAIL && onAdminSuggestions) {
+      menuItems.push({ Icon: MessageSquarePlus, label: "View Suggestions", action: onAdminSuggestions });
+    }
     menuItems.push({ Icon: Trash2, label: "Delete Account", action: () => setShowDeleteConfirm(true) });
     menuItems.push({ Icon: LogOut, label: "Sign Out", action: onSignOut });
   } else {
