@@ -906,7 +906,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 })}
               </div>
               {/* Custom detail input when a substyle is selected */}
-              {selectedSubs[catId] && (
+              {selectedSubs[catId] && (Array.isArray(selectedSubs[catId]) ? (selectedSubs[catId] as string[]).length > 0 : true) && (
                 <div style={{ marginTop: 12 }}>
                   <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 6, lineHeight: 1.4 }}>
                     ✏️ Specify exactly what you want (optional)
@@ -968,10 +968,11 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           onClick={() => {
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
-              .filter(([, v]) => v)
-              .map(([catId, subId]) => {
+              .filter(([, v]) => v && (Array.isArray(v) ? v.length > 0 : true))
+              .flatMap(([catId, subId]) => {
                 const detail = customDetails[catId]?.trim();
-                return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
+                const ids = Array.isArray(subId) ? subId : [subId];
+                return ids.map(id => detail ? `${catId}:${id}[${detail}]` : `${catId}:${id}`);
               })
               .join(" + ");
             onNext(current.id, undefined, combinedSubs || undefined);
