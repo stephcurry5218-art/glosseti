@@ -34,6 +34,31 @@ const SettingsScreen = ({ onBack, gender }: Props) => {
   const [highQuality, setHighQuality] = useState(() =>
     localStorage.getItem("glosseti_hq") !== "off"
   );
+  const [suggestion, setSuggestion] = useState("");
+  const [suggestionCategory, setSuggestionCategory] = useState("general");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmitSuggestion = async () => {
+    if (!suggestion.trim()) { toast.error("Please write a suggestion"); return; }
+    setSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      await supabase.from("app_suggestions" as any).insert({
+        user_id: user?.id || null,
+        suggestion: suggestion.trim(),
+        category: suggestionCategory,
+      } as any);
+      toast.success("Thanks for your feedback! 💛");
+      setSuggestion("");
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch {
+      toast.error("Failed to submit, please try again");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     applyTheme(theme);
