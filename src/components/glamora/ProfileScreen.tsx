@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw, Trash2 } from "lucide-react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw, Trash2, MessageSquarePlus } from "lucide-react";
 import { restorePurchases, isIAPAvailable } from "./subscription/iapService";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
@@ -21,9 +21,12 @@ interface Props {
   subscription?: SubscriptionState;
   onShowPaywall?: () => void;
   onSettings?: () => void;
+  onAdminSuggestions?: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings }: Props) => {
+const ADMIN_EMAIL = "admin@glosseti.com";
+
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -129,6 +132,9 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   ];
 
   if (user) {
+    if (user.email === ADMIN_EMAIL && onAdminSuggestions) {
+      menuItems.push({ Icon: MessageSquarePlus, label: "View Suggestions", action: onAdminSuggestions });
+    }
     menuItems.push({ Icon: Trash2, label: "Delete Account", action: () => setShowDeleteConfirm(true) });
     menuItems.push({ Icon: LogOut, label: "Sign Out", action: onSignOut });
   } else {
