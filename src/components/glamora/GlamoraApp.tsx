@@ -17,6 +17,7 @@ import SavedLooksScreen from "./SavedLooksScreen";
 import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
+import SettingsScreen, { applyTheme, getStoredTheme } from "./SettingsScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
