@@ -782,7 +782,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 {catLabel} — Refine Your Vibe
               </div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
-                Pick a sub-style for {catLabel.toLowerCase()} (optional)
+                {(catId === "couples" || catId === "parent-child")
+                  ? `Select one or more sub-styles for ${catLabel.toLowerCase()} — mix & match!`
+                  : `Pick a sub-style for ${catLabel.toLowerCase()} (optional)`}
               </div>
               {/* Search bar for cosplay */}
               {catId === "cosplay" && (
