@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { WifiOff } from "lucide-react";
 import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
@@ -62,6 +63,17 @@ const GlamoraApp = () => {
   });
 
 
+  // Network connectivity detection
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  useEffect(() => {
+    const goOffline = () => setIsOffline(true);
+    const goOnline = () => setIsOffline(false);
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
+    return () => { window.removeEventListener("offline", goOffline); window.removeEventListener("online", goOnline); };
+  }, []);
+
+
   const {
     subscription, canGenerate, remainingGenerations, showWatermark,
     showPaywall, setShowPaywall, showUpgradePrompt, setShowUpgradePrompt,
@@ -107,6 +119,18 @@ const GlamoraApp = () => {
 
   return (
     <div className="phone">
+      {/* Offline banner */}
+      {isOffline && (
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, zIndex: 999,
+          padding: "env(safe-area-inset-top, 8px) 16px 8px",
+          background: "hsl(0 72% 55%)", color: "white",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          fontSize: 13, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+        }}>
+          <WifiOff size={14} /> No Internet Connection
+        </div>
+      )}
       {screen === "splash" && <SplashScreen onDone={() => { CapSplash.hide().catch(() => {}); go("entrance"); }} />}
       {screen === "entrance" && (
         <EntranceScreen onEnter={(gender) => { setPrefs(p => ({ ...p, gender })); go("home"); }} />

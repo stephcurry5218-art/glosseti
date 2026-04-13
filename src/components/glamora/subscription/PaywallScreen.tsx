@@ -262,7 +262,7 @@ const PaywallScreen = ({ onClose, onUpgrade, remainingGenerations, lockedFeature
             </a>
             <span>·</span>
             <a
-              href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+              href="/terms"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "hsl(var(--glamora-gold))", textDecoration: "underline", cursor: "pointer", fontSize: 11 }}
