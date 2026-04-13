@@ -17,6 +17,7 @@ import SavedLooksScreen from "./SavedLooksScreen";
 import StylistChat, { type StylistChatHandle } from "./StylistChat";
 import AuthScreen from "./AuthScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
+import SettingsScreen, { applyTheme, getStoredTheme } from "./SettingsScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
@@ -27,7 +28,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -91,6 +92,9 @@ const GlamoraApp = () => {
     });
     return () => authSub.unsubscribe();
   }, []);
+
+  // Apply saved theme on mount
+  useEffect(() => { applyTheme(getStoredTheme()); }, []);
 
   // Initialize Apple IAP
   useEffect(() => {
@@ -213,7 +217,11 @@ const GlamoraApp = () => {
         <ProfileScreen onBack={() => go("home")} savedCount={savedStyles.length} onSaved={() => go("saved")}
           onGetStyled={() => go("style-picker")} gender={prefs.gender} user={user}
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
-          subscription={subscription} onShowPaywall={() => setShowPaywall(true)} />
+          subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
+          onSettings={() => go("settings")} />
+      )}
+      {screen === "settings" && (
+        <SettingsScreen onBack={() => go("profile")} gender={prefs.gender} />
       )}
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}

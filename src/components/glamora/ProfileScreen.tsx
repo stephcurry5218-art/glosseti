@@ -20,9 +20,10 @@ interface Props {
   onSignIn: () => void;
   subscription?: SubscriptionState;
   onShowPaywall?: () => void;
+  onSettings?: () => void;
 }
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -107,11 +108,11 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
-    { Icon: Settings, label: "Settings", action: undefined },
+    { Icon: Settings, label: "Settings", action: onSettings },
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
     { Icon: Shield, label: "Privacy Policy", action: () => { window.location.href = "/privacy"; } },
     { Icon: Shield, label: "Terms of Use", action: () => { window.location.href = "/terms"; } },
-    { Icon: Star, label: "Rate Glosseti", action: undefined },
+    { Icon: Star, label: "Rate Glosseti", action: () => { window.open("https://apps.apple.com/app/id6761397052?action=write-review", "_blank"); } },
     { Icon: RotateCcw, label: "Restore Purchases", action: async () => {
       if (!isIAPAvailable()) {
         toast.info("Restore is available in the Glosseti app on iOS.");
