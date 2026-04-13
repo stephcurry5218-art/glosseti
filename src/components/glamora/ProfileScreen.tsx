@@ -110,6 +110,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
     { Icon: Settings, label: "Settings", action: undefined },
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
     { Icon: Shield, label: "Privacy Policy", action: () => { window.location.href = "/privacy"; } },
+    { Icon: Shield, label: "Terms of Use", action: () => { window.location.href = "/terms"; } },
     { Icon: Star, label: "Rate Glosseti", action: undefined },
     { Icon: RotateCcw, label: "Restore Purchases", action: async () => {
       if (!isIAPAvailable()) {
