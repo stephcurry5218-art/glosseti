@@ -615,11 +615,12 @@ const customDetailPlaceholders: Record<string, string> = {
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
   "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
   "parent-child": 'e.g. "Matching denim jackets", "Mommy & me floral dresses"...',
+  "couples": 'e.g. "Matching all-black outfits", "His & hers Jordans"...',
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
-  const [selectedSubs, setSelectedSubs] = useState<Record<string, string>>({});
+  const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
   
@@ -781,7 +782,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 {catLabel} — Refine Your Vibe
               </div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
-                Pick a sub-style for {catLabel.toLowerCase()} (optional)
+                {(catId === "couples" || catId === "parent-child")
+                  ? `Select one or more sub-styles for ${catLabel.toLowerCase()} — mix & match!`
+                  : `Pick a sub-style for ${catLabel.toLowerCase()} (optional)`}
               </div>
               {/* Search bar for cosplay */}
               {catId === "cosplay" && (
@@ -846,14 +849,31 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                       </div>
                     );
                   }
-                  const isActive = selectedSubs[catId] === sub.id;
+                  const isMultiSub = catId === "couples" || catId === "parent-child";
+                  const currentVal = selectedSubs[catId];
+                  const isActive = isMultiSub
+                    ? Array.isArray(currentVal) && currentVal.includes(sub.id)
+                    : currentVal === sub.id;
                   return (
                     <div
                       key={sub.id}
-                      onClick={() => setSelectedSubs(prev => ({
-                        ...prev,
-                        [catId]: isActive ? undefined as any : sub.id,
-                      }))}
+                      onClick={() => {
+                        if (isMultiSub) {
+                          setSelectedSubs(prev => {
+                            const arr = Array.isArray(prev[catId]) ? [...(prev[catId] as string[])] : prev[catId] ? [prev[catId] as string] : [];
+                            if (arr.includes(sub.id)) {
+                              const filtered = arr.filter(s => s !== sub.id);
+                              return { ...prev, [catId]: filtered.length ? filtered : undefined as any };
+                            }
+                            return { ...prev, [catId]: [...arr, sub.id] };
+                          });
+                        } else {
+                          setSelectedSubs(prev => ({
+                            ...prev,
+                            [catId]: isActive ? undefined as any : sub.id,
+                          }));
+                        }
+                      }}
                       style={{
                         padding: "12px 14px", borderRadius: 14, cursor: "pointer",
                         border: isActive
@@ -889,7 +909,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
                 })}
               </div>
               {/* Custom detail input when a substyle is selected */}
-              {selectedSubs[catId] && (
+              {selectedSubs[catId] && (Array.isArray(selectedSubs[catId]) ? (selectedSubs[catId] as string[]).length > 0 : true) && (
                 <div style={{ marginTop: 12 }}>
                   <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 6, lineHeight: 1.4 }}>
                     ✏️ Specify exactly what you want (optional)
@@ -951,10 +971,11 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
           onClick={() => {
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
-              .filter(([, v]) => v)
-              .map(([catId, subId]) => {
+              .filter(([, v]) => v && (Array.isArray(v) ? v.length > 0 : true))
+              .flatMap(([catId, subId]) => {
                 const detail = customDetails[catId]?.trim();
-                return detail ? `${catId}:${subId}[${detail}]` : `${catId}:${subId}`;
+                const ids = Array.isArray(subId) ? subId : [subId];
+                return ids.map(id => detail ? `${catId}:${id}[${detail}]` : `${catId}:${id}`);
               })
               .join(" + ");
             onNext(current.id, undefined, combinedSubs || undefined);
