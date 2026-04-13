@@ -35,7 +35,7 @@ const OnboardingScreen = ({ onStart }: Props) => {
 
       <div style={{ padding: "28px 24px 0" }}>
         <div className="anim-fadeUp" style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "hsl(var(--glamora-gold))", fontWeight: 600, marginBottom: 10 }}>
-          Welcome to Glamora
+          Welcome to Glosseti
         </div>
         <h1 className="serif anim-fadeUp d1" style={{ fontSize: 36, lineHeight: 1.08, fontWeight: 400, color: "hsl(var(--glamora-char))", marginBottom: 14 }}>
           Your <em style={{ fontStyle: "italic", color: "hsl(var(--glamora-rose-dark))" }}>Complete</em> Style, Curated.
