@@ -551,6 +551,33 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
       { id: "pc-daddy-son", label: "Daddy & Son", desc: "Matching suits, sneakers, or jerseys — like father like son", emoji: "👨‍👦" },
     ],
   },
+  {
+    id: "couples" as StyleCategory, label: "Couples", Icon: Heart,
+    desc: "Coordinated outfits for you and your significant other — styled together",
+    includes: ["Matching Sets", "Coordinated Colors", "His & Hers Outfits", "Date Night Looks"],
+    subs: [
+      { id: "_section_everyday", label: "💑 Everyday Couples", desc: "", emoji: "" },
+      { id: "cp-casual-match", label: "Casual Couple", desc: "Effortlessly coordinated — matching tees, denim, and sneakers", emoji: "👕" },
+      { id: "cp-athleisure", label: "Gym Partners", desc: "Matching workout sets, sneakers, and sporty accessories", emoji: "🏋️" },
+      { id: "cp-streetwear", label: "Street Duo", desc: "Coordinated hypebeast energy — matching Jordans and oversized fits", emoji: "🔥" },
+      { id: "cp-cozy-couple", label: "Cozy Couple", desc: "Matching knit sweaters, beanies, and warm-toned loungewear", emoji: "🧶" },
+      { id: "_section_datenight", label: "💕 Date Night", desc: "", emoji: "" },
+      { id: "cp-romantic-dinner", label: "Dinner Date", desc: "Elegant, coordinated looks for a candlelit evening", emoji: "🕯️" },
+      { id: "cp-rooftop-drinks", label: "Rooftop Drinks", desc: "Trendy, complementary styles for a night out", emoji: "🍷" },
+      { id: "cp-club-night", label: "Club Night", desc: "Bold, head-turning matching energy for the dance floor", emoji: "🪩" },
+      { id: "_section_events", label: "✨ Special Events", desc: "", emoji: "" },
+      { id: "cp-wedding-guest", label: "Wedding Guests", desc: "Perfectly coordinated formal outfits for attending a wedding", emoji: "💒" },
+      { id: "cp-gala-black-tie", label: "Black Tie Gala", desc: "Tuxedo and gown — stunning red carpet couple energy", emoji: "🎩" },
+      { id: "cp-holiday-match", label: "Holiday Couple", desc: "Matching Christmas sweaters, Valentine's red, or festive vibes", emoji: "🎄" },
+      { id: "cp-vacation", label: "Vacation Couple", desc: "Resort-ready coordinated looks — linen, pastels, and tropical prints", emoji: "🌴" },
+      { id: "_section_aesthetic", label: "🎨 Aesthetic Vibes", desc: "", emoji: "" },
+      { id: "cp-monochrome", label: "Monochrome Duo", desc: "All-black, all-white, or single-color couple coordination", emoji: "⬛" },
+      { id: "cp-boho-couple", label: "Boho Lovers", desc: "Earthy tones, flowing fabrics, and free-spirited coordination", emoji: "🌻" },
+      { id: "cp-preppy-pair", label: "Preppy Pair", desc: "Polos, blazers, and clean coordination — country club vibes", emoji: "⛳" },
+      { id: "cp-edgy-couple", label: "Edgy Couple", desc: "Leather, chains, and dark coordinated rebel energy", emoji: "🖤" },
+      { id: "cp-vintage-duo", label: "Vintage Duo", desc: "Retro-inspired coordinated looks — 70s, 80s, or 90s vibes", emoji: "📻" },
+    ],
+  },
 ];
 
 const customDetailPlaceholders: Record<string, string> = {

@@ -25,7 +25,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const accent = isMale ? "var(--glamora-gold)" : "var(--glamora-rose-dark)";
   const accentLight = isMale ? "var(--glamora-gold-light)" : "var(--glamora-rose)";
 
-  const isDualPhotoCategory = prefs.styleCategory === "parent-child";
+  const isDualPhotoCategory = prefs.styleCategory === "parent-child" || prefs.styleCategory === "couples";
 
   const handleFile = async (f: File) => {
     setFile(f);
@@ -187,7 +187,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               <div>
                 <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                   <UserRound size={14} color={`hsl(${accent})`} />
-                  {prefs.styleCategory === "parent-child" ? "Parent" : "Person 1"}
+                  {prefs.styleCategory === "parent-child" ? "Parent" : prefs.styleCategory === "couples" ? "You" : "Person 1"}
                 </div>
                 <div
                   className="glamora-card anim-fadeUp d1"
@@ -219,7 +219,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               <div>
                 <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                   <Heart size={14} color={`hsl(${accent})`} />
-                  {prefs.styleCategory === "parent-child" ? "Child" : "Person 2"}
+                  {prefs.styleCategory === "parent-child" ? "Child" : prefs.styleCategory === "couples" ? "Your Partner" : "Person 2"}
                 </div>
                 <div
                   className="glamora-card anim-fadeUp d2"
