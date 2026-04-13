@@ -419,15 +419,15 @@ serve(async (req) => {
     const isCouples = styleCategory === "couples";
     const hasDualPhotos = (isParentChild || isCouples) && secondImageBase64;
     const genderEnforcement = isBaby
-      ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Keep the child's face and appearance.`
+      ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.`
       : isCouples && hasDualPhotos
-        ? `\n\nCRITICAL COUPLES STYLING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is one partner and the SECOND image is the other partner. Generate a single image showing BOTH people together wearing beautifully coordinated complementary outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. Their outfits should harmonize in color, style, and vibe while each being flattering for the individual. Professional couples fashion editorial photography.`
+        ? `\n\nCRITICAL COUPLES STYLING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is one partner and the SECOND image is the other partner. Generate a single image showing BOTH people together wearing beautifully coordinated complementary outfits. You MUST preserve BOTH people's EXACT facial features with photographic accuracy — same eye shape, nose, lips, jawline, skin tone, hair color and texture. Each person must be immediately recognizable from their uploaded photo. Their outfits should harmonize in color, style, and vibe while each being flattering for the individual. Professional couples fashion editorial photography.`
         : isCouples
-          ? `\n\nCRITICAL COUPLES STYLING: This is a couples outfit request. The uploaded photo is of one partner (a ${genderWord}). Generate an image showing this ${genderWord} alongside their partner, BOTH wearing beautifully coordinated complementary outfits. Show BOTH people together in the same image. Keep the uploaded person's face and appearance. Professional couples fashion editorial photography.`
+          ? `\n\nCRITICAL COUPLES STYLING: This is a couples outfit request. The uploaded photo is of one partner (a ${genderWord}). Generate an image showing this ${genderWord} alongside their partner, BOTH wearing beautifully coordinated complementary outfits. You MUST preserve the uploaded person's EXACT facial features — same eyes, nose, lips, jawline, skin tone, and hair. Show BOTH people together in the same image. Professional couples fashion editorial photography.`
           : isParentChild && hasDualPhotos
-            ? `\n\nCRITICAL PARENT-CHILD MATCHING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is the PARENT (a ${genderWord}) and the SECOND image is the CHILD. Generate a single image showing BOTH people together wearing beautifully coordinated matching outfits. Keep BOTH people's actual faces and appearances from their respective uploaded photos. The parent's outfit should be stylish and the child's should be a miniature complementary version. Professional family fashion editorial photography.`
+            ? `\n\nCRITICAL PARENT-CHILD MATCHING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is the PARENT (a ${genderWord}) and the SECOND image is the CHILD. Generate a single image showing BOTH people together wearing beautifully coordinated matching outfits. You MUST preserve BOTH people's EXACT facial features with photographic accuracy — same eye shape, nose, lips, jawline, skin tone, hair. Each person must be immediately recognizable from their uploaded photo. The parent's outfit should be stylish and the child's should be a miniature complementary version. Professional family fashion editorial photography.`
             : isParentChild
-              ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. The parent's outfit should be stylish and the child's should be a miniature complementary version. Show BOTH the parent and child together in the same image. Keep the parent's face and appearance from the uploaded photo. Professional family fashion editorial photography.`
+              ? `\n\nCRITICAL PARENT-CHILD MATCHING: This is a parent-child matching outfit request. The uploaded photo is of the PARENT (a ${genderWord}). You MUST preserve the parent's EXACT facial features — same eyes, nose, lips, jawline, skin tone, hair color and texture. Generate an image showing this ${genderWord} parent alongside a baby/toddler, BOTH wearing beautifully coordinated matching outfits. Show BOTH the parent and child together in the same image. Professional family fashion editorial photography.`
               : `\n\nCRITICAL GENDER REQUIREMENT: This person is a ${genderWord}. The generated image MUST clearly depict a ${genderWord}. All clothing, styling, body proportions, and accessories MUST be ${isMale ? "masculine/men's" : "feminine/women's"} items specifically designed for a ${genderWord}. Do NOT generate ${isMale ? "women's" : "men's"} clothing or styling.`;
 
     let editPrompt: string;
@@ -448,13 +448,17 @@ serve(async (req) => {
       const isSwimwear = styleCategory === "swimwear";
       const isLingerie = styleCategory === "lingerie";
       const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
+
+      // Strong facial identity preservation directive
+      const facePreservation = "CRITICAL FACIAL IDENTITY PRESERVATION: You MUST preserve this person's EXACT facial features with photographic accuracy. This means their exact eye shape, eye color, nose shape and size, lip shape and fullness, jawline, chin shape, cheekbone structure, eyebrow shape, forehead size, skin tone, skin texture, freckles, moles, facial hair, hairline, and hair color/texture. The face in the generated image must be immediately recognizable as the SAME person from the uploaded photo — not a similar-looking person, but the EXACT same person. Do NOT idealize, smooth, reshape, or alter any facial features. Do NOT change their ethnicity, skin tone, or facial proportions. The person viewing the result should instantly say 'that's me.'";
+
       const keepNote = isSwimwear
-        ? "Keep the person's face and body shape. Restyle their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style."
+        ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style.`
         : isLingerie
-          ? "Keep the person's face and body shape. Restyle their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style."
+          ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style.`
           : isRevealing
-            ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
-            : "Keep face, body, background. Realistic clothing, warm lighting.";
+            ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style.`
+            : `${facePreservation} Keep the person's exact body shape, proportions, and background. Change ONLY their clothing and accessories. Realistic clothing, warm lighting.`;
       editPrompt = photoType === "full-body"
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
         : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
@@ -493,7 +497,7 @@ serve(async (req) => {
 
       const fallbackPrompt = fallbackDescriptions[styleCategory] || (isMannequin
         ? `High-end fashion mannequin editorial showing ${styleDesc}. Sophisticated styling, realistic fabrics, luxury studio lighting.`
-        : `Restyle this ${genderWord} into a polished high-end fashion editorial look inspired by ${styleCategory.replace(/-/g, " ")}. Keep identity and body shape while prioritizing elegant, realistic styling and premium magazine photography.`);
+        : `Restyle this ${genderWord} into a polished high-end fashion editorial look inspired by ${styleCategory.replace(/-/g, " ")}. CRITICAL: Preserve this person's EXACT facial features — same eye shape, eye color, nose, lips, jawline, skin tone, hair color and texture. The person must be immediately recognizable. Change ONLY their clothing. Premium magazine photography.`);
 
       const fallbackMessages = isMannequin
         ? [{ role: "user", content: [{ type: "text", text: `${fallbackPrompt}${refinementNote}` }] }]
