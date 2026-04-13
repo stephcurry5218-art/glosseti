@@ -448,13 +448,17 @@ serve(async (req) => {
       const isSwimwear = styleCategory === "swimwear";
       const isLingerie = styleCategory === "lingerie";
       const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
+
+      // Strong facial identity preservation directive
+      const facePreservation = "CRITICAL FACIAL IDENTITY PRESERVATION: You MUST preserve this person's EXACT facial features with photographic accuracy. This means their exact eye shape, eye color, nose shape and size, lip shape and fullness, jawline, chin shape, cheekbone structure, eyebrow shape, forehead size, skin tone, skin texture, freckles, moles, facial hair, hairline, and hair color/texture. The face in the generated image must be immediately recognizable as the SAME person from the uploaded photo — not a similar-looking person, but the EXACT same person. Do NOT idealize, smooth, reshape, or alter any facial features. Do NOT change their ethnicity, skin tone, or facial proportions. The person viewing the result should instantly say 'that's me.'";
+
       const keepNote = isSwimwear
-        ? "Keep the person's face and body shape. Restyle their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style."
+        ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style.`
         : isLingerie
-          ? "Keep the person's face and body shape. Restyle their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style."
+          ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described luxury sleepwear and loungewear look. Change the background to an elegant bedroom or boudoir setting. Professional fashion editorial style.`
           : isRevealing
-            ? "Keep the person's face and body shape. Restyle their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style."
-            : "Keep face, body, background. Realistic clothing, warm lighting.";
+            ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style.`
+            : `${facePreservation} Keep the person's exact body shape, proportions, and background. Change ONLY their clothing and accessories. Realistic clothing, warm lighting.`;
       editPrompt = photoType === "full-body"
         ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
         : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
