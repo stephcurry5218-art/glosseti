@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_suggestions: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          suggestion: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          suggestion: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          suggestion?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

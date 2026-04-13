@@ -604,7 +604,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             </button>
           )}
           <ShareMenu
-            text={`Check out my AI-styled ${isMakeup ? "beauty" : "fashion"} look from Glamora! ✨`}
+            text={`Check out my AI-styled ${isMakeup ? "beauty" : "fashion"} look from Glosseti! ✨`}
             imageUrl={styledImageUrl || undefined}
             trigger={
               <button className="btn-primary btn-rose" style={{ display: "flex", alignItems: "center", gap: 8, width: "100%" }}>
