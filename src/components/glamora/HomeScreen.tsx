@@ -13,6 +13,7 @@ import UsageBadge from "./subscription/UsageBadge";
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
   onHolidayPick: (holidayId: string) => void;
+  onDirectPick: (category: StyleCategory, subcategory: string) => void;
   onDailyLook: () => void;
   onProfile: () => void;
   onSaved: () => void;
@@ -159,7 +160,7 @@ const ClosetCTA = ({ isPremium, onCloset, isMale }: { isPremium: boolean; onClos
   );
 };
 
-const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSaved, onCloset, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn, isPremium }: Props) => {
+const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onProfile, onSaved, onCloset, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn, isPremium }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
