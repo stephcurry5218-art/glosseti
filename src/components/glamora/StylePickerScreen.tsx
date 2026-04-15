@@ -740,6 +740,53 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
           )}
         </div>
 
+        {/* Holiday Picks — shown when coming from seasonal banner */}
+        {holidayPicks.length > 0 && holidayPromo && (
+          <div className="anim-fadeUp" style={{ marginBottom: 16 }}>
+            <div className="section-label" style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
+              <Gift size={14} color={holidayPromo.accentColor} />
+              <span>{holidayPromo.title} — Curated Picks</span>
+            </div>
+            <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 6, scrollbarWidth: "none" }}>
+              {holidayPicks.map((pick) => (
+                <div
+                  key={pick.subcategory}
+                  className="glamora-card"
+                  onClick={() => handleHolidayPick(pick)}
+                  style={{
+                    minWidth: 140, padding: "12px 10px", cursor: "pointer",
+                    display: "flex", flexDirection: "column", gap: 6,
+                    background: holidayPromo.gradient,
+                    border: `1.5px solid ${holidayPromo.border}`,
+                    boxShadow: "0 4px 14px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
+                    transition: "transform 0.2s",
+                  }}
+                >
+                  <span style={{ fontSize: 22 }}>{pick.emoji}</span>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)", lineHeight: 1.2 }}>
+                    {pick.label}
+                  </div>
+                  <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", lineHeight: 1.3 }}>
+                    {pick.desc}
+                  </div>
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 3, marginTop: "auto",
+                  }}>
+                    <span style={{ fontSize: 9, fontWeight: 600, color: holidayPromo.accentColor }}>Style This</span>
+                    <ArrowRight size={10} color={holidayPromo.accentColor} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{
+              textAlign: "center", fontSize: 11, color: "hsla(0 0% 100% / 0.4)",
+              marginTop: 8, fontStyle: "italic",
+            }}>
+              — or browse all styles below —
+            </div>
+          </div>
+        )}
+
         {/* Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
           {filtered.map((cat, i) => {
