@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Crown, X } from "lucide-react";
+import { Crown, X, RefreshCw } from "lucide-react";
 import type { SubscriptionTier } from "./types";
-import { purchaseSubscription, isIAPAvailable } from "./iapService";
+import { purchaseSubscription, isIAPAvailable, restorePurchases } from "./iapService";
 
 interface Props {
   feature: string;
@@ -12,6 +12,7 @@ interface Props {
 
 const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Props) => {
   const [purchasing, setPurchasing] = useState(false);
+  const [restoring, setRestoring] = useState(false);
 
   const handleUpgrade = async () => {
     if (!isIAPAvailable()) {
@@ -23,6 +24,21 @@ const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Prop
       await purchaseSubscription("premium", "monthly");
     } finally {
       setPurchasing(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    if (!isIAPAvailable()) {
+      alert("Restore is available in the Glosseti app. Download from the App Store to restore purchases.");
+      return;
+    }
+    setRestoring(true);
+    try {
+      await restorePurchases();
+    } catch (err) {
+      console.error("[IAP] Restore failed:", err);
+    } finally {
+      setRestoring(false);
     }
   };
 
@@ -91,9 +107,23 @@ const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Prop
         <button onClick={onClose} style={{
           background: "none", border: "none", cursor: "pointer",
           color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
-          fontSize: 12,
+          fontSize: 12, marginBottom: 12,
         }}>
           Maybe later
+        </button>
+
+        <button
+          onClick={handleRestore}
+          disabled={restoring}
+          style={{
+            background: "none", border: "none", cursor: restoring ? "not-allowed" : "pointer",
+            color: "hsl(var(--glamora-gold))", fontFamily: "'Jost', sans-serif",
+            fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+            opacity: restoring ? 0.6 : 0.9,
+          }}
+        >
+          <RefreshCw size={12} />
+          {restoring ? "Restoring…" : "Restore Purchases"}
         </button>
       </div>
     </div>
