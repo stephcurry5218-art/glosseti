@@ -145,19 +145,21 @@ const GlamoraApp = () => {
         <HomeScreen
           onGetStyled={(initialCategory?: StyleCategory) => {
             if (initialCategory) setPrefs(p => ({ ...p, styleCategory: initialCategory }));
+            setActiveHolidayId(null);
+            go("style-picker");
+          }}
+          onHolidayPick={(holidayId: string) => {
+            setActiveHolidayId(holidayId);
             go("style-picker");
           }}
           onDailyLook={() => {
-            // Daily Look: set category to full-style
             setPrefs(p => ({ ...p, styleCategory: "full-style" }));
-            // If user has already uploaded a photo before, skip upload and go straight to generate
             const hasPhoto = prefs.photoBase64 || prefs.photoFile;
             if (hasPhoto) {
               if (!tryGenerate()) return;
               recordStyle({ styleCategory: "full-style", gender: prefs.gender, generationMode: prefs.generationMode });
               go("loading");
             } else {
-              // First time — need a photo so AI knows them
               go("upload");
             }
           }}
@@ -176,12 +178,14 @@ const GlamoraApp = () => {
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
       {screen === "style-picker" && (
         <StylePickerScreen prefs={prefs} onBack={() => go("home")}
+          holidayId={activeHolidayId}
           onNext={(category: StyleCategory, _celebrityGuide?: string, subcategory?: string) => {
             setPrefs(p => ({
               ...p,
               styleCategory: category,
               styleSubcategory: subcategory,
             }));
+            setActiveHolidayId(null);
             go("upload");
           }} />
       )}
