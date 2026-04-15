@@ -154,6 +154,11 @@ const GlamoraApp = () => {
             setActiveHolidayId(holidayId);
             go("style-picker");
           }}
+          onDirectPick={(category: StyleCategory, subcategory: string) => {
+            setPrefs(p => ({ ...p, styleCategory: category, styleSubcategory: subcategory }));
+            setActiveHolidayId(null);
+            go("upload");
+          }}
           onDailyLook={() => {
             setPrefs(p => ({ ...p, styleCategory: "full-style" }));
             const hasPhoto = prefs.photoBase64 || prefs.photoFile;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
@@ -55,6 +55,10 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [generating, setGenerating] = useState(false);
   const [outfits, setOutfits] = useState<OutfitResult[] | null>(null);
   const [showOutfits, setShowOutfits] = useState(false);
+  const [activePlan, setActivePlan] = useState<any>(null);
+  const [showPlanSetup, setShowPlanSetup] = useState(false);
+  const [planDays, setPlanDays] = useState(7);
+  const [creatingPlan, setCreatingPlan] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchItems = useCallback(async () => {
@@ -80,6 +84,59 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   }, [userId]);
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
+
+  // Fetch active style plan
+  const fetchActivePlan = useCallback(async () => {
+    const { data } = await supabase
+      .from("closet_style_plans")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(1);
+    setActivePlan(data?.[0] || null);
+  }, [userId]);
+
+  useEffect(() => { fetchActivePlan(); }, [fetchActivePlan]);
+
+  const handleCreatePlan = async () => {
+    if (items.length < 3) return;
+    setCreatingPlan(true);
+    try {
+      const itemDescriptions = items.map(
+        (i) => `${i.category}${i.color ? ` (${i.color})` : ""}${i.label ? `: ${i.label}` : ""}`
+      );
+      const { data, error } = await supabase.functions.invoke("closet-style-plan", {
+        body: { items: itemDescriptions, gender, days: planDays },
+      });
+      if (error) throw error;
+
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + planDays - 1);
+
+      await supabase.from("closet_style_plans").insert({
+        user_id: userId,
+        days: planDays,
+        end_date: endDate.toISOString().split("T")[0],
+        daily_outfits: data?.outfits || [],
+        gender,
+      });
+
+      setShowPlanSetup(false);
+      await fetchActivePlan();
+    } catch (err) {
+      console.error("Plan creation error:", err);
+    }
+    setCreatingPlan(false);
+  };
+
+  const handleCancelPlan = async () => {
+    if (!activePlan) return;
+    await supabase.from("closet_style_plans")
+      .update({ status: "cancelled" })
+      .eq("id", activePlan.id);
+    setActivePlan(null);
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -251,6 +308,111 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
               {generating ? "Creating Outfits…" : "✨ AI Style My Closet"}
             </span>
           </button>
+        </div>
+      )}
+
+      {/* 7-Day Style Plan */}
+      {items.length >= 3 && (
+        <div style={{ padding: "0 16px 12px" }}>
+          {activePlan ? (
+            <div style={{
+              padding: 16, borderRadius: 16,
+              background: "linear-gradient(135deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+              border: "1.5px solid hsla(160 50% 45% / 0.25)",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CalendarDays size={16} color="hsl(160 50% 55%)" />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "white" }}>
+                    {activePlan.days}-Day Style Plan
+                  </span>
+                </div>
+                <button onClick={handleCancelPlan} style={{
+                  fontSize: 10, padding: "3px 8px", borderRadius: 100,
+                  background: "hsla(0 60% 50% / 0.15)", border: "1px solid hsla(0 60% 50% / 0.2)",
+                  color: "hsl(0 60% 65%)", cursor: "pointer", fontWeight: 600,
+                }}>
+                  Cancel
+                </button>
+              </div>
+
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginBottom: 10 }}>
+                {new Date(activePlan.start_date).toLocaleDateString()} → {new Date(activePlan.end_date).toLocaleDateString()}
+              </div>
+
+              {/* Daily outfit cards */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {(activePlan.daily_outfits as any[]).map((outfit: any, i: number) => {
+                  const dayDate = new Date(activePlan.start_date);
+                  dayDate.setDate(dayDate.getDate() + i);
+                  const isToday = dayDate.toDateString() === new Date().toDateString();
+                  const isPast = dayDate < new Date() && !isToday;
+
+                  return (
+                    <div key={i} style={{
+                      padding: "10px 12px", borderRadius: 12,
+                      background: isToday ? "hsla(160 50% 45% / 0.15)" : "hsla(0 0% 100% / 0.04)",
+                      border: `1px solid ${isToday ? "hsla(160 50% 45% / 0.3)" : "hsla(0 0% 100% / 0.06)"}`,
+                      opacity: isPast ? 0.5 : 1,
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          {isPast && <Check size={12} color="hsl(160 50% 55%)" />}
+                          <span style={{
+                            fontSize: 11, fontWeight: 700,
+                            color: isToday ? "hsl(160 50% 55%)" : "hsla(0 0% 100% / 0.7)",
+                          }}>
+                            {isToday ? "📍 Today" : `Day ${i + 1}`}
+                          </span>
+                          <span style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.4)" }}>
+                            {dayDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.4)", textTransform: "uppercase", fontWeight: 600, letterSpacing: 0.5 }}>
+                          {outfit.occasion}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 12, color: "white", fontWeight: 600, marginTop: 4 }}>
+                        {outfit.description}
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                        {outfit.items?.map((item: string, j: number) => (
+                          <span key={j} style={{
+                            padding: "2px 8px", borderRadius: 100, fontSize: 9,
+                            background: "hsla(0 0% 100% / 0.06)",
+                            color: "hsla(0 0% 100% / 0.6)",
+                          }}>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                      {outfit.tips && (
+                        <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.4)", marginTop: 4 }}>
+                          💡 {outfit.tips}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowPlanSetup(true)}
+              style={{
+                width: "100%", padding: "14px 16px", borderRadius: 16, cursor: "pointer",
+                background: "linear-gradient(135deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+                border: "1.5px solid hsla(160 50% 45% / 0.25)",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                boxShadow: "0 4px 16px hsla(160 50% 45% / 0.12)",
+              }}
+            >
+              <CalendarDays size={18} color="hsl(160 50% 55%)" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: "hsla(0 0% 100% / 0.9)" }}>
+                📅 AI Style Me for Up to 7 Days
+              </span>
+            </button>
+          )}
         </div>
       )}
 
@@ -493,6 +655,83 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                 Couldn't generate outfits. Try adding more items to your closet.
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Plan setup modal */}
+      {showPlanSetup && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 50,
+          background: "hsla(0 0% 0% / 0.7)", backdropFilter: "blur(8px)",
+          display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            width: "100%", maxWidth: 360, borderRadius: 24,
+            background: "hsl(20 18% 8%)",
+            border: "1px solid hsla(160 50% 45% / 0.2)",
+            padding: 24, textAlign: "center",
+          }}>
+            <CalendarDays size={32} color="hsl(160 50% 55%)" style={{ marginBottom: 12 }} />
+            <div className="serif" style={{ fontSize: 18, fontWeight: 700, color: "white", marginBottom: 8 }}>
+              AI Style Plan
+            </div>
+            <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.55)", lineHeight: 1.5, marginBottom: 20 }}>
+              The AI will create a unique outfit from your closet for each day. Get a full week of styled looks using what you already own.
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.5)", marginBottom: 8, fontWeight: 600 }}>
+                HOW MANY DAYS?
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+                {[3, 5, 7].map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setPlanDays(d)}
+                    style={{
+                      width: 56, height: 56, borderRadius: 14, cursor: "pointer",
+                      background: planDays === d
+                        ? "linear-gradient(135deg, hsl(160 50% 45%), hsl(160 50% 55%))"
+                        : "hsla(0 0% 100% / 0.06)",
+                      border: `1.5px solid ${planDays === d ? "hsla(160 50% 55% / 0.4)" : "hsla(0 0% 100% / 0.1)"}`,
+                      color: planDays === d ? "white" : "hsla(0 0% 100% / 0.6)",
+                      fontSize: 18, fontWeight: 700,
+                      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                    }}
+                  >
+                    {d}
+                    <span style={{ fontSize: 8, fontWeight: 600, marginTop: -2 }}>days</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={handleCreatePlan}
+              disabled={creatingPlan}
+              style={{
+                width: "100%", padding: "14px", borderRadius: 14, cursor: "pointer",
+                background: "linear-gradient(135deg, hsl(160 50% 45%), hsl(160 50% 55%))",
+                color: "white", fontSize: 14, fontWeight: 700,
+                border: "none",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                opacity: creatingPlan ? 0.6 : 1,
+              }}
+            >
+              {creatingPlan ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+              {creatingPlan ? "Creating Plan…" : "Generate My Plan"}
+            </button>
+
+            <button
+              onClick={() => setShowPlanSetup(false)}
+              style={{
+                marginTop: 10, background: "none", border: "none", cursor: "pointer",
+                color: "hsla(0 0% 100% / 0.4)", fontSize: 12,
+              }}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

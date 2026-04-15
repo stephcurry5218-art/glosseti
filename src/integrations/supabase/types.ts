@@ -71,6 +71,42 @@ export type Database = {
         }
         Relationships: []
       }
+      closet_style_plans: {
+        Row: {
+          created_at: string
+          daily_outfits: Json
+          days: number
+          end_date: string
+          gender: string
+          id: string
+          start_date: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_outfits?: Json
+          days?: number
+          end_date: string
+          gender?: string
+          id?: string
+          start_date?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_outfits?: Json
+          days?: number
+          end_date?: string
+          gender?: string
+          id?: string
+          start_date?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       face_references: {
         Row: {
           created_at: string
