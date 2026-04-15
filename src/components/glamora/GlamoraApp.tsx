@@ -66,7 +66,7 @@ const GlamoraApp = () => {
     gender: "female",
     generationMode: "on-me",
   });
-
+  const [closetUpgradeOpen, setClosetUpgradeOpen] = useState(false);
 
   // Network connectivity detection
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
