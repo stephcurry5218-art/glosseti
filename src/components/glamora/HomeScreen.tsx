@@ -3,6 +3,7 @@ import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
+import SeasonalBanner from "./SeasonalBanner";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
@@ -295,6 +296,9 @@ const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, 
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
         <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
       </div>
+
+      {/* Seasonal Promo Banner */}
+      <SeasonalBanner onGetStyled={onGetStyled} />
 
       {/* Two action cards — side by side */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
