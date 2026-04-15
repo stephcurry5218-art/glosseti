@@ -9,6 +9,11 @@ window.addEventListener("unhandledrejection", (event) => {
   event.preventDefault();
 });
 
+// Catch uncaught errors to prevent crashes on iPad/native
+window.addEventListener("error", (event) => {
+  console.error("[Uncaught Error]", event.error || event.message);
+});
+
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>
     <App />

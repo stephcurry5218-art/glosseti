@@ -132,10 +132,14 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
 
   const handleCancelPlan = async () => {
     if (!activePlan) return;
-    await supabase.from("closet_style_plans")
-      .update({ status: "cancelled" })
-      .eq("id", activePlan.id);
-    setActivePlan(null);
+    try {
+      await supabase.from("closet_style_plans")
+        .update({ status: "cancelled" })
+        .eq("id", activePlan.id);
+      setActivePlan(null);
+    } catch (err) {
+      console.error("Cancel plan error:", err);
+    }
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +150,9 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
       const base64 = await fixImageOrientation(file);
       setPendingPreview(base64);
     } catch {
-      setPendingPreview(URL.createObjectURL(file));
+      // Fallback — track URL for cleanup
+      const fallbackUrl = URL.createObjectURL(file);
+      setPendingPreview(fallbackUrl);
     }
     setShowAddForm(true);
     e.target.value = "";
@@ -185,9 +191,13 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   };
 
   const handleDelete = async (item: ClosetItem) => {
-    await supabase.storage.from("closet-items").remove([item.storage_path]);
-    await supabase.from("closet_items").delete().eq("id", item.id);
-    setItems((prev) => prev.filter((i) => i.id !== item.id));
+    try {
+      await supabase.storage.from("closet-items").remove([item.storage_path]);
+      await supabase.from("closet_items").delete().eq("id", item.id);
+      setItems((prev) => prev.filter((i) => i.id !== item.id));
+    } catch (err) {
+      console.error("Delete closet item error:", err);
+    }
   };
 
   const handleGenerateOutfits = async () => {
@@ -244,7 +254,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
         </button>
       </div>
 
-      <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={handleFileSelect} style={{ display: "none" }} />
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: "none" }} />
 
       {/* Category filter pills */}
       <div style={{

@@ -264,7 +264,7 @@ const FaceProfileScreen = ({ onBack, gender, userId }: Props) => {
           ref={fileRef}
           type="file"
           accept="image/*"
-          capture="user"
+          
           style={{ display: "none" }}
           onChange={(e) => {
             const f = e.target.files?.[0];
