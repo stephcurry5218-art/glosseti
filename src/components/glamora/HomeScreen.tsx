@@ -11,6 +11,7 @@ import UsageBadge from "./subscription/UsageBadge";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
+  onHolidayPick: (holidayId: string) => void;
   onDailyLook: () => void;
   onProfile: () => void;
   onSaved: () => void;
@@ -24,7 +25,7 @@ interface Props {
   onSignIn: () => void;
 }
 
-const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn }: Props) => {
+const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -298,7 +299,7 @@ const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, 
       </div>
 
       {/* Seasonal Promo Banner */}
-      <SeasonalBanner onGetStyled={onGetStyled} />
+      <SeasonalBanner onHolidayPick={onHolidayPick} />
 
       {/* Two action cards — side by side */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
