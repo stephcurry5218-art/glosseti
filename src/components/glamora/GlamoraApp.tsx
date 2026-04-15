@@ -53,6 +53,7 @@ const GlamoraApp = () => {
   const [styledImageUrl, setStyledImageUrl] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [hasGeneratedOnce, setHasGeneratedOnce] = useState(() => !!localStorage.getItem("glamora_first_gen"));
+  const [activeHolidayId, setActiveHolidayId] = useState<string | null>(null);
   const [prefs, setPrefs] = useState<UserPrefs>({
     styleCategory: "full-style",
     photoType: "selfie",
