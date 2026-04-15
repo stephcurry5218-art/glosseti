@@ -87,7 +87,7 @@ const ClosetCTA = ({ isPremium, onCloset, isMale }: { isPremium: boolean; onClos
         <div
           onClick={() => setShowDesc(false)}
           style={{
-            position: "fixed", inset: 0, zIndex: 100,
+            position: "fixed", inset: 0, zIndex: 200,
             background: "hsla(0 0% 0% / 0.7)", backdropFilter: "blur(8px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: 24,
@@ -129,7 +129,7 @@ const ClosetCTA = ({ isPremium, onCloset, isMale }: { isPremium: boolean; onClos
                   <Crown size={14} /> Premium Feature
                 </div>
                 <button
-                  onClick={() => { setShowDesc(false); onCloset(); }}
+                  onClick={() => { setShowDesc(false); setTimeout(() => onCloset(), 100); }}
                   style={{
                     width: "100%", padding: "14px", borderRadius: 14, cursor: "pointer",
                     background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
