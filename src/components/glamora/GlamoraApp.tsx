@@ -175,6 +175,12 @@ const GlamoraApp = () => {
           onShowPaywall={() => setShowPaywall(true)}
           isLoggedIn={!!user}
           onSignIn={() => go("auth")}
+          onCloset={() => {
+            if (!user) { go("auth"); return; }
+            if (subscription.tier === "free") { setShowPaywall(true); return; }
+            go("my-closet");
+          }}
+          isPremium={subscription.tier !== "free"}
         />
       )}
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
