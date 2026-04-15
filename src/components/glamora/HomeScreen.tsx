@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Scissors, Bookmark, User, ArrowRight, Zap, Eye, Palette, Camera, Star, Sparkles, Shirt, Lock } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
