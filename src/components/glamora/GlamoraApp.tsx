@@ -66,7 +66,7 @@ const GlamoraApp = () => {
     gender: "female",
     generationMode: "on-me",
   });
-
+  const [closetUpgradeOpen, setClosetUpgradeOpen] = useState(false);
 
   // Network connectivity detection
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -182,7 +182,7 @@ const GlamoraApp = () => {
           onSignIn={() => go("auth")}
           onCloset={() => {
             if (!user) { go("auth"); return; }
-            if (subscription.tier === "free") { setShowPaywall(true); return; }
+            if (subscription.tier === "free") { setClosetUpgradeOpen(true); return; }
             go("my-closet");
           }}
           isPremium={subscription.tier !== "free"}
@@ -287,6 +287,14 @@ const GlamoraApp = () => {
       {showUpgradePrompt && lockedFeature && (
         <UpgradePrompt feature={lockedFeature} onClose={() => setShowUpgradePrompt(false)}
           onUpgrade={(tier) => upgradeTo(tier)} />
+      )}
+      {closetUpgradeOpen && (
+        <UpgradePrompt
+          feature="My Closet"
+          featureDescription="Snap photos of every item in your wardrobe — tops, bottoms, shoes, accessories. Our AI analyzes your real pieces and creates complete outfit combinations you can actually wear. Save favorites, regenerate looks, and get a 7-day style plan from your own closet."
+          onClose={() => setClosetUpgradeOpen(false)}
+          onUpgrade={(tier) => { upgradeTo(tier); setClosetUpgradeOpen(false); }}
+        />
       )}
       {/* <AppDownloadSheet /> */}
     </div>

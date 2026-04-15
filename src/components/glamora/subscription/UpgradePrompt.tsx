@@ -5,11 +5,12 @@ import { purchaseSubscription, isIAPAvailable } from "./iapService";
 
 interface Props {
   feature: string;
+  featureDescription?: string;
   onClose: () => void;
   onUpgrade: (tier: SubscriptionTier) => void;
 }
 
-const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
+const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Props) => {
   const [purchasing, setPurchasing] = useState(false);
 
   const handleUpgrade = async () => {
@@ -58,9 +59,18 @@ const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
         <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", marginBottom: 8 }}>
           Premium Feature
         </div>
-        <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginBottom: 20, lineHeight: 1.5 }}>
-          <strong style={{ color: "hsl(var(--glamora-char))" }}>{feature}</strong> is available with Premium.
-          Upgrade to unlock the full Glosseti experience.
+        <div style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", marginBottom: 20, lineHeight: 1.6 }}>
+          {featureDescription ? (
+            <>
+              <div style={{ marginBottom: 10 }}>{featureDescription}</div>
+              <strong style={{ color: "hsl(var(--glamora-char))" }}>{feature}</strong> is available with Premium.
+            </>
+          ) : (
+            <>
+              <strong style={{ color: "hsl(var(--glamora-char))" }}>{feature}</strong> is available with Premium.
+              Upgrade to unlock the full Glosseti experience.
+            </>
+          )}
         </div>
 
         <button
