@@ -87,7 +87,7 @@ const ForgotPasswordView = ({ onBack, accent, accentLight, inputStyle, iconWrap 
 };
 
 const AuthScreen = ({ onBack, onSuccess }: Props) => {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
