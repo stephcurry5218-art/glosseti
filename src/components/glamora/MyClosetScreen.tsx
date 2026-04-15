@@ -85,6 +85,59 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
 
+  // Fetch active style plan
+  const fetchActivePlan = useCallback(async () => {
+    const { data } = await supabase
+      .from("closet_style_plans")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(1);
+    setActivePlan(data?.[0] || null);
+  }, [userId]);
+
+  useEffect(() => { fetchActivePlan(); }, [fetchActivePlan]);
+
+  const handleCreatePlan = async () => {
+    if (items.length < 3) return;
+    setCreatingPlan(true);
+    try {
+      const itemDescriptions = items.map(
+        (i) => `${i.category}${i.color ? ` (${i.color})` : ""}${i.label ? `: ${i.label}` : ""}`
+      );
+      const { data, error } = await supabase.functions.invoke("closet-style-plan", {
+        body: { items: itemDescriptions, gender, days: planDays },
+      });
+      if (error) throw error;
+
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + planDays - 1);
+
+      await supabase.from("closet_style_plans").insert({
+        user_id: userId,
+        days: planDays,
+        end_date: endDate.toISOString().split("T")[0],
+        daily_outfits: data?.outfits || [],
+        gender,
+      });
+
+      setShowPlanSetup(false);
+      await fetchActivePlan();
+    } catch (err) {
+      console.error("Plan creation error:", err);
+    }
+    setCreatingPlan(false);
+  };
+
+  const handleCancelPlan = async () => {
+    if (!activePlan) return;
+    await supabase.from("closet_style_plans")
+      .update({ status: "cancelled" })
+      .eq("id", activePlan.id);
+    setActivePlan(null);
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
