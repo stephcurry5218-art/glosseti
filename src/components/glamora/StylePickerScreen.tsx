@@ -662,13 +662,17 @@ const customDetailPlaceholders: Record<string, string> = {
   "couples": 'e.g. "Matching all-black outfits", "His & hers Jordans"...',
 };
 
-const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
+const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
   
   const isMale = prefs.gender === "male";
+
+  // Get holiday picks if coming from seasonal banner
+  const holidayPromo = holidayId ? getCurrentPromo() : null;
+  const holidayPicks = (holidayPromo && holidayPromo.id === holidayId) ? holidayPromo.picks : [];
 
   const filtered = categories.filter(c => {
     if (c.id === "grooming") return isMale;
@@ -690,6 +694,10 @@ const StylePickerScreen = ({ prefs, onBack, onNext }: Props) => {
       }
       return [...prev, id];
     });
+  };
+
+  const handleHolidayPick = (pick: HolidayPick) => {
+    onNext(pick.category, undefined, pick.subcategory);
   };
 
   // Show detail for the most recently selected and use it as the primary generation style
