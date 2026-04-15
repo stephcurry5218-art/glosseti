@@ -10,7 +10,7 @@ interface Props {
   onUpgrade: (tier: SubscriptionTier) => void;
 }
 
-const UpgradePrompt = ({ feature, onClose, onUpgrade }: Props) => {
+const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Props) => {
   const [purchasing, setPurchasing] = useState(false);
 
   const handleUpgrade = async () => {
