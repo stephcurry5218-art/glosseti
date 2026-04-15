@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, ChevronDown } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
@@ -87,9 +87,8 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
     try {
       const fixed = await fixImageOrientation(file);
       setPendingFile(fixed);
-      const reader = new FileReader();
-      reader.onload = (ev) => setPendingPreview(ev.target?.result as string);
-      reader.readAsDataURL(fixed);
+      const url = URL.createObjectURL(fixed);
+      setPendingPreview(url);
       setShowAddForm(true);
     } catch {
       setPendingFile(file);
@@ -159,7 +158,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   };
 
   const filtered = activeFilter === "all" ? items : items.filter((i) => i.category === activeFilter);
-  const isMale = gender === "male";
+  
 
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingTop: 0 }}>
