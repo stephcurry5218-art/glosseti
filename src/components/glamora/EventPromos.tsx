@@ -90,7 +90,7 @@ const EventPromos = ({ onHolidayPick }: Props) => {
                   color: isExpanded ? "hsla(0 0% 100% / 0.95)" : "hsla(0 0% 100% / 0.6)",
                   fontFamily: "'Jost', sans-serif",
                 }}>
-                  {event.title.replace(/\s?[🎒🎃🍂✨🎓👑👔🇺🇸☀️🌸🍁❄️🥂💕🏖️🐣🎆🎁🔥💐🦃🎄⚽📚😎]/g, "").trim()}
+                  {event.title.replace(/\s*[\p{Emoji_Presentation}\p{Extended_Pictographic}]+/gu, "").trim()}
                 </span>
               </button>
             </div>
