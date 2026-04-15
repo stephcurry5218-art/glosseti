@@ -293,13 +293,13 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSave
         </div>
       </div>
 
+      {/* Seasonal Promo Banner — above Daily Look for prominence */}
+      <SeasonalBanner onHolidayPick={onHolidayPick} />
+
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
         <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
       </div>
-
-      {/* Seasonal Promo Banner */}
-      <SeasonalBanner onHolidayPick={onHolidayPick} />
 
       {/* Two action cards — side by side */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>

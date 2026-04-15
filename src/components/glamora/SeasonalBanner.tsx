@@ -1,4 +1,4 @@
-import { ArrowRight, GraduationCap, Heart, Snowflake, Sun, Leaf, TreePine, PartyPopper, Star, Sparkles, Gift, Flower2, Baby, Ghost, Flag } from "lucide-react";
+import { ArrowRight, Crown, GraduationCap, Heart, Snowflake, Sun, Leaf, TreePine, PartyPopper, Star, Sparkles, Gift, Flower2, Baby, Ghost, Flag } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 
 export interface HolidayPick {
@@ -89,7 +89,22 @@ const PROMOS: SeasonalPromo[] = [
       { label: "Brunch Chic", emoji: "🥞", category: "full-style", subcategory: "brunch-ready", desc: "Easter brunch styling" },
     ],
   },
-  // Mother's Day (May 1–12)
+  // Prom Season (Apr 15 – May 15)
+  {
+    id: "prom-season", title: "Prom Season 👑",
+    subtitle: "Make it unforgettable — glam gowns, sharp suits & total looks", cta: "Prom Looks",
+    icon: Crown,
+    gradient: "linear-gradient(135deg, hsla(280 55% 55% / 0.18), hsla(320 60% 50% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+    border: "hsla(280 55% 55% / 0.35)", accentColor: "hsl(280 55% 60%)",
+    months: [3, 4], dayRange: [15, 15],
+    picks: [
+      { label: "Prom Glam Gown", emoji: "👗", category: "formal", subcategory: "gala-evening", desc: "Show-stopping prom dress" },
+      { label: "Sharp Prom Suit", emoji: "🤵", category: "formal", subcategory: "black-tie", desc: "Tailored suit for prom night" },
+      { label: "Teen Makeup Glam", emoji: "💄", category: "makeup-only" as StyleCategory, subcategory: "glam-evening", desc: "Age-appropriate prom glam" },
+      { label: "Prom Couple Match", emoji: "💕", category: "couples", subcategory: "matching-elegance", desc: "Coordinated couple prom look" },
+      { label: "After-Party Fit", emoji: "🎉", category: "teens" as StyleCategory, subcategory: "y2k-retro", desc: "Fun after-prom outfit swap" },
+    ],
+  },
   {
     id: "mothers-day", title: "Style Her Day ✨",
     subtitle: "Help Mom look & feel amazing — or style a matching look", cta: "Gift a Look",
@@ -340,11 +355,11 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
 
   return (
     <div
-      className="glamora-card anim-fadeUp d2"
+      className="glamora-card anim-fadeUp d1"
       onClick={() => onHolidayPick(promo.id)}
       style={{
         margin: "14px 20px 0",
-        padding: "14px 16px",
+        padding: "16px 16px",
         cursor: "pointer",
         background: promo.gradient,
         border: `1.5px solid ${promo.border}`,
@@ -353,10 +368,12 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
         gap: 12,
         position: "relative",
         overflow: "hidden",
-        boxShadow: `0 4px 20px hsla(0 0% 0% / 0.35), inset 0 1px 0 hsla(0 0% 100% / 0.06)`,
+        boxShadow: `0 4px 20px hsla(0 0% 0% / 0.35), 0 0 30px ${promo.accentColor.replace(")", " / 0.08)")}, inset 0 1px 0 hsla(0 0% 100% / 0.06)`,
         backdropFilter: "blur(12px)",
+        animation: "subtle-pulse 3s ease-in-out infinite",
       }}
     >
+      {/* Shimmer sweep */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
         background: `linear-gradient(105deg, transparent 40%, ${promo.accentColor.replace(")", " / 0.1)")} 45%, ${promo.accentColor.replace(")", " / 0.18)")} 50%, ${promo.accentColor.replace(")", " / 0.1)")} 55%, transparent 60%)`,
@@ -364,21 +381,23 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
         animation: "gold-shimmer 3s ease-in-out infinite",
       }} />
 
+      {/* Animated icon */}
       <div style={{
-        width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+        width: 44, height: 44, borderRadius: 13, flexShrink: 0,
         background: `${promo.accentColor.replace(")", " / 0.2)")}`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: `0 3px 10px ${promo.accentColor.replace(")", " / 0.2)")}`,
+        boxShadow: `0 3px 12px ${promo.accentColor.replace(")", " / 0.25)")}`,
         position: "relative", zIndex: 2,
+        animation: "icon-glow 2s ease-in-out infinite alternate",
       }}>
-        <Icon size={20} color={promo.accentColor} />
+        <Icon size={21} color={promo.accentColor} />
       </div>
 
       <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)" }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "hsla(0 0% 100% / 0.95)", letterSpacing: 0.2 }}>
           {promo.title}
         </div>
-        <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+        <div style={{ fontSize: 10.5, color: "hsla(0 0% 100% / 0.55)", marginTop: 2, lineHeight: 1.3 }}>
           {promo.subtitle}
         </div>
       </div>
@@ -386,10 +405,24 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
       <div style={{
         display: "flex", alignItems: "center", gap: 4,
         position: "relative", zIndex: 2,
+        padding: "5px 10px", borderRadius: 100,
+        background: `${promo.accentColor.replace(")", " / 0.15)")}`,
+        border: `1px solid ${promo.accentColor.replace(")", " / 0.2)")}`,
       }}>
-        <span style={{ fontSize: 10, fontWeight: 600, color: promo.accentColor }}>{promo.cta}</span>
-        <ArrowRight size={14} color={promo.accentColor} />
+        <span style={{ fontSize: 10, fontWeight: 700, color: promo.accentColor }}>{promo.cta}</span>
+        <ArrowRight size={12} color={promo.accentColor} />
       </div>
+
+      <style>{`
+        @keyframes subtle-pulse {
+          0%, 100% { box-shadow: 0 4px 20px hsla(0 0% 0% / 0.35), 0 0 30px ${promo.accentColor.replace(")", " / 0.08)")}, inset 0 1px 0 hsla(0 0% 100% / 0.06); }
+          50% { box-shadow: 0 4px 24px hsla(0 0% 0% / 0.4), 0 0 40px ${promo.accentColor.replace(")", " / 0.14)")}, inset 0 1px 0 hsla(0 0% 100% / 0.08); }
+        }
+        @keyframes icon-glow {
+          0% { box-shadow: 0 3px 12px ${promo.accentColor.replace(")", " / 0.2)")}; }
+          100% { box-shadow: 0 4px 18px ${promo.accentColor.replace(")", " / 0.35)")}; }
+        }
+      `}</style>
     </div>
   );
 };
