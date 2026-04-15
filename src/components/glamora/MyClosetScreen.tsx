@@ -658,6 +658,83 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
           </div>
         </div>
       )}
+
+      {/* Plan setup modal */}
+      {showPlanSetup && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 50,
+          background: "hsla(0 0% 0% / 0.7)", backdropFilter: "blur(8px)",
+          display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            width: "100%", maxWidth: 360, borderRadius: 24,
+            background: "hsl(20 18% 8%)",
+            border: "1px solid hsla(160 50% 45% / 0.2)",
+            padding: 24, textAlign: "center",
+          }}>
+            <CalendarDays size={32} color="hsl(160 50% 55%)" style={{ marginBottom: 12 }} />
+            <div className="serif" style={{ fontSize: 18, fontWeight: 700, color: "white", marginBottom: 8 }}>
+              AI Style Plan
+            </div>
+            <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.55)", lineHeight: 1.5, marginBottom: 20 }}>
+              The AI will create a unique outfit from your closet for each day. Get a full week of styled looks using what you already own.
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.5)", marginBottom: 8, fontWeight: 600 }}>
+                HOW MANY DAYS?
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+                {[3, 5, 7].map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setPlanDays(d)}
+                    style={{
+                      width: 56, height: 56, borderRadius: 14, cursor: "pointer",
+                      background: planDays === d
+                        ? "linear-gradient(135deg, hsl(160 50% 45%), hsl(160 50% 55%))"
+                        : "hsla(0 0% 100% / 0.06)",
+                      border: `1.5px solid ${planDays === d ? "hsla(160 50% 55% / 0.4)" : "hsla(0 0% 100% / 0.1)"}`,
+                      color: planDays === d ? "white" : "hsla(0 0% 100% / 0.6)",
+                      fontSize: 18, fontWeight: 700,
+                      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                    }}
+                  >
+                    {d}
+                    <span style={{ fontSize: 8, fontWeight: 600, marginTop: -2 }}>days</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={handleCreatePlan}
+              disabled={creatingPlan}
+              style={{
+                width: "100%", padding: "14px", borderRadius: 14, cursor: "pointer",
+                background: "linear-gradient(135deg, hsl(160 50% 45%), hsl(160 50% 55%))",
+                color: "white", fontSize: 14, fontWeight: 700,
+                border: "none",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                opacity: creatingPlan ? 0.6 : 1,
+              }}
+            >
+              {creatingPlan ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+              {creatingPlan ? "Creating Plan…" : "Generate My Plan"}
+            </button>
+
+            <button
+              onClick={() => setShowPlanSetup(false)}
+              style={{
+                marginTop: 10, background: "none", border: "none", cursor: "pointer",
+                color: "hsla(0 0% 100% / 0.4)", fontSize: 12,
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
