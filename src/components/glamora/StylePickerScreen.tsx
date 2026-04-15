@@ -523,7 +523,25 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
-    id: "parent-child", label: "Parent-Child Matching", Icon: Heart,
+    id: "kids", label: "Kids Fashion", Icon: Star,
+    desc: "Stylish, age-appropriate outfits for kids — school, play, and special occasions",
+    includes: ["Tops & Tees", "Pants & Shorts", "Shoes & Sneakers", "Accessories"],
+    subs: [
+      { id: "kids-casual", label: "Everyday Casual", desc: "Comfy tees, jeans, and sneakers — playground to hangout", emoji: "😎" },
+      { id: "kids-school", label: "Back to School", desc: "Neat, polished outfits for the classroom", emoji: "📚" },
+      { id: "kids-sporty", label: "Sporty & Active", desc: "Athletic sets, sneakers, and team-spirit fits", emoji: "⚽" },
+      { id: "kids-formal", label: "Formal / Occasion", desc: "Suits, dresses, and bow ties for events and holidays", emoji: "🎩" },
+      { id: "kids-streetwear", label: "Mini Streetwear", desc: "Cool-kid Jordans, graphic tees, and urban style", emoji: "🔥" },
+      { id: "kids-preppy", label: "Preppy Kid", desc: "Polos, chinos, and clean sneakers — picture day ready", emoji: "🎓" },
+      { id: "kids-boho", label: "Boho Kid", desc: "Earthy tones, florals, and natural fabrics", emoji: "🌻" },
+      { id: "kids-summer", label: "Summer Fun", desc: "Bright shorts, tanks, sandals, and sunglasses", emoji: "☀️" },
+      { id: "kids-winter", label: "Winter Cozy", desc: "Puffer jackets, beanies, boots, and warm layers", emoji: "❄️" },
+      { id: "kids-holiday", label: "Holiday Outfit", desc: "Festive fits for Christmas, Halloween, Easter, and more", emoji: "🎄" },
+      { id: "kids-matching-sibling", label: "Sibling Matching", desc: "Coordinated outfits for brothers and sisters", emoji: "👯" },
+      { id: "kids-denim", label: "Denim Days", desc: "Jeans, denim jackets, and rugged-cute combos", emoji: "👖" },
+    ],
+  },
+  {
     desc: "Coordinated outfits for parent and baby — twinning never looked so good",
     includes: ["Matching Sets", "Coordinated Colors", "Family Photo Outfits", "Mommy & Me / Daddy & Me"],
     subs: [
@@ -614,6 +632,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "icon-looks": 'e.g. "Old Hollywood waves", "Oversized blazer with sneakers"...',
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
   "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
+  "kids": 'e.g. "Graphic tee with cargo pants", "Mini blazer and chinos"...',
   "parent-child": 'e.g. "Matching denim jackets", "Mommy & me floral dresses"...',
   "couples": 'e.g. "Matching all-black outfits", "His & hers Jordans"...',
 };
