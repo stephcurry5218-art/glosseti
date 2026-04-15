@@ -431,7 +431,7 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSave
       <SeasonalBanner onHolidayPick={onHolidayPick} />
 
       {/* Event-specific promos with style picks */}
-      <EventPromos onHolidayPick={onHolidayPick} />
+      <EventPromos onHolidayPick={onHolidayPick} onDirectPick={onDirectPick} />
 
       {/* My Closet CTA */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0" }}>
