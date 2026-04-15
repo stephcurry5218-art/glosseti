@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
@@ -55,6 +55,10 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [generating, setGenerating] = useState(false);
   const [outfits, setOutfits] = useState<OutfitResult[] | null>(null);
   const [showOutfits, setShowOutfits] = useState(false);
+  const [activePlan, setActivePlan] = useState<any>(null);
+  const [showPlanSetup, setShowPlanSetup] = useState(false);
+  const [planDays, setPlanDays] = useState(7);
+  const [creatingPlan, setCreatingPlan] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchItems = useCallback(async () => {
