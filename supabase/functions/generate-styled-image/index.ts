@@ -341,6 +341,28 @@ serve(async (req) => {
       ? `\n\n${kidsSubStyleOverrides[styleSubcategory]}`
       : "";
 
+    // Teens sub-style overrides
+    const teensSubStyleOverrides: Record<string, string> = {
+      "teens-streetwear": "IMPORTANT: Style this teen in viral streetwear — oversized hoodie or graphic tee, cargo pants or baggy jeans, Nike Dunks or Jordan 1s, and a crossbody bag. Urban setting with youthful energy.",
+      "teens-clean-girl": "IMPORTANT: Style this teen in clean-girl aesthetic — slicked bun or low ponytail, gold hoop earrings, matching ribbed set or tailored basics, minimal gold jewelry, and clean white sneakers or mules. Bright, airy setting.",
+      "teens-skater": "IMPORTANT: Style this teen in skater fashion — baggy jeans or cargos, oversized graphic tee, Vans or Converse, beanie, and a skateboard. Relaxed urban or skatepark setting.",
+      "teens-preppy": "IMPORTANT: Style this teen in preppy fashion — polo shirt or button-up, pleated skirt or chinos, loafers or clean sneakers, and a backpack. School or campus setting.",
+      "teens-athleisure": "IMPORTANT: Style this teen in athleisure — matching set (sports bra/tee + leggings/joggers), Air Max or running shoes, and a sporty watch. Active, bright setting.",
+      "teens-y2k": "IMPORTANT: Style this teen in Y2K revival — baby tee, low-rise jeans or mini skirt, butterfly clips, platform sneakers, and layered necklaces. Nostalgic early-2000s aesthetic.",
+      "teens-dark-academia": "IMPORTANT: Style this teen in dark academia — plaid trousers or skirt, turtleneck or knit vest, blazer, oxford shoes, and round vintage glasses. Library or campus setting.",
+      "teens-cottagecore": "IMPORTANT: Style this teen in cottagecore — floral midi dress or linen shirt, puff sleeves, mary janes or leather boots, and a wicker bag. Meadow or garden setting.",
+      "teens-grunge": "IMPORTANT: Style this teen in grunge — flannel shirt, ripped jeans, band tee, combat boots, and layered chains. Dark, moody setting.",
+      "teens-formal": "IMPORTANT: Style this teen in formal/prom attire — an elegant dress or sharp suit, dress shoes, and refined accessories. Event-ready, sophisticated setting.",
+      "teens-festival": "IMPORTANT: Style this teen in festival fashion — colorful outfit, bucket hat, chunky sneakers, fun sunglasses, and bold accessories. Concert or outdoor festival setting.",
+      "teens-minimalist": "IMPORTANT: Style this teen in minimalist fashion — neutral tones, clean lines, basic tee, tailored pants, white sneakers, and minimal accessories. Clean, modern setting.",
+      "teens-kpop": "IMPORTANT: Style this teen in K-Pop inspired fashion — bold or pastel hair accents, oversized jacket, wide-leg pants, platform shoes, and layered accessories. Trendy, editorial setting.",
+      "teens-coastal": "IMPORTANT: Style this teen in coastal/surf style — board shorts or linen pants, relaxed tee, bucket hat, sandals, and sunglasses. Beach or coastal setting.",
+    };
+
+    const teensOverride = (styleCategory === "teens" && styleSubcategory && teensSubStyleOverrides[styleSubcategory])
+      ? `\n\n${teensSubStyleOverrides[styleSubcategory]}`
+      : "";
+
     const parentChildOverride = (styleCategory === "parent-child" && styleSubcategory && parentChildSubStyleOverrides[styleSubcategory])
       ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
       : "";
@@ -369,7 +391,7 @@ serve(async (req) => {
       ? `\n\n${couplesSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || parentChildOverride || couplesOverride;
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || teensOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
