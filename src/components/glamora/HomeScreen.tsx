@@ -124,8 +124,22 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
     }
   };
 
+  const devModeActive = (() => { try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; } })();
+
   return (
     <div className="screen enter" style={{ minHeight: "100%", paddingTop: 64, paddingBottom: 20 }}>
+      {devModeActive && (
+        <div style={{
+          position: "fixed", top: 68, left: "50%", transform: "translateX(-50%)", zIndex: 9999,
+          background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+          color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: 1.2,
+          padding: "3px 14px", borderRadius: 100, textTransform: "uppercase",
+          boxShadow: "0 2px 10px rgba(34,197,94,0.4)", fontFamily: "Jost, sans-serif",
+          pointerEvents: "none", opacity: 0.92,
+        }}>
+          🔓 Dev Mode
+        </div>
+      )}
       {/* Compact hero */}
       <div style={{ position: "relative", height: 260, overflow: "hidden" }}>
         <DynamicVisual width="100%" height="100%" variant="hero" style={{ position: "absolute", inset: 0 }} />
