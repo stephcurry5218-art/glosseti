@@ -125,6 +125,10 @@ serve(async (req) => {
         female: "a school-age girl wearing a stylish, age-appropriate outfit. The clothing should be fun, comfortable, and kid-friendly — bright colors, playful patterns, and practical for an active child. Professional children's fashion editorial photography with bright, cheerful lighting. Clean, wholesome, family-friendly setting.",
         male: "a school-age boy wearing a stylish, age-appropriate outfit. The clothing should be fun, comfortable, and kid-friendly — bold colors, cool patterns, and practical for an active child. Professional children's fashion editorial photography with bright, cheerful lighting. Clean, wholesome, family-friendly setting.",
       },
+      teens: {
+        female: "a teenage girl (age 13-17) wearing a trendy, age-appropriate outfit. The clothing should be stylish and on-trend — TikTok-worthy fashion that's fun yet modest. Professional teen fashion editorial photography with vibrant, youthful energy. Clean, wholesome setting.",
+        male: "a teenage boy (age 13-17) wearing a trendy, age-appropriate outfit. The clothing should be stylish and on-trend — cool, confident fashion that's fun yet modest. Professional teen fashion editorial photography with vibrant, youthful energy. Clean, wholesome setting.",
+      },
       "parent-child": {
         female: "a mother and her baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
         male: "a father and his baby/toddler wearing beautifully coordinated matching outfits. The parent's outfit is stylish and age-appropriate, while the child's outfit is a miniature version or color-coordinated complement. Both are styled for a family fashion editorial with warm, natural lighting. The image shows both parent and child together, showcasing how their outfits coordinate. Professional family lifestyle photography.",
@@ -337,6 +341,28 @@ serve(async (req) => {
       ? `\n\n${kidsSubStyleOverrides[styleSubcategory]}`
       : "";
 
+    // Teens sub-style overrides
+    const teensSubStyleOverrides: Record<string, string> = {
+      "teens-streetwear": "IMPORTANT: Style this teen in viral streetwear — oversized hoodie or graphic tee, cargo pants or baggy jeans, Nike Dunks or Jordan 1s, and a crossbody bag. Urban setting with youthful energy.",
+      "teens-clean-girl": "IMPORTANT: Style this teen in clean-girl aesthetic — slicked bun or low ponytail, gold hoop earrings, matching ribbed set or tailored basics, minimal gold jewelry, and clean white sneakers or mules. Bright, airy setting.",
+      "teens-skater": "IMPORTANT: Style this teen in skater fashion — baggy jeans or cargos, oversized graphic tee, Vans or Converse, beanie, and a skateboard. Relaxed urban or skatepark setting.",
+      "teens-preppy": "IMPORTANT: Style this teen in preppy fashion — polo shirt or button-up, pleated skirt or chinos, loafers or clean sneakers, and a backpack. School or campus setting.",
+      "teens-athleisure": "IMPORTANT: Style this teen in athleisure — matching set (sports bra/tee + leggings/joggers), Air Max or running shoes, and a sporty watch. Active, bright setting.",
+      "teens-y2k": "IMPORTANT: Style this teen in Y2K revival — baby tee, low-rise jeans or mini skirt, butterfly clips, platform sneakers, and layered necklaces. Nostalgic early-2000s aesthetic.",
+      "teens-dark-academia": "IMPORTANT: Style this teen in dark academia — plaid trousers or skirt, turtleneck or knit vest, blazer, oxford shoes, and round vintage glasses. Library or campus setting.",
+      "teens-cottagecore": "IMPORTANT: Style this teen in cottagecore — floral midi dress or linen shirt, puff sleeves, mary janes or leather boots, and a wicker bag. Meadow or garden setting.",
+      "teens-grunge": "IMPORTANT: Style this teen in grunge — flannel shirt, ripped jeans, band tee, combat boots, and layered chains. Dark, moody setting.",
+      "teens-formal": "IMPORTANT: Style this teen in formal/prom attire — an elegant dress or sharp suit, dress shoes, and refined accessories. Event-ready, sophisticated setting.",
+      "teens-festival": "IMPORTANT: Style this teen in festival fashion — colorful outfit, bucket hat, chunky sneakers, fun sunglasses, and bold accessories. Concert or outdoor festival setting.",
+      "teens-minimalist": "IMPORTANT: Style this teen in minimalist fashion — neutral tones, clean lines, basic tee, tailored pants, white sneakers, and minimal accessories. Clean, modern setting.",
+      "teens-kpop": "IMPORTANT: Style this teen in K-Pop inspired fashion — bold or pastel hair accents, oversized jacket, wide-leg pants, platform shoes, and layered accessories. Trendy, editorial setting.",
+      "teens-coastal": "IMPORTANT: Style this teen in coastal/surf style — board shorts or linen pants, relaxed tee, bucket hat, sandals, and sunglasses. Beach or coastal setting.",
+    };
+
+    const teensOverride = (styleCategory === "teens" && styleSubcategory && teensSubStyleOverrides[styleSubcategory])
+      ? `\n\n${teensSubStyleOverrides[styleSubcategory]}`
+      : "";
+
     const parentChildOverride = (styleCategory === "parent-child" && styleSubcategory && parentChildSubStyleOverrides[styleSubcategory])
       ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
       : "";
@@ -365,7 +391,7 @@ serve(async (req) => {
       ? `\n\n${couplesSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || parentChildOverride || couplesOverride;
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || teensOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
@@ -437,23 +463,27 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
-    // Strong gender enforcement (skip for baby, kids, parent-child, and couples categories)
+    // Strong gender enforcement (skip for baby, kids, teens, parent-child, and couples categories)
     const isBaby = styleCategory === "baby-toddler";
     const isKids = styleCategory === "kids";
+    const isTeens = styleCategory === "teens";
     const isParentChild = styleCategory === "parent-child";
     const isCouples = styleCategory === "couples";
     const isChildCategory = isBaby || isKids;
+    const isMinorCategory = isBaby || isKids || isTeens;
     const hasDualPhotos = (isParentChild || isCouples) && secondImageBase64;
 
-    // Content safety for kids/baby categories
-    const childSafetyDirective = isChildCategory
-      ? "\n\nCONTENT SAFETY — MANDATORY: This image involves a child. ALL clothing MUST be age-appropriate, modest, and family-friendly. Do NOT generate anything revealing, suggestive, or inappropriate for children. No crop tops, no low-cut items, no swimwear, no lingerie, no adult-themed styling. Keep the tone wholesome, cheerful, and suitable for a children's fashion catalog. Only generate fully-clothed, modest, and tasteful children's outfits."
+    // Content safety for all minor categories (baby, kids, teens)
+    const childSafetyDirective = isMinorCategory
+      ? "\n\nCONTENT SAFETY — MANDATORY: This image involves a minor. ALL clothing MUST be age-appropriate, modest, and family-friendly. Do NOT generate anything revealing, suggestive, or inappropriate. No crop tops showing midriff, no low-cut items, no lingerie, no adult-themed styling. Keep the tone wholesome and suitable for a fashion catalog. Only generate fully-clothed, modest, and tasteful outfits."
       : "";
 
     const genderEnforcement = isBaby
       ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.${childSafetyDirective}`
       : isKids
         ? `\n\nCRITICAL: This is a KIDS styling request. The uploaded photo is of a child (school-age). Style this child in age-appropriate, kid-friendly clothing. The result must show a child — NOT an adult or teenager. All clothing must be children's sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.${childSafetyDirective}`
+      : isTeens
+        ? `\n\nCRITICAL: This is a TEEN styling request (ages 13-17). The uploaded photo is of a teenager. Style this teen in trendy, age-appropriate clothing. The result must show a teenager — NOT an adult. All clothing must be appropriate for a teenager. Preserve the teen's EXACT face — same eyes, nose, mouth, skin tone, and hair.${childSafetyDirective}`
       : isCouples && hasDualPhotos
         ? `\n\nCRITICAL COUPLES STYLING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is one partner and the SECOND image is the other partner. Generate a single image showing BOTH people together wearing beautifully coordinated complementary outfits. You MUST preserve BOTH people's EXACT facial features with photographic accuracy — same eye shape, nose, lips, jawline, skin tone, hair color and texture. Each person must be immediately recognizable from their uploaded photo. Their outfits should harmonize in color, style, and vibe while each being flattering for the individual. Professional couples fashion editorial photography.`
         : isCouples
@@ -469,9 +499,13 @@ serve(async (req) => {
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      const mannequinType = isChildCategory
-        ? `a child-sized ${isMale ? "boy's" : "girl's"} mannequin`
-        : `a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin`;
+      const mannequinType = isBaby
+        ? `a baby-sized ${isMale ? "boy's" : "girl's"} mannequin`
+        : isKids
+          ? `a child-sized ${isMale ? "boy's" : "girl's"} mannequin`
+          : isTeens
+            ? `a teen-sized ${isMale ? "boy's" : "girl's"} mannequin`
+            : `a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin`;
       editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}`;
 
       messages = [
