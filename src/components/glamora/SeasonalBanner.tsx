@@ -105,8 +105,23 @@ const PROMOS: SeasonalPromo[] = [
       { label: "After-Party Fit", emoji: "🎉", category: "teens" as StyleCategory, subcategory: "y2k-retro", desc: "Fun after-prom outfit swap" },
     ],
   },
+  // Graduation Season (May 15 – Jun 5)
   {
-    id: "mothers-day", title: "Style Her Day ✨",
+    id: "graduation", title: "Graduation Glam 🎓",
+    subtitle: "Cap, gown & beyond — celebrate with show-stopping style", cta: "Grad Looks",
+    icon: GraduationCap,
+    gradient: "linear-gradient(135deg, hsla(45 80% 50% / 0.18), hsla(210 50% 45% / 0.12))",
+    border: "hsla(45 80% 55% / 0.35)", accentColor: "hsl(45 80% 55%)",
+    months: [4, 5], dayRange: [15, 5],
+    picks: [
+      { label: "Under the Gown", emoji: "👗", category: "formal", subcategory: "cocktail", desc: "Chic outfit under the cap & gown" },
+      { label: "Grad Party Fit", emoji: "🎉", category: "teens" as StyleCategory, subcategory: "street-style", desc: "Trendy after-ceremony party look" },
+      { label: "Family Photo Ready", emoji: "📸", category: "full-style", subcategory: "smart-casual", desc: "Polished family photo outfit" },
+      { label: "Grad Night Glam", emoji: "✨", category: "formal", subcategory: "gala-evening", desc: "Evening celebration showstopper" },
+      { label: "Sharp Grad Suit", emoji: "🤵", category: "formal", subcategory: "business-modern", desc: "Tailored suit for the big day" },
+    ],
+  },
+  {
     subtitle: "Help Mom look & feel amazing — or style a matching look", cta: "Gift a Look",
     icon: Heart,
     gradient: "linear-gradient(135deg, hsla(330 50% 60% / 0.15), hsla(var(--glamora-gold) / 0.1))",
