@@ -3,6 +3,7 @@ import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
+import SeasonalBanner from "./SeasonalBanner";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
