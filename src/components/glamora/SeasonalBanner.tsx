@@ -121,6 +121,22 @@ export const PROMOS: SeasonalPromo[] = [
       { label: "Sharp Grad Suit", emoji: "🤵", category: "formal", subcategory: "business-modern", desc: "Tailored suit for the big day" },
     ],
   },
+  // Wedding Season (May 1 – Jun 30)
+  {
+    id: "wedding-season", title: "Wedding Season 💍",
+    subtitle: "Bridal, guest, bridesmaid & groom looks for the big day", cta: "Wedding Looks",
+    icon: Heart,
+    gradient: "linear-gradient(135deg, hsla(340 40% 65% / 0.15), hsla(45 60% 55% / 0.1))",
+    border: "hsla(340 40% 65% / 0.3)", accentColor: "hsl(340 40% 65%)",
+    months: [4, 5], dayRange: [1, 30],
+    picks: [
+      { label: "Wedding Guest", emoji: "👗", category: "formal", subcategory: "cocktail", desc: "Elegant guest outfit" },
+      { label: "Bridesmaid Chic", emoji: "💐", category: "formal", subcategory: "garden-party", desc: "Coordinated bridesmaid look" },
+      { label: "Groom's Style", emoji: "🤵", category: "formal", subcategory: "black-tie", desc: "Sharp wedding day suit" },
+      { label: "Rehearsal Dinner", emoji: "🥂", category: "full-style", subcategory: "smart-casual", desc: "Polished rehearsal look" },
+      { label: "Bridal Shower", emoji: "🎀", category: "full-style", subcategory: "brunch-ready", desc: "Feminine shower outfit" },
+    ],
+  },
   // Mother's Day (May 1–12)
   {
     id: "mothers-day", title: "Style Her Day ✨",
