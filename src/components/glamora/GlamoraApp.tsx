@@ -251,6 +251,9 @@ const GlamoraApp = () => {
       {screen === "face-profile" && user && (
         <FaceProfileScreen onBack={() => go("profile")} gender={prefs.gender} userId={user.id} />
       )}
+      {screen === "my-closet" && user && (
+        <MyClosetScreen onBack={() => go("home")} gender={prefs.gender} userId={user.id} />
+      )}
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
           onLookSelect={(name) => { setSelectedLook(name); go("tutorial"); }}
