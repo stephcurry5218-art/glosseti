@@ -311,6 +311,111 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
         </div>
       )}
 
+      {/* 7-Day Style Plan */}
+      {items.length >= 3 && (
+        <div style={{ padding: "0 16px 12px" }}>
+          {activePlan ? (
+            <div style={{
+              padding: 16, borderRadius: 16,
+              background: "linear-gradient(135deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+              border: "1.5px solid hsla(160 50% 45% / 0.25)",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CalendarDays size={16} color="hsl(160 50% 55%)" />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "white" }}>
+                    {activePlan.days}-Day Style Plan
+                  </span>
+                </div>
+                <button onClick={handleCancelPlan} style={{
+                  fontSize: 10, padding: "3px 8px", borderRadius: 100,
+                  background: "hsla(0 60% 50% / 0.15)", border: "1px solid hsla(0 60% 50% / 0.2)",
+                  color: "hsl(0 60% 65%)", cursor: "pointer", fontWeight: 600,
+                }}>
+                  Cancel
+                </button>
+              </div>
+
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginBottom: 10 }}>
+                {new Date(activePlan.start_date).toLocaleDateString()} → {new Date(activePlan.end_date).toLocaleDateString()}
+              </div>
+
+              {/* Daily outfit cards */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {(activePlan.daily_outfits as any[]).map((outfit: any, i: number) => {
+                  const dayDate = new Date(activePlan.start_date);
+                  dayDate.setDate(dayDate.getDate() + i);
+                  const isToday = dayDate.toDateString() === new Date().toDateString();
+                  const isPast = dayDate < new Date() && !isToday;
+
+                  return (
+                    <div key={i} style={{
+                      padding: "10px 12px", borderRadius: 12,
+                      background: isToday ? "hsla(160 50% 45% / 0.15)" : "hsla(0 0% 100% / 0.04)",
+                      border: `1px solid ${isToday ? "hsla(160 50% 45% / 0.3)" : "hsla(0 0% 100% / 0.06)"}`,
+                      opacity: isPast ? 0.5 : 1,
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          {isPast && <Check size={12} color="hsl(160 50% 55%)" />}
+                          <span style={{
+                            fontSize: 11, fontWeight: 700,
+                            color: isToday ? "hsl(160 50% 55%)" : "hsla(0 0% 100% / 0.7)",
+                          }}>
+                            {isToday ? "📍 Today" : `Day ${i + 1}`}
+                          </span>
+                          <span style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.4)" }}>
+                            {dayDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.4)", textTransform: "uppercase", fontWeight: 600, letterSpacing: 0.5 }}>
+                          {outfit.occasion}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 12, color: "white", fontWeight: 600, marginTop: 4 }}>
+                        {outfit.description}
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                        {outfit.items?.map((item: string, j: number) => (
+                          <span key={j} style={{
+                            padding: "2px 8px", borderRadius: 100, fontSize: 9,
+                            background: "hsla(0 0% 100% / 0.06)",
+                            color: "hsla(0 0% 100% / 0.6)",
+                          }}>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                      {outfit.tips && (
+                        <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.4)", marginTop: 4 }}>
+                          💡 {outfit.tips}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowPlanSetup(true)}
+              style={{
+                width: "100%", padding: "14px 16px", borderRadius: 16, cursor: "pointer",
+                background: "linear-gradient(135deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+                border: "1.5px solid hsla(160 50% 45% / 0.25)",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                boxShadow: "0 4px 16px hsla(160 50% 45% / 0.12)",
+              }}
+            >
+              <CalendarDays size={18} color="hsl(160 50% 55%)" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: "hsla(0 0% 100% / 0.9)" }}>
+                📅 AI Style Me for Up to 7 Days
+              </span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Items grid */}
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
