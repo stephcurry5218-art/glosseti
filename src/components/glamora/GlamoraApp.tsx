@@ -245,7 +245,13 @@ const GlamoraApp = () => {
               return;
             }
             go("face-profile");
-          }} />
+          }}
+          onCloset={() => {
+            if (!user) { go("auth"); return; }
+            if (subscription.tier === "free") { setClosetUpgradeOpen(true); return; }
+            go("my-closet");
+          }}
+        />
       )}
       {screen === "settings" && (
         <SettingsScreen onBack={() => go("profile")} gender={prefs.gender} />
