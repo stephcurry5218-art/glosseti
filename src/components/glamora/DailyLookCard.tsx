@@ -118,8 +118,8 @@ const DailyLookCard = ({ onGenerate, onGetStyled, gender }: Props) => {
   const [showResult, setShowResult] = useState(false);
   const particlesRef = useRef<Particle[]>([]);
 
-  const trendPills = isMale ? TREND_PILLS_MALE : TREND_PILLS_FEMALE;
-  const trends = isMale ? TRENDS_MALE : TRENDS_FEMALE;
+  const trendPills = pickWeekly(isMale ? ALL_TREND_PILLS_MALE : ALL_TREND_PILLS_FEMALE, 4);
+  const trends = pickWeekly(isMale ? ALL_TRENDS_MALE : ALL_TRENDS_FEMALE, 4);
   const morphLayers = isMale
     ? ["Jacket / Top", "Pants", "Shoes & Watch"]
     : ["Top Layer", "Bottom", "Accessories"];
