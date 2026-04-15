@@ -542,7 +542,27 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
-    id: "parent-child", label: "Parent-Child Matching", Icon: Heart,
+    id: "teens", label: "Teen Fashion", Icon: Sparkles,
+    desc: "Trendy, age-appropriate styles for teens 13–17 — TikTok-worthy looks",
+    includes: ["Tops & Layers", "Bottoms", "Sneakers & Shoes", "Accessories"],
+    subs: [
+      { id: "teens-streetwear", label: "Street Style", desc: "Oversized hoodies, cargo pants, Dunks — viral fits", emoji: "🔥" },
+      { id: "teens-clean-girl", label: "Clean Girl", desc: "Slicked bun, gold hoops, matching set — effortless polish", emoji: "✨" },
+      { id: "teens-skater", label: "Skater", desc: "Baggy jeans, graphic tees, Vans — laid-back cool", emoji: "🛹" },
+      { id: "teens-preppy", label: "Preppy", desc: "Polo, pleated skirt or chinos, loafers — school chic", emoji: "🎓" },
+      { id: "teens-athleisure", label: "Athleisure", desc: "Matching sets, Air Max, sporty accessories", emoji: "🏃" },
+      { id: "teens-y2k", label: "Y2K Revival", desc: "Low-rise, butterfly clips, baby tees — 2000s energy", emoji: "💖" },
+      { id: "teens-dark-academia", label: "Dark Academia", desc: "Plaid, turtlenecks, blazers, vintage glasses", emoji: "📚" },
+      { id: "teens-cottagecore", label: "Cottagecore", desc: "Floral dresses, puff sleeves, mary janes", emoji: "🌷" },
+      { id: "teens-grunge", label: "Grunge", desc: "Flannel, ripped jeans, combat boots — 90s rebel vibes", emoji: "🎸" },
+      { id: "teens-formal", label: "Prom / Formal", desc: "Stunning dresses and sharp suits for special events", emoji: "🎩" },
+      { id: "teens-festival", label: "Festival", desc: "Colorful, bold, and expressive — concert-ready fits", emoji: "🎪" },
+      { id: "teens-minimalist", label: "Minimalist", desc: "Neutral tones, clean lines, capsule wardrobe energy", emoji: "🤍" },
+      { id: "teens-kpop", label: "K-Pop Inspired", desc: "Bold colors, oversized fits, layered accessories — idol energy", emoji: "🎶" },
+      { id: "teens-coastal", label: "Coastal / Surf", desc: "Beach vibes, board shorts, bucket hats, and linen", emoji: "🏄" },
+    ],
+  },
+  {
     desc: "Coordinated outfits for parent and baby — twinning never looked so good",
     includes: ["Matching Sets", "Coordinated Colors", "Family Photo Outfits", "Mommy & Me / Daddy & Me"],
     subs: [
