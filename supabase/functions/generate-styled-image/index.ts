@@ -544,6 +544,12 @@ serve(async (req) => {
         { type: "text", text: editPrompt },
         { type: "image_url", image_url: { url: imageBase64 } },
       ];
+      // Add face reference selfies for better identity preservation
+      if (hasFaceRefs) {
+        for (const refUrl of faceReferenceUrls.slice(0, 3)) {
+          contentParts.push({ type: "image_url", image_url: { url: refUrl } });
+        }
+      }
       // Add second photo for dual-photo parent-child mode
       if (hasDualPhotos) {
         contentParts.push({ type: "image_url", image_url: { url: secondImageBase64 } });
