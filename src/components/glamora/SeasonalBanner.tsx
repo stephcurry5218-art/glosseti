@@ -121,7 +121,9 @@ const PROMOS: SeasonalPromo[] = [
       { label: "Sharp Grad Suit", emoji: "🤵", category: "formal", subcategory: "business-modern", desc: "Tailored suit for the big day" },
     ],
   },
+  // Mother's Day (May 1–12)
   {
+    id: "mothers-day", title: "Style Her Day ✨",
     subtitle: "Help Mom look & feel amazing — or style a matching look", cta: "Gift a Look",
     icon: Heart,
     gradient: "linear-gradient(135deg, hsla(330 50% 60% / 0.15), hsla(var(--glamora-gold) / 0.1))",
