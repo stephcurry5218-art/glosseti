@@ -317,6 +317,26 @@ serve(async (req) => {
       ? `\n\n${babySubStyleOverrides[styleSubcategory]}`
       : "";
 
+    // Kids sub-style overrides
+    const kidsSubStyleOverrides: Record<string, string> = {
+      "kids-casual": "IMPORTANT: Style the child in comfortable everyday clothes — a graphic tee or hoodie, jeans or joggers, and clean sneakers. Bright, playful setting. Age-appropriate, wholesome children's fashion editorial.",
+      "kids-school": "IMPORTANT: Style the child in neat back-to-school clothes — a polo or button-up, chinos or a skirt, clean shoes, and a backpack. Bright, cheerful school-themed setting.",
+      "kids-sporty": "IMPORTANT: Style the child in athletic wear — matching sports set, sneakers, and a sporty watch or cap. Active outdoor or playground setting.",
+      "kids-formal": "IMPORTANT: Style the child in formal attire — a mini suit with tie for boys, or an elegant dress with headband for girls. Patent shoes. Special event setting.",
+      "kids-streetwear": "IMPORTANT: Style the child in cool kids' streetwear — Jordans or Nikes, a graphic tee, joggers or cargo pants, and a snapback. Urban lifestyle editorial.",
+      "kids-preppy": "IMPORTANT: Style the child in preppy clothes — polo shirt, chinos or a pleated skirt, clean sneakers or loafers, and a neat hairstyle. Picture-day-ready setting.",
+      "kids-boho": "IMPORTANT: Style the child in earthy boho tones — floral prints, natural fabrics, moccasins or sandals. Outdoor meadow setting.",
+      "kids-summer": "IMPORTANT: Style the child in bright summer clothes — colorful shorts, a fun tank or tee, sandals, sunglasses, and a bucket hat. Sunny outdoor setting.",
+      "kids-winter": "IMPORTANT: Style the child in cozy winter layers — a puffer jacket, beanie, boots, and warm scarf. Snowy or cold-weather outdoor setting.",
+      "kids-holiday": "IMPORTANT: Style the child in a festive holiday outfit — Christmas sweater, Halloween costume, or Easter pastels. Themed celebratory setting.",
+      "kids-matching-sibling": "IMPORTANT: Style the child in an outfit designed for sibling coordination — same colors, complementary patterns. Show coordinated kids' styling.",
+      "kids-denim": "IMPORTANT: Style the child in denim pieces — a denim jacket, jeans, and a cool tee with sneakers. Casual, rugged-cute kids' fashion editorial.",
+    };
+
+    const kidsOverride = (styleCategory === "kids" && styleSubcategory && kidsSubStyleOverrides[styleSubcategory])
+      ? `\n\n${kidsSubStyleOverrides[styleSubcategory]}`
+      : "";
+
     const parentChildOverride = (styleCategory === "parent-child" && styleSubcategory && parentChildSubStyleOverrides[styleSubcategory])
       ? `\n\n${parentChildSubStyleOverrides[styleSubcategory]}`
       : "";
@@ -345,7 +365,7 @@ serve(async (req) => {
       ? `\n\n${couplesSubStyleOverrides[styleSubcategory]}`
       : "";
 
-    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || parentChildOverride || couplesOverride;
+    const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
     const subcategoryNote = styleSubcategory
