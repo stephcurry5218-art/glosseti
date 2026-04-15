@@ -655,6 +655,7 @@ const customDetailPlaceholders: Record<string, string> = {
   "cosplay": 'e.g. "Orange martial arts gi", "Sailor outfit with tiara"...',
   "baby-toddler": 'e.g. "Floral romper with sun hat", "Mini Nike Jordan set"...',
   "kids": 'e.g. "Graphic tee with cargo pants", "Mini blazer and chinos"...',
+  "teens": 'e.g. "Oversized hoodie with cargos", "Clean girl matching set"...',
   "parent-child": 'e.g. "Matching denim jackets", "Mommy & me floral dresses"...',
   "couples": 'e.g. "Matching all-black outfits", "His & hers Jordans"...',
 };
