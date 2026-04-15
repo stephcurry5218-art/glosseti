@@ -8,6 +8,7 @@ const EVENT_IDS = [
   "prom-season", "graduation", "back-to-school", "valentines", "easter",
   "mothers-day", "fathers-day", "halloween", "thanksgiving", "holiday",
   "july-4th", "memorial-day", "new-year", "spring-break", "black-friday",
+  "wedding-season",
 ];
 
 function getUpcomingEvents(): SeasonalPromo[] {
@@ -15,24 +16,23 @@ function getUpcomingEvents(): SeasonalPromo[] {
   const month = now.getMonth();
   const currentPromo = getCurrentPromo();
 
-  // Get all event promos, sort by proximity to current date
   const events = PROMOS.filter(p => EVENT_IDS.includes(p.id) && p.id !== currentPromo.id);
 
-  // Sort: current month first, then upcoming months wrapping around
   return events.sort((a, b) => {
     const aMonth = a.months[0];
     const bMonth = b.months[0];
     const aDist = (aMonth - month + 12) % 12;
     const bDist = (bMonth - month + 12) % 12;
     return aDist - bDist;
-  }).slice(0, 8); // Show up to 8 events
+  }).slice(0, 8);
 }
 
 interface Props {
   onHolidayPick: (holidayId: string) => void;
+  onDirectPick?: (category: StyleCategory, subcategory: string) => void;
 }
 
-const EventPromos = ({ onHolidayPick }: Props) => {
+const EventPromos = ({ onHolidayPick, onDirectPick }: Props) => {
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
   const events = getUpcomingEvents();
 
@@ -140,7 +140,7 @@ const EventPromos = ({ onHolidayPick }: Props) => {
               {event.picks.map((pick, i) => (
                 <div
                   key={i}
-                  onClick={() => onHolidayPick(event.id)}
+                  onClick={() => onDirectPick ? onDirectPick(pick.category, pick.subcategory) : onHolidayPick(event.id)}
                   style={{
                     padding: "12px 10px",
                     borderRadius: 14,
