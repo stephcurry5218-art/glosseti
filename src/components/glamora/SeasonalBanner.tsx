@@ -95,7 +95,20 @@ const PROMOS: SeasonalPromo[] = [
     months: [4],
     dayRange: [20, 31],
   },
-  // Summer Vibes (Jun 1 – Jul 3)
+  // Father's Day (Jun 1–15)
+  {
+    id: "fathers-day",
+    title: "Style Dad's Day 👔",
+    subtitle: "Sharp grooming & outfit upgrades for the man of the hour",
+    cta: "Men's Looks",
+    icon: Star,
+    gradient: "linear-gradient(135deg, hsla(210 45% 45% / 0.15), hsla(var(--glamora-gold) / 0.1))",
+    border: "hsla(210 45% 50% / 0.3)",
+    accentColor: "hsl(210 45% 50%)",
+    category: "grooming" as StyleCategory,
+    months: [5], // June
+    dayRange: [1, 15],
+  },
   {
     id: "summer",
     title: "Summer Vibes ☀️",
