@@ -16,6 +16,7 @@ interface Props {
   onDailyLook: () => void;
   onProfile: () => void;
   onSaved: () => void;
+  onCloset: () => void;
   savedCount: number;
   gender: Gender;
   onGenderToggle: (g: Gender) => void;
@@ -24,9 +25,10 @@ interface Props {
   onShowPaywall: () => void;
   isLoggedIn: boolean;
   onSignIn: () => void;
+  isPremium: boolean;
 }
 
-const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSaved, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn }: Props) => {
+const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSaved, onCloset, savedCount, gender, onGenderToggle, subscription, remainingGenerations, onShowPaywall, isLoggedIn, onSignIn, isPremium }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
