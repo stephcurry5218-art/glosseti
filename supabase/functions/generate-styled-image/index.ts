@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference } = await req.json();
+    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -521,7 +521,13 @@ serve(async (req) => {
       const isRevealing = isSwimwear || isLingerie || styleCategory === "sexy";
 
       // Strong facial identity preservation directive
-      const facePreservation = "CRITICAL FACIAL IDENTITY PRESERVATION: You MUST preserve this person's EXACT facial features with photographic accuracy. This means their exact eye shape, eye color, nose shape and size, lip shape and fullness, jawline, chin shape, cheekbone structure, eyebrow shape, forehead size, skin tone, skin texture, freckles, moles, facial hair, hairline, and hair color/texture. The face in the generated image must be immediately recognizable as the SAME person from the uploaded photo — not a similar-looking person, but the EXACT same person. Do NOT idealize, smooth, reshape, or alter any facial features. Do NOT change their ethnicity, skin tone, or facial proportions. The person viewing the result should instantly say 'that's me.'";
+      // Build face reference directive if available
+      const hasFaceRefs = Array.isArray(faceReferenceUrls) && faceReferenceUrls.length > 0 && !isMannequin;
+      const faceRefDirective = hasFaceRefs
+        ? `\n\nFACE REFERENCE IMAGES PROVIDED: The user has uploaded ${faceReferenceUrls.length} reference selfie(s) showing their face from different angles. Use these reference images to PRECISELY match and preserve their exact facial identity in the generated image. Cross-reference ALL provided selfies to ensure the generated face is an exact match — same bone structure, eye shape, nose, lips, skin tone, hair, and all distinguishing features.`
+        : "";
+
+      const facePreservation = "CRITICAL FACIAL IDENTITY PRESERVATION: You MUST preserve this person's EXACT facial features with photographic accuracy. This means their exact eye shape, eye color, nose shape and size, lip shape and fullness, jawline, chin shape, cheekbone structure, eyebrow shape, forehead size, skin tone, skin texture, freckles, moles, facial hair, hairline, and hair color/texture. The face in the generated image must be immediately recognizable as the SAME person from the uploaded photo — not a similar-looking person, but the EXACT same person. Do NOT idealize, smooth, reshape, or alter any facial features. Do NOT change their ethnicity, skin tone, or facial proportions. The person viewing the result should instantly say 'that's me.'" + faceRefDirective;
 
       const keepNote = isSwimwear
         ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting. Professional fashion editorial style.`
@@ -538,6 +544,12 @@ serve(async (req) => {
         { type: "text", text: editPrompt },
         { type: "image_url", image_url: { url: imageBase64 } },
       ];
+      // Add face reference selfies for better identity preservation
+      if (hasFaceRefs) {
+        for (const refUrl of faceReferenceUrls.slice(0, 3)) {
+          contentParts.push({ type: "image_url", image_url: { url: refUrl } });
+        }
+      }
       // Add second photo for dual-photo parent-child mode
       if (hasDualPhotos) {
         contentParts.push({ type: "image_url", image_url: { url: secondImageBase64 } });

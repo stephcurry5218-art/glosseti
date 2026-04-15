@@ -19,6 +19,7 @@ import AuthScreen from "./AuthScreen";
 import PaywallScreen from "./subscription/PaywallScreen";
 import SettingsScreen, { applyTheme, getStoredTheme } from "./SettingsScreen";
 import AdminSuggestionsScreen from "./AdminSuggestionsScreen";
+import FaceProfileScreen from "./FaceProfileScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
@@ -29,7 +30,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -225,13 +226,23 @@ const GlamoraApp = () => {
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
           subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
           onSettings={() => go("settings")}
-          onAdminSuggestions={() => go("admin-suggestions")} />
+          onAdminSuggestions={() => go("admin-suggestions")}
+          onFaceProfile={() => {
+            if (!user) {
+              go("auth");
+              return;
+            }
+            go("face-profile");
+          }} />
       )}
       {screen === "settings" && (
         <SettingsScreen onBack={() => go("profile")} gender={prefs.gender} />
       )}
       {screen === "admin-suggestions" && (
         <AdminSuggestionsScreen onBack={() => go("profile")} />
+      )}
+      {screen === "face-profile" && user && (
+        <FaceProfileScreen onBack={() => go("profile")} gender={prefs.gender} userId={user.id} />
       )}
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
