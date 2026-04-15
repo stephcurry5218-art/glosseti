@@ -20,6 +20,7 @@ import PaywallScreen from "./subscription/PaywallScreen";
 import SettingsScreen, { applyTheme, getStoredTheme } from "./SettingsScreen";
 import AdminSuggestionsScreen from "./AdminSuggestionsScreen";
 import FaceProfileScreen from "./FaceProfileScreen";
+import MyClosetScreen from "./MyClosetScreen";
 // import AppDownloadSheet from "./AppDownloadSheet";
 import UpgradePrompt from "./subscription/UpgradePrompt";
 import { useSubscription } from "./subscription/useSubscription";
@@ -30,7 +31,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile";
+type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile" | "my-closet";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
