@@ -99,14 +99,16 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
   },
   {
     id: "formal", label: "Formal / Business", Icon: Briefcase,
-    desc: "Professional and elegant looks for work and events",
-    includes: ["Suits & Blazers", "Dress Shirts", "Dress Shoes", "Ties & Cufflinks"],
+    desc: "Power dressing for boardrooms, galas, and everything in between",
+    includes: ["Tailored Suits", "Designer Blazers", "Silk Ties", "Cufflinks & Watches", "Oxford Shoes", "Gowns"],
     subs: [
-      { id: "black-tie", label: "Black Tie", desc: "Tuxedos, gowns, and red-carpet polish", emoji: "🎩" },
-      { id: "business-modern", label: "Business Modern", desc: "Tailored fits with contemporary edge", emoji: "👔" },
-      { id: "cocktail", label: "Cocktail", desc: "Semiformal elegance for evening events", emoji: "🍸" },
-      { id: "boardroom", label: "Boardroom", desc: "CEO-level power dressing", emoji: "💎" },
-      { id: "gala-evening", label: "Gala Evening", desc: "Floor-length gowns, cufflinks, and opulence", emoji: "✨" },
+      { id: "black-tie", label: "Black Tie", desc: "Red-carpet elegance — tuxedos, gowns, and statement pieces", emoji: "🎩" },
+      { id: "business-modern", label: "Business Modern", desc: "Sharp tailoring meets contemporary cool — own the office", emoji: "👔" },
+      { id: "cocktail", label: "Cocktail Chic", desc: "Semiformal glamour for rooftop bars and evening soirées", emoji: "🍸" },
+      { id: "boardroom", label: "Boardroom Power", desc: "CEO-level authority dressing — command every room", emoji: "💎" },
+      { id: "gala-evening", label: "Gala Evening", desc: "Floor-length opulence — couture-inspired showstoppers", emoji: "✨" },
+      { id: "smart-casual", label: "Smart Casual", desc: "Polished but relaxed — blazer over tee energy", emoji: "🧥" },
+      { id: "interview-ready", label: "Interview Ready", desc: "Confident first-impression looks that land the job", emoji: "📋" },
     ],
   },
   {
