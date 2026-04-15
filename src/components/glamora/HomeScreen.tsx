@@ -297,6 +297,9 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSave
       {/* Seasonal Promo Banner — above Daily Look for prominence */}
       <SeasonalBanner onHolidayPick={onHolidayPick} />
 
+      {/* Event-specific promos with style picks */}
+      <EventPromos onHolidayPick={onHolidayPick} />
+
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
         <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
