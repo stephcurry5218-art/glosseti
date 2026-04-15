@@ -182,7 +182,7 @@ const GlamoraApp = () => {
           onSignIn={() => go("auth")}
           onCloset={() => {
             if (!user) { go("auth"); return; }
-            if (subscription.tier === "free") { setShowPaywall(true); return; }
+            if (subscription.tier === "free") { setClosetUpgradeOpen(true); return; }
             go("my-closet");
           }}
           isPremium={subscription.tier !== "free"}
