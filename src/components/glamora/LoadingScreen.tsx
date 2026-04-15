@@ -183,7 +183,35 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         }
         const gioRefinement = localStorage.getItem("glamora_gio_refinement");
         localStorage.removeItem("glamora_gio_refinement");
-        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode, hasRefinement: !!gioRefinement });
+
+        // Fetch face reference images for better identity preservation
+        let faceReferenceUrls: string[] = [];
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && prefs.generationMode !== "mannequin") {
+            const { data: refs } = await supabase
+              .from("face_references")
+              .select("storage_path")
+              .eq("user_id", session.user.id)
+              .order("created_at", { ascending: true })
+              .limit(5);
+            if (refs && refs.length > 0) {
+              const urls = await Promise.all(
+                refs.map(async (ref: any) => {
+                  const { data } = await supabase.storage
+                    .from("face-references")
+                    .createSignedUrl(ref.storage_path, 300);
+                  return data?.signedUrl || null;
+                })
+              );
+              faceReferenceUrls = urls.filter(Boolean) as string[];
+            }
+          }
+        } catch (e) {
+          console.warn("Could not fetch face references:", e);
+        }
+
+        console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode, hasRefinement: !!gioRefinement, faceRefs: faceReferenceUrls.length });
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
@@ -195,6 +223,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             generationMode: prefs.generationMode,
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
             ...(prefs.makeupPreference ? { makeupPreference: prefs.makeupPreference } : {}),
+            ...(faceReferenceUrls.length > 0 ? { faceReferenceUrls } : {}),
           },
         });
         if (error || data?.error) {
