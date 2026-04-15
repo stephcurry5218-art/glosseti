@@ -181,6 +181,7 @@ export function useSubscription() {
     canGenerate,
     remainingGenerations,
     showWatermark,
+    isDevMode: isDevMode(),
     showPaywall,
     setShowPaywall,
     showUpgradePrompt,

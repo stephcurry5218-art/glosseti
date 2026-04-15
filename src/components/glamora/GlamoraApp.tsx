@@ -90,7 +90,7 @@ const GlamoraApp = () => {
   const {
     subscription, canGenerate, remainingGenerations, showWatermark,
     showPaywall, setShowPaywall, showUpgradePrompt, setShowUpgradePrompt,
-    lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo,
+    lockedFeature, tryGenerate, checkFeatureAccess, upgradeTo, isDevMode,
   } = useSubscription();
 
   const { recordStyle } = useStyleHistory();
@@ -190,10 +190,10 @@ const GlamoraApp = () => {
           onSignIn={() => go("auth")}
           onCloset={() => {
             if (!user) { go("auth"); return; }
-            if (subscription.tier === "free") { setClosetUpgradeOpen(true); return; }
+            if (subscription.tier === "free" && !isDevMode) { setClosetUpgradeOpen(true); return; }
             go("my-closet");
           }}
-          isPremium={subscription.tier !== "free"}
+          isPremium={subscription.tier !== "free" || isDevMode}
         />
       )}
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
@@ -256,7 +256,7 @@ const GlamoraApp = () => {
           }}
           onCloset={() => {
             if (!user) { go("auth"); return; }
-            if (subscription.tier === "free") { setClosetUpgradeOpen(true); return; }
+            if (subscription.tier === "free" && !isDevMode) { setClosetUpgradeOpen(true); return; }
             go("my-closet");
           }}
         />
