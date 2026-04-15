@@ -38,6 +38,39 @@ export type Database = {
         }
         Relationships: []
       }
+      closet_items: {
+        Row: {
+          category: string
+          color: string | null
+          created_at: string
+          id: string
+          label: string | null
+          notes: string | null
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          notes?: string | null
+          storage_path: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          label?: string | null
+          notes?: string | null
+          storage_path?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       face_references: {
         Row: {
           created_at: string
