@@ -24,7 +24,7 @@ export interface SeasonalPromo {
   picks: HolidayPick[];
 }
 
-const PROMOS: SeasonalPromo[] = [
+export const PROMOS: SeasonalPromo[] = [
   // New Year (Jan 1–15)
   {
     id: "new-year", title: "New Year, New Style",

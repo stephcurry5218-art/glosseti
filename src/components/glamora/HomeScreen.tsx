@@ -4,6 +4,7 @@ import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
 import SeasonalBanner from "./SeasonalBanner";
+import EventPromos from "./EventPromos";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
@@ -295,6 +296,9 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSave
 
       {/* Seasonal Promo Banner — above Daily Look for prominence */}
       <SeasonalBanner onHolidayPick={onHolidayPick} />
+
+      {/* Event-specific promos with style picks */}
+      <EventPromos onHolidayPick={onHolidayPick} />
 
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
