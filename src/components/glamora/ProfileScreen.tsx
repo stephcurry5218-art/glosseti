@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw, Trash2, MessageSquarePlus } from "lucide-react";
+import { Scissors, Bookmark, Settings, MessageCircle, Star, User, ChevronRight, LogOut, LogIn, Crown, Camera, Pencil, Check, X, Shield, RotateCcw, Trash2, MessageSquarePlus, Shirt } from "lucide-react";
 import { restorePurchases, isIAPAvailable } from "./subscription/iapService";
 import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
@@ -14,6 +14,7 @@ interface Props {
   savedCount: number;
   onSaved: () => void;
   onGetStyled: () => void;
+  onCloset?: () => void;
   gender: Gender;
   user: SupaUser | null;
   onSignOut: () => void;
@@ -27,7 +28,7 @@ interface Props {
 
 const ADMIN_EMAIL = "admin@glosseti.com";
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions, onFaceProfile }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, onCloset, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions, onFaceProfile }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -112,6 +113,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
     { Icon: Camera, label: "My Face Profile", action: onFaceProfile },
+    { Icon: Shirt, label: "My Closet", action: onCloset },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
     { Icon: Settings, label: "Settings", action: onSettings },
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
