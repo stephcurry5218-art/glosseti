@@ -226,7 +226,14 @@ const GlamoraApp = () => {
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
           subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
           onSettings={() => go("settings")}
-          onAdminSuggestions={() => go("admin-suggestions")} />
+          onAdminSuggestions={() => go("admin-suggestions")}
+          onFaceProfile={() => {
+            if (!user) {
+              go("auth");
+              return;
+            }
+            go("face-profile");
+          }} />
       )}
       {screen === "settings" && (
         <SettingsScreen onBack={() => go("profile")} gender={prefs.gender} />

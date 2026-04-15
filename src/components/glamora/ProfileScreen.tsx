@@ -22,11 +22,12 @@ interface Props {
   onShowPaywall?: () => void;
   onSettings?: () => void;
   onAdminSuggestions?: () => void;
+  onFaceProfile?: () => void;
 }
 
 const ADMIN_EMAIL = "admin@glosseti.com";
 
-const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions }: Props) => {
+const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user, onSignOut, onSignIn, subscription, onShowPaywall, onSettings, onAdminSuggestions, onFaceProfile }: Props) => {
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
@@ -110,6 +111,7 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, gender, user,
 
   const menuItems: { Icon: LucideIcon; label: string; action?: () => void }[] = [
     { Icon: Scissors, label: "Get Styled", action: onGetStyled },
+    { Icon: Camera, label: "My Face Profile", action: onFaceProfile },
     { Icon: Bookmark, label: "Saved Styles", action: onSaved },
     { Icon: Settings, label: "Settings", action: onSettings },
     { Icon: MessageCircle, label: "Support", action: () => { window.location.href = "/support"; } },
