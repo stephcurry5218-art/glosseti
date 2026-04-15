@@ -9,6 +9,83 @@ interface Props {
   onSuccess: () => void;
 }
 
+const ForgotPasswordView = ({ onBack, accent, accentLight, inputStyle, iconWrap }: {
+  onBack: () => void; accent: string; accentLight: string;
+  inputStyle: React.CSSProperties; iconWrap: React.CSSProperties;
+}) => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleReset = async () => {
+    if (!email) { toast.error("Please enter your email"); return; }
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setSent(true);
+      toast.success("Check your email for a reset link!");
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="screen enter" style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+      <div className="screen-header">
+        <button className="back-btn" onClick={onBack}>←</button>
+        <div>
+          <div className="header-title">Reset Password</div>
+          <div className="header-sub">We'll send you a reset link</div>
+        </div>
+      </div>
+      <div style={{ flex: 1, padding: "0 22px", display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ textAlign: "center", margin: "24px 0 12px" }}>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px",
+            background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 8px 28px hsla(28 40% 52% / 0.3)`,
+          }}>
+            <Mail size={28} color="white" />
+          </div>
+        </div>
+        {sent ? (
+          <div className="anim-fadeUp" style={{ textAlign: "center", padding: "20px 0" }}>
+            <p style={{ fontSize: 15, color: "hsl(var(--glamora-char))", fontFamily: "'Jost', sans-serif", lineHeight: 1.6 }}>
+              A password reset link has been sent to <strong>{email}</strong>. Check your inbox and follow the link to set a new password.
+            </p>
+            <button onClick={onBack} style={{
+              marginTop: 20, padding: "14px 32px", borderRadius: 14, border: "none",
+              background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
+              color: "white", fontSize: 14, fontWeight: 600, fontFamily: "'Jost', sans-serif", cursor: "pointer",
+            }}>Back to Sign In</button>
+          </div>
+        ) : (
+          <>
+            <div className="anim-fadeUp" style={{ position: "relative" }}>
+              <div style={iconWrap}><Mail size={18} color={`hsl(${accent})`} /></div>
+              <input type="email" placeholder="Email address" value={email}
+                onChange={e => setEmail(e.target.value)} style={inputStyle} />
+            </div>
+            <button className="anim-fadeUp d1" onClick={handleReset} disabled={loading} style={{
+              width: "100%", padding: "16px", borderRadius: 16, border: "none",
+              background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
+              color: "white", fontSize: 15, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+              cursor: loading ? "wait" : "pointer", opacity: loading ? 0.7 : 1, transition: "opacity 0.2s",
+            }}>
+              {loading ? "Sending..." : "Send Reset Link"}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const AuthScreen = ({ onBack, onSuccess }: Props) => {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
