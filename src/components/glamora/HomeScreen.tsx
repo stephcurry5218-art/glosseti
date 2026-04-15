@@ -297,6 +297,9 @@ const HomeScreen = ({ onGetStyled, onDailyLook, onProfile, onSaved, savedCount, 
         <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
       </div>
 
+      {/* Seasonal Promo Banner */}
+      <SeasonalBanner onGetStyled={onGetStyled} />
+
       {/* Two action cards — side by side */}
       <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <div className="glamora-card" onClick={() => onGetStyled("full-style")} style={{
