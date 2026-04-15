@@ -50,6 +50,7 @@ const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Prop
     padding: 20, animation: "fadeUp 0.3s ease",
   }}>
     <div style={{
+      position: "relative",
       background: "hsl(var(--card))", borderRadius: 24,
       padding: "28px 24px", maxWidth: 340, width: "100%",
       border: "1.5px solid hsla(var(--glamora-gold) / 0.2)",

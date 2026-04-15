@@ -3,7 +3,15 @@ import { WifiOff } from "lucide-react";
 import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
-import { SplashScreen as CapSplash } from "@capacitor/splash-screen";
+// Safe import for Capacitor SplashScreen — avoid crash on web/iPad when plugin unavailable
+const CapSplash = {
+  hide: async () => {
+    try {
+      const mod = await import("@capacitor/splash-screen");
+      await mod.SplashScreen.hide();
+    } catch { /* not on native — no-op */ }
+  },
+};
 import SplashScreen from "./SplashScreen";
 import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
