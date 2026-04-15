@@ -440,7 +440,7 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
       </div>
 
       {/* Daily Look Card */}
-      <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
+      <div className="anim-fadeUp d2" style={{ marginTop: 18 }}>
         <DailyLookCard onGenerate={onDailyLook} onGetStyled={onGetStyled} gender={gender} />
       </div>
 
