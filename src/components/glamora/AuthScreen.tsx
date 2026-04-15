@@ -159,8 +159,6 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           <div className="header-sub">{mode === "signin" ? "Sign in to your profile" : "Join the Glosseti community"}</div>
         </div>
       </div>
-        </div>
-      </div>
 
       <div style={{ flex: 1, padding: "0 22px", display: "flex", flexDirection: "column", gap: 16 }}>
         {/* Logo area */}
