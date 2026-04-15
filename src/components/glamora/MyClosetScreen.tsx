@@ -84,17 +84,14 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setPendingFile(file);
     try {
-      const fixed = await fixImageOrientation(file);
-      setPendingFile(fixed);
-      const url = URL.createObjectURL(fixed);
-      setPendingPreview(url);
-      setShowAddForm(true);
+      const base64 = await fixImageOrientation(file);
+      setPendingPreview(base64);
     } catch {
-      setPendingFile(file);
       setPendingPreview(URL.createObjectURL(file));
-      setShowAddForm(true);
     }
+    setShowAddForm(true);
     e.target.value = "";
   };
 
