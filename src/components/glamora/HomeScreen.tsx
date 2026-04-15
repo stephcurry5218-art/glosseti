@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Heart, Shirt, Lock } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
@@ -301,6 +301,11 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDailyLook, onProfile, onSave
 
       {/* Event-specific promos with style picks */}
       <EventPromos onHolidayPick={onHolidayPick} />
+
+      {/* My Closet CTA */}
+      <div className="anim-fadeUp d2" style={{ padding: "14px 20px 0" }}>
+        <ClosetCTA isPremium={isPremium} onCloset={onCloset} isMale={isMale} />
+      </div>
 
       {/* Daily Look Card */}
       <div className="anim-fadeUp d2" style={{ marginTop: 14 }}>
