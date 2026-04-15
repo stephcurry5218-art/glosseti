@@ -4,6 +4,7 @@ import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
 import SeasonalBanner from "./SeasonalBanner";
+import EventPromos from "./EventPromos";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
 import { MONTHLY_CAPS } from "./subscription/types";
