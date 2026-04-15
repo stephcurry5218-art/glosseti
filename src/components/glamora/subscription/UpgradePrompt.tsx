@@ -5,6 +5,7 @@ import { purchaseSubscription, isIAPAvailable } from "./iapService";
 
 interface Props {
   feature: string;
+  featureDescription?: string;
   onClose: () => void;
   onUpgrade: (tier: SubscriptionTier) => void;
 }
