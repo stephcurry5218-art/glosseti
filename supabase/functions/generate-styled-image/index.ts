@@ -437,13 +437,23 @@ serve(async (req) => {
       throw lastError || new Error("RATE_LIMITED");
     };
 
-    // Strong gender enforcement (skip for baby, parent-child, and couples categories)
+    // Strong gender enforcement (skip for baby, kids, parent-child, and couples categories)
     const isBaby = styleCategory === "baby-toddler";
+    const isKids = styleCategory === "kids";
     const isParentChild = styleCategory === "parent-child";
     const isCouples = styleCategory === "couples";
+    const isChildCategory = isBaby || isKids;
     const hasDualPhotos = (isParentChild || isCouples) && secondImageBase64;
+
+    // Content safety for kids/baby categories
+    const childSafetyDirective = isChildCategory
+      ? "\n\nCONTENT SAFETY — MANDATORY: This image involves a child. ALL clothing MUST be age-appropriate, modest, and family-friendly. Do NOT generate anything revealing, suggestive, or inappropriate for children. No crop tops, no low-cut items, no swimwear, no lingerie, no adult-themed styling. Keep the tone wholesome, cheerful, and suitable for a children's fashion catalog. Only generate fully-clothed, modest, and tasteful children's outfits."
+      : "";
+
     const genderEnforcement = isBaby
-      ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.`
+      ? `\n\nCRITICAL: This is a BABY/TODDLER styling request. The uploaded photo is of a baby or toddler. Style this baby/toddler in age-appropriate children's clothing. The result must show a cute, adorable baby/toddler — NOT an adult. All clothing must be baby/toddler sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.${childSafetyDirective}`
+      : isKids
+        ? `\n\nCRITICAL: This is a KIDS styling request. The uploaded photo is of a child (school-age). Style this child in age-appropriate, kid-friendly clothing. The result must show a child — NOT an adult or teenager. All clothing must be children's sized. Preserve the child's EXACT face — same eyes, nose, mouth, skin tone, and hair.${childSafetyDirective}`
       : isCouples && hasDualPhotos
         ? `\n\nCRITICAL COUPLES STYLING WITH DUAL PHOTOS: TWO photos have been provided — the FIRST image is one partner and the SECOND image is the other partner. Generate a single image showing BOTH people together wearing beautifully coordinated complementary outfits. You MUST preserve BOTH people's EXACT facial features with photographic accuracy — same eye shape, nose, lips, jawline, skin tone, hair color and texture. Each person must be immediately recognizable from their uploaded photo. Their outfits should harmonize in color, style, and vibe while each being flattering for the individual. Professional couples fashion editorial photography.`
         : isCouples
@@ -459,7 +469,10 @@ serve(async (req) => {
 
     if (isMannequin) {
       // Mannequin mode: generate clothes on a mannequin/dress form without a user photo
-      editPrompt = `Fashion photo of a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${refinementNote}`;
+      const mannequinType = isChildCategory
+        ? `a child-sized ${isMale ? "boy's" : "girl's"} mannequin`
+        : `a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin`;
+      editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}`;
 
       messages = [
         {
