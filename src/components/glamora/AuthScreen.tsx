@@ -146,6 +146,10 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
     position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
   };
 
+  if (mode === "forgot") {
+    return <ForgotPasswordView onBack={() => setMode("signin")} accent={accent} accentLight={accentLight} inputStyle={inputStyle} iconWrap={iconWrap} />;
+  }
+
   return (
     <div className="screen enter" style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
       <div className="screen-header">
@@ -153,6 +157,8 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
         <div>
           <div className="header-title">{mode === "signin" ? "Welcome Back" : "Create Account"}</div>
           <div className="header-sub">{mode === "signin" ? "Sign in to your profile" : "Join the Glosseti community"}</div>
+        </div>
+      </div>
         </div>
       </div>
 
@@ -212,6 +218,17 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
             }
           </button>
         </div>
+
+        {/* Forgot password link (sign-in only) */}
+        {mode === "signin" && (
+          <div className="anim-fadeUp d2" style={{ textAlign: "right", marginTop: -8 }}>
+            <button onClick={() => setMode("forgot")} style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: `hsl(${accent})`, fontSize: 12, fontWeight: 500,
+              fontFamily: "'Jost', sans-serif",
+            }}>Forgot password?</button>
+          </div>
+        )}
 
         {/* Submit */}
         <button
