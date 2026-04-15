@@ -563,6 +563,7 @@ const categories: { id: StyleCategory; label: string; Icon: LucideIcon; desc: st
     ],
   },
   {
+    id: "parent-child", label: "Parent-Child Matching", Icon: Heart,
     desc: "Coordinated outfits for parent and baby — twinning never looked so good",
     includes: ["Matching Sets", "Coordinated Colors", "Family Photo Outfits", "Mommy & Me / Daddy & Me"],
     subs: [
