@@ -31,132 +31,53 @@ interface Props {
 
 /* My Closet CTA card with description overlay */
 const ClosetCTA = ({ isPremium, onCloset, isMale }: { isPremium: boolean; onCloset: () => void; isMale: boolean }) => {
-  const [showDesc, setShowDesc] = useState(false);
-
   return (
-    <>
-      <div
-        className="glamora-card"
-        onClick={() => setShowDesc(true)}
-        style={{
-          padding: "16px 14px", cursor: "pointer",
-          display: "flex", alignItems: "center", gap: 12,
-          background: "linear-gradient(160deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
-          border: "1.5px solid hsla(160 50% 45% / 0.25)",
-          position: "relative", overflow: "hidden",
-          boxShadow: "0 4px 20px hsla(160 50% 45% / 0.12), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <div style={{
-          position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-          background: "linear-gradient(105deg, transparent 40%, hsla(160 50% 55% / 0.1) 45%, hsla(160 50% 60% / 0.18) 50%, hsla(160 50% 55% / 0.1) 55%, transparent 60%)",
-          backgroundSize: "200% 100%",
-          animation: "gold-shimmer 3s ease-in-out infinite",
-        }} />
-        <div style={{
-          width: 42, height: 42, borderRadius: 12, flexShrink: 0, position: "relative", zIndex: 2,
-          background: "linear-gradient(135deg, hsla(160 50% 45% / 0.3), hsla(var(--glamora-gold) / 0.15))",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: "0 3px 10px hsla(160 50% 45% / 0.2)",
-        }}>
-          <Shirt size={20} color="hsl(160 50% 55%)" />
-        </div>
-        <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)", display: "flex", alignItems: "center", gap: 6 }}>
-            👕 My Closet
-            {!isPremium && (
-              <span style={{
-                fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 100,
-                background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
-                color: "white", display: "inline-flex", alignItems: "center", gap: 3,
-              }}>
-                <Lock size={8} /> PRO
-              </span>
-            )}
-          </div>
-          <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
-            AI styles outfits from your real wardrobe
-          </div>
-        </div>
-        <ArrowRight size={16} color="hsl(160 50% 55%)" style={{ position: "relative", zIndex: 2 }} />
+    <div
+      className="glamora-card"
+      onClick={onCloset}
+      style={{
+        padding: "16px 14px", cursor: "pointer",
+        display: "flex", alignItems: "center", gap: 12,
+        background: "linear-gradient(160deg, hsla(160 50% 45% / 0.12), hsla(var(--glamora-gold) / 0.08))",
+        border: "1.5px solid hsla(160 50% 45% / 0.25)",
+        position: "relative", overflow: "hidden",
+        boxShadow: "0 4px 20px hsla(160 50% 45% / 0.12), inset 0 1px 0 hsla(0 0% 100% / 0.06)",
+        backdropFilter: "blur(12px)",
+      }}
+    >
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+        background: "linear-gradient(105deg, transparent 40%, hsla(160 50% 55% / 0.1) 45%, hsla(160 50% 60% / 0.18) 50%, hsla(160 50% 55% / 0.1) 55%, transparent 60%)",
+        backgroundSize: "200% 100%",
+        animation: "gold-shimmer 3s ease-in-out infinite",
+      }} />
+      <div style={{
+        width: 42, height: 42, borderRadius: 12, flexShrink: 0, position: "relative", zIndex: 2,
+        background: "linear-gradient(135deg, hsla(160 50% 45% / 0.3), hsla(var(--glamora-gold) / 0.15))",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: "0 3px 10px hsla(160 50% 45% / 0.2)",
+      }}>
+        <Shirt size={20} color="hsl(160 50% 55%)" />
       </div>
-
-      {/* Description overlay */}
-      {showDesc && (
-        <div
-          onClick={() => setShowDesc(false)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 200,
-            background: "hsla(0 0% 0% / 0.7)", backdropFilter: "blur(8px)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            padding: 24,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: "100%", maxWidth: 360, borderRadius: 24,
-              background: "hsl(20 18% 8%)",
-              border: "1px solid hsla(160 50% 45% / 0.2)",
-              padding: 24, textAlign: "center",
-            }}
-          >
-            <div style={{
-              width: 56, height: 56, borderRadius: 16, margin: "0 auto 16px",
-              background: "linear-gradient(135deg, hsla(160 50% 45% / 0.2), hsla(var(--glamora-gold) / 0.1))",
-              display: "flex", alignItems: "center", justifyContent: "center",
+      <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "hsla(0 0% 100% / 0.92)", display: "flex", alignItems: "center", gap: 6 }}>
+          👕 My Closet
+          {!isPremium && (
+            <span style={{
+              fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 100,
+              background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+              color: "white", display: "inline-flex", alignItems: "center", gap: 3,
             }}>
-              <Shirt size={28} color="hsl(160 50% 55%)" />
-            </div>
-            <div className="serif" style={{ fontSize: 20, fontWeight: 700, color: "white", marginBottom: 8 }}>
-              My Closet
-            </div>
-            <div style={{ fontSize: 13, color: "hsla(0 0% 100% / 0.6)", lineHeight: 1.5, marginBottom: 20 }}>
-              Snap photos of every item in your wardrobe — tops, bottoms, shoes, accessories. Our AI analyzes your real
-              pieces and creates complete outfit combinations you can actually wear today. Save your favorites, regenerate
-              new looks, and discover styling possibilities you never thought of.
-            </div>
-            {!isPremium ? (
-              <>
-                <div style={{
-                  padding: "8px 16px", borderRadius: 12, marginBottom: 12,
-                  background: "hsla(var(--glamora-gold) / 0.08)",
-                  border: "1px solid hsla(var(--glamora-gold) / 0.15)",
-                  fontSize: 11, color: "hsl(var(--glamora-gold))", fontWeight: 600,
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                }}>
-                  <Crown size={14} /> Premium Feature
-                </div>
-                <button
-                  onClick={() => { setShowDesc(false); setTimeout(() => onCloset(), 100); }}
-                  style={{
-                    width: "100%", padding: "14px", borderRadius: 14, cursor: "pointer",
-                    background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
-                    color: "white", fontSize: 14, fontWeight: 700,
-                    border: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  }}
-                >
-                  <Sparkles size={16} /> Upgrade to Unlock
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={() => { setShowDesc(false); onCloset(); }}
-                style={{
-                  width: "100%", padding: "14px", borderRadius: 14, cursor: "pointer",
-                  background: "linear-gradient(135deg, hsl(160 50% 45%), hsl(160 50% 55%))",
-                  color: "white", fontSize: 14, fontWeight: 700,
-                  border: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                }}
-              >
-                <Shirt size={16} /> Open My Closet
-              </button>
-            )}
-          </div>
+              <Lock size={8} /> PRO
+            </span>
+          )}
         </div>
-      )}
-    </>
+        <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+          AI styles outfits from your real wardrobe
+        </div>
+      </div>
+      <ArrowRight size={16} color="hsl(160 50% 55%)" style={{ position: "relative", zIndex: 2 }} />
+    </div>
   );
 };
 
