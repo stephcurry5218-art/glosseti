@@ -17,32 +17,87 @@ interface Particle {
   duration: number;
 }
 
-const TREND_PILLS_FEMALE = [
+// Weekly rotation: pick trends based on ISO week number
+function getWeekNumber(): number {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  const diff = now.getTime() - start.getTime();
+  return Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+}
+
+function pickWeekly<T>(pool: T[], count: number): T[] {
+  const week = getWeekNumber();
+  const result: T[] = [];
+  for (let i = 0; i < count; i++) {
+    result.push(pool[(week * 3 + i) % pool.length]);
+  }
+  // Deduplicate by shifting if needed
+  const seen = new Set<number>();
+  const final: T[] = [];
+  for (let i = 0; final.length < count && i < pool.length; i++) {
+    const idx = (week * 3 + i) % pool.length;
+    if (!seen.has(idx)) {
+      seen.add(idx);
+      final.push(pool[idx]);
+    }
+  }
+  return final;
+}
+
+const ALL_TREND_PILLS_FEMALE = [
   { label: "Bold Glam", color: "hsla(0 70% 55% / 0.85)", bg: "hsla(0 70% 55% / 0.14)", border: "hsla(0 70% 55% / 0.3)", category: "formal" as StyleCategory },
   { label: "Minimalist", color: "hsla(220 70% 60% / 0.9)", bg: "hsla(220 70% 60% / 0.14)", border: "hsla(220 70% 60% / 0.3)", category: "minimalist" as StyleCategory },
   { label: "Boho", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)", category: "bohemian" as StyleCategory },
   { label: "Soft Fem", color: "hsla(340 55% 60% / 0.9)", bg: "hsla(340 55% 60% / 0.14)", border: "hsla(340 55% 60% / 0.3)", category: "cottagecore" as StyleCategory },
+  { label: "Y2K", color: "hsla(300 60% 60% / 0.9)", bg: "hsla(300 60% 60% / 0.14)", border: "hsla(300 60% 60% / 0.3)", category: "y2k" as StyleCategory },
+  { label: "Clean Girl", color: "hsla(30 60% 55% / 0.9)", bg: "hsla(30 60% 55% / 0.14)", border: "hsla(30 60% 55% / 0.3)", category: "minimalist" as StyleCategory },
+  { label: "Dark Fem", color: "hsla(280 55% 50% / 0.9)", bg: "hsla(280 55% 50% / 0.14)", border: "hsla(280 55% 50% / 0.3)", category: "edgy" as StyleCategory },
+  { label: "Resort", color: "hsla(180 55% 50% / 0.9)", bg: "hsla(180 55% 50% / 0.14)", border: "hsla(180 55% 50% / 0.3)", category: "resort" as StyleCategory },
+  { label: "Streetwear", color: "hsla(35 80% 55% / 0.9)", bg: "hsla(35 80% 55% / 0.14)", border: "hsla(35 80% 55% / 0.3)", category: "streetwear" as StyleCategory },
+  { label: "Vintage", color: "hsla(20 60% 50% / 0.9)", bg: "hsla(20 60% 50% / 0.14)", border: "hsla(20 60% 50% / 0.3)", category: "vintage" as StyleCategory },
 ];
 
-const TREND_PILLS_MALE = [
+const ALL_TREND_PILLS_MALE = [
   { label: "Sharp & Clean", color: "hsla(220 60% 55% / 0.9)", bg: "hsla(220 60% 55% / 0.14)", border: "hsla(220 60% 55% / 0.3)", category: "formal" as StyleCategory },
   { label: "Streetwear", color: "hsla(35 80% 55% / 0.9)", bg: "hsla(35 80% 55% / 0.14)", border: "hsla(35 80% 55% / 0.3)", category: "streetwear" as StyleCategory },
   { label: "Rugged", color: "hsla(25 50% 45% / 0.9)", bg: "hsla(25 50% 45% / 0.14)", border: "hsla(25 50% 45% / 0.3)", category: "rugged" as StyleCategory },
   { label: "Athletic", color: "hsla(140 55% 50% / 0.9)", bg: "hsla(140 55% 50% / 0.14)", border: "hsla(140 55% 50% / 0.3)", category: "athleisure" as StyleCategory },
+  { label: "Techwear", color: "hsla(200 55% 50% / 0.9)", bg: "hsla(200 55% 50% / 0.14)", border: "hsla(200 55% 50% / 0.3)", category: "techwear" as StyleCategory },
+  { label: "Minimalist", color: "hsla(220 70% 60% / 0.9)", bg: "hsla(220 70% 60% / 0.14)", border: "hsla(220 70% 60% / 0.3)", category: "minimalist" as StyleCategory },
+  { label: "Preppy", color: "hsla(140 50% 45% / 0.9)", bg: "hsla(140 50% 45% / 0.14)", border: "hsla(140 50% 45% / 0.3)", category: "preppy" as StyleCategory },
+  { label: "Vintage", color: "hsla(20 60% 50% / 0.9)", bg: "hsla(20 60% 50% / 0.14)", border: "hsla(20 60% 50% / 0.3)", category: "vintage" as StyleCategory },
+  { label: "Urban", color: "hsla(0 60% 50% / 0.9)", bg: "hsla(0 60% 50% / 0.14)", border: "hsla(0 60% 50% / 0.3)", category: "urban-hiphop" as StyleCategory },
+  { label: "Edgy", color: "hsla(280 55% 50% / 0.9)", bg: "hsla(280 55% 50% / 0.14)", border: "hsla(280 55% 50% / 0.3)", category: "edgy" as StyleCategory },
 ];
 
-const TRENDS_FEMALE = [
+const ALL_TRENDS_FEMALE = [
   { label: "Quiet Luxury", pct: 87, color: "hsla(0 70% 55% / 0.8)", category: "minimalist" as StyleCategory },
   { label: "Coastal Cowgirl", pct: 72, color: "hsla(220 70% 60% / 0.8)", category: "bohemian" as StyleCategory },
   { label: "Dark Romantic", pct: 64, color: "hsla(280 55% 55% / 0.8)", category: "edgy" as StyleCategory },
   { label: "Athleisure Chic", pct: 51, color: "hsla(140 55% 50% / 0.8)", category: "athleisure" as StyleCategory },
+  { label: "Mob Wife", pct: 78, color: "hsla(350 60% 45% / 0.8)", category: "icon-looks" as StyleCategory },
+  { label: "Cottagecore", pct: 66, color: "hsla(120 45% 50% / 0.8)", category: "cottagecore" as StyleCategory },
+  { label: "Y2K Revival", pct: 74, color: "hsla(300 60% 60% / 0.8)", category: "y2k" as StyleCategory },
+  { label: "Parisian Chic", pct: 69, color: "hsla(0 50% 50% / 0.8)", category: "icon-looks" as StyleCategory },
+  { label: "Resort Glam", pct: 58, color: "hsla(180 55% 50% / 0.8)", category: "resort" as StyleCategory },
+  { label: "Clean Girl", pct: 82, color: "hsla(30 60% 55% / 0.8)", category: "minimalist" as StyleCategory },
+  { label: "90s Supermodel", pct: 61, color: "hsla(40 50% 50% / 0.8)", category: "vintage" as StyleCategory },
+  { label: "Streetwear Chic", pct: 55, color: "hsla(35 80% 55% / 0.8)", category: "streetwear" as StyleCategory },
 ];
 
-const TRENDS_MALE = [
+const ALL_TRENDS_MALE = [
   { label: "Quiet Luxury", pct: 84, color: "hsla(220 60% 55% / 0.8)", category: "minimalist" as StyleCategory },
   { label: "Techwear", pct: 71, color: "hsla(200 55% 50% / 0.8)", category: "techwear" as StyleCategory },
   { label: "New Preppy", pct: 63, color: "hsla(140 50% 45% / 0.8)", category: "preppy" as StyleCategory },
   { label: "Gorpcore", pct: 55, color: "hsla(25 50% 45% / 0.8)", category: "streetwear" as StyleCategory },
+  { label: "Workwear Revival", pct: 76, color: "hsla(25 55% 40% / 0.8)", category: "rugged" as StyleCategory },
+  { label: "Hip-Hop Drip", pct: 68, color: "hsla(0 60% 50% / 0.8)", category: "urban-hiphop" as StyleCategory },
+  { label: "Dark Academia", pct: 59, color: "hsla(280 40% 45% / 0.8)", category: "preppy" as StyleCategory },
+  { label: "Retro Revival", pct: 65, color: "hsla(35 60% 50% / 0.8)", category: "vintage" as StyleCategory },
+  { label: "Modern Suave", pct: 73, color: "hsla(220 55% 50% / 0.8)", category: "formal" as StyleCategory },
+  { label: "Skater Core", pct: 52, color: "hsla(140 55% 50% / 0.8)", category: "streetwear" as StyleCategory },
+  { label: "Athleisure Pro", pct: 77, color: "hsla(160 50% 45% / 0.8)", category: "athleisure" as StyleCategory },
+  { label: "Edgy Punk", pct: 48, color: "hsla(280 55% 50% / 0.8)", category: "edgy" as StyleCategory },
 ];
 
 function getCountdown(): string {
@@ -63,8 +118,8 @@ const DailyLookCard = ({ onGenerate, onGetStyled, gender }: Props) => {
   const [showResult, setShowResult] = useState(false);
   const particlesRef = useRef<Particle[]>([]);
 
-  const trendPills = isMale ? TREND_PILLS_MALE : TREND_PILLS_FEMALE;
-  const trends = isMale ? TRENDS_MALE : TRENDS_FEMALE;
+  const trendPills = pickWeekly(isMale ? ALL_TREND_PILLS_MALE : ALL_TREND_PILLS_FEMALE, 4);
+  const trends = pickWeekly(isMale ? ALL_TRENDS_MALE : ALL_TRENDS_FEMALE, 4);
   const morphLayers = isMale
     ? ["Jacket / Top", "Pants", "Shoes & Watch"]
     : ["Top Layer", "Bottom", "Accessories"];
