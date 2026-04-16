@@ -226,6 +226,54 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
     setGenerating(false);
   };
 
+  const handleTryOnFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const base64 = await fixImageOrientation(file);
+      setTryOnPhoto(base64);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = () => setTryOnPhoto(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+    e.target.value = "";
+  };
+
+  const handleTryOn = async (outfitIdx: number) => {
+    if (!outfits || !outfits[outfitIdx]) return;
+
+    // If no photo yet, prompt for one
+    if (!tryOnPhoto) {
+      setTryOnOutfitIdx(outfitIdx);
+      tryOnFileRef.current?.click();
+      return;
+    }
+
+    setTryOnOutfitIdx(outfitIdx);
+    setTryOnGenerating(true);
+    setTryOnResult(null);
+    try {
+      const outfit = outfits[outfitIdx];
+      const { data, error } = await supabase.functions.invoke("closet-try-on", {
+        body: { imageBase64: tryOnPhoto, items: items.map(i => i.label || i.category), gender, outfit },
+      });
+      if (error) throw error;
+      setTryOnResult(data?.generatedImage || null);
+    } catch (err) {
+      console.error("Try-on error:", err);
+      setTryOnResult(null);
+    }
+    setTryOnGenerating(false);
+  };
+
+  // Trigger try-on after photo is selected
+  useEffect(() => {
+    if (tryOnPhoto && tryOnOutfitIdx !== null && !tryOnGenerating && !tryOnResult) {
+      handleTryOn(tryOnOutfitIdx);
+    }
+  }, [tryOnPhoto]);
+
   const filtered = activeFilter === "all" ? items : items.filter((i) => i.category === activeFilter);
   
 
