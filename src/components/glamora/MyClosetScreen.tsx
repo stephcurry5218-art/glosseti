@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check, UserCircle, ChevronLeft, RotateCcw } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check, UserCircle, ChevronLeft, RotateCcw, Heart, ImageIcon, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
@@ -35,6 +35,16 @@ interface OutfitResult {
   tips: string;
 }
 
+interface SavedLook {
+  id: string;
+  image_url: string;
+  outfit_description: string;
+  occasion: string;
+  outfit_items: string[];
+  tips: string | null;
+  created_at: string;
+}
+
 interface Props {
   onBack: () => void;
   gender: Gender;
@@ -63,6 +73,12 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [tryOnGenerating, setTryOnGenerating] = useState(false);
   const [tryOnResult, setTryOnResult] = useState<string | null>(null);
   const [tryOnOutfitIdx, setTryOnOutfitIdx] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"closet" | "looks">("closet");
+  const [savedLooks, setSavedLooks] = useState<SavedLook[]>([]);
+  const [loadingLooks, setLoadingLooks] = useState(false);
+  const [savingLook, setSavingLook] = useState(false);
+  const [lookSaved, setLookSaved] = useState(false);
+  const [expandedLook, setExpandedLook] = useState<SavedLook | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const tryOnFileRef = useRef<HTMLInputElement>(null);
 
@@ -89,6 +105,51 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   }, [userId]);
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
+
+  // Fetch saved looks
+  const fetchSavedLooks = useCallback(async () => {
+    setLoadingLooks(true);
+    const { data } = await supabase
+      .from("closet_looks")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    setSavedLooks((data as SavedLook[]) || []);
+    setLoadingLooks(false);
+  }, [userId]);
+
+  useEffect(() => { if (activeTab === "looks") fetchSavedLooks(); }, [activeTab, fetchSavedLooks]);
+
+  const handleSaveLook = async () => {
+    if (!tryOnResult || tryOnOutfitIdx === null || !outfits?.[tryOnOutfitIdx]) return;
+    setSavingLook(true);
+    try {
+      const outfit = outfits[tryOnOutfitIdx];
+      await supabase.from("closet_looks").insert({
+        user_id: userId,
+        image_url: tryOnResult,
+        outfit_description: outfit.description,
+        occasion: outfit.occasion,
+        outfit_items: outfit.items,
+        tips: outfit.tips,
+      } as any);
+      setLookSaved(true);
+      setTimeout(() => setLookSaved(false), 2000);
+    } catch (err) {
+      console.error("Save look error:", err);
+    }
+    setSavingLook(false);
+  };
+
+  const handleDeleteLook = async (lookId: string) => {
+    try {
+      await supabase.from("closet_looks").delete().eq("id", lookId);
+      setSavedLooks(prev => prev.filter(l => l.id !== lookId));
+      if (expandedLook?.id === lookId) setExpandedLook(null);
+    } catch (err) {
+      console.error("Delete look error:", err);
+    }
+  };
 
   // Fetch active style plan
   const fetchActivePlan = useCallback(async () => {
@@ -310,6 +371,45 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
       <input ref={fileRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: "none" }} />
       <input ref={tryOnFileRef} type="file" accept="image/*" capture="environment" onChange={handleTryOnFileSelect} style={{ display: "none" }} />
 
+      {/* Tab switcher: Closet / My Looks */}
+      <div style={{
+        display: "flex", gap: 0, padding: "8px 16px",
+        borderBottom: "1px solid hsla(0 0% 100% / 0.06)",
+      }}>
+        {([{ id: "closet", label: "Wardrobe", icon: Shirt }, { id: "looks", label: "My Looks", icon: ImageIcon }] as const).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              flex: 1, padding: "10px 0", borderRadius: 0,
+              background: "none", cursor: "pointer",
+              borderBottom: `2px solid ${activeTab === tab.id ? "hsl(var(--glamora-gold))" : "transparent"}`,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              fontSize: 12, fontWeight: 700, border: "none",
+              borderBottomWidth: 2, borderBottomStyle: "solid",
+              borderBottomColor: activeTab === tab.id ? "hsl(var(--glamora-gold))" : "transparent",
+              color: activeTab === tab.id ? "hsl(var(--glamora-gold))" : "hsla(0 0% 100% / 0.4)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <tab.icon size={14} />
+            {tab.label}
+            {tab.id === "looks" && savedLooks.length > 0 && (
+              <span style={{
+                fontSize: 9, padding: "1px 5px", borderRadius: 100,
+                background: "hsla(var(--glamora-gold) / 0.15)",
+                color: "hsl(var(--glamora-gold))",
+                fontWeight: 700,
+              }}>
+                {savedLooks.length}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === "closet" ? (
+      <>
       {/* Category filter pills */}
       <div style={{
         display: "flex", gap: 8, overflowX: "auto", padding: "12px 16px",
@@ -548,6 +648,138 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
           ))}
         </div>
       )}
+      </>
+      ) : (
+        /* My Looks Gallery Tab */
+        <div style={{ padding: "16px", minHeight: 300 }}>
+          {loadingLooks ? (
+            <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
+              <Loader2 size={28} color="hsl(var(--glamora-gold))" className="animate-spin" />
+            </div>
+          ) : savedLooks.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "50px 24px" }}>
+              <ImageIcon size={48} color="hsla(0 0% 100% / 0.15)" style={{ marginBottom: 16 }} />
+              <div style={{ fontSize: 16, fontWeight: 600, color: "hsla(0 0% 100% / 0.7)", marginBottom: 8 }}>
+                No saved looks yet
+              </div>
+              <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.4)", lineHeight: 1.5 }}>
+                Generate outfit combos from your wardrobe, try them on, and save your favorites here
+              </div>
+              <button
+                onClick={() => setActiveTab("closet")}
+                style={{
+                  marginTop: 20, padding: "10px 20px", borderRadius: 100,
+                  background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                  color: "white", fontSize: 12, fontWeight: 700,
+                  border: "none", cursor: "pointer",
+                }}
+              >
+                Go to Wardrobe
+              </button>
+            </div>
+          ) : (
+            <div style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10,
+              paddingBottom: 100,
+            }}>
+              {savedLooks.map((look) => (
+                <div
+                  key={look.id}
+                  onClick={() => setExpandedLook(look)}
+                  style={{
+                    position: "relative", borderRadius: 16, overflow: "hidden",
+                    border: "1px solid hsla(var(--glamora-gold) / 0.12)",
+                    cursor: "pointer",
+                    background: "hsla(0 0% 100% / 0.03)",
+                  }}
+                >
+                  <img src={look.image_url} alt={look.outfit_description} style={{
+                    width: "100%", aspectRatio: "3/4", objectFit: "cover",
+                  }} />
+                  <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0,
+                    padding: "24px 10px 8px",
+                    background: "linear-gradient(transparent, hsla(0 0% 0% / 0.85))",
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "white", lineHeight: 1.3 }}>
+                      {look.outfit_description}
+                    </div>
+                    <div style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+                      {look.occasion}
+                    </div>
+                  </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleDeleteLook(look.id); }}
+                    style={{
+                      position: "absolute", top: 6, right: 6,
+                      width: 24, height: 24, borderRadius: 8,
+                      background: "hsla(0 0% 0% / 0.6)", border: "none",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Trash2 size={11} color="hsla(0 70% 60% / 0.9)" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Expanded look modal */}
+      {expandedLook && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 55,
+          background: "hsla(0 0% 0% / 0.85)", backdropFilter: "blur(16px)",
+          overflowY: "auto",
+          display: "flex", flexDirection: "column",
+        }}>
+          <div style={{
+            maxWidth: 500, margin: "0 auto", width: "100%",
+            padding: "env(safe-area-inset-top, 12px) 0 env(safe-area-inset-bottom, 20px)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 16px 12px" }}>
+              <span className="serif" style={{ fontSize: 16, fontWeight: 700, color: "white" }}>Saved Look</span>
+              <button onClick={() => setExpandedLook(null)}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                <X size={20} color="hsla(0 0% 100% / 0.5)" />
+              </button>
+            </div>
+            <img src={expandedLook.image_url} alt={expandedLook.outfit_description} style={{
+              width: "100%", borderRadius: 0,
+            }} />
+            <div style={{ padding: "16px" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "hsl(var(--glamora-gold))", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>
+                {expandedLook.occasion}
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 10 }}>
+                {expandedLook.outfit_description}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+                {(expandedLook.outfit_items || []).map((item: string, j: number) => (
+                  <span key={j} style={{
+                    padding: "4px 10px", borderRadius: 100,
+                    background: "hsla(var(--glamora-gold) / 0.1)",
+                    border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+                    fontSize: 11, color: "hsla(0 0% 100% / 0.8)",
+                  }}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+              {expandedLook.tips && (
+                <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.5)", lineHeight: 1.5 }}>
+                  💡 {expandedLook.tips}
+                </div>
+              )}
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.3)", marginTop: 12 }}>
+                Saved {new Date(expandedLook.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add item form modal */}
       {showAddForm && (
@@ -725,6 +957,20 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                       </div>
                       <div style={{ display: "flex", gap: 6 }}>
                         <button
+                          onClick={handleSaveLook}
+                          disabled={savingLook || lookSaved}
+                          style={{
+                            padding: "5px 10px", borderRadius: 8,
+                            background: lookSaved ? "hsla(160 50% 45% / 0.15)" : "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                            border: lookSaved ? "1px solid hsla(160 50% 45% / 0.3)" : "none",
+                            cursor: "pointer", display: "flex", alignItems: "center", gap: 4,
+                            fontSize: 10, fontWeight: 700,
+                            color: lookSaved ? "hsl(160 50% 55%)" : "white",
+                          }}
+                        >
+                          {lookSaved ? <><Check size={10} /> Saved</> : savingLook ? <Loader2 size={10} className="animate-spin" /> : <><Heart size={10} /> Save</>}
+                        </button>
+                        <button
                           onClick={() => { if (tryOnOutfitIdx !== null) { setTryOnResult(null); handleTryOn(tryOnOutfitIdx); } }}
                           style={{
                             padding: "5px 10px", borderRadius: 8,
@@ -736,7 +982,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                           <RotateCcw size={10} /> Redo
                         </button>
                         <button
-                          onClick={() => { setTryOnResult(null); setTryOnOutfitIdx(null); }}
+                          onClick={() => { setTryOnResult(null); setTryOnOutfitIdx(null); setLookSaved(false); }}
                           style={{
                             padding: "5px 10px", borderRadius: 8,
                             background: "hsla(0 0% 100% / 0.06)", border: "1px solid hsla(0 0% 100% / 0.1)",

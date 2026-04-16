@@ -71,6 +71,39 @@ export type Database = {
         }
         Relationships: []
       }
+      closet_looks: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          occasion: string
+          outfit_description: string
+          outfit_items: Json
+          tips: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          occasion?: string
+          outfit_description?: string
+          outfit_items?: Json
+          tips?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          occasion?: string
+          outfit_description?: string
+          outfit_items?: Json
+          tips?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       closet_style_plans: {
         Row: {
           created_at: string
