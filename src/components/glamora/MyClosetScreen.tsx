@@ -106,6 +106,51 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
 
+  // Fetch saved looks
+  const fetchSavedLooks = useCallback(async () => {
+    setLoadingLooks(true);
+    const { data } = await supabase
+      .from("closet_looks")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    setSavedLooks((data as SavedLook[]) || []);
+    setLoadingLooks(false);
+  }, [userId]);
+
+  useEffect(() => { if (activeTab === "looks") fetchSavedLooks(); }, [activeTab, fetchSavedLooks]);
+
+  const handleSaveLook = async () => {
+    if (!tryOnResult || tryOnOutfitIdx === null || !outfits?.[tryOnOutfitIdx]) return;
+    setSavingLook(true);
+    try {
+      const outfit = outfits[tryOnOutfitIdx];
+      await supabase.from("closet_looks").insert({
+        user_id: userId,
+        image_url: tryOnResult,
+        outfit_description: outfit.description,
+        occasion: outfit.occasion,
+        outfit_items: outfit.items,
+        tips: outfit.tips,
+      } as any);
+      setLookSaved(true);
+      setTimeout(() => setLookSaved(false), 2000);
+    } catch (err) {
+      console.error("Save look error:", err);
+    }
+    setSavingLook(false);
+  };
+
+  const handleDeleteLook = async (lookId: string) => {
+    try {
+      await supabase.from("closet_looks").delete().eq("id", lookId);
+      setSavedLooks(prev => prev.filter(l => l.id !== lookId));
+      if (expandedLook?.id === lookId) setExpandedLook(null);
+    } catch (err) {
+      console.error("Delete look error:", err);
+    }
+  };
+
   // Fetch active style plan
   const fetchActivePlan = useCallback(async () => {
     const { data } = await supabase
