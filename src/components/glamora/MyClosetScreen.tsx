@@ -308,6 +308,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
       </div>
 
       <input ref={fileRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: "none" }} />
+      <input ref={tryOnFileRef} type="file" accept="image/*" capture="environment" onChange={handleTryOnFileSelect} style={{ display: "none" }} />
 
       {/* Category filter pills */}
       <div style={{
