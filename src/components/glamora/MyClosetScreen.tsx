@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check, UserCircle, ChevronLeft, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
@@ -59,7 +59,12 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [showPlanSetup, setShowPlanSetup] = useState(false);
   const [planDays, setPlanDays] = useState(7);
   const [creatingPlan, setCreatingPlan] = useState(false);
+  const [tryOnPhoto, setTryOnPhoto] = useState<string | null>(null);
+  const [tryOnGenerating, setTryOnGenerating] = useState(false);
+  const [tryOnResult, setTryOnResult] = useState<string | null>(null);
+  const [tryOnOutfitIdx, setTryOnOutfitIdx] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const tryOnFileRef = useRef<HTMLInputElement>(null);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -221,6 +226,54 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
     setGenerating(false);
   };
 
+  const handleTryOnFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const base64 = await fixImageOrientation(file);
+      setTryOnPhoto(base64);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = () => setTryOnPhoto(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+    e.target.value = "";
+  };
+
+  const handleTryOn = async (outfitIdx: number) => {
+    if (!outfits || !outfits[outfitIdx]) return;
+
+    // If no photo yet, prompt for one
+    if (!tryOnPhoto) {
+      setTryOnOutfitIdx(outfitIdx);
+      tryOnFileRef.current?.click();
+      return;
+    }
+
+    setTryOnOutfitIdx(outfitIdx);
+    setTryOnGenerating(true);
+    setTryOnResult(null);
+    try {
+      const outfit = outfits[outfitIdx];
+      const { data, error } = await supabase.functions.invoke("closet-try-on", {
+        body: { imageBase64: tryOnPhoto, items: items.map(i => i.label || i.category), gender, outfit },
+      });
+      if (error) throw error;
+      setTryOnResult(data?.generatedImage || null);
+    } catch (err) {
+      console.error("Try-on error:", err);
+      setTryOnResult(null);
+    }
+    setTryOnGenerating(false);
+  };
+
+  // Trigger try-on after photo is selected
+  useEffect(() => {
+    if (tryOnPhoto && tryOnOutfitIdx !== null && !tryOnGenerating && !tryOnResult) {
+      handleTryOn(tryOnOutfitIdx);
+    }
+  }, [tryOnPhoto]);
+
   const filtered = activeFilter === "all" ? items : items.filter((i) => i.category === activeFilter);
   
 
@@ -255,6 +308,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
       </div>
 
       <input ref={fileRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: "none" }} />
+      <input ref={tryOnFileRef} type="file" accept="image/*" capture="environment" onChange={handleTryOnFileSelect} style={{ display: "none" }} />
 
       {/* Category filter pills */}
       <div style={{
@@ -599,11 +653,104 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                 <Sparkles size={18} color="hsl(var(--glamora-gold))" />
                 <span className="serif" style={{ fontSize: 18, fontWeight: 700, color: "white" }}>AI Outfit Ideas</span>
               </div>
-              <button onClick={() => setShowOutfits(false)}
+              <button onClick={() => { setShowOutfits(false); setTryOnResult(null); setTryOnOutfitIdx(null); }}
                 style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
                 <X size={20} color="hsla(0 0% 100% / 0.5)" />
               </button>
             </div>
+
+            {/* Full-body photo upload strip */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 10, marginBottom: 16,
+              padding: "10px 14px", borderRadius: 14,
+              background: "hsla(0 0% 100% / 0.04)",
+              border: "1px solid hsla(0 0% 100% / 0.08)",
+            }}>
+              {tryOnPhoto ? (
+                <img src={tryOnPhoto} alt="Your photo" style={{ width: 40, height: 40, borderRadius: 10, objectFit: "cover" }} />
+              ) : (
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10,
+                  background: "hsla(0 0% 100% / 0.06)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <UserCircle size={22} color="hsla(0 0% 100% / 0.3)" />
+                </div>
+              )}
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "hsla(0 0% 100% / 0.8)" }}>
+                  {tryOnPhoto ? "Your Photo" : "Upload Full-Body Photo"}
+                </div>
+                <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.4)" }}>
+                  {tryOnPhoto ? "Tap an outfit to try it on you" : "Required to try outfits on you"}
+                </div>
+              </div>
+              <button
+                onClick={() => tryOnFileRef.current?.click()}
+                style={{
+                  padding: "6px 12px", borderRadius: 10,
+                  background: tryOnPhoto ? "hsla(0 0% 100% / 0.06)" : "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                  border: "none", cursor: "pointer",
+                  fontSize: 11, fontWeight: 600,
+                  color: tryOnPhoto ? "hsla(0 0% 100% / 0.6)" : "white",
+                }}
+              >
+                {tryOnPhoto ? "Change" : "Upload"}
+              </button>
+            </div>
+
+            {/* Try-on result display (inline) */}
+            {(tryOnGenerating || tryOnResult) && (
+              <div style={{
+                marginBottom: 16, borderRadius: 18, overflow: "hidden",
+                border: "1.5px solid hsla(var(--glamora-gold) / 0.25)",
+                background: "hsla(0 0% 0% / 0.4)",
+              }}>
+                {tryOnGenerating ? (
+                  <div style={{ padding: "50px 20px", textAlign: "center" }}>
+                    <Loader2 size={36} color="hsl(var(--glamora-gold))" className="animate-spin" />
+                    <div style={{ fontSize: 13, color: "hsla(0 0% 100% / 0.6)", marginTop: 14, fontWeight: 600 }}>
+                      Styling you in this outfit…
+                    </div>
+                    <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.35)", marginTop: 4 }}>
+                      This may take 20-30 seconds
+                    </div>
+                  </div>
+                ) : tryOnResult ? (
+                  <div>
+                    <img src={tryOnResult} alt="Try-on result" style={{ width: "100%", borderRadius: "16px 16px 0 0" }} />
+                    <div style={{ padding: "10px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-gold))" }}>
+                        ✨ {outfits && tryOnOutfitIdx !== null ? outfits[tryOnOutfitIdx]?.description : "Your Look"}
+                      </div>
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button
+                          onClick={() => { if (tryOnOutfitIdx !== null) { setTryOnResult(null); handleTryOn(tryOnOutfitIdx); } }}
+                          style={{
+                            padding: "5px 10px", borderRadius: 8,
+                            background: "hsla(0 0% 100% / 0.06)", border: "1px solid hsla(0 0% 100% / 0.1)",
+                            cursor: "pointer", display: "flex", alignItems: "center", gap: 4,
+                            fontSize: 10, fontWeight: 600, color: "hsla(0 0% 100% / 0.6)",
+                          }}
+                        >
+                          <RotateCcw size={10} /> Redo
+                        </button>
+                        <button
+                          onClick={() => { setTryOnResult(null); setTryOnOutfitIdx(null); }}
+                          style={{
+                            padding: "5px 10px", borderRadius: 8,
+                            background: "hsla(0 0% 100% / 0.06)", border: "1px solid hsla(0 0% 100% / 0.1)",
+                            cursor: "pointer", fontSize: 10, fontWeight: 600, color: "hsla(0 0% 100% / 0.6)",
+                          }}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )}
 
             {generating ? (
               <div style={{ textAlign: "center", padding: 40 }}>
@@ -617,8 +764,9 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                 {outfits.map((outfit, i) => (
                   <div key={i} style={{
                     padding: 16, borderRadius: 18,
-                    background: "hsla(0 0% 100% / 0.05)",
-                    border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+                    background: tryOnOutfitIdx === i ? "hsla(var(--glamora-gold) / 0.08)" : "hsla(0 0% 100% / 0.05)",
+                    border: `1px solid ${tryOnOutfitIdx === i ? "hsla(var(--glamora-gold) / 0.3)" : "hsla(var(--glamora-gold) / 0.15)"}`,
+                    transition: "all 0.2s ease",
                   }}>
                     <div style={{
                       fontSize: 11, fontWeight: 700, color: "hsl(var(--glamora-gold))",
@@ -641,8 +789,25 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                         </span>
                       ))}
                     </div>
-                    <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.5)", lineHeight: 1.4 }}>
-                      💡 {outfit.tips}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div style={{ fontSize: 11, color: "hsla(0 0% 100% / 0.5)", lineHeight: 1.4, flex: 1 }}>
+                        💡 {outfit.tips}
+                      </div>
+                      <button
+                        onClick={() => handleTryOn(i)}
+                        disabled={tryOnGenerating}
+                        style={{
+                          flexShrink: 0, marginLeft: 10,
+                          padding: "8px 14px", borderRadius: 12,
+                          background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                          border: "none", cursor: "pointer",
+                          display: "flex", alignItems: "center", gap: 5,
+                          fontSize: 11, fontWeight: 700, color: "white",
+                          opacity: tryOnGenerating ? 0.5 : 1,
+                        }}
+                      >
+                        <Camera size={12} /> Try On
+                      </button>
                     </div>
                   </div>
                 ))}
