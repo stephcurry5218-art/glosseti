@@ -957,6 +957,20 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                       </div>
                       <div style={{ display: "flex", gap: 6 }}>
                         <button
+                          onClick={handleSaveLook}
+                          disabled={savingLook || lookSaved}
+                          style={{
+                            padding: "5px 10px", borderRadius: 8,
+                            background: lookSaved ? "hsla(160 50% 45% / 0.15)" : "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                            border: lookSaved ? "1px solid hsla(160 50% 45% / 0.3)" : "none",
+                            cursor: "pointer", display: "flex", alignItems: "center", gap: 4,
+                            fontSize: 10, fontWeight: 700,
+                            color: lookSaved ? "hsl(160 50% 55%)" : "white",
+                          }}
+                        >
+                          {lookSaved ? <><Check size={10} /> Saved</> : savingLook ? <Loader2 size={10} className="animate-spin" /> : <><Heart size={10} /> Save</>}
+                        </button>
+                        <button
                           onClick={() => { if (tryOnOutfitIdx !== null) { setTryOnResult(null); handleTryOn(tryOnOutfitIdx); } }}
                           style={{
                             padding: "5px 10px", borderRadius: 8,
@@ -968,7 +982,7 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
                           <RotateCcw size={10} /> Redo
                         </button>
                         <button
-                          onClick={() => { setTryOnResult(null); setTryOnOutfitIdx(null); }}
+                          onClick={() => { setTryOnResult(null); setTryOnOutfitIdx(null); setLookSaved(false); }}
                           style={{
                             padding: "5px 10px", borderRadius: 8,
                             background: "hsla(0 0% 100% / 0.06)", border: "1px solid hsla(0 0% 100% / 0.1)",
