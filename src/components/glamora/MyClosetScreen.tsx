@@ -35,6 +35,16 @@ interface OutfitResult {
   tips: string;
 }
 
+interface SavedLook {
+  id: string;
+  image_url: string;
+  outfit_description: string;
+  occasion: string;
+  outfit_items: string[];
+  tips: string | null;
+  created_at: string;
+}
+
 interface Props {
   onBack: () => void;
   gender: Gender;
