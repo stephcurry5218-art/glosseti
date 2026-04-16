@@ -59,7 +59,12 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [showPlanSetup, setShowPlanSetup] = useState(false);
   const [planDays, setPlanDays] = useState(7);
   const [creatingPlan, setCreatingPlan] = useState(false);
+  const [tryOnPhoto, setTryOnPhoto] = useState<string | null>(null);
+  const [tryOnGenerating, setTryOnGenerating] = useState(false);
+  const [tryOnResult, setTryOnResult] = useState<string | null>(null);
+  const [tryOnOutfitIdx, setTryOnOutfitIdx] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const tryOnFileRef = useRef<HTMLInputElement>(null);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
