@@ -371,6 +371,45 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
       <input ref={fileRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: "none" }} />
       <input ref={tryOnFileRef} type="file" accept="image/*" capture="environment" onChange={handleTryOnFileSelect} style={{ display: "none" }} />
 
+      {/* Tab switcher: Closet / My Looks */}
+      <div style={{
+        display: "flex", gap: 0, padding: "8px 16px",
+        borderBottom: "1px solid hsla(0 0% 100% / 0.06)",
+      }}>
+        {([{ id: "closet", label: "Wardrobe", icon: Shirt }, { id: "looks", label: "My Looks", icon: ImageIcon }] as const).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              flex: 1, padding: "10px 0", borderRadius: 0,
+              background: "none", cursor: "pointer",
+              borderBottom: `2px solid ${activeTab === tab.id ? "hsl(var(--glamora-gold))" : "transparent"}`,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              fontSize: 12, fontWeight: 700, border: "none",
+              borderBottomWidth: 2, borderBottomStyle: "solid",
+              borderBottomColor: activeTab === tab.id ? "hsl(var(--glamora-gold))" : "transparent",
+              color: activeTab === tab.id ? "hsl(var(--glamora-gold))" : "hsla(0 0% 100% / 0.4)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <tab.icon size={14} />
+            {tab.label}
+            {tab.id === "looks" && savedLooks.length > 0 && (
+              <span style={{
+                fontSize: 9, padding: "1px 5px", borderRadius: 100,
+                background: "hsla(var(--glamora-gold) / 0.15)",
+                color: "hsl(var(--glamora-gold))",
+                fontWeight: 700,
+              }}>
+                {savedLooks.length}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === "closet" ? (
+      <>
       {/* Category filter pills */}
       <div style={{
         display: "flex", gap: 8, overflowX: "auto", padding: "12px 16px",
