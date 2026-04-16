@@ -73,6 +73,12 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
   const [tryOnGenerating, setTryOnGenerating] = useState(false);
   const [tryOnResult, setTryOnResult] = useState<string | null>(null);
   const [tryOnOutfitIdx, setTryOnOutfitIdx] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"closet" | "looks">("closet");
+  const [savedLooks, setSavedLooks] = useState<SavedLook[]>([]);
+  const [loadingLooks, setLoadingLooks] = useState(false);
+  const [savingLook, setSavingLook] = useState(false);
+  const [lookSaved, setLookSaved] = useState(false);
+  const [expandedLook, setExpandedLook] = useState<SavedLook | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const tryOnFileRef = useRef<HTMLInputElement>(null);
 
