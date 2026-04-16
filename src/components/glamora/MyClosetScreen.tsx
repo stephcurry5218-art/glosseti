@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check } from "lucide-react";
+import { ArrowLeft, Plus, Camera, Trash2, Shirt, Sparkles, X, Loader2, CalendarDays, Check, UserCircle, ChevronLeft, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
 import type { Gender } from "./GlamoraApp";
