@@ -648,6 +648,138 @@ const MyClosetScreen = ({ onBack, gender, userId }: Props) => {
           ))}
         </div>
       )}
+      </>
+      ) : (
+        /* My Looks Gallery Tab */
+        <div style={{ padding: "16px", minHeight: 300 }}>
+          {loadingLooks ? (
+            <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
+              <Loader2 size={28} color="hsl(var(--glamora-gold))" className="animate-spin" />
+            </div>
+          ) : savedLooks.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "50px 24px" }}>
+              <ImageIcon size={48} color="hsla(0 0% 100% / 0.15)" style={{ marginBottom: 16 }} />
+              <div style={{ fontSize: 16, fontWeight: 600, color: "hsla(0 0% 100% / 0.7)", marginBottom: 8 }}>
+                No saved looks yet
+              </div>
+              <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.4)", lineHeight: 1.5 }}>
+                Generate outfit combos from your wardrobe, try them on, and save your favorites here
+              </div>
+              <button
+                onClick={() => setActiveTab("closet")}
+                style={{
+                  marginTop: 20, padding: "10px 20px", borderRadius: 100,
+                  background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                  color: "white", fontSize: 12, fontWeight: 700,
+                  border: "none", cursor: "pointer",
+                }}
+              >
+                Go to Wardrobe
+              </button>
+            </div>
+          ) : (
+            <div style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10,
+              paddingBottom: 100,
+            }}>
+              {savedLooks.map((look) => (
+                <div
+                  key={look.id}
+                  onClick={() => setExpandedLook(look)}
+                  style={{
+                    position: "relative", borderRadius: 16, overflow: "hidden",
+                    border: "1px solid hsla(var(--glamora-gold) / 0.12)",
+                    cursor: "pointer",
+                    background: "hsla(0 0% 100% / 0.03)",
+                  }}
+                >
+                  <img src={look.image_url} alt={look.outfit_description} style={{
+                    width: "100%", aspectRatio: "3/4", objectFit: "cover",
+                  }} />
+                  <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0,
+                    padding: "24px 10px 8px",
+                    background: "linear-gradient(transparent, hsla(0 0% 0% / 0.85))",
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "white", lineHeight: 1.3 }}>
+                      {look.outfit_description}
+                    </div>
+                    <div style={{ fontSize: 9, color: "hsla(0 0% 100% / 0.5)", marginTop: 2 }}>
+                      {look.occasion}
+                    </div>
+                  </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleDeleteLook(look.id); }}
+                    style={{
+                      position: "absolute", top: 6, right: 6,
+                      width: 24, height: 24, borderRadius: 8,
+                      background: "hsla(0 0% 0% / 0.6)", border: "none",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Trash2 size={11} color="hsla(0 70% 60% / 0.9)" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Expanded look modal */}
+      {expandedLook && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 55,
+          background: "hsla(0 0% 0% / 0.85)", backdropFilter: "blur(16px)",
+          overflowY: "auto",
+          display: "flex", flexDirection: "column",
+        }}>
+          <div style={{
+            maxWidth: 500, margin: "0 auto", width: "100%",
+            padding: "env(safe-area-inset-top, 12px) 0 env(safe-area-inset-bottom, 20px)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 16px 12px" }}>
+              <span className="serif" style={{ fontSize: 16, fontWeight: 700, color: "white" }}>Saved Look</span>
+              <button onClick={() => setExpandedLook(null)}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                <X size={20} color="hsla(0 0% 100% / 0.5)" />
+              </button>
+            </div>
+            <img src={expandedLook.image_url} alt={expandedLook.outfit_description} style={{
+              width: "100%", borderRadius: 0,
+            }} />
+            <div style={{ padding: "16px" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "hsl(var(--glamora-gold))", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>
+                {expandedLook.occasion}
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 10 }}>
+                {expandedLook.outfit_description}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+                {(expandedLook.outfit_items || []).map((item: string, j: number) => (
+                  <span key={j} style={{
+                    padding: "4px 10px", borderRadius: 100,
+                    background: "hsla(var(--glamora-gold) / 0.1)",
+                    border: "1px solid hsla(var(--glamora-gold) / 0.15)",
+                    fontSize: 11, color: "hsla(0 0% 100% / 0.8)",
+                  }}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+              {expandedLook.tips && (
+                <div style={{ fontSize: 12, color: "hsla(0 0% 100% / 0.5)", lineHeight: 1.5 }}>
+                  💡 {expandedLook.tips}
+                </div>
+              )}
+              <div style={{ fontSize: 10, color: "hsla(0 0% 100% / 0.3)", marginTop: 12 }}>
+                Saved {new Date(expandedLook.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add item form modal */}
       {showAddForm && (
