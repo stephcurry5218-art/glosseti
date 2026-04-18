@@ -79,9 +79,17 @@ export function useSubscription() {
 
   // Listen for auth state and load usage
   useEffect(() => {
+    const DEV_EMAILS = ["joejenkins2625@gmail.com"];
+    const maybeUnlockDev = (email?: string | null) => {
+      if (email && DEV_EMAILS.includes(email.toLowerCase())) {
+        try { localStorage.setItem("glamora_dev_mode", "unlocked"); } catch {}
+      }
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const uid = session?.user?.id ?? null;
       setUserId(uid);
+      maybeUnlockDev(session?.user?.email);
       if (uid) {
         setRequireAuth(false);
         fetchUsage(uid, state.tier);
@@ -91,6 +99,7 @@ export function useSubscription() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const uid = session?.user?.id ?? null;
       setUserId(uid);
+      maybeUnlockDev(session?.user?.email);
       if (uid) {
         fetchUsage(uid, state.tier);
       } else {
