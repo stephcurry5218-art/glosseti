@@ -293,6 +293,32 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           onClick={async () => {
             setLoading(true);
             try {
+              const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+
+              if (isNative) {
+                // Native iOS: use AppleID.framework via the Capacitor plugin
+                const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
+                const response = await SignInWithApple.authorize({
+                  clientId: "com.glosseti.app",
+                  redirectURI: "https://glosseti.lovable.app/",
+                  scopes: "email name",
+                });
+                const idToken = response?.response?.identityToken;
+                if (!idToken) {
+                  toast.error("Apple sign in failed — no identity token returned");
+                  return;
+                }
+                const { error } = await supabase.auth.signInWithIdToken({
+                  provider: "apple",
+                  token: idToken,
+                });
+                if (error) { toast.error(error.message || "Apple sign in failed"); return; }
+                toast.success("Welcome!");
+                onSuccess();
+                return;
+              }
+
+              // Web: use Lovable Cloud OAuth broker
               const result = await lovable.auth.signInWithOAuth("apple", {
                 redirect_uri: window.location.origin,
               });
@@ -302,6 +328,8 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
               toast.success("Welcome!");
               onSuccess();
             } catch (err: any) {
+              // User cancelled native sheet — don't show an error
+              if (err?.code === "1001" || /cancel/i.test(err?.message || "")) return;
               toast.error(err?.message || "Apple sign in failed. Please try again.");
             } finally {
               setLoading(false);
