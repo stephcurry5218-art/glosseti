@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
@@ -293,9 +294,9 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           onClick={async () => {
             setLoading(true);
             try {
-              const isNative = !!(window as any).Capacitor?.isNativePlatform?.();
+              const isNativeIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
 
-              if (isNative) {
+              if (isNativeIOS) {
                 // Native iOS: use AppleID.framework via the Capacitor plugin
                 const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
                 const response = await SignInWithApple.authorize({
@@ -318,7 +319,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
                 return;
               }
 
-              // Web: use Lovable Cloud OAuth broker
+              // Web only: use Lovable Cloud OAuth broker
               const result = await lovable.auth.signInWithOAuth("apple", {
                 redirect_uri: window.location.origin,
               });
