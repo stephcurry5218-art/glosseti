@@ -302,7 +302,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
                 const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
                 console.log("[AppleAuth] plugin loaded, calling authorize…");
                 const response = await SignInWithApple.authorize({
-                  clientId: "com.glosseti.app",
+                  clientId: "com.glosseti.signin",
                   redirectURI: "https://glosseti.lovable.app/",
                   scopes: "email name",
                 });
