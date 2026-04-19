@@ -295,23 +295,36 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
             setLoading(true);
             try {
               const isNativeIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
+              console.log("[AppleAuth] start", { isNativeIOS, platform: Capacitor.getPlatform() });
 
               if (isNativeIOS) {
                 // Native iOS: use AppleID.framework via the Capacitor plugin
                 const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
+                console.log("[AppleAuth] plugin loaded, calling authorize…");
                 const response = await SignInWithApple.authorize({
                   clientId: "com.glosseti.app",
                   redirectURI: "https://glosseti.lovable.app/",
                   scopes: "email name",
+                });
+                console.log("[AppleAuth] authorize response", {
+                  hasResponse: !!response?.response,
+                  hasIdToken: !!response?.response?.identityToken,
+                  email: response?.response?.email,
+                  user: response?.response?.user,
                 });
                 const idToken = response?.response?.identityToken;
                 if (!idToken) {
                   toast.error("Apple sign in failed — no identity token returned");
                   return;
                 }
-                const { error } = await supabase.auth.signInWithIdToken({
+                const { data, error } = await supabase.auth.signInWithIdToken({
                   provider: "apple",
                   token: idToken,
+                });
+                console.log("[AppleAuth] supabase signInWithIdToken result", {
+                  hasSession: !!data?.session,
+                  userId: data?.user?.id,
+                  error: error?.message,
                 });
                 if (error) { toast.error(error.message || "Apple sign in failed"); return; }
                 toast.success("Welcome!");
@@ -329,6 +342,12 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
               toast.success("Welcome!");
               onSuccess();
             } catch (err: any) {
+              console.error("[AppleAuth] exception", {
+                code: err?.code,
+                message: err?.message,
+                name: err?.name,
+                raw: err,
+              });
               // User cancelled native sheet — don't show an error
               if (err?.code === "1001" || /cancel/i.test(err?.message || "")) return;
               toast.error(err?.message || "Apple sign in failed. Please try again.");
