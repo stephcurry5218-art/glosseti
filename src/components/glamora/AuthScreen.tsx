@@ -260,8 +260,15 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           onClick={async () => {
             setLoading(true);
             try {
+              // On native (iOS/Android), window.location.origin is capacitor://localhost
+              // which is NOT allowlisted by Google OAuth. Use the published HTTPS URL instead.
+              const isNative = Capacitor.isNativePlatform();
+              const redirectUri = isNative
+                ? "https://glosseti.lovable.app/"
+                : window.location.origin;
+              console.log("[GoogleAuth] start", { isNative, platform: Capacitor.getPlatform(), redirectUri });
               const result = await lovable.auth.signInWithOAuth("google", {
-                redirect_uri: window.location.origin,
+                redirect_uri: redirectUri,
               });
               if (!result) { toast.error("Sign in was cancelled"); return; }
               if (result.error) { toast.error(result.error?.message || "Google sign in failed"); return; }
