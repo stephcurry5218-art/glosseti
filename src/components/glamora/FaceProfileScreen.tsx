@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Camera, Trash2, Plus, ChevronLeft, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fixImageOrientation } from "./fixImageOrientation";
-import { pickImage } from "./pickImage";
+import { pickImageEx, permissionDeniedMessage } from "./pickImage";
 import { toast } from "sonner";
 import type { Gender } from "./GlamoraApp";
 
@@ -207,7 +207,11 @@ const FaceProfileScreen = ({ onBack, gender, userId }: Props) => {
           {photos.length < MAX_REFS && (
             <button
               onClick={async () => {
-                const file = await pickImage(fileRef.current, "prompt");
+                const { file, error } = await pickImageEx(fileRef.current, "prompt");
+                if (error?.kind === "permission_denied") {
+                  toast.error(permissionDeniedMessage(error.permission));
+                  return;
+                }
                 if (file) handleUpload(file);
               }}
               disabled={uploading}
