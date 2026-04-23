@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { pickImage } from "./pickImage";
 import { toast } from "sonner";
 
 import type { SubscriptionState } from "./subscription/types";
@@ -64,8 +65,8 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, onCloset, gen
     setIsEditingName(false);
   };
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleAvatarUpload = async (fileOrEvent: File | React.ChangeEvent<HTMLInputElement>) => {
+    const file = fileOrEvent instanceof File ? fileOrEvent : fileOrEvent.target.files?.[0];
     if (!file || !user) return;
     setUploading(true);
     const ext = file.name.split(".").pop();
@@ -176,7 +177,10 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, onCloset, gen
               <>
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} style={{ display: "none" }} />
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={async () => {
+                    const f = await pickImage(fileInputRef.current, "prompt");
+                    if (f) handleAvatarUpload(f);
+                  }}
                   disabled={uploading}
                   style={{
                     position: "absolute", bottom: 0, right: -4,
