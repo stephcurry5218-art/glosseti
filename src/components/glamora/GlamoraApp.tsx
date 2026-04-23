@@ -112,8 +112,14 @@ const GlamoraApp = () => {
   // Initialize Apple IAP
   useEffect(() => {
     initializeIAP(
-      (tier) => upgradeTo(tier),
-      (error) => console.error("[IAP] Purchase error:", error),
+      (tier) => {
+        upgradeTo(tier);
+        toast.success("Subscription activated! Welcome to Premium.");
+      },
+      (error) => {
+        console.error("[IAP] Purchase error:", error);
+        toast.error(error || "Purchase failed. Please try again.");
+      },
     );
   }, [upgradeTo]);
 
