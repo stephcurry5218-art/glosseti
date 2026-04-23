@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import type { Gender } from "./GlamoraApp";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { pickImage } from "./pickImage";
+import { pickImageEx, permissionDeniedMessage } from "./pickImage";
 import { toast } from "sonner";
 
 import type { SubscriptionState } from "./subscription/types";
@@ -178,8 +178,12 @@ const ProfileScreen = ({ onBack, savedCount, onSaved, onGetStyled, onCloset, gen
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} style={{ display: "none" }} />
                 <button
                   onClick={async () => {
-                    const f = await pickImage(fileInputRef.current, "prompt");
-                    if (f) handleAvatarUpload(f);
+                    const { file, error } = await pickImageEx(fileInputRef.current, "prompt");
+                    if (error?.kind === "permission_denied") {
+                      toast.error(permissionDeniedMessage(error.permission));
+                      return;
+                    }
+                    if (file) handleAvatarUpload(file);
                   }}
                   disabled={uploading}
                   style={{
