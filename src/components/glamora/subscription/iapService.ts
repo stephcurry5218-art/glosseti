@@ -48,15 +48,12 @@ async function loadPurchasePlugin(): Promise<any | null> {
   const globalCdv = (window as any).CdvPurchase;
   if (globalCdv) return globalCdv;
 
-  // Fallback to ESM import (dev / hot-reload). Wrapped to avoid bundling errors on web.
-  try {
-    const mod = await import("cordova-plugin-purchase");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (mod as any).CdvPurchase || (mod as any).default || mod;
-  } catch (err) {
-    console.warn("[IAP] cordova-plugin-purchase not available:", err);
-    return null;
-  }
+  // The plugin attaches `CdvPurchase` to window when Cordova bootstraps on
+  // device. There is no usable ESM export, so we just wait one tick and try
+  // the global again in case Cordova hasn't injected it yet.
+  await new Promise(resolve => setTimeout(resolve, 100));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (window as any).CdvPurchase || null;
 }
 
 /**
