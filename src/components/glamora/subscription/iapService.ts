@@ -1,8 +1,12 @@
 /**
- * Apple In-App Purchase integration via cordova-plugin-purchase.
+ * Apple In-App Purchase integration via cordova-plugin-purchase v13.
  *
  * Product IDs must match those configured in App Store Connect.
  * Call `initializeIAP()` once at app start.
+ *
+ * On web (or if the plugin is unavailable), all functions become safe no-ops
+ * and `isIAPAvailable()` returns false so the UI can hide / disable purchase
+ * buttons instead of leaving the user stuck on "Processing…".
  */
 
 import type { SubscriptionTier } from "./types";
@@ -21,11 +25,38 @@ export const IAP_PRODUCT_IDS: Record<Exclude<SubscriptionTier, "free">, {
 type BillingCycle = "weekly" | "monthly" | "yearly";
 
 let storeInstance: any = null;
+let CdvPurchase: any = null;
 let initialized = false;
+let initializing: Promise<void> | null = null;
+let onApprovedCallback: ((tier: SubscriptionTier) => void) | null = null;
+let onErrorCallback: ((error: string) => void) | null = null;
 
 /** Returns true if running in a native Capacitor shell */
 function isNativePlatform(): boolean {
-  return !!(window as any).Capacitor?.isNativePlatform?.();
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return !!(window as any).Capacitor?.isNativePlatform?.();
+  } catch {
+    return false;
+  }
+}
+
+/** Load the cordova-plugin-purchase module. Returns null if unavailable. */
+async function loadPurchasePlugin(): Promise<any | null> {
+  // Prefer the global injected by Cordova at runtime on the device
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const globalCdv = (window as any).CdvPurchase;
+  if (globalCdv) return globalCdv;
+
+  // Fallback to ESM import (dev / hot-reload). Wrapped to avoid bundling errors on web.
+  try {
+    const mod = await import("cordova-plugin-purchase");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (mod as any).CdvPurchase || (mod as any).default || mod;
+  } catch (err) {
+    console.warn("[IAP] cordova-plugin-purchase not available:", err);
+    return null;
+  }
 }
 
 /**
@@ -36,67 +67,109 @@ export async function initializeIAP(
   onPurchaseApproved: (tier: SubscriptionTier) => void,
   onPurchaseError: (error: string) => void,
 ): Promise<void> {
+  onApprovedCallback = onPurchaseApproved;
+  onErrorCallback = onPurchaseError;
+
   if (!isNativePlatform()) {
     console.log("[IAP] Not on native platform, skipping IAP init");
     return;
   }
 
   if (initialized) return;
+  if (initializing) return initializing;
 
-  try {
-    const CdvPurchase = (window as any).CdvPurchase;
-    if (!CdvPurchase) {
-      console.error("[IAP] CdvPurchase not available on window");
-      return;
-    }
-    const store = CdvPurchase.store;
-    storeInstance = store;
+  initializing = (async () => {
+    try {
+      CdvPurchase = await loadPurchasePlugin();
+      if (!CdvPurchase) {
+        console.error("[IAP] cordova-plugin-purchase failed to load");
+        return;
+      }
 
-    // Register all subscription products
-    const products: any[] = [];
-    for (const [_tier, ids] of Object.entries(IAP_PRODUCT_IDS)) {
-      for (const [, productId] of Object.entries(ids)) {
-        if (productId) {
-          products.push({
-            id: productId,
-            type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
-            platform: CdvPurchase.Platform.APPLE_APPSTORE,
-          });
+      const store = CdvPurchase.store;
+      if (!store) {
+        console.error("[IAP] CdvPurchase.store is undefined");
+        return;
+      }
+      storeInstance = store;
+
+      // Register all subscription products
+      const products: any[] = [];
+      for (const [, ids] of Object.entries(IAP_PRODUCT_IDS)) {
+        for (const productId of Object.values(ids)) {
+          if (productId) {
+            products.push({
+              id: productId,
+              type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+              platform: CdvPurchase.Platform.APPLE_APPSTORE,
+            });
+          }
         }
       }
+
+      store.register(products);
+
+      // Handle approved purchases — verify, then finish
+      store.when()
+        .approved((transaction: any) => {
+          // For non-validated subscriptions we still need to call .verify()
+          // (no-op without a validator) before finish() per plugin API.
+          try {
+            if (typeof transaction.verify === "function") {
+              transaction.verify();
+            }
+          } catch (e) {
+            console.warn("[IAP] verify() failed:", e);
+          }
+
+          const productId = transaction.products?.[0]?.id || transaction.productId;
+          const tier = productIdToTier(productId);
+          if (tier && onApprovedCallback) {
+            onApprovedCallback(tier);
+          }
+
+          try {
+            transaction.finish();
+          } catch (e) {
+            console.warn("[IAP] finish() failed:", e);
+          }
+        })
+        .verified((receipt: any) => {
+          // Called after server-side validation (we have none) — finish anyway.
+          try { receipt.finish(); } catch { /* noop */ }
+        });
+
+      // Handle purchase errors
+      store.error((err: any) => {
+        // 6777003 = PAYMENT_CANCELLED — silent
+        if (err?.code === 6777003 || /cancel/i.test(String(err?.message || ""))) {
+          return;
+        }
+        console.error("[IAP] Store error:", err);
+        if (onErrorCallback) {
+          onErrorCallback(err?.message || "Purchase failed");
+        }
+      });
+
+      await store.initialize([
+        CdvPurchase.Platform?.APPLE_APPSTORE || "ios-appstore",
+      ]);
+
+      initialized = true;
+      console.log("[IAP] Store initialized successfully");
+    } catch (err) {
+      console.error("[IAP] Failed to initialize store:", err);
+    } finally {
+      initializing = null;
     }
+  })();
 
-    store.register(products);
-
-    // Handle approved purchases
-    store.when().approved((transaction: any) => {
-      // Determine which tier was purchased
-      const productId = transaction.products?.[0]?.id || transaction.productId;
-      const tier = productIdToTier(productId);
-      if (tier) {
-        onPurchaseApproved(tier);
-      }
-      transaction.finish();
-    });
-
-    // Handle purchase errors
-    store.error((err: any) => {
-      if (err.code !== 6777003) { // PAYMENT_CANCELLED
-        onPurchaseError(err.message || "Purchase failed");
-      }
-    });
-
-    await store.initialize([CdvPurchase.Platform?.APPLE_APPSTORE || "ios-appstore"]);
-    initialized = true;
-    console.log("[IAP] Store initialized successfully");
-  } catch (err) {
-    console.error("[IAP] Failed to initialize store:", err);
-  }
+  return initializing;
 }
 
 /**
  * Initiate a purchase for the given tier and billing cycle.
- * Returns false if we're on web (no native IAP available).
+ * Returns false if we're on web (no native IAP available) or the product is missing.
  */
 export async function purchaseSubscription(
   tier: Exclude<SubscriptionTier, "free">,
@@ -107,40 +180,71 @@ export async function purchaseSubscription(
     return false;
   }
 
+  // Make sure the store is ready (handles cold-start race)
+  if (!initialized && initializing) {
+    await initializing;
+  }
+
+  if (!storeInstance) {
+    if (onErrorCallback) onErrorCallback("Store not ready. Please try again in a moment.");
+    return false;
+  }
+
   const productIds = IAP_PRODUCT_IDS[tier];
   const productId = productIds[cycle] || productIds.monthly;
 
   if (!productId) {
-    console.error("[IAP] No product ID for", tier, cycle);
-    return false;
-  }
-
-  if (!storeInstance) {
-    console.error("[IAP] Store not initialized");
+    if (onErrorCallback) onErrorCallback("Subscription option unavailable.");
     return false;
   }
 
   try {
-    const offer = storeInstance.get(productId)?.getOffer();
-    if (offer) {
-      await offer.order();
-      return true;
-    } else {
-      console.error("[IAP] Product not found:", productId);
+    const product = storeInstance.get(productId);
+    if (!product) {
+      if (onErrorCallback) onErrorCallback("Subscription not available. Please try again later.");
       return false;
     }
-  } catch (err) {
+
+    const offer = typeof product.getOffer === "function" ? product.getOffer() : product.offers?.[0];
+    if (!offer) {
+      if (onErrorCallback) onErrorCallback("No purchase offer available.");
+      return false;
+    }
+
+    const result = await offer.order();
+    // order() resolves with an error object on failure (per cdv-purchase v13 API)
+    if (result && result.code) {
+      // Cancellation — silent
+      if (result.code !== 6777003 && !/cancel/i.test(String(result.message || ""))) {
+        if (onErrorCallback) onErrorCallback(result.message || "Purchase failed");
+      }
+      return false;
+    }
+    return true;
+  } catch (err: any) {
     console.error("[IAP] Purchase error:", err);
+    if (onErrorCallback) onErrorCallback(err?.message || "Purchase failed");
     return false;
   }
 }
 
 /**
  * Restore previous purchases (e.g. after reinstall).
+ * Apple requires this to be USER-TRIGGERED only.
  */
 export async function restorePurchases(): Promise<void> {
-  if (!isNativePlatform() || !storeInstance) return;
-  await storeInstance.restorePurchases();
+  if (!isNativePlatform()) return;
+  if (!initialized && initializing) await initializing;
+  if (!storeInstance) {
+    if (onErrorCallback) onErrorCallback("Store not ready. Please try again.");
+    return;
+  }
+  try {
+    await storeInstance.restorePurchases();
+  } catch (err: any) {
+    console.error("[IAP] Restore error:", err);
+    if (onErrorCallback) onErrorCallback(err?.message || "Restore failed");
+  }
 }
 
 /** Map a product ID back to its subscription tier */
@@ -153,7 +257,12 @@ function productIdToTier(productId: string): SubscriptionTier | null {
   return null;
 }
 
-/** Check if native IAP is available */
+/** Check if native IAP is available (i.e. running on device) */
 export function isIAPAvailable(): boolean {
   return isNativePlatform();
+}
+
+/** Returns true once the store has finished initializing */
+export function isIAPReady(): boolean {
+  return initialized && !!storeInstance;
 }
