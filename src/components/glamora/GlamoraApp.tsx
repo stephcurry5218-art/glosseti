@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { WifiOff } from "lucide-react";
+import { toast } from "sonner";
 import { initializeIAP } from "./subscription/iapService";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
