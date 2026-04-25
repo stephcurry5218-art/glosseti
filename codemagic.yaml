@@ -1,101 +1,103 @@
 workflows:
- ios-workflow:
-   name: Glosseti iOS
-   max_build_duration: 120
+  ios-workflow:
+    name: Glosseti iOS
+    max_build_duration: 120
+    integrations:
+      app_store_connect: App Store Connect
     environment:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.glosseti.app
       vars:
-        XCODE_PROJECT: ios/App/App.xcodeproj
+        XCODE_WORKSPACE: ios/App/App.xcworkspace
         XCODE_SCHEME: App
+        APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID
+        APP_STORE_CONNECT_KEY_IDENTIFIER: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
       node: 22
       xcode: latest
-   scripts:
-     - name: Install dependencies
-       script: npm install
-     - name: Patch apple-sign-in for capacitor-swift-pm 8.x
-       script: |
-         PKG_SWIFT="node_modules/@capacitor-community/apple-sign-in/Package.swift"
-         if [ -f "$PKG_SWIFT" ]; then
-           echo "🔧 Patching $PKG_SWIFT to allow capacitor-swift-pm 8.x"
-           sed -i.bak 's|from: "7.0.0"|"8.0.0" ..< "9.0.0"|g' "$PKG_SWIFT"
-           echo "--- Patched Package.swift ---"
-           cat "$PKG_SWIFT"
-         else
-           echo "⚠️  $PKG_SWIFT not found — skipping patch."
-         fi
-     - name: Build web app
-       script: npm run build
-     - name: Add iOS platform (if missing)
-       script: |
-         if [ ! -d "ios/App" ]; then
-           echo "📱 No iOS platform found — adding it now..."
-           npx cap add ios
-         else
-           echo "✅ iOS platform already exists, skipping 'cap add'."
-         fi
-     - name: Sync Capacitor (iOS)
-       script: npx cap sync ios
-     - name: Inject iOS permission strings into Info.plist
-       script: |
-         PLIST=ios/App/App/Info.plist
-         /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST" 2>/dev/null || \
-           /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST"
-         /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST" 2>/dev/null || \
-           /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST"
-         /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST" 2>/dev/null || \
-           /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST"
-         echo "✅ Info.plist permission strings injected:"
-         /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
-         /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
-         /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
-     - name: Resolve Swift Package Manager dependencies
-       script: |
-         if [ ! -d "ios/App" ]; then
-           echo "⚠️  iOS platform missing — generating native project..."
-           rm -rf ios
-           npx cap add ios
-           npx cap sync ios
-         fi
-         if [ ! -d "$XCODE_PROJECT" ]; then
-           echo "❌ ERROR: Xcode project not found at $XCODE_PROJECT"
-           ls -la ios/App || echo "(ios/App does not exist)"
-           exit 1
-         fi
-         echo "✅ Xcode project found at $XCODE_PROJECT"
-         xcodebuild -resolvePackageDependencies \
-           -project "$XCODE_PROJECT" \
-           -scheme "$XCODE_SCHEME"
-     - name: Create export options
-       script: |
-         cat > /Users/builder/export_options.plist << EOF
-         <?xml version="1.0" encoding="UTF-8"?>
-         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-         <plist version="1.0">
-         <dict>
-           <key>method</key>
-           <string>app-store</string>
-           <key>teamID</key>
-           <string>N8LPSBH923</string>
-         </dict>
-         </plist>
-         EOF
-     - name: Build iOS app (SPM)
-       script: |
-         xcodebuild -project ios/App/App.xcodeproj \
-           -scheme App \
-           -archivePath build/ios/xcarchive/App.xcarchive \
-           archive \
-           CODE_SIGN_STYLE=Automatic \
-           DEVELOPMENT_TEAM=N8LPSBH923 \
-           COMPILER_INDEX_STORE_ENABLE=NO \
-           -allowProvisioningUpdates \
-           -allowProvisioningDeviceRegistration
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: npm install
+      - name: Patch apple-sign-in for capacitor-swift-pm 8.x
+        script: |
+          PKG_SWIFT="node_modules/@capacitor-community/apple-sign-in/Package.swift"
+          if [ -f "$PKG_SWIFT" ]; then
+            echo "🔧 Patching $PKG_SWIFT to allow capacitor-swift-pm 8.x"
+            sed -i.bak 's|from: "7.0.0"|"8.0.0" ..< "9.0.0"|g' "$PKG_SWIFT"
+            echo "--- Patched Package.swift ---"
+            cat "$PKG_SWIFT"
+          else
+            echo "⚠️  $PKG_SWIFT not found — skipping patch."
+          fi
+      - name: Build web app
+        script: npm run build
+      - name: Add iOS platform (if missing)
+        script: |
+          if [ ! -d "ios/App" ]; then
+            echo "📱 No iOS platform found — adding it now..."
+            npx cap add ios
+          else
+            echo "✅ iOS platform already exists, skipping 'cap add'."
+          fi
+      - name: Sync Capacitor (iOS)
+        script: npx cap sync ios
+      - name: Inject iOS permission strings into Info.plist
+        script: |
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST"
+          echo "✅ Info.plist permission strings injected:"
+          /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
+      - name: Resolve Swift Package Manager dependencies
+        script: |
+          if [ ! -d "ios/App" ]; then
+            echo "⚠️  iOS platform missing — generating native project..."
+            rm -rf ios
+            npx cap add ios
+            npx cap sync ios
+          fi
+          if [ ! -d "$XCODE_PROJECT" ]; then
+            echo "❌ ERROR: Xcode project not found at $XCODE_PROJECT"
+            ls -la ios/App || echo "(ios/App does not exist)"
+            exit 1
+          fi
+          echo "✅ Xcode project found at $XCODE_PROJECT"
+          xcodebuild -resolvePackageDependencies \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME"
+      - name: Create export options
+        script: |
+          cat > /Users/builder/export_options.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>N8LPSBH923</string>
+          </dict>
+          </plist>
+          EOF
+      - name: Build iOS app (SPM)
+        script: |
+          xcodebuild -project ios/App/App.xcodeproj \
+            -scheme App \
+            -archivePath build/ios/xcarchive/App.xcarchive \
+            archive \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=N8LPSBH923 \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            -allowProvisioningUpdates \
+            -allowProvisioningDeviceRegistration
    artifacts:
      - build/ios/ipa/*.ipa
 
@@ -152,4 +154,3 @@ publishing:
    auth: integration
    submit_to_testflight: true
    submit_to_app_store: false
-   
