@@ -1,4 +1,3 @@
-
 workflows:
   ios-workflow:
     name: Glosseti iOS
@@ -11,6 +10,7 @@ workflows:
         bundle_identifier: com.glosseti.app
       vars:
         XCODE_WORKSPACE: ios/App/App.xcworkspace
+        XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_SCHEME: App
         APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID
         APP_STORE_CONNECT_KEY_IDENTIFIER: $APP_STORE_CONNECT_KEY_IDENTIFIER
@@ -99,7 +99,7 @@ workflows:
             COMPILER_INDEX_STORE_ENABLE=NO \
             -allowProvisioningUpdates \
             -allowProvisioningDeviceRegistration
-   artifacts:
+    artifacts:
      - build/ios/ipa/*.ipa
 
  android-workflow:
@@ -148,11 +148,10 @@ workflows:
      - android/app/build/outputs/**/*.apk
 
 integrations:
- app_store_connect: App Store Connect
+  app_store_connect: App Store Connect
 
 publishing:
  app_store_connect:
-   auth: integration
-   submit_to_testflight: true
-   submit_to_app_store: false
-   
+    auth: integration
+    submit_to_testflight: true
+    submit_to_app_store: false
