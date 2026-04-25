@@ -16,124 +16,156 @@ workflows:
 
     scripts:
       - name: Install dependencies
-        script: npm install
+        script: |
+          set -e
+          npm install
 
       - name: Patch apple-sign-in for capacitor-swift-pm 8.x
         script: |
+          set -e
           PKG_SWIFT="node_modules/@capacitor-community/apple-sign-in/Package.swift"
           if [ -f "$PKG_SWIFT" ]; then
-            echo "🔧 Patching $PKG_SWIFT to allow capacitor-swift-pm 8.x"
-            sed -i.bak 's|from: "7.0.0"|"8.0.0" ..< "9.0.0"|g' "$PKG_SWIFT"
-            echo "--- Patched Package.swift ---"
+            python3 - "$PKG_SWIFT" <<'PY'
+          from pathlib import Path
+          import sys
+
+          path = Path(sys.argv[1])
+          text = path.read_text()
+          text = text.replace('from: "7.0.0"', '"8.0.0" ..< "9.0.0"')
+          path.write_text(text)
+          PY
+            echo "Patched $PKG_SWIFT"
             cat "$PKG_SWIFT"
           else
-            echo "⚠️ $PKG_SWIFT not found — skipping patch."
+            echo "$PKG_SWIFT not found; skipping patch."
           fi
 
       - name: Build web app
-        script: npm run build
+        script: |
+          set -e
+          npm run build
 
       - name: Add iOS platform if missing
         script: |
+          set -e
           if [ ! -d "ios/App" ]; then
-            echo "📱 No iOS platform found — adding it now..."
             npx cap add ios
           else
-            echo "✅ iOS platform already exists, skipping cap add."
+            echo "iOS platform already exists."
           fi
 
       - name: Sync Capacitor iOS
-        script: npx cap sync ios
+        script: |
+          set -e
+          npx cap sync ios
 
       - name: Inject iOS permission strings into Info.plist
         script: |
-          PLIST=ios/App/App/Info.plist
+          set -e
+          PLIST="ios/App/App/Info.plist"
 
-          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST" 2>/dev/null || \
-            /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string Glosseti uses the camera so you can take a selfie or full-body photo for AI styling." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription Glosseti uses the camera so you can take a selfie or full-body photo for AI styling." "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling." "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string Glosseti saves your generated styled looks to your Photos so you can keep or share them." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription Glosseti saves your generated styled looks to your Photos so you can keep or share them." "$PLIST"
 
-          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST" 2>/dev/null || \
-            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST"
-
-          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST" 2>/dev/null || \
-            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST"
-
-          echo "✅ Info.plist permission strings injected."
-
-      - name: Clean Swift Package Manager cache
+      - name: Clean Swift Package Manager state
         script: |
-          echo "🧹 Cleaning Swift Package Manager and Xcode caches..."
-
+          set -e
           rm -rf "$HOME/Library/Caches/org.swift.swiftpm"
           rm -rf "$HOME/Library/org.swift.swiftpm"
           rm -rf "$HOME/Library/Developer/Xcode/DerivedData"
           rm -rf "$CM_BUILD_DIR/spm-clones"
-          rm -rf ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
-          rm -rf ios/App/App.xcworkspace/xcshareddata/swiftpm
-
+          rm -rf "$CM_BUILD_DIR/DerivedData"
+          rm -rf "ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm"
+          rm -rf "ios/App/App.xcworkspace/xcshareddata/swiftpm"
           mkdir -p "$CM_BUILD_DIR/spm-clones"
-
-          echo "✅ Swift Package Manager cache cleaned."
+          mkdir -p "$CM_BUILD_DIR/DerivedData"
 
       - name: Resolve Swift Package Manager dependencies
         script: |
+          set -e
           if [ ! -d "$XCODE_PROJECT" ]; then
-            echo "❌ ERROR: Xcode project not found at $XCODE_PROJECT"
-            ls -la ios/App || echo "ios/App does not exist"
+            echo "Xcode project not found at $XCODE_PROJECT"
+            ls -la ios/App || true
             exit 1
           fi
 
+          set +e
           xcodebuild -resolvePackageDependencies \
             -project "$XCODE_PROJECT" \
             -scheme "$XCODE_SCHEME" \
             -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
+            -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
             -disablePackageRepositoryCache
+          STATUS=$?
+          set -e
+
+          if [ "$STATUS" -ne 0 ]; then
+            rm -rf "$HOME/Library/Caches/org.swift.swiftpm"
+            rm -rf "$HOME/Library/org.swift.swiftpm"
+            rm -rf "$CM_BUILD_DIR/spm-clones"
+            rm -rf "$CM_BUILD_DIR/DerivedData"
+            mkdir -p "$CM_BUILD_DIR/spm-clones"
+            mkdir -p "$CM_BUILD_DIR/DerivedData"
+            xcodebuild -resolvePackageDependencies \
+              -project "$XCODE_PROJECT" \
+              -scheme "$XCODE_SCHEME" \
+              -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
+              -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
+              -disablePackageRepositoryCache
+          fi
 
       - name: Prepare App Store Connect private key
         script: |
           set -e
-
-          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
-            echo "❌ APP_STORE_CONNECT_ISSUER_ID is missing in Codemagic environment variables."
-            exit 1
-          fi
-
-          if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ]; then
-            echo "❌ APP_STORE_CONNECT_KEY_IDENTIFIER is missing in Codemagic environment variables."
-            exit 1
-          fi
-
-          if [ -z "$APP_STORE_CONNECT_PRIVATE_KEY" ]; then
-            echo "❌ APP_STORE_CONNECT_PRIVATE_KEY is missing in Codemagic environment variables."
-            exit 1
-          fi
+          : "${APP_STORE_CONNECT_ISSUER_ID:?APP_STORE_CONNECT_ISSUER_ID is missing}"
+          : "${APP_STORE_CONNECT_KEY_IDENTIFIER:?APP_STORE_CONNECT_KEY_IDENTIFIER is missing}"
+          : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY is missing}"
 
           mkdir -p "$CM_BUILD_DIR/private_keys"
-
           KEY_FILE="$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
 
-          printf "%s" "$APP_STORE_CONNECT_PRIVATE_KEY" \
-            | sed 's/\\n/\
-/g' \
-            | sed 's/\r$//' > "$KEY_FILE"
+          python3 - "$KEY_FILE" <<'PY'
+          import base64
+          import os
+          import sys
+          from pathlib import Path
+
+          key_file = Path(sys.argv[1])
+          key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip().strip('"').strip("'")
+
+          if "\\n" in key:
+              key = key.replace("\\n", "\n")
+
+          if "BEGIN PRIVATE KEY" not in key:
+              try:
+                  decoded = base64.b64decode(key).decode("utf-8")
+                  if "BEGIN PRIVATE KEY" in decoded:
+                      key = decoded
+              except Exception:
+                  pass
+
+          key = key.replace("\r\n", "\n").replace("\r", "\n").strip() + "\n"
+          key_file.write_text(key)
+          PY
 
           chmod 600 "$KEY_FILE"
 
           if ! grep -q "BEGIN PRIVATE KEY" "$KEY_FILE"; then
-            echo "❌ Private key is invalid. It must include:"
-            echo "-----BEGIN PRIVATE KEY-----"
-            echo "-----END PRIVATE KEY-----"
+            echo "Private key is invalid. It must include BEGIN PRIVATE KEY and END PRIVATE KEY lines."
+            exit 1
+          fi
+
+          if ! grep -q "END PRIVATE KEY" "$KEY_FILE"; then
+            echo "Private key is invalid. It must include END PRIVATE KEY."
             exit 1
           fi
 
           echo "APP_STORE_CONNECT_PRIVATE_KEY_PATH=$KEY_FILE" >> "$CM_ENV"
 
-          echo "✅ App Store Connect private key prepared."
-
       - name: Fetch iOS signing files
         script: |
           set -e
-
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
             --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
@@ -143,34 +175,40 @@ workflows:
 
       - name: Set up code signing
         script: |
+          set -e
           keychain initialize
           keychain add-certificates
           xcode-project use-profiles
 
-      - name: Build iOS app
+      - name: Build iOS archive
         script: |
-          xcodebuild -project "$XCODE_PROJECT" \
+          set -e
+          xcodebuild archive \
+            -project "$XCODE_PROJECT" \
             -scheme "$XCODE_SCHEME" \
             -archivePath build/ios/xcarchive/App.xcarchive \
             -configuration Release \
+            -destination "generic/platform=iOS" \
             -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
+            -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
             -disablePackageRepositoryCache \
-            archive \
             DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+            CODE_SIGN_STYLE=Automatic \
             COMPILER_INDEX_STORE_ENABLE=NO
 
       - name: Export IPA
         script: |
+          set -e
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
             --archive-xcarchive build/ios/xcarchive/App.xcarchive
 
     artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+      - "build/ios/ipa/*.ipa"
+      - "/tmp/xcodebuild_logs/*.log"
+      - "$HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app"
+      - "$HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM"
 
     publishing:
       app_store_connect:
@@ -179,59 +217,3 @@ workflows:
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
         submit_to_app_store: false
-
-  android-workflow:
-    name: Glosseti Android
-    max_build_duration: 120
-
-    environment:
-      vars:
-        PACKAGE_NAME: com.glosseti.app
-      node: 22
-      java: 21
-
-    scripts:
-      - name: Install dependencies
-        script: npm install
-
-      - name: Run frontend tests
-        script: |
-          if npm run | grep -qE '^\s+test'; then
-            npm test -- --run || npx vitest run
-          else
-            echo "ℹ️ No test script found — skipping tests."
-          fi
-
-      - name: Build web app
-        script: npm run build
-
-      - name: Add Android platform if missing
-        script: |
-          if [ ! -d "android" ] || [ ! -f "android/build.gradle" ]; then
-            echo "🤖 No Android platform found — adding it now..."
-            rm -rf android
-            npx cap add android
-          else
-            echo "✅ Android platform already exists, skipping cap add."
-          fi
-
-      - name: Sync Capacitor Android
-        script: npx cap sync android
-
-      - name: Make gradlew executable
-        script: chmod +x android/gradlew
-
-      - name: Build Android AAB release
-        script: |
-          cd android
-          ./gradlew :app:bundleRelease
-
-      - name: Build Android APK release
-        script: |
-          cd android
-          ./gradlew :app:assembleRelease
-
-    artifacts:
-      - android/app/build/outputs/**/*.aab
-      - android/app/build/outputs/**/*.apk
-      
