@@ -262,45 +262,34 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
             const isNative = Capacitor.isNativePlatform();
             try {
               if (isNative) {
-                // Native (iOS/Android): open OAuth in the in-app Safari/Chrome view,
-                // watch for Supabase session, then auto-close the browser.
-                const { Browser } = await import("@capacitor/browser");
-                const redirectUri = "https://glosseti.lovable.app/";
-                console.log("[GoogleAuth][native] start", { platform: Capacitor.getPlatform(), redirectUri });
+                // Native (iOS/Android): use the native Google Sign-In SDK,
+                // then exchange the ID token with Supabase for a session.
+                const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
+                console.log("[GoogleAuth][native] start", { platform: Capacitor.getPlatform() });
 
-                const result = await lovable.auth.signInWithOAuth("google", {
-                  redirect_uri: redirectUri,
-                  // Tell the broker to return the auth URL instead of redirecting in-page
-                  skipBrowserRedirect: true,
-                } as any);
+                try { await GoogleAuth.initialize(); } catch (e) { console.warn("[GoogleAuth] init warn", e); }
 
-                const authUrl: string | undefined =
-                  (result as any)?.url || (result as any)?.data?.url;
+                const googleUser: any = await GoogleAuth.signIn();
+                const idToken: string | undefined =
+                  googleUser?.authentication?.idToken || googleUser?.idToken;
 
-                if (result?.error || !authUrl) {
-                  console.error("[GoogleAuth][native] no url", result);
-                  toast.error(result?.error?.message || "Could not start Google sign in");
+                if (!idToken) {
+                  console.error("[GoogleAuth][native] no idToken", googleUser);
+                  toast.error("Could not get Google credentials");
                   return;
                 }
 
-                await Browser.open({ url: authUrl, presentationStyle: "popover" });
+                const { data, error } = await supabase.auth.signInWithIdToken({
+                  provider: "google",
+                  token: idToken,
+                });
 
-                // Poll for a Supabase session — when the OAuth callback completes,
-                // the broker postMessages tokens back and the session appears here.
-                const start = Date.now();
-                let session = null;
-                while (Date.now() - start < 120_000) {
-                  await new Promise((r) => setTimeout(r, 700));
-                  const { data } = await supabase.auth.getSession();
-                  if (data.session) { session = data.session; break; }
-                }
-
-                try { await Browser.close(); } catch {}
-
-                if (!session) {
-                  toast.error("Sign in was cancelled or timed out");
+                if (error || !data.session) {
+                  console.error("[GoogleAuth][native] supabase exchange failed", error);
+                  toast.error(error?.message || "Sign in failed");
                   return;
                 }
+
                 toast.success("Welcome!");
                 onSuccess();
                 return;
