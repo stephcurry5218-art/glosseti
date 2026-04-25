@@ -5,7 +5,7 @@ workflows:
 
     environment:
       groups:
-        - app_store_connect
+        - default
       vars:
         XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_WORKSPACE: ios/App/App.xcworkspace
