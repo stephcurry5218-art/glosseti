@@ -40,17 +40,20 @@ workflows:
           /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
-      - name: Verify Podfile and Install CocoaPods
+      - name: Verify iOS dependencies
         script: |
-          if [ ! -f "ios/App/Podfile" ]; then
-            echo "⚠️  Podfile missing — re-running cap add + sync to regenerate native project..."
+          if [ ! -d "ios/App" ]; then
+            echo "⚠️  iOS platform missing — generating native project..."
             rm -rf ios
             npx cap add ios
             npx cap sync ios
           fi
-          echo "📄 Podfile found at ios/App/Podfile — running pod install"
-          cd ios/App
-          pod install --repo-update
+          if [ -f "ios/App/Podfile" ]; then
+            echo "📄 Podfile found at ios/App/Podfile — running pod install"
+            (cd ios/App && pod install --repo-update)
+          else
+            echo "✅ No Podfile generated; Capacitor is using Swift Package Manager, so CocoaPods install is not required."
+          fi
       - name: Build iOS app
         script: |
           xcode-project build-ipa \
