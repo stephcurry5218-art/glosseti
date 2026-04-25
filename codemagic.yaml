@@ -10,9 +10,6 @@ workflows:
         XCODE_SCHEME: App
         BUNDLE_ID: com.glosseti.app
         DEVELOPMENT_TEAM: N8LPSBH923
-        APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID
-        APP_STORE_CONNECT_KEY_IDENTIFIER: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
       node: 22
       xcode: latest
       cocoapods: default
@@ -70,7 +67,6 @@ workflows:
           rm -rf "$HOME/Library/Caches/org.swift.swiftpm"
           rm -rf "$HOME/Library/org.swift.swiftpm"
           rm -rf "$HOME/Library/Developer/Xcode/DerivedData"
-          rm -rf "$CM_BUILD_DIR/spm-cache"
           rm -rf "$CM_BUILD_DIR/spm-clones"
           rm -rf ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
           rm -rf ios/App/App.xcworkspace/xcshareddata/swiftpm
@@ -95,21 +91,53 @@ workflows:
 
       - name: Prepare App Store Connect private key
         script: |
+          set -e
+
+          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
+            echo "❌ APP_STORE_CONNECT_ISSUER_ID is missing in Codemagic environment variables."
+            exit 1
+          fi
+
+          if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ]; then
+            echo "❌ APP_STORE_CONNECT_KEY_IDENTIFIER is missing in Codemagic environment variables."
+            exit 1
+          fi
+
+          if [ -z "$APP_STORE_CONNECT_PRIVATE_KEY" ]; then
+            echo "❌ APP_STORE_CONNECT_PRIVATE_KEY is missing in Codemagic environment variables."
+            exit 1
+          fi
+
           mkdir -p "$CM_BUILD_DIR/private_keys"
 
-          printf "%s" "$APP_STORE_CONNECT_PRIVATE_KEY" | sed 's/\\n/\
-          /g' > "$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
+          KEY_FILE="$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
 
-          chmod 600 "$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
+          printf "%s" "$APP_STORE_CONNECT_PRIVATE_KEY" \
+            | sed 's/\\n/\
+/g' \
+            | sed 's/\r$//' > "$KEY_FILE"
+
+          chmod 600 "$KEY_FILE"
+
+          if ! grep -q "BEGIN PRIVATE KEY" "$KEY_FILE"; then
+            echo "❌ Private key is invalid. It must include:"
+            echo "-----BEGIN PRIVATE KEY-----"
+            echo "-----END PRIVATE KEY-----"
+            exit 1
+          fi
+
+          echo "APP_STORE_CONNECT_PRIVATE_KEY_PATH=$KEY_FILE" >> "$CM_ENV"
 
           echo "✅ App Store Connect private key prepared."
 
       - name: Fetch iOS signing files
         script: |
+          set -e
+
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
             --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
-            --private-key "@file:$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8" \
+            --private-key "@file:$APP_STORE_CONNECT_PRIVATE_KEY_PATH" \
             --type IOS_APP_STORE \
             --create
 
@@ -206,5 +234,4 @@ workflows:
     artifacts:
       - android/app/build/outputs/**/*.aab
       - android/app/build/outputs/**/*.apk
-      
       
