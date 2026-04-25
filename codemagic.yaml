@@ -21,6 +21,19 @@ ios-workflow:
         script: npx cap add ios
       - name: Sync Capacitor
         script: npx cap sync ios
+      - name: Inject iOS permission strings into Info.plist
+        script: |
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription 'Glosseti uses the camera so you can take a selfie or full-body photo for AI styling.'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription 'Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling.'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription 'Glosseti saves your generated styled looks to your Photos so you can keep or share them.'" "$PLIST"
+          echo "✅ Info.plist permission strings injected:"
+          /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
       - name: Install CocoaPods
         script: |
           cd ios/App
