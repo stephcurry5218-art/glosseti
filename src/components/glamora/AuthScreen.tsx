@@ -259,16 +259,57 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           className="anim-fadeUp d4"
           onClick={async () => {
             setLoading(true);
+            const isNative = Capacitor.isNativePlatform();
             try {
-              // On native (iOS/Android), window.location.origin is capacitor://localhost
-              // which is NOT allowlisted by Google OAuth. Use the published HTTPS URL instead.
-              const isNative = Capacitor.isNativePlatform();
-              const redirectUri = isNative
-                ? "https://glosseti.lovable.app/"
-                : window.location.origin;
-              console.log("[GoogleAuth] start", { isNative, platform: Capacitor.getPlatform(), redirectUri });
+              if (isNative) {
+                // Native (iOS/Android): open OAuth in the in-app Safari/Chrome view,
+                // watch for Supabase session, then auto-close the browser.
+                const { Browser } = await import("@capacitor/browser");
+                const redirectUri = "https://glosseti.lovable.app/";
+                console.log("[GoogleAuth][native] start", { platform: Capacitor.getPlatform(), redirectUri });
+
+                const result = await lovable.auth.signInWithOAuth("google", {
+                  redirect_uri: redirectUri,
+                  // Tell the broker to return the auth URL instead of redirecting in-page
+                  skipBrowserRedirect: true,
+                } as any);
+
+                const authUrl: string | undefined =
+                  (result as any)?.url || (result as any)?.data?.url;
+
+                if (result?.error || !authUrl) {
+                  console.error("[GoogleAuth][native] no url", result);
+                  toast.error(result?.error?.message || "Could not start Google sign in");
+                  return;
+                }
+
+                await Browser.open({ url: authUrl, presentationStyle: "popover" });
+
+                // Poll for a Supabase session — when the OAuth callback completes,
+                // the broker postMessages tokens back and the session appears here.
+                const start = Date.now();
+                let session = null;
+                while (Date.now() - start < 120_000) {
+                  await new Promise((r) => setTimeout(r, 700));
+                  const { data } = await supabase.auth.getSession();
+                  if (data.session) { session = data.session; break; }
+                }
+
+                try { await Browser.close(); } catch {}
+
+                if (!session) {
+                  toast.error("Sign in was cancelled or timed out");
+                  return;
+                }
+                toast.success("Welcome!");
+                onSuccess();
+                return;
+              }
+
+              // Web flow
+              console.log("[GoogleAuth][web] start");
               const result = await lovable.auth.signInWithOAuth("google", {
-                redirect_uri: redirectUri,
+                redirect_uri: window.location.origin,
               });
               if (!result) { toast.error("Sign in was cancelled"); return; }
               if (result.error) { toast.error(result.error?.message || "Google sign in failed"); return; }
@@ -276,6 +317,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
               toast.success("Welcome!");
               onSuccess();
             } catch (err: any) {
+              console.error("[GoogleAuth] error", err);
               toast.error(err?.message || "Google sign in failed. Please try again.");
             } finally {
               setLoading(false);
