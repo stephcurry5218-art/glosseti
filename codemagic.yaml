@@ -17,9 +17,15 @@ workflows:
         script: npm install
       - name: Build web app
         script: npm run build
-      - name: Add iOS platform
-        script: npx cap add ios
-      - name: Sync Capacitor
+      - name: Add iOS platform (if missing)
+        script: |
+          if [ ! -d "ios/App" ]; then
+            echo "📱 No iOS platform found — adding it now..."
+            npx cap add ios
+          else
+            echo "✅ iOS platform already exists, skipping 'cap add'."
+          fi
+      - name: Sync Capacitor (iOS)
         script: npx cap sync ios
       - name: Inject iOS permission strings into Info.plist
         script: |
@@ -34,10 +40,17 @@ workflows:
           /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
-      - name: Install CocoaPods
+      - name: Verify Podfile and Install CocoaPods
         script: |
+          if [ ! -f "ios/App/Podfile" ]; then
+            echo "⚠️  Podfile missing — re-running cap add + sync to regenerate native project..."
+            rm -rf ios
+            npx cap add ios
+            npx cap sync ios
+          fi
+          echo "📄 Podfile found at ios/App/Podfile — running pod install"
           cd ios/App
-          pod install
+          pod install --repo-update
       - name: Build iOS app
         script: |
           xcode-project build-ipa \
@@ -54,4 +67,3 @@ publishing:
     auth: integration
     submit_to_testflight: true
     submit_to_app_store: false
-    
