@@ -9,6 +9,7 @@ workflows:
         XCODE_WORKSPACE: ios/App/App.xcworkspace
         XCODE_SCHEME: App
         BUNDLE_ID: com.glosseti.app
+        DEVELOPMENT_TEAM: N8LPSBH923
         APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID
         APP_STORE_CONNECT_KEY_IDENTIFIER: $APP_STORE_CONNECT_KEY_IDENTIFIER
         APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
@@ -29,7 +30,7 @@ workflows:
             echo "--- Patched Package.swift ---"
             cat "$PKG_SWIFT"
           else
-            echo "⚠️  $PKG_SWIFT not found — skipping patch."
+            echo "⚠️ $PKG_SWIFT not found — skipping patch."
           fi
 
       - name: Build web app
@@ -62,6 +63,22 @@ workflows:
 
           echo "✅ Info.plist permission strings injected."
 
+      - name: Clean Swift Package Manager cache
+        script: |
+          echo "🧹 Cleaning Swift Package Manager and Xcode caches..."
+
+          rm -rf "$HOME/Library/Caches/org.swift.swiftpm"
+          rm -rf "$HOME/Library/org.swift.swiftpm"
+          rm -rf "$HOME/Library/Developer/Xcode/DerivedData"
+          rm -rf "$CM_BUILD_DIR/spm-cache"
+          rm -rf "$CM_BUILD_DIR/spm-clones"
+          rm -rf ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
+          rm -rf ios/App/App.xcworkspace/xcshareddata/swiftpm
+
+          mkdir -p "$CM_BUILD_DIR/spm-clones"
+
+          echo "✅ Swift Package Manager cache cleaned."
+
       - name: Resolve Swift Package Manager dependencies
         script: |
           if [ ! -d "$XCODE_PROJECT" ]; then
@@ -72,11 +89,27 @@ workflows:
 
           xcodebuild -resolvePackageDependencies \
             -project "$XCODE_PROJECT" \
-            -scheme "$XCODE_SCHEME"
+            -scheme "$XCODE_SCHEME" \
+            -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
+            -disablePackageRepositoryCache
+
+      - name: Prepare App Store Connect private key
+        script: |
+          mkdir -p "$CM_BUILD_DIR/private_keys"
+
+          printf "%s" "$APP_STORE_CONNECT_PRIVATE_KEY" | sed 's/\\n/\
+          /g' > "$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
+
+          chmod 600 "$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
+
+          echo "✅ App Store Connect private key prepared."
 
       - name: Fetch iOS signing files
         script: |
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
+            --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
+            --private-key "@file:$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8" \
             --type IOS_APP_STORE \
             --create
 
@@ -92,8 +125,10 @@ workflows:
             -scheme "$XCODE_SCHEME" \
             -archivePath build/ios/xcarchive/App.xcarchive \
             -configuration Release \
+            -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
+            -disablePackageRepositoryCache \
             archive \
-            DEVELOPMENT_TEAM=N8LPSBH923 \
+            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
             COMPILER_INDEX_STORE_ENABLE=NO
 
       - name: Export IPA
@@ -136,7 +171,7 @@ workflows:
           if npm run | grep -qE '^\s+test'; then
             npm test -- --run || npx vitest run
           else
-            echo "ℹ️  No test script found — skipping tests."
+            echo "ℹ️ No test script found — skipping tests."
           fi
 
       - name: Build web app
@@ -171,4 +206,5 @@ workflows:
     artifacts:
       - android/app/build/outputs/**/*.aab
       - android/app/build/outputs/**/*.apk
+      
       
