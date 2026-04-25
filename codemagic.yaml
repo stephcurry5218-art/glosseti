@@ -85,9 +85,13 @@ workflows:
           EOF
       - name: Build iOS app (SPM)
         script: |
-          xcode-project build-ipa \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+          xcodebuild -project ios/App/App.xcodeproj \
+            -scheme App \
+            -archivePath build/ios/xcarchive/App.xcarchive \
+            archive \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=N8LPSBH923 \
+            COMPILER_INDEX_STORE_ENABLE=NO
     artifacts:
       - build/ios/ipa/*.ipa
 
