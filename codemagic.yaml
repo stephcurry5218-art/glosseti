@@ -15,6 +15,22 @@ workflows:
     scripts:
       - name: Install dependencies
         script: npm install
+      - name: Patch apple-sign-in for capacitor-swift-pm 8.x
+        script: |
+          # @capacitor-community/apple-sign-in@7.1.0 pins capacitor-swift-pm to 7.x,
+          # but the project uses Capacitor 8.x (cordova-plugin-purchase requires
+          # capacitor-swift-pm 8.x). No v8 of apple-sign-in is published yet, so we
+          # rewrite its Package.swift to allow swift-pm 8.x. The plugin's Swift API
+          # surface is compatible with Capacitor 8.
+          PKG_SWIFT="node_modules/@capacitor-community/apple-sign-in/Package.swift"
+          if [ -f "$PKG_SWIFT" ]; then
+            echo "🔧 Patching $PKG_SWIFT to allow capacitor-swift-pm 8.x"
+            sed -i.bak 's|from: "7.0.0"|"8.0.0" ..< "9.0.0"|g' "$PKG_SWIFT"
+            echo "--- Patched Package.swift ---"
+            cat "$PKG_SWIFT"
+          else
+            echo "⚠️  $PKG_SWIFT not found — skipping patch."
+          fi
       - name: Build web app
         script: npm run build
       - name: Add iOS platform (if missing)
