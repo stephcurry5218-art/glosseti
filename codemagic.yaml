@@ -7,11 +7,11 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.glosseti.app
       vars:
-        XCODE_WORKSPACE: ios/App/App.xcworkspace
+        XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_SCHEME: App
       node: 22
       xcode: latest
-      cocoapods: default
+      
     scripts:
       - name: Install dependencies
         script: npm install
@@ -40,7 +40,7 @@ workflows:
           /usr/libexec/PlistBuddy -c "Print :NSCameraUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$PLIST"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$PLIST"
-      - name: Install CocoaPods
+      - name: Resolve Swift Package Manager dependencies
         script: |
           if [ ! -d "ios/App" ]; then
             echo "⚠️  iOS platform missing — generating native project..."
@@ -48,23 +48,19 @@ workflows:
             npx cap add ios
             npx cap sync ios
           fi
-          cd ios/App
-          pod install --repo-update
-          ls -la
-      - name: Verify Xcode workspace exists
-        script: |
-          if [ ! -d "$XCODE_WORKSPACE" ]; then
-            echo "❌ ERROR: Xcode workspace not found at $XCODE_WORKSPACE"
-            echo "Contents of ios/App:"
+          if [ ! -d "$XCODE_PROJECT" ]; then
+            echo "❌ ERROR: Xcode project not found at $XCODE_PROJECT"
             ls -la ios/App || echo "(ios/App does not exist)"
             exit 1
           fi
-          echo "✅ Xcode workspace found at $XCODE_WORKSPACE"
-          ls -la "$XCODE_WORKSPACE"
-      - name: Build iOS app
+          echo "✅ Xcode project found at $XCODE_PROJECT"
+          xcodebuild -resolvePackageDependencies \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME"
+      - name: Build iOS app (SPM)
         script: |
           xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
+            --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
