@@ -2,15 +2,19 @@ workflows:
  ios-workflow:
    name: Glosseti iOS
    max_build_duration: 120
-   environment:
-     ios_signing:
-       distribution_type: app_store
-       bundle_identifier: com.glosseti.app
-     vars:
-       XCODE_PROJECT: ios/App/App.xcodeproj
-       XCODE_SCHEME: App
-     node: 22
-     xcode: latest
+    environment:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.glosseti.app
+      vars:
+        XCODE_PROJECT: ios/App/App.xcodeproj
+        XCODE_SCHEME: App
+      node: 22
+      xcode: latest
    scripts:
      - name: Install dependencies
        script: npm install
