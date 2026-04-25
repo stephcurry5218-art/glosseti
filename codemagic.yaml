@@ -100,7 +100,7 @@ workflows:
             -allowProvisioningUpdates \
             -allowProvisioningDeviceRegistration
     artifacts:
-     - build/ios/ipa/*.ipa
+      - build/ios/ipa/*.ipa
 
  android-workflow:
    name: Glosseti Android
