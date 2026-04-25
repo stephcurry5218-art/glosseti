@@ -4,6 +4,8 @@ workflows:
     max_build_duration: 120
 
     environment:
+      groups:
+        - app_store_connect
       vars:
         XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_WORKSPACE: ios/App/App.xcworkspace
@@ -63,7 +65,6 @@ workflows:
         script: |
           set -e
           PLIST="ios/App/App/Info.plist"
-
           /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string Glosseti uses the camera so you can take a selfie or full-body photo for AI styling." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription Glosseti uses the camera so you can take a selfie or full-body photo for AI styling." "$PLIST"
           /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryUsageDescription Glosseti needs access to your photos so you can pick an existing selfie or outfit photo for AI styling." "$PLIST"
           /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string Glosseti saves your generated styled looks to your Photos so you can keep or share them." "$PLIST" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :NSPhotoLibraryAddUsageDescription Glosseti saves your generated styled looks to your Photos so you can keep or share them." "$PLIST"
