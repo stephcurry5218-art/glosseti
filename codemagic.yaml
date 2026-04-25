@@ -102,56 +102,56 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
 
- android-workflow:
-   name: Glosseti Android
-   max_build_duration: 120
-   environment:
-     vars:
-       PACKAGE_NAME: com.glosseti.app
-     node: 22
-     java: 21
-   scripts:
-     - name: Install dependencies
-       script: npm install
-     - name: Run frontend tests
-       script: |
-         if npm run | grep -qE '^\s+test'; then
-           npm test -- --run || npx vitest run
-         else
-           echo "ℹ️  No 'test' script found — skipping tests."
-         fi
-     - name: Build web app
-       script: npm run build
-     - name: Add Android platform (if missing)
-       script: |
-         if [ ! -d "android" ] || [ ! -f "android/build.gradle" ]; then
-           echo "🤖 No Android platform found — adding it now..."
-           rm -rf android
-           npx cap add android
-         else
-           echo "✅ Android platform already exists, skipping 'cap add'."
-         fi
-     - name: Sync Capacitor (Android)
-       script: npx cap sync android
-     - name: Make gradlew executable
-       script: chmod +x android/gradlew
-     - name: Build Android AAB (release)
-       script: |
-         cd android
-         ./gradlew :app:bundleRelease
-     - name: Build Android APK (release)
-       script: |
-         cd android
-         ./gradlew :app:assembleRelease
-   artifacts:
-     - android/app/build/outputs/**/*.aab
-     - android/app/build/outputs/**/*.apk
+  android-workflow:
+    name: Glosseti Android
+    max_build_duration: 120
+    environment:
+      vars:
+        PACKAGE_NAME: com.glosseti.app
+      node: 22
+      java: 21
+    scripts:
+      - name: Install dependencies
+        script: npm install
+      - name: Run frontend tests
+        script: |
+          if npm run | grep -qE '^\s+test'; then
+            npm test -- --run || npx vitest run
+          else
+            echo "ℹ️  No 'test' script found — skipping tests."
+          fi
+      - name: Build web app
+        script: npm run build
+      - name: Add Android platform (if missing)
+        script: |
+          if [ ! -d "android" ] || [ ! -f "android/build.gradle" ]; then
+            echo "🤖 No Android platform found — adding it now..."
+            rm -rf android
+            npx cap add android
+          else
+            echo "✅ Android platform already exists, skipping 'cap add'."
+          fi
+      - name: Sync Capacitor (Android)
+        script: npx cap sync android
+      - name: Make gradlew executable
+        script: chmod +x android/gradlew
+      - name: Build Android AAB (release)
+        script: |
+          cd android
+          ./gradlew :app:bundleRelease
+      - name: Build Android APK (release)
+        script: |
+          cd android
+          ./gradlew :app:assembleRelease
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+      - android/app/build/outputs/**/*.apk
 
 integrations:
   app_store_connect: App Store Connect
 
 publishing:
- app_store_connect:
+  app_store_connect:
     auth: integration
     submit_to_testflight: true
     submit_to_app_store: false
