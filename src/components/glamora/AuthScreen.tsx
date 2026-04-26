@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+
+const NATIVE_GOOGLE_CLIENT_ID = "397756734481-noqav0d4im5v9r8bkrgqntrcucn9u5po.apps.googleusercontent.com";
 
 interface Props {
   onBack: () => void;
@@ -259,23 +261,40 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           className="anim-fadeUp d4"
           onClick={async () => {
             setLoading(true);
-            const isNative = Capacitor.isNativePlatform();
+            const platform = Capacitor.getPlatform();
+            const isNativeRuntime =
+              Capacitor.isNativePlatform() ||
+              platform === "ios" ||
+              platform === "android" ||
+              window.location.protocol === "capacitor:" ||
+              window.location.protocol === "ionic:";
+
             try {
-              if (isNative) {
+              if (isNativeRuntime) {
                 // Native (iOS/Android): use the native Google Sign-In SDK,
                 // then exchange the ID token with Supabase for a session.
+                // Never use the hosted web OAuth broker inside the Capacitor WebView.
                 const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
-                console.log("[GoogleAuth][native] start", { platform: Capacitor.getPlatform() });
+                console.log("[GoogleAuth][native-app] start", {
+                  platform,
+                  href: window.location.href,
+                  protocol: window.location.protocol,
+                  hasCapacitorBridge: !!(window as any).Capacitor,
+                });
 
-                try { await GoogleAuth.initialize(); } catch (e) { console.warn("[GoogleAuth] init warn", e); }
+                await GoogleAuth.initialize({
+                  clientId: NATIVE_GOOGLE_CLIENT_ID,
+                  scopes: ["profile", "email"],
+                  grantOfflineAccess: true,
+                });
 
                 const googleUser: any = await GoogleAuth.signIn();
                 const idToken: string | undefined =
                   googleUser?.authentication?.idToken || googleUser?.idToken;
 
                 if (!idToken) {
-                  console.error("[GoogleAuth][native] no idToken", googleUser);
-                  toast.error("Could not get Google credentials");
+                  console.error("[GoogleAuth][native-app] no idToken", googleUser);
+                  toast.error("Google sign in failed — no identity token returned");
                   return;
                 }
 
@@ -284,9 +303,14 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
                   token: idToken,
                 });
 
+                console.log("[GoogleAuth][native-app] token exchange", {
+                  hasSession: !!data?.session,
+                  userId: data?.user?.id,
+                  error: error?.message,
+                });
+
                 if (error || !data.session) {
-                  console.error("[GoogleAuth][native] supabase exchange failed", error);
-                  toast.error(error?.message || "Sign in failed");
+                  toast.error(error?.message || "Google sign in failed");
                   return;
                 }
 
@@ -295,7 +319,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
                 return;
               }
 
-              // Web flow
+              // Web flow only. This route must never be used inside iOS/Android WebViews.
               console.log("[GoogleAuth][web] start");
               const result = await lovable.auth.signInWithOAuth("google", {
                 redirect_uri: window.location.origin,
