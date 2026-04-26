@@ -6,6 +6,9 @@ workflows:
     environment:
       groups:
         - app_store_connect
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.glosseti.app
       vars:
         XCODE_PROJECT: ios/App/App.xcodeproj
         XCODE_WORKSPACE: ios/App/App.xcworkspace
@@ -115,64 +118,6 @@ workflows:
               -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
               -disablePackageRepositoryCache
           fi
-
-      - name: Prepare App Store Connect private key
-        script: |
-          set -e
-          : "${APP_STORE_CONNECT_ISSUER_ID:?APP_STORE_CONNECT_ISSUER_ID is missing}"
-          : "${APP_STORE_CONNECT_KEY_IDENTIFIER:?APP_STORE_CONNECT_KEY_IDENTIFIER is missing}"
-          : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY is missing}"
-
-          mkdir -p "$CM_BUILD_DIR/private_keys"
-          KEY_FILE="$CM_BUILD_DIR/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_IDENTIFIER}.p8"
-
-          python3 - "$KEY_FILE" <<'PY'
-          import base64
-          import os
-          import sys
-          from pathlib import Path
-
-          key_file = Path(sys.argv[1])
-          key = os.environ.get("APP_STORE_CONNECT_PRIVATE_KEY", "").strip().strip('"').strip("'")
-
-          if "\\n" in key:
-              key = key.replace("\\n", "\n")
-
-          if "BEGIN PRIVATE KEY" not in key:
-              try:
-                  decoded = base64.b64decode(key).decode("utf-8")
-                  if "BEGIN PRIVATE KEY" in decoded:
-                      key = decoded
-              except Exception:
-                  pass
-
-          key = key.replace("\r\n", "\n").replace("\r", "\n").strip() + "\n"
-          key_file.write_text(key)
-          PY
-
-          chmod 600 "$KEY_FILE"
-
-          if ! grep -q "BEGIN PRIVATE KEY" "$KEY_FILE"; then
-            echo "Private key is invalid. It must include BEGIN PRIVATE KEY and END PRIVATE KEY lines."
-            exit 1
-          fi
-
-          if ! grep -q "END PRIVATE KEY" "$KEY_FILE"; then
-            echo "Private key is invalid. It must include END PRIVATE KEY."
-            exit 1
-          fi
-
-          echo "APP_STORE_CONNECT_PRIVATE_KEY_PATH=$KEY_FILE" >> "$CM_ENV"
-
-      - name: Fetch iOS signing files
-        script: |
-          set -e
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
-            --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
-            --private-key "@file:$APP_STORE_CONNECT_PRIVATE_KEY_PATH" \
-            --type IOS_APP_STORE \
-            --create
 
       - name: Set up code signing
         script: |
