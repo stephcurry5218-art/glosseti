@@ -291,7 +291,12 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
                 // Native (iOS/Android): use the native Google Sign-In SDK,
                 // then exchange the ID token with Supabase for a session.
                 // Never use the hosted web OAuth broker inside the Capacitor WebView.
-                const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
+                // Use a non-statically-analyzable specifier so Vite/Rollup does not try
+                // to resolve this package at build time. The package is intentionally not
+                // installed (Google sign-in is disabled on iOS); this branch only runs on
+                // Android where it can be added back if needed.
+                const pkg = "@codetrix-studio/capacitor-google-auth";
+                const { GoogleAuth } = await import(/* @vite-ignore */ pkg);
                 console.log("[GoogleAuth][native-app] start", {
                   platform,
                   href: window.location.href,
