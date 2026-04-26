@@ -126,6 +126,14 @@ workflows:
           keychain add-certificates
           xcode-project use-profiles
 
+      - name: Increment build number
+        script: |
+          set -e
+          cd ios/App
+          NEW_BUILD_NUMBER=$(($BUILD_NUMBER + 1))
+          echo "Setting build number to $NEW_BUILD_NUMBER"
+          agvtool new-version -all $NEW_BUILD_NUMBER
+
       - name: Build iOS archive
         script: |
           set -e
