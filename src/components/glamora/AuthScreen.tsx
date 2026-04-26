@@ -256,7 +256,8 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
         </div>
 
-        {/* Google Sign In */}
+        {/* Google Sign In — hidden on iOS (App Store: Apple-only is fine; avoids Google flow issues) */}
+        {Capacitor.getPlatform() !== "ios" && (
         <button
           className="anim-fadeUp d4"
           onClick={async () => {
