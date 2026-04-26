@@ -144,10 +144,10 @@ workflows:
       - name: Export IPA
         script: |
           set -e
-          xcode-project build-ipa \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME" \
-            --archive-path build/ios/xcarchive/App.xcarchive
+          xcodebuild -exportArchive \
+            -archivePath build/ios/xcarchive/App.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist /Users/builder/export_options.plist
 
     artifacts:
       - "build/ios/ipa/*.ipa"
