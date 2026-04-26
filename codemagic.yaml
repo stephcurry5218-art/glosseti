@@ -147,7 +147,7 @@ workflows:
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
-            --archive-xcarchive build/ios/xcarchive/App.xcarchive
+            --archive-path build/ios/xcarchive/App.xcarchive
 
     artifacts:
       - "build/ios/ipa/*.ipa"
