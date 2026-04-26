@@ -264,12 +264,14 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           {loading ? "Please wait..." : mode === "signin" ? "Sign In" : "Create Account"}
         </button>
 
-        {/* Divider — hidden on iOS to avoid orphaned separator (Apple-only social) */}
-        <div className="anim-fadeUp d3" style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
-          <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
-          <span style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif" }}>or</span>
-          <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
-        </div>
+        {/* Divider — only shown when there is a social option below (Google on non-Apple surfaces) */}
+        {showGoogleSignIn && (
+          <div className="anim-fadeUp d3" style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
+            <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
+            <span style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif" }}>or</span>
+            <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
+          </div>
+        )}
 
         {/* Google Sign In — completely omitted on Apple devices and iOS simulators */}
         {showGoogleSignIn && (
@@ -373,89 +375,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
         </button>
         )}
 
-        {/* Apple Sign In */}
-        <button
-          className="anim-fadeUp d4"
-          onClick={async () => {
-            setLoading(true);
-            try {
-              const isNativeIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
-              console.log("[AppleAuth] start", { isNativeIOS, platform: Capacitor.getPlatform() });
-
-              if (isNativeIOS) {
-                // Native iOS: use AppleID.framework via the Capacitor plugin
-                const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
-                console.log("[AppleAuth] plugin loaded, calling authorize…");
-                const response = await SignInWithApple.authorize({
-                  clientId: "com.glosseti.signin",
-                  redirectURI: "https://glosseti.lovable.app/",
-                  scopes: "email name",
-                });
-                console.log("[AppleAuth] authorize response", {
-                  hasResponse: !!response?.response,
-                  hasIdToken: !!response?.response?.identityToken,
-                  email: response?.response?.email,
-                  user: response?.response?.user,
-                });
-                const idToken = response?.response?.identityToken;
-                if (!idToken) {
-                  toast.error("Apple sign in failed — no identity token returned");
-                  return;
-                }
-                const { data, error } = await supabase.auth.signInWithIdToken({
-                  provider: "apple",
-                  token: idToken,
-                });
-                console.log("[AppleAuth] supabase signInWithIdToken result", {
-                  hasSession: !!data?.session,
-                  userId: data?.user?.id,
-                  error: error?.message,
-                });
-                if (error) { toast.error(error.message || "Apple sign in failed"); return; }
-                toast.success("Welcome!");
-                onSuccess();
-                return;
-              }
-
-              // Web only: use Lovable Cloud OAuth broker
-              const result = await lovable.auth.signInWithOAuth("apple", {
-                redirect_uri: window.location.origin,
-              });
-              if (!result) { toast.error("Sign in was cancelled"); return; }
-              if (result.error) { toast.error(result.error?.message || "Apple sign in failed"); return; }
-              if (result.redirected) return;
-              toast.success("Welcome!");
-              onSuccess();
-            } catch (err: any) {
-              console.error("[AppleAuth] exception", {
-                code: err?.code,
-                message: err?.message,
-                name: err?.name,
-                raw: err,
-              });
-              // User cancelled native sheet — don't show an error
-              if (err?.code === "1001" || /cancel/i.test(err?.message || "")) return;
-              toast.error(err?.message || "Apple sign in failed. Please try again.");
-            } finally {
-              setLoading(false);
-            }
-          }}
-          disabled={loading}
-          style={{
-            width: "100%", padding: "16px", borderRadius: 16, border: "none",
-            background: "#000", color: "#fff", fontSize: 15, fontWeight: 600,
-            fontFamily: "'Jost', sans-serif", cursor: loading ? "wait" : "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-            opacity: loading ? 0.7 : 1, transition: "opacity 0.2s",
-            minHeight: 48, WebkitTapHighlightColor: "transparent", touchAction: "manipulation",
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 17 20" fill="currentColor">
-            <path d="M13.545 10.239c-.022-2.234 1.823-3.306 1.906-3.358-.037-.054-1.038-1.573-2.646-1.95-1.119-.282-2.188.667-2.756.667-.58 0-1.439-.655-2.373-.636-1.209.018-2.336.711-2.957 1.793-1.275 2.21-.325 5.46.9 7.248.614.878 1.332 1.86 2.271 1.824.921-.037 1.264-.586 2.374-.586 1.1 0 1.413.586 2.374.567.986-.018 1.606-.88 2.2-1.764.707-1.007.99-1.995 1.004-2.047-.022-.008-1.92-.736-1.94-2.926-.016-1.831 1.495-2.712 1.565-2.757-.862-1.262-2.194-1.4-2.66-1.432-1.18-.092-2.318.695-2.91.695-.604 0-1.532-.682-2.552-.682z"/>
-            <path d="M11.151.55c.489-.607.824-1.432.732-2.268-.712.03-1.59.487-2.095 1.082-.449.527-.851 1.39-.746 2.2.8.06 1.62-.4 2.11-1.014z" transform="translate(0 2)"/>
-          </svg>
-          Sign in with Apple
-        </button>
+        {/* Apple Sign In removed — email-only on iOS */}
 
         {/* Toggle mode */}
         <div className="anim-fadeUp d5" style={{ textAlign: "center", marginTop: 8 }}>
