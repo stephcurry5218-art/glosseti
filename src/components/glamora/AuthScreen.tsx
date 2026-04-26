@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { lovable } from "@/integrations/lovable/index";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+
+const NATIVE_GOOGLE_CLIENT_ID = "397756734481-noqav0d4im5v9r8bkrgqntrcucn9u5po.apps.googleusercontent.com";
 
 interface Props {
   onBack: () => void;
