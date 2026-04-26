@@ -129,6 +129,7 @@ workflows:
       - name: Build iOS archive
         script: |
           set -e
+          xcode-project use-profiles
           xcodebuild archive \
             -project "$XCODE_PROJECT" \
             -scheme "$XCODE_SCHEME" \
@@ -138,9 +139,6 @@ workflows:
             -clonedSourcePackagesDirPath "$CM_BUILD_DIR/spm-clones" \
             -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
             -disablePackageRepositoryCache \
-            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-            CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="Glosseti app store" \
             COMPILER_INDEX_STORE_ENABLE=NO
 
       - name: Export IPA
