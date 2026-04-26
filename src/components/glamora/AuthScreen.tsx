@@ -249,14 +249,14 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           {loading ? "Please wait..." : mode === "signin" ? "Sign In" : "Create Account"}
         </button>
 
-        {/* Divider */}
+        {/* Divider — hidden on iOS to avoid orphaned separator (Apple-only social) */}
         <div className="anim-fadeUp d3" style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
           <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
           <span style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif" }}>or</span>
           <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
         </div>
 
-        {/* Google Sign In — hidden on iOS (App Store: Apple-only is fine; avoids Google flow issues) */}
+        {/* Google Sign In — completely omitted on iOS per App Store requirements (Apple-only social auth) */}
         {Capacitor.getPlatform() !== "ios" && (
         <button
           className="anim-fadeUp d4"
