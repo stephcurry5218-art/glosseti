@@ -139,7 +139,8 @@ workflows:
             -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
             -disablePackageRepositoryCache \
             DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER="Glosseti app store" \
             COMPILER_INDEX_STORE_ENABLE=NO
 
       - name: Export IPA
