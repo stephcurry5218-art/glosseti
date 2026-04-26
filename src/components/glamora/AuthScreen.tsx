@@ -7,6 +7,20 @@ import { toast } from "sonner";
 
 const NATIVE_GOOGLE_CLIENT_ID = "397756734481-noqav0d4im5v9r8bkrgqntrcucn9u5po.apps.googleusercontent.com";
 
+const isAppleAuthSurface = () => {
+  const platform = Capacitor.getPlatform();
+  if (platform === "ios") return true;
+  if (typeof navigator === "undefined") return false;
+
+  const userAgent = navigator.userAgent || "";
+  const vendor = navigator.vendor || "";
+  const isIPhoneOrIPad = /iPhone|iPad|iPod/i.test(userAgent);
+  const isIPadDesktopMode = /Macintosh/i.test(userAgent) && navigator.maxTouchPoints > 1;
+  const isAppleBrowserOrDevice = /Apple/i.test(vendor) && !/Android/i.test(userAgent);
+
+  return isIPhoneOrIPad || isIPadDesktopMode || isAppleBrowserOrDevice;
+};
+
 interface Props {
   onBack: () => void;
   onSuccess: () => void;
@@ -99,6 +113,7 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
 
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
+  const showGoogleSignIn = !isAppleAuthSurface();
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -256,11 +271,12 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
           <div style={{ flex: 1, height: 1, background: "hsla(var(--glamora-gray-light) / 0.3)" }} />
         </div>
 
-        {/* Google Sign In — completely omitted on iOS per App Store requirements (Apple-only social auth) */}
-        {Capacitor.getPlatform() !== "ios" && (
+        {/* Google Sign In — completely omitted on Apple devices and iOS simulators */}
+        {showGoogleSignIn && (
         <button
           className="anim-fadeUp d4"
           onClick={async () => {
+            if (!showGoogleSignIn) return;
             setLoading(true);
             const platform = Capacitor.getPlatform();
             const isNativeRuntime =
