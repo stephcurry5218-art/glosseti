@@ -10,20 +10,60 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [ready, setReady] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    let mounted = true;
+    const markReady = () => { if (mounted) setReady(true); };
+    const markError = (message: string) => { if (mounted) setErrorMessage(message); };
+
+    const getRecoveryParams = () => {
+      const url = new URL(window.location.href);
+      const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
+      return { url, hashParams, code: url.searchParams.get("code") };
+    };
+
+    const initializeRecoverySession = async () => {
+      const { url, hashParams, code } = getRecoveryParams();
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+      const type = url.searchParams.get("type") || hashParams.get("type");
+
+      try {
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+          window.history.replaceState({}, document.title, "/reset-password");
+          markReady();
+          return;
+        }
+
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+          if (error) throw error;
+          window.history.replaceState({}, document.title, "/reset-password");
+          markReady();
+          return;
+        }
+
+        const { data } = await supabase.auth.getSession();
+        if (data.session || type === "recovery") markReady();
+        else markError("This reset link is missing or expired. Please request a new password reset email.");
+      } catch (err: any) {
+        markError(err.message || "This reset link could not be opened. Please request a new password reset email.");
+      }
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(true);
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") markReady();
     });
-    // Recovery params can appear in hash or query string
-    const hash = window.location.hash;
-    const search = window.location.search;
-    if (hash.includes("type=recovery") || search.includes("type=recovery")) setReady(true);
-    // If already authenticated (recovery link auto-signs-in), allow password update
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setReady(true);
-    });
-    return () => subscription.unsubscribe();
+
+    initializeRecoverySession();
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleSubmit = async () => {
@@ -81,9 +121,19 @@ const ResetPassword = () => {
             }}>Back to App</a>
           </div>
         ) : !ready ? (
-          <p style={{ textAlign: "center", fontSize: 14, color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif" }}>
-            Loading recovery session...
-          </p>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontSize: 14, color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif", marginBottom: errorMessage ? 18 : 0 }}>
+              {errorMessage || "Loading recovery session..."}
+            </p>
+            {errorMessage && (
+              <a href="/" style={{
+                display: "inline-block", padding: "14px 28px", borderRadius: 14, border: "none",
+                background: `linear-gradient(135deg, hsl(${accent}), hsl(${accentLight}))`,
+                color: "white", fontSize: 14, fontWeight: 600, fontFamily: "'Jost', sans-serif",
+                textDecoration: "none",
+              }}>Back to App</a>
+            )}
+          </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ position: "relative" }}>
