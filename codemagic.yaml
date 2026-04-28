@@ -64,6 +64,20 @@ workflows:
           set -e
           npx cap sync ios
 
+      - name: Copy app icon into AppIcon.appiconset
+        script: |
+          set -e
+          SRC="assets/AppIcon.png"
+          DEST_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
+          if [ ! -f "$SRC" ]; then
+            echo "Source icon $SRC not found"
+            exit 1
+          fi
+          mkdir -p "$DEST_DIR"
+          cp "$SRC" "$DEST_DIR/AppIcon-512@2x.png"
+          echo "Copied $SRC to $DEST_DIR/AppIcon-512@2x.png"
+          ls -la "$DEST_DIR"
+
       - name: Inject iOS permission strings into Info.plist
         script: |
           set -e
