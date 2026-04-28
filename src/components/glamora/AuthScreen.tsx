@@ -1,25 +1,9 @@
 import { useState } from "react";
-import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
-const NATIVE_GOOGLE_CLIENT_ID = "397756734481-noqav0d4im5v9r8bkrgqntrcucn9u5po.apps.googleusercontent.com";
-
-const isAppleAuthSurface = () => {
-  const platform = Capacitor.getPlatform();
-  if (platform === "ios") return true;
-  if (typeof navigator === "undefined") return false;
-
-  const userAgent = navigator.userAgent || "";
-  const vendor = navigator.vendor || "";
-  const isIPhoneOrIPad = /iPhone|iPad|iPod/i.test(userAgent);
-  const isIPadDesktopMode = /Macintosh/i.test(userAgent) && navigator.maxTouchPoints > 1;
-  const isAppleBrowserOrDevice = /Apple/i.test(vendor) && !/Android/i.test(userAgent);
-
-  return isIPhoneOrIPad || isIPadDesktopMode || isAppleBrowserOrDevice;
-};
+interface PropsBase {}
 
 interface Props {
   onBack: () => void;
