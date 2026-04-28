@@ -113,7 +113,6 @@ const AuthScreen = ({ onBack, onSuccess }: Props) => {
 
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
-  const showGoogleSignIn = !isAppleAuthSurface();
 
   const handleSubmit = async () => {
     if (!email || !password) {
