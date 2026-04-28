@@ -12,13 +12,17 @@ const ResetPassword = () => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Supabase auto-sets session from the recovery link hash
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") setReady(true);
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(true);
     });
-    // Also check if already in recovery state
+    // Recovery params can appear in hash or query string
     const hash = window.location.hash;
-    if (hash.includes("type=recovery")) setReady(true);
+    const search = window.location.search;
+    if (hash.includes("type=recovery") || search.includes("type=recovery")) setReady(true);
+    // If already authenticated (recovery link auto-signs-in), allow password update
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) setReady(true);
+    });
     return () => subscription.unsubscribe();
   }, []);
 
