@@ -535,21 +535,30 @@ export function getSubStyleImages(
   const cached = getCachedTrio(categoryId, subId, gender);
   if (cached && cached.length > 0) return cached;
 
-  // 2. Compute fresh and cache
+  // 2. Compute fresh and cache. Each trio intentionally includes a Black model,
+  // a Hispanic/Latina/Latino model, and one style/category-specific image.
   const bank = CATEGORY_BANKS[categoryId];
-  let trio: string[];
+  let stylePick: string[];
   if (bank) {
     const arr = gender === "male" ? bank.male : bank.female;
     if (arr && arr.length > 0) {
-      trio = pickTrio(arr, `${categoryId}:${subId}`);
+      stylePick = pickTrio(arr, `${categoryId}:${subId}:style`);
     } else {
       const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
-      trio = pickTrio(defaults, `${categoryId}:${subId}`);
+      stylePick = pickTrio(defaults, `${categoryId}:${subId}:style`);
     }
   } else {
     const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
-    trio = pickTrio(defaults, `${categoryId}:${subId}`);
+    stylePick = pickTrio(defaults, `${categoryId}:${subId}:style`);
   }
+  const representation = REPRESENTATION_POOLS[gender];
+  const blackPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyBlack : representation.black;
+  const hispanicPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyHispanic : representation.hispanic;
+  const trio = [
+    pickOne(blackPool, `${categoryId}:${subId}:black`),
+    pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`),
+    ...stylePick,
+  ].filter((img, idx, arr): img is string => Boolean(img) && arr.indexOf(img) === idx).slice(0, 3);
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
 }
