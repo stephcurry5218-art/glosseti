@@ -3,6 +3,7 @@ name: Inspiration Images & Favorites
 description: Sub-style inspiration grids — 3 unique diverse photos per sub-style, cached per user, with favorite/lightbox support
 type: feature
 ---
+- Inspiration grids must not repeat a photo anywhere in the visible selected sub-style list. Makeup/beauty grids must use diverse face/beauty shots for different makeup styles.
 - `subStyleImages.ts` holds large diverse Unsplash banks per category (mixed races, gender-matched). `getSubStyleImages(category, subId, gender)` deterministic-hash-picks 3 unique images per sub-style.
 - `savedInspiration.ts` localStorage layer:
   - `glamora_inspo_trios_v1` — locks each trio so the user always sees the same images across sessions.
