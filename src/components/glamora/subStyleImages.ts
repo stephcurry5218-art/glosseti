@@ -554,10 +554,23 @@ export function getSubStyleImages(
   categoryId: string,
   subId: string,
   gender: Gender,
+  usedImages?: Set<string>,
 ): string[] {
   // 1. Cached trio wins — guarantees stability across sessions
   const cached = getCachedTrio(categoryId, subId, gender);
-  if (cached && cached.length > 0) return cached;
+  if (cached && cached.length > 0) {
+    const trio: string[] = [];
+    addUnique(trio, cached, usedImages);
+    if (trio.length < 3) {
+      const bank = CATEGORY_BANKS[categoryId];
+      const arr = bank ? (gender === "male" ? bank.male : bank.female) : [];
+      const fallback = categoryId === "makeup-only" && gender === "female"
+        ? FEMALE_MAKEUP_FACE_SHOTS
+        : [...arr, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+      addUnique(trio, pickTrio(uniqueByFirstSeen(fallback), `${categoryId}:${subId}:cache-fill`, 12), usedImages);
+    }
+    return trio;
+  }
 
   // 2. Compute fresh and cache. Each trio intentionally includes a Black model,
   // a Hispanic/Latina/Latino model, and one style/category-specific image.
@@ -578,15 +591,14 @@ export function getSubStyleImages(
   const representation = REPRESENTATION_POOLS[gender];
   const blackPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyBlack : representation.black;
   const hispanicPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyHispanic : representation.hispanic;
-  const trio = [
-    pickOne(blackPool, `${categoryId}:${subId}:black`),
-    pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`),
-    ...stylePick,
-  ].filter((img, idx, arr): img is string => Boolean(img) && arr.indexOf(img) === idx).slice(0, 3);
-  for (const img of [...blackPool, ...hispanicPool, ...stylePick]) {
-    if (trio.length >= 3) break;
-    if (!trio.includes(img)) trio.push(img);
-  }
+  const trio: string[] = [];
+  addUnique(trio, [pickOne(blackPool, `${categoryId}:${subId}:black`)].filter(Boolean) as string[], usedImages);
+  addUnique(trio, [pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`)].filter(Boolean) as string[], usedImages);
+  addUnique(trio, stylePick, usedImages);
+  const fallbackPool = categoryId === "makeup-only" && gender === "female"
+    ? FEMALE_MAKEUP_FACE_SHOTS
+    : [...blackPool, ...hispanicPool, ...stylePick, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+  addUnique(trio, pickTrio(uniqueByFirstSeen(fallbackPool), `${categoryId}:${subId}:fallback`, 20), usedImages);
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
 }
