@@ -1022,15 +1022,23 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                             marginTop: 2,
                           }}>
                             {imgs.map((src, i) => (
-                              <div key={i} style={{
-                                position: "relative",
-                                width: "100%",
-                                paddingTop: "125%",
-                                borderRadius: 8,
-                                overflow: "hidden",
-                                background: "hsla(var(--glamora-gold) / 0.06)",
-                                border: `1px solid hsla(var(${accent}) / 0.12)`,
-                              }}>
+                              <div
+                                key={i}
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  setLightbox({ images: imgs, index: i, title: sub.label });
+                                }}
+                                style={{
+                                  position: "relative",
+                                  width: "100%",
+                                  paddingTop: "125%",
+                                  borderRadius: 8,
+                                  overflow: "hidden",
+                                  background: "hsla(var(--glamora-gold) / 0.06)",
+                                  border: `1px solid hsla(var(${accent}) / 0.12)`,
+                                  cursor: "zoom-in",
+                                }}
+                              >
                                 <img
                                   src={src}
                                   alt={`${sub.label} inspiration ${i + 1}`}
