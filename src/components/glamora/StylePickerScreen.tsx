@@ -3,6 +3,7 @@ import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check,
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
+import { getSubStyleImages } from "./subStyleImages";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
