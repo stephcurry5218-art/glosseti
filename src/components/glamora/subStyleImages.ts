@@ -559,6 +559,10 @@ export function getSubStyleImages(
     pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`),
     ...stylePick,
   ].filter((img, idx, arr): img is string => Boolean(img) && arr.indexOf(img) === idx).slice(0, 3);
+  for (const img of [...blackPool, ...hispanicPool, ...stylePick]) {
+    if (trio.length >= 3) break;
+    if (!trio.includes(img)) trio.push(img);
+  }
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
 }
