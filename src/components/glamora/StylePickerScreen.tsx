@@ -712,6 +712,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
+  const visibleInspoImages = new Set<string>();
 
   return (
     <>
@@ -1014,7 +1015,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                       </div>
                       {/* Inspiration image grid — diverse models, gender-matched */}
                       {(() => {
-                        const imgs = getSubStyleImages(catId, sub.id, prefs.gender);
+                        const imgs = getSubStyleImages(catId, sub.id, prefs.gender, visibleInspoImages);
                         if (!imgs.length) return null;
                         return (
                           <div style={{
