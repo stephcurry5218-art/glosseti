@@ -671,6 +671,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string } | null>(null);
   
   const isMale = prefs.gender === "male";
 
