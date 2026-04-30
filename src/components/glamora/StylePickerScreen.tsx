@@ -713,6 +713,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
 
   return (
+    <>
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
       <div className="screen-header">
         <button className="back-btn" onClick={onBack}>←</button>
