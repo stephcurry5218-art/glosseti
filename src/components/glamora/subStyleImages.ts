@@ -461,21 +461,37 @@ const CATEGORY_BANKS: Record<string, { female: string[]; male: string[] }> = {
   },
 };
 
+import { getCachedTrio, setCachedTrio } from "./savedInspiration";
+
 /**
- * Returns 3 inspiration images, unique per sub-style via deterministic hash.
- * Same sub-id always picks the same trio (stable UI); different sub-ids
- * within the same category get different trios from the bank.
+ * Returns 3 inspiration images per sub-style. Picks deterministically via hash,
+ * then locks the result in localStorage so the user always sees the same trio
+ * across sessions, refreshes, and even if image bank is later updated.
  */
 export function getSubStyleImages(
   categoryId: string,
   subId: string,
   gender: Gender,
 ): string[] {
+  // 1. Cached trio wins — guarantees stability across sessions
+  const cached = getCachedTrio(categoryId, subId, gender);
+  if (cached && cached.length > 0) return cached;
+
+  // 2. Compute fresh and cache
   const bank = CATEGORY_BANKS[categoryId];
+  let trio: string[];
   if (bank) {
     const arr = gender === "male" ? bank.male : bank.female;
-    if (arr && arr.length > 0) return pickTrio(arr, `${categoryId}:${subId}`);
+    if (arr && arr.length > 0) {
+      trio = pickTrio(arr, `${categoryId}:${subId}`);
+    } else {
+      const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
+      trio = pickTrio(defaults, `${categoryId}:${subId}`);
+    }
+  } else {
+    const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
+    trio = pickTrio(defaults, `${categoryId}:${subId}`);
   }
-  const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
-  return pickTrio(defaults, `${categoryId}:${subId}`);
+  if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
+  return trio;
 }
