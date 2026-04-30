@@ -4,6 +4,7 @@ import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 import { getSubStyleImages } from "./subStyleImages";
+import ImageLightbox from "./ImageLightbox";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
@@ -670,6 +671,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string } | null>(null);
   
   const isMale = prefs.gender === "male";
 
@@ -711,6 +713,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
 
   return (
+    <>
     <div className="screen enter" style={{ minHeight: "100%", paddingBottom: 40 }}>
       <div className="screen-header">
         <button className="back-btn" onClick={onBack}>←</button>
@@ -1020,15 +1023,23 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                             marginTop: 2,
                           }}>
                             {imgs.map((src, i) => (
-                              <div key={i} style={{
-                                position: "relative",
-                                width: "100%",
-                                paddingTop: "125%",
-                                borderRadius: 8,
-                                overflow: "hidden",
-                                background: "hsla(var(--glamora-gold) / 0.06)",
-                                border: `1px solid hsla(var(${accent}) / 0.12)`,
-                              }}>
+                              <div
+                                key={i}
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  setLightbox({ images: imgs, index: i, title: sub.label });
+                                }}
+                                style={{
+                                  position: "relative",
+                                  width: "100%",
+                                  paddingTop: "125%",
+                                  borderRadius: 8,
+                                  overflow: "hidden",
+                                  background: "hsla(var(--glamora-gold) / 0.06)",
+                                  border: `1px solid hsla(var(${accent}) / 0.12)`,
+                                  cursor: "zoom-in",
+                                }}
+                              >
                                 <img
                                   src={src}
                                   alt={`${sub.label} inspiration ${i + 1}`}
@@ -1133,6 +1144,15 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         </button>
       </div>
     </div>
+    {lightbox && (
+      <ImageLightbox
+        images={lightbox.images}
+        startIndex={lightbox.index}
+        title={lightbox.title}
+        onClose={() => setLightbox(null)}
+      />
+    )}
+    </>
   );
 };
 
