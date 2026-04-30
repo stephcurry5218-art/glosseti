@@ -26,12 +26,16 @@ function pickTrio(bank: string[], seed: string): string[] {
   const used = new Set<number>();
   const out: string[] = [];
   let i = start;
-  while (out.length < 3 && used.size < bank.length) {
+  for (let attempts = 0; attempts < bank.length && out.length < 3; attempts++) {
     if (!used.has(i)) {
       used.add(i);
       out.push(bank[i]);
     }
     i = (i + stride) % bank.length;
+  }
+  for (let offset = 0; offset < bank.length && out.length < 3; offset++) {
+    const next = (start + offset) % bank.length;
+    if (!used.has(next)) out.push(bank[next]);
   }
   return out;
 }
