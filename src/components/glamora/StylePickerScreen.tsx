@@ -1031,7 +1031,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                                 subId={sub.id}
                                 subLabel={sub.label}
                                 accent={accent}
-                                onOpen={() => setLightbox({ images: imgs, index: i, title: sub.label })}
+                                onOpen={() => setLightbox({ images: imgs, index: i, title: sub.label, category: catId, subId: sub.id })}
                               />
                             ))}
                           </div>
