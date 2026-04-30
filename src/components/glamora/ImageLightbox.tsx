@@ -88,20 +88,47 @@ const ImageLightbox = ({ images, startIndex, title, category, subId, onClose }: 
         <div style={{ fontSize: 13, fontWeight: 600, opacity: 0.85, fontFamily: "'Jost', sans-serif" }}>
           {title ? `${title} · ` : ""}{index + 1} / {images.length}
         </div>
-        <button
-          onClick={onClose}
-          aria-label="Close gallery"
-          style={{
-            width: 40, height: 40, borderRadius: 20,
-            border: "1px solid hsla(var(--glamora-gold) / 0.3)",
-            background: "hsla(var(--glamora-gold) / 0.08)",
-            color: "hsl(var(--glamora-gold))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer",
-          }}
-        >
-          <X size={18} />
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            onClick={() => {
+              const nowFaved = toggleFavorite({
+                url: images[index],
+                category: category || "uncategorized",
+                subId: subId || "unknown",
+                subLabel: title || "Inspiration",
+              });
+              setFaved(nowFaved);
+            }}
+            aria-label={faved ? "Remove from saved" : "Save to favorites"}
+            style={{
+              width: 40, height: 40, borderRadius: 20,
+              border: "1px solid hsla(var(--glamora-gold) / 0.3)",
+              background: "hsla(var(--glamora-gold) / 0.08)",
+              color: "hsl(var(--glamora-gold))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+            }}
+          >
+            <Heart
+              size={18}
+              fill={faved ? "hsl(var(--glamora-gold))" : "transparent"}
+            />
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Close gallery"
+            style={{
+              width: 40, height: 40, borderRadius: 20,
+              border: "1px solid hsla(var(--glamora-gold) / 0.3)",
+              background: "hsla(var(--glamora-gold) / 0.08)",
+              color: "hsl(var(--glamora-gold))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {/* Image area */}
