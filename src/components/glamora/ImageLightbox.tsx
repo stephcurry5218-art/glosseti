@@ -1,15 +1,27 @@
 import { useEffect, useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Heart } from "lucide-react";
+import { isFavorited, toggleFavorite } from "./savedInspiration";
 
 interface Props {
   images: string[];
   startIndex: number;
   title?: string;
+  category?: string;
+  subId?: string;
   onClose: () => void;
 }
 
-const ImageLightbox = ({ images, startIndex, title, onClose }: Props) => {
+const ImageLightbox = ({ images, startIndex, title, category, subId, onClose }: Props) => {
   const [index, setIndex] = useState(startIndex);
+  const [faved, setFaved] = useState(() => isFavorited(images[startIndex]));
+
+  // Refresh fav state when slide changes or external changes happen
+  useEffect(() => {
+    setFaved(isFavorited(images[index]));
+    const handler = () => setFaved(isFavorited(images[index]));
+    window.addEventListener("glamora:inspo-favs-changed", handler);
+    return () => window.removeEventListener("glamora:inspo-favs-changed", handler);
+  }, [images, index]);
 
   const next = useCallback(() => {
     setIndex(i => (i + 1) % images.length);
@@ -76,20 +88,47 @@ const ImageLightbox = ({ images, startIndex, title, onClose }: Props) => {
         <div style={{ fontSize: 13, fontWeight: 600, opacity: 0.85, fontFamily: "'Jost', sans-serif" }}>
           {title ? `${title} · ` : ""}{index + 1} / {images.length}
         </div>
-        <button
-          onClick={onClose}
-          aria-label="Close gallery"
-          style={{
-            width: 40, height: 40, borderRadius: 20,
-            border: "1px solid hsla(var(--glamora-gold) / 0.3)",
-            background: "hsla(var(--glamora-gold) / 0.08)",
-            color: "hsl(var(--glamora-gold))",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer",
-          }}
-        >
-          <X size={18} />
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            onClick={() => {
+              const nowFaved = toggleFavorite({
+                url: images[index],
+                category: category || "uncategorized",
+                subId: subId || "unknown",
+                subLabel: title || "Inspiration",
+              });
+              setFaved(nowFaved);
+            }}
+            aria-label={faved ? "Remove from saved" : "Save to favorites"}
+            style={{
+              width: 40, height: 40, borderRadius: 20,
+              border: "1px solid hsla(var(--glamora-gold) / 0.3)",
+              background: "hsla(var(--glamora-gold) / 0.08)",
+              color: "hsl(var(--glamora-gold))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+            }}
+          >
+            <Heart
+              size={18}
+              fill={faved ? "hsl(var(--glamora-gold))" : "transparent"}
+            />
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Close gallery"
+            style={{
+              width: 40, height: 40, borderRadius: 20,
+              border: "1px solid hsla(var(--glamora-gold) / 0.3)",
+              background: "hsla(var(--glamora-gold) / 0.08)",
+              color: "hsl(var(--glamora-gold))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {/* Image area */}

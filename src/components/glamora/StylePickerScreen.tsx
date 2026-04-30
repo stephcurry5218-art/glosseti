@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 import { getSubStyleImages } from "./subStyleImages";
 import ImageLightbox from "./ImageLightbox";
+import InspoThumb from "./InspoThumb";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
@@ -671,7 +672,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string } | null>(null);
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string; category: string; subId: string } | null>(null);
   
   const isMale = prefs.gender === "male";
 
@@ -1023,36 +1024,15 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                             marginTop: 2,
                           }}>
                             {imgs.map((src, i) => (
-                              <div
+                              <InspoThumb
                                 key={i}
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  setLightbox({ images: imgs, index: i, title: sub.label });
-                                }}
-                                style={{
-                                  position: "relative",
-                                  width: "100%",
-                                  paddingTop: "125%",
-                                  borderRadius: 8,
-                                  overflow: "hidden",
-                                  background: "hsla(var(--glamora-gold) / 0.06)",
-                                  border: `1px solid hsla(var(${accent}) / 0.12)`,
-                                  cursor: "zoom-in",
-                                }}
-                              >
-                                <img
-                                  src={src}
-                                  alt={`${sub.label} inspiration ${i + 1}`}
-                                  loading="lazy"
-                                  style={{
-                                    position: "absolute", inset: 0,
-                                    width: "100%", height: "100%",
-                                    objectFit: "cover",
-                                    display: "block",
-                                  }}
-                                  onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                                />
-                              </div>
+                                src={src}
+                                category={catId}
+                                subId={sub.id}
+                                subLabel={sub.label}
+                                accent={accent}
+                                onOpen={() => setLightbox({ images: imgs, index: i, title: sub.label, category: catId, subId: sub.id })}
+                              />
                             ))}
                           </div>
                         );
@@ -1149,6 +1129,8 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         images={lightbox.images}
         startIndex={lightbox.index}
         title={lightbox.title}
+        category={lightbox.category}
+        subId={lightbox.subId}
         onClose={() => setLightbox(null)}
       />
     )}
