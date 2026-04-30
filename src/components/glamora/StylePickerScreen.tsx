@@ -1129,6 +1129,8 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         images={lightbox.images}
         startIndex={lightbox.index}
         title={lightbox.title}
+        category={lightbox.category}
+        subId={lightbox.subId}
         onClose={() => setLightbox(null)}
       />
     )}
