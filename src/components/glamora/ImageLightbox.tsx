@@ -1,15 +1,27 @@
 import { useEffect, useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Heart } from "lucide-react";
+import { isFavorited, toggleFavorite } from "./savedInspiration";
 
 interface Props {
   images: string[];
   startIndex: number;
   title?: string;
+  category?: string;
+  subId?: string;
   onClose: () => void;
 }
 
-const ImageLightbox = ({ images, startIndex, title, onClose }: Props) => {
+const ImageLightbox = ({ images, startIndex, title, category, subId, onClose }: Props) => {
   const [index, setIndex] = useState(startIndex);
+  const [faved, setFaved] = useState(() => isFavorited(images[startIndex]));
+
+  // Refresh fav state when slide changes or external changes happen
+  useEffect(() => {
+    setFaved(isFavorited(images[index]));
+    const handler = () => setFaved(isFavorited(images[index]));
+    window.addEventListener("glamora:inspo-favs-changed", handler);
+    return () => window.removeEventListener("glamora:inspo-favs-changed", handler);
+  }, [images, index]);
 
   const next = useCallback(() => {
     setIndex(i => (i + 1) % images.length);
