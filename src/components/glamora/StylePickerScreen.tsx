@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 import { getSubStyleImages } from "./subStyleImages";
 import ImageLightbox from "./ImageLightbox";
+import InspoThumb from "./InspoThumb";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
