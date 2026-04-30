@@ -6,6 +6,7 @@
 type Gender = "male" | "female";
 
 const u = (id: string) => `https://images.unsplash.com/photo-${id}?w=400&h=500&fit=crop&q=75`;
+const face = (id: string) => `https://images.unsplash.com/photo-${id}?w=400&h=500&fit=crop&crop=faces&q=75`;
 
 // Deterministic string hash so the same sub-id always picks the same trio.
 function hash(s: string): number {
@@ -17,27 +18,40 @@ function hash(s: string): number {
   return Math.abs(h);
 }
 
-// Pick 3 distinct images from a bank, seeded by the sub id.
-function pickTrio(bank: string[], seed: string): string[] {
+// Pick distinct images from a bank, seeded by the sub id.
+function pickTrio(bank: string[], seed: string, count = 3): string[] {
   if (bank.length === 0) return [];
-  if (bank.length <= 3) return bank.slice(0, 3);
+  if (bank.length <= count) return bank.slice(0, count);
   const start = hash(seed) % bank.length;
   const stride = (hash(seed + "x") % (bank.length - 1)) + 1;
   const used = new Set<number>();
   const out: string[] = [];
   let i = start;
-  for (let attempts = 0; attempts < bank.length && out.length < 3; attempts++) {
+  for (let attempts = 0; attempts < bank.length && out.length < count; attempts++) {
     if (!used.has(i)) {
       used.add(i);
       out.push(bank[i]);
     }
     i = (i + stride) % bank.length;
   }
-  for (let offset = 0; offset < bank.length && out.length < 3; offset++) {
+  for (let offset = 0; offset < bank.length && out.length < count; offset++) {
     const next = (start + offset) % bank.length;
     if (!used.has(next)) out.push(bank[next]);
   }
   return out;
+}
+
+function uniqueByFirstSeen(images: string[]): string[] {
+  return images.filter((img, idx, arr) => arr.indexOf(img) === idx);
+}
+
+function addUnique(target: string[], candidates: string[], used?: Set<string>, limit = 3) {
+  for (const img of candidates) {
+    if (target.length >= limit) break;
+    if (!img || target.includes(img) || used?.has(img)) continue;
+    target.push(img);
+    used?.add(img);
+  }
 }
 
 // ============================================================================
@@ -75,14 +89,16 @@ const REPRESENTATION_POOLS: Record<Gender, { black: string[]; hispanic: string[]
       u("1524504388940-b1c1722653e1"), u("1517841905240-472988babdf9"),
     ],
     beautyBlack: [
-      u("1770283553838-769c5f97d55c"), u("1766465525389-2c817a267fbf"),
-      u("1503236823255-94609f598e71"), u("1542838132-92c53300491e"),
-      u("1765991735465-eae91b52065e"), u("1526045478516-99145907023c"),
+      face("1591726328133-b4e2b0031cb2"), face("1666073090334-f2a9c8a86d14"),
+      face("1595051780009-1a8f6f4fac9e"), face("1631825598395-58692acfee5c"),
+      face("1688633201440-73f30feb06ba"), face("1601599009979-f85c21cbd703"),
+      face("1648671095177-d00c1f6264e9"), face("1705486525499-1aaa9388de94"),
     ],
     beautyHispanic: [
-      u("1630084775816-7abb7383ded5"), u("1646335940131-0e25ade32348"),
-      u("1565325058695-f614c1580d7e"), u("1617380518330-7c5ca1dafdef"),
-      u("1488426862026-3ee34a7d66df"), u("1522337360788-8b13dee7a37e"),
+      face("1628619447698-d17aa1899220"), face("1563827517575-7d43935ca7f6"),
+      face("1631652367427-726f96b37cf1"), face("1563827525259-22d51d5e7452"),
+      face("1570751057249-92751f496ee3"), face("1605052063083-858e6a650919"),
+      face("1565630918451-2bab9571feec"), face("1582727476685-9813d181cf75"),
     ],
   },
   male: {
@@ -110,6 +126,24 @@ const REPRESENTATION_POOLS: Record<Gender, { black: string[]; hispanic: string[]
 };
 
 const BEAUTY_CATEGORY_IDS = new Set(["makeup-only", "grooming"]);
+
+const FEMALE_MAKEUP_FACE_SHOTS = [
+  face("1591726328133-b4e2b0031cb2"), face("1666073090334-f2a9c8a86d14"),
+  face("1595051780009-1a8f6f4fac9e"), face("1631825598395-58692acfee5c"),
+  face("1688633201440-73f30feb06ba"), face("1601599009979-f85c21cbd703"),
+  face("1648671095177-d00c1f6264e9"), face("1705486525499-1aaa9388de94"),
+  face("1628619447698-d17aa1899220"), face("1563827517575-7d43935ca7f6"),
+  face("1631652367427-726f96b37cf1"), face("1563827525259-22d51d5e7452"),
+  face("1570751057249-92751f496ee3"), face("1605052063083-858e6a650919"),
+  face("1565630918451-2bab9571feec"), face("1565630916140-8518afed6329"),
+  face("1582727476685-9813d181cf75"), face("1763906802570-be2a2609757f"),
+  face("1686350751255-20a12bbe4880"), face("1686350751264-1d3f6e41a6e6"),
+  face("1721152839659-dabbacabd5d6"), face("1770576934845-759db89fcd3f"),
+  face("1770821214788-6605c5c3075b"), face("1761498443962-1f00eed12137"),
+  face("1686350751240-348d2ca05025"), face("1630084775816-7abb7383ded5"),
+  face("1542838132-92c53300491e"), face("1522337360788-8b13dee7a37e"),
+  face("1531746020798-e6953c6e8e04"), face("1488426862026-3ee34a7d66df"),
+];
 
 function pickOne(pool: string[], seed: string): string | null {
   if (pool.length === 0) return null;
@@ -289,18 +323,7 @@ const CATEGORY_BANKS: Record<string, { female: string[]; male: string[] }> = {
   // ===== Makeup & Beauty (women) — distinct shots per sub-style =====
   "makeup-only": {
     female: [
-      u("1503236823255-94609f598e71"), // Black woman dewy
-      u("1487412720507-e7ab37603c6f"), // Asian glass skin
-      u("1526045478516-99145907023c"), // Editorial
-      u("1457972729786-0411a3b2b626"), // Smoky eye
-      u("1531746020798-e6953c6e8e04"), // Red lip
-      u("1512496015851-a90fb38ba796"), // Full beat
-      u("1542838132-92c53300491e"),    // Natural Black skin
-      u("1488426862026-3ee34a7d66df"), // Latina natural glow
-      u("1517841905240-472988babdf9"), // South-Asian fresh
-      u("1583001931096-959e9a1a6223"), // Avant-garde
-      u("1522337360788-8b13dee7a37e"), // Beauty closeup
-      u("1596704017254-9b121068fb31"), // Glam portrait
+      ...FEMALE_MAKEUP_FACE_SHOTS,
     ],
     male: [
       u("1500648767791-00dcc994a43e"), u("1581824283135-0666cf353f35"),
@@ -534,10 +557,23 @@ export function getSubStyleImages(
   categoryId: string,
   subId: string,
   gender: Gender,
+  usedImages?: Set<string>,
 ): string[] {
   // 1. Cached trio wins — guarantees stability across sessions
   const cached = getCachedTrio(categoryId, subId, gender);
-  if (cached && cached.length > 0) return cached;
+  if (cached && cached.length > 0) {
+    const trio: string[] = [];
+    addUnique(trio, cached, usedImages);
+    if (trio.length < 3) {
+      const bank = CATEGORY_BANKS[categoryId];
+      const arr = bank ? (gender === "male" ? bank.male : bank.female) : [];
+      const fallback = categoryId === "makeup-only" && gender === "female"
+        ? FEMALE_MAKEUP_FACE_SHOTS
+        : [...arr, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+      addUnique(trio, pickTrio(uniqueByFirstSeen(fallback), `${categoryId}:${subId}:cache-fill`, 12), usedImages);
+    }
+    return trio;
+  }
 
   // 2. Compute fresh and cache. Each trio intentionally includes a Black model,
   // a Hispanic/Latina/Latino model, and one style/category-specific image.
@@ -558,15 +594,14 @@ export function getSubStyleImages(
   const representation = REPRESENTATION_POOLS[gender];
   const blackPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyBlack : representation.black;
   const hispanicPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyHispanic : representation.hispanic;
-  const trio = [
-    pickOne(blackPool, `${categoryId}:${subId}:black`),
-    pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`),
-    ...stylePick,
-  ].filter((img, idx, arr): img is string => Boolean(img) && arr.indexOf(img) === idx).slice(0, 3);
-  for (const img of [...blackPool, ...hispanicPool, ...stylePick]) {
-    if (trio.length >= 3) break;
-    if (!trio.includes(img)) trio.push(img);
-  }
+  const trio: string[] = [];
+  addUnique(trio, [pickOne(blackPool, `${categoryId}:${subId}:black`)].filter(Boolean) as string[], usedImages);
+  addUnique(trio, [pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`)].filter(Boolean) as string[], usedImages);
+  addUnique(trio, stylePick, usedImages);
+  const fallbackPool = categoryId === "makeup-only" && gender === "female"
+    ? FEMALE_MAKEUP_FACE_SHOTS
+    : [...blackPool, ...hispanicPool, ...stylePick, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+  addUnique(trio, pickTrio(uniqueByFirstSeen(fallbackPool), `${categoryId}:${subId}:fallback`, 20), usedImages);
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
 }
