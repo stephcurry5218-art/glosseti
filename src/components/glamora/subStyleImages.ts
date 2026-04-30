@@ -320,18 +320,7 @@ const CATEGORY_BANKS: Record<string, { female: string[]; male: string[] }> = {
   // ===== Makeup & Beauty (women) — distinct shots per sub-style =====
   "makeup-only": {
     female: [
-      u("1503236823255-94609f598e71"), // Black woman dewy
-      u("1487412720507-e7ab37603c6f"), // Asian glass skin
-      u("1526045478516-99145907023c"), // Editorial
-      u("1457972729786-0411a3b2b626"), // Smoky eye
-      u("1531746020798-e6953c6e8e04"), // Red lip
-      u("1512496015851-a90fb38ba796"), // Full beat
-      u("1542838132-92c53300491e"),    // Natural Black skin
-      u("1488426862026-3ee34a7d66df"), // Latina natural glow
-      u("1517841905240-472988babdf9"), // South-Asian fresh
-      u("1583001931096-959e9a1a6223"), // Avant-garde
-      u("1522337360788-8b13dee7a37e"), // Beauty closeup
-      u("1596704017254-9b121068fb31"), // Glam portrait
+      ...FEMALE_MAKEUP_FACE_SHOTS,
     ],
     male: [
       u("1500648767791-00dcc994a43e"), u("1581824283135-0666cf353f35"),
