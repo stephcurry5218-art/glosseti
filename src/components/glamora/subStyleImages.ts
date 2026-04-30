@@ -6,6 +6,7 @@
 type Gender = "male" | "female";
 
 const u = (id: string) => `https://images.unsplash.com/photo-${id}?w=400&h=500&fit=crop&q=75`;
+const face = (id: string) => `https://images.unsplash.com/photo-${id}?w=400&h=500&fit=crop&crop=faces&q=75`;
 
 // Deterministic string hash so the same sub-id always picks the same trio.
 function hash(s: string): number {
