@@ -4,6 +4,7 @@ import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 import { getSubStyleImages } from "./subStyleImages";
+import ImageLightbox from "./ImageLightbox";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
