@@ -1,507 +1,481 @@
-// Curated Unsplash inspiration images for sub-styles.
-// Each entry returns 3 photos showing diverse races, gender-matched.
-// Photos come from Unsplash (free to use, no attribution required for our use case).
+// Inspiration images for sub-styles.
+// Strategy: large diverse image bank per category + deterministic hash-based picker
+// so EVERY sub-style gets a unique trio. Mixes Black, Asian, Latina/o, White,
+// South-Asian, Middle-Eastern models, gender-matched.
 
 type Gender = "male" | "female";
 
-// Helper: build small Unsplash thumbnail URL
 const u = (id: string) => `https://images.unsplash.com/photo-${id}?w=400&h=500&fit=crop&q=75`;
 
-// Default fallback pools — diverse mix used when a specific sub-style has no curated set.
-// Each pool intentionally mixes Black, Asian, Latina/o, White, and South-Asian models.
+// Deterministic string hash so the same sub-id always picks the same trio.
+function hash(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+
+// Pick 3 distinct images from a bank, seeded by the sub id.
+function pickTrio(bank: string[], seed: string): string[] {
+  if (bank.length === 0) return [];
+  if (bank.length <= 3) return bank.slice(0, 3);
+  const start = hash(seed) % bank.length;
+  const stride = (hash(seed + "x") % (bank.length - 1)) + 1;
+  const used = new Set<number>();
+  const out: string[] = [];
+  let i = start;
+  while (out.length < 3 && used.size < bank.length) {
+    if (!used.has(i)) {
+      used.add(i);
+      out.push(bank[i]);
+    }
+    i = (i + stride) % bank.length;
+  }
+  return out;
+}
+
+// ============================================================================
+// IMAGE BANKS — Large diverse pools per category (10-20 photos each).
+// Hash picker selects 3 unique images per sub-style from these banks.
+// ============================================================================
+
 const DEFAULT_FEMALE = [
-  u("1529626455594-4ff0802cfb7e"), // Black woman fashion
-  u("1524504388940-b1c1722653e1"), // Asian woman fashion
-  u("1488426862026-3ee34a7d66df"), // Latina woman style
-  u("1534528741775-53994a69daeb"), // Mixed race fashion
-  u("1495121605193-b116b5b09a55"), // White woman style
-  u("1517841905240-472988babdf9"), // South-Asian woman
+  u("1529626455594-4ff0802cfb7e"), u("1524504388940-b1c1722653e1"),
+  u("1488426862026-3ee34a7d66df"), u("1534528741775-53994a69daeb"),
+  u("1495121605193-b116b5b09a55"), u("1517841905240-472988babdf9"),
+  u("1496747611176-843222e1e57c"), u("1483985988355-763728e1935b"),
 ];
-
 const DEFAULT_MALE = [
-  u("1506794778202-cad84cf45f1d"), // White man portrait
-  u("1507003211169-0a1dd7228f2d"), // Black man fashion
-  u("1519085360753-af0119f7cbe7"), // Asian man style
-  u("1472099645785-5658abf4ff4e"), // Latino man portrait
-  u("1500648767791-00dcc994a43e"), // Middle-Eastern man
-  u("1531123897727-8f129e1688ce"), // Mixed-race man
+  u("1506794778202-cad84cf45f1d"), u("1507003211169-0a1dd7228f2d"),
+  u("1519085360753-af0119f7cbe7"), u("1472099645785-5658abf4ff4e"),
+  u("1500648767791-00dcc994a43e"), u("1531123897727-8f129e1688ce"),
+  u("1488161628813-04466f872be2"), u("1492447166138-50c3889fccb1"),
 ];
 
-// Category-level themed pools — used when sub-style has no specific curation.
-// Keys match category ids in StylePickerScreen.
-const CATEGORY_POOLS: Record<string, { female: string[]; male: string[] }> = {
+// Each category has a wide pool — picker rotates through to give each sub a unique trio.
+const CATEGORY_BANKS: Record<string, { female: string[]; male: string[] }> = {
   "full-style": {
     female: [
-      u("1483985988355-763728e1935b"), // Editorial woman
-      u("1496747611176-843222e1e57c"), // Black woman full outfit
-      u("1551803091-e20673f15770"),     // Asian street style
+      u("1483985988355-763728e1935b"), u("1496747611176-843222e1e57c"),
+      u("1551803091-e20673f15770"),    u("1539109136881-3be0616acf4b"),
+      u("1485178575877-1a13bf489dfe"), u("1517841905240-472988babdf9"),
+      u("1524504388940-b1c1722653e1"), u("1495121605193-b116b5b09a55"),
+      u("1529626455594-4ff0802cfb7e"), u("1488426862026-3ee34a7d66df"),
+      u("1517438476312-10d79c5f25e3"), u("1534528741775-53994a69daeb"),
     ],
     male: [
-      u("1488161628813-04466f872be2"), // Man full outfit
-      u("1492447166138-50c3889fccb1"), // Black man fashion
-      u("1539109136881-3be0616acf4b"), // Asian man street
+      u("1488161628813-04466f872be2"), u("1492447166138-50c3889fccb1"),
+      u("1539109136881-3be0616acf4b"), u("1506794778202-cad84cf45f1d"),
+      u("1507003211169-0a1dd7228f2d"), u("1519085360753-af0119f7cbe7"),
+      u("1472099645785-5658abf4ff4e"), u("1500648767791-00dcc994a43e"),
+      u("1521119989659-a83eee488004"), u("1593032465175-481ac7f401a0"),
+      u("1483721310020-03333e577078"), u("1531123897727-8f129e1688ce"),
+    ],
+  },
+  "icon-looks": {
+    female: [
+      u("1483985988355-763728e1935b"), u("1485178575877-1a13bf489dfe"),
+      u("1496747611176-843222e1e57c"), u("1566174053879-31528523f8ae"),
+      u("1490481651871-ab68de25d43d"), u("1525026198548-4baa812f1183"),
+      u("1495121605193-b116b5b09a55"), u("1517841905240-472988babdf9"),
+      u("1539109136881-3be0616acf4b"), u("1571908599407-cdb918ed83bf"),
+      u("1524504388940-b1c1722653e1"), u("1517438476312-10d79c5f25e3"),
+    ],
+    male: [
+      u("1507003211169-0a1dd7228f2d"), u("1521119989659-a83eee488004"),
+      u("1593032465175-481ac7f401a0"), u("1488161628813-04466f872be2"),
+      u("1492447166138-50c3889fccb1"), u("1483721310020-03333e577078"),
+      u("1552058544-f2b08422138a"),    u("1531123897727-8f129e1688ce"),
+      u("1500648767791-00dcc994a43e"), u("1519085360753-af0119f7cbe7"),
     ],
   },
   "streetwear": {
     female: [
-      u("1539109136881-3be0616acf4b"),
-      u("1488161628813-04466f872be2"),
-      u("1517438476312-10d79c5f25e3"),
+      u("1539109136881-3be0616acf4b"), u("1488161628813-04466f872be2"),
+      u("1517438476312-10d79c5f25e3"), u("1525026198548-4baa812f1183"),
+      u("1485178575877-1a13bf489dfe"), u("1551803091-e20673f15770"),
+      u("1496747611176-843222e1e57c"), u("1534528741775-53994a69daeb"),
     ],
     male: [
-      u("1483721310020-03333e577078"),
-      u("1552058544-f2b08422138a"),
-      u("1492447166138-50c3889fccb1"),
-    ],
-  },
-  "formal": {
-    female: [
-      u("1566174053879-31528523f8ae"), // Black woman in gown
-      u("1490481651871-ab68de25d43d"), // Asian woman elegant
-      u("1571908599407-cdb918ed83bf"), // Formal dress
-    ],
-    male: [
-      u("1507003211169-0a1dd7228f2d"), // Black man suit
-      u("1521119989659-a83eee488004"), // Asian man suit
-      u("1593032465175-481ac7f401a0"), // White man suit
-    ],
-  },
-  "casual": {
-    female: DEFAULT_FEMALE.slice(0, 3),
-    male: DEFAULT_MALE.slice(0, 3),
-  },
-  "makeup-only": {
-    female: [
-      u("1503236823255-94609f598e71"), // Black woman makeup
-      u("1487412720507-e7ab37603c6f"), // Asian beauty
-      u("1526045478516-99145907023c"), // Editorial makeup
-    ],
-    male: [
-      u("1500648767791-00dcc994a43e"), // Skincare man
-      u("1581824283135-0666cf353f35"), // Grooming
-      u("1605497788044-5a32c7078486"), // Beard care
-    ],
-  },
-  "grooming": {
-    female: [], // not applicable
-    male: [
-      u("1605497788044-5a32c7078486"),
-      u("1581824283135-0666cf353f35"),
-      u("1500648767791-00dcc994a43e"),
-    ],
-  },
-  "sexy": {
-    female: [
-      u("1525026198548-4baa812f1183"), // Bodycon Black woman
-      u("1539109136881-3be0616acf4b"), // Sultry editorial
-      u("1485178575877-1a13bf489dfe"), // Latina sultry
-    ],
-    male: [
-      u("1531123897727-8f129e1688ce"),
-      u("1492447166138-50c3889fccb1"),
-      u("1488161628813-04466f872be2"),
-    ],
-  },
-  "swimwear": {
-    female: [
-      u("1570976447640-ac859d960c4b"), // Black woman beach
-      u("1502323777036-f29e3972d82f"), // Asian woman swim
-      u("1515886657613-9f3515b0c78f"), // Latina swim
-    ],
-    male: [
-      u("1530268729831-4b0b9e170218"),
-      u("1532910404247-7ee9488d7292"),
-      u("1502720433255-614171a1835e"),
-    ],
-  },
-  "athleisure": {
-    female: [
-      u("1518310383802-640c2de311b6"),
-      u("1571019613454-1cb2f99b2d8b"),
-      u("1517836357463-d25dfeac3438"),
-    ],
-    male: [
-      u("1571019614242-c5c5dee9f50b"),
-      u("1583500178690-f7fd39c44a66"),
-      u("1567013127542-490d757e51fc"),
-    ],
-  },
-  "fitness": {
-    female: [
-      u("1518310383802-640c2de311b6"),
-      u("1571019613454-1cb2f99b2d8b"),
-      u("1599058917212-d750089bc07e"),
-    ],
-    male: [
-      u("1567013127542-490d757e51fc"),
-      u("1583500178690-f7fd39c44a66"),
-      u("1571019614242-c5c5dee9f50b"),
-    ],
-  },
-  "vintage": {
-    female: [
-      u("1495121605193-b116b5b09a55"),
-      u("1485178575877-1a13bf489dfe"),
-      u("1515886657613-9f3515b0c78f"),
-    ],
-    male: [
-      u("1521119989659-a83eee488004"),
-      u("1488161628813-04466f872be2"),
-      u("1500648767791-00dcc994a43e"),
+      u("1483721310020-03333e577078"), u("1552058544-f2b08422138a"),
+      u("1492447166138-50c3889fccb1"), u("1531123897727-8f129e1688ce"),
+      u("1488161628813-04466f872be2"), u("1539109136881-3be0616acf4b"),
+      u("1507003211169-0a1dd7228f2d"), u("1519085360753-af0119f7cbe7"),
     ],
   },
   "minimalist": {
     female: [
-      u("1496747611176-843222e1e57c"),
-      u("1524504388940-b1c1722653e1"),
-      u("1517841905240-472988babdf9"),
+      u("1496747611176-843222e1e57c"), u("1524504388940-b1c1722653e1"),
+      u("1517841905240-472988babdf9"), u("1495121605193-b116b5b09a55"),
+      u("1483985988355-763728e1935b"), u("1485178575877-1a13bf489dfe"),
+      u("1488426862026-3ee34a7d66df"), u("1534528741775-53994a69daeb"),
     ],
     male: [
-      u("1488161628813-04466f872be2"),
-      u("1519085360753-af0119f7cbe7"),
-      u("1593032465175-481ac7f401a0"),
+      u("1488161628813-04466f872be2"), u("1519085360753-af0119f7cbe7"),
+      u("1593032465175-481ac7f401a0"), u("1521119989659-a83eee488004"),
+      u("1506794778202-cad84cf45f1d"), u("1500648767791-00dcc994a43e"),
+      u("1507003211169-0a1dd7228f2d"), u("1531123897727-8f129e1688ce"),
+    ],
+  },
+  "vintage": {
+    female: [
+      u("1495121605193-b116b5b09a55"), u("1485178575877-1a13bf489dfe"),
+      u("1515886657613-9f3515b0c78f"), u("1483985988355-763728e1935b"),
+      u("1517841905240-472988babdf9"), u("1496747611176-843222e1e57c"),
+      u("1488426862026-3ee34a7d66df"), u("1524504388940-b1c1722653e1"),
+    ],
+    male: [
+      u("1521119989659-a83eee488004"), u("1488161628813-04466f872be2"),
+      u("1500648767791-00dcc994a43e"), u("1593032465175-481ac7f401a0"),
+      u("1506794778202-cad84cf45f1d"), u("1492447166138-50c3889fccb1"),
+      u("1507003211169-0a1dd7228f2d"), u("1531123897727-8f129e1688ce"),
+    ],
+  },
+  "athleisure": {
+    female: [
+      u("1518310383802-640c2de311b6"), u("1571019613454-1cb2f99b2d8b"),
+      u("1517836357463-d25dfeac3438"), u("1599058917212-d750089bc07e"),
+      u("1483721310020-03333e577078"), u("1571945153237-4929e783af4a"),
+      u("1581009146145-b5ef050c2e1e"), u("1574680096145-d05b474e2155"),
+    ],
+    male: [
+      u("1571019614242-c5c5dee9f50b"), u("1583500178690-f7fd39c44a66"),
+      u("1567013127542-490d757e51fc"), u("1581009146145-b5ef050c2e1e"),
+      u("1532009877282-3340270e0529"), u("1605296867424-35fc25c9212a"),
+      u("1517836357463-d25dfeac3438"), u("1574680096145-d05b474e2155"),
+    ],
+  },
+  "formal": {
+    female: [
+      u("1566174053879-31528523f8ae"), u("1490481651871-ab68de25d43d"),
+      u("1571908599407-cdb918ed83bf"), u("1583900985737-6d0495555783"),
+      u("1494178270175-e96de2971df9"), u("1485178575877-1a13bf489dfe"),
+      u("1525026198548-4baa812f1183"), u("1483985988355-763728e1935b"),
+    ],
+    male: [
+      u("1507003211169-0a1dd7228f2d"), u("1521119989659-a83eee488004"),
+      u("1593032465175-481ac7f401a0"), u("1488161628813-04466f872be2"),
+      u("1506794778202-cad84cf45f1d"), u("1492447166138-50c3889fccb1"),
+      u("1519085360753-af0119f7cbe7"), u("1500648767791-00dcc994a43e"),
+    ],
+  },
+  "casual": {
+    female: [
+      u("1524504388940-b1c1722653e1"), u("1488426862026-3ee34a7d66df"),
+      u("1495121605193-b116b5b09a55"), u("1517841905240-472988babdf9"),
+      u("1496747611176-843222e1e57c"), u("1534528741775-53994a69daeb"),
+      u("1529626455594-4ff0802cfb7e"), u("1483985988355-763728e1935b"),
+    ],
+    male: [
+      u("1506794778202-cad84cf45f1d"), u("1519085360753-af0119f7cbe7"),
+      u("1472099645785-5658abf4ff4e"), u("1488161628813-04466f872be2"),
+      u("1531123897727-8f129e1688ce"), u("1500648767791-00dcc994a43e"),
+      u("1507003211169-0a1dd7228f2d"), u("1521119989659-a83eee488004"),
     ],
   },
   "bohemian": {
     female: [
-      u("1485178575877-1a13bf489dfe"),
-      u("1515886657613-9f3515b0c78f"),
-      u("1517841905240-472988babdf9"),
+      u("1485178575877-1a13bf489dfe"), u("1515886657613-9f3515b0c78f"),
+      u("1517841905240-472988babdf9"), u("1495121605193-b116b5b09a55"),
+      u("1488426862026-3ee34a7d66df"), u("1483985988355-763728e1935b"),
+      u("1524504388940-b1c1722653e1"), u("1496747611176-843222e1e57c"),
     ],
-    male: DEFAULT_MALE.slice(0, 3),
+    male: [
+      u("1531123897727-8f129e1688ce"), u("1500648767791-00dcc994a43e"),
+      u("1488161628813-04466f872be2"), u("1472099645785-5658abf4ff4e"),
+      u("1506794778202-cad84cf45f1d"), u("1519085360753-af0119f7cbe7"),
+    ],
   },
   "preppy": {
     female: [
-      u("1495121605193-b116b5b09a55"),
-      u("1517841905240-472988babdf9"),
-      u("1524504388940-b1c1722653e1"),
+      u("1495121605193-b116b5b09a55"), u("1517841905240-472988babdf9"),
+      u("1524504388940-b1c1722653e1"), u("1483985988355-763728e1935b"),
+      u("1496747611176-843222e1e57c"), u("1488426862026-3ee34a7d66df"),
     ],
     male: [
-      u("1593032465175-481ac7f401a0"),
-      u("1521119989659-a83eee488004"),
-      u("1507003211169-0a1dd7228f2d"),
+      u("1593032465175-481ac7f401a0"), u("1521119989659-a83eee488004"),
+      u("1507003211169-0a1dd7228f2d"), u("1488161628813-04466f872be2"),
+      u("1506794778202-cad84cf45f1d"), u("1500648767791-00dcc994a43e"),
     ],
   },
   "edgy": {
     female: [
-      u("1539109136881-3be0616acf4b"),
-      u("1525026198548-4baa812f1183"),
-      u("1517438476312-10d79c5f25e3"),
+      u("1539109136881-3be0616acf4b"), u("1525026198548-4baa812f1183"),
+      u("1517438476312-10d79c5f25e3"), u("1485178575877-1a13bf489dfe"),
+      u("1551803091-e20673f15770"),    u("1496747611176-843222e1e57c"),
     ],
     male: [
-      u("1483721310020-03333e577078"),
-      u("1552058544-f2b08422138a"),
-      u("1531123897727-8f129e1688ce"),
+      u("1483721310020-03333e577078"), u("1552058544-f2b08422138a"),
+      u("1531123897727-8f129e1688ce"), u("1488161628813-04466f872be2"),
+      u("1492447166138-50c3889fccb1"), u("1500648767791-00dcc994a43e"),
     ],
   },
   "resort": {
     female: [
-      u("1570976447640-ac859d960c4b"),
-      u("1502323777036-f29e3972d82f"),
-      u("1515886657613-9f3515b0c78f"),
+      u("1570976447640-ac859d960c4b"), u("1502323777036-f29e3972d82f"),
+      u("1515886657613-9f3515b0c78f"), u("1485178575877-1a13bf489dfe"),
+      u("1488426862026-3ee34a7d66df"), u("1517841905240-472988babdf9"),
     ],
     male: [
-      u("1530268729831-4b0b9e170218"),
-      u("1502720433255-614171a1835e"),
-      u("1532910404247-7ee9488d7292"),
+      u("1530268729831-4b0b9e170218"), u("1502720433255-614171a1835e"),
+      u("1532910404247-7ee9488d7292"), u("1500648767791-00dcc994a43e"),
+      u("1531123897727-8f129e1688ce"), u("1472099645785-5658abf4ff4e"),
+    ],
+  },
+  // ===== Makeup & Beauty (women) — distinct shots per sub-style =====
+  "makeup-only": {
+    female: [
+      u("1503236823255-94609f598e71"), // Black woman dewy
+      u("1487412720507-e7ab37603c6f"), // Asian glass skin
+      u("1526045478516-99145907023c"), // Editorial
+      u("1457972729786-0411a3b2b626"), // Smoky eye
+      u("1531746020798-e6953c6e8e04"), // Red lip
+      u("1512496015851-a90fb38ba796"), // Full beat
+      u("1542838132-92c53300491e"),    // Natural Black skin
+      u("1488426862026-3ee34a7d66df"), // Latina natural glow
+      u("1517841905240-472988babdf9"), // South-Asian fresh
+      u("1583001931096-959e9a1a6223"), // Avant-garde
+      u("1522337360788-8b13dee7a37e"), // Beauty closeup
+      u("1596704017254-9b121068fb31"), // Glam portrait
+    ],
+    male: [
+      u("1500648767791-00dcc994a43e"), u("1581824283135-0666cf353f35"),
+      u("1605497788044-5a32c7078486"), u("1492562080023-ab3db95bfbce"),
+      u("1519085360753-af0119f7cbe7"), u("1521119989659-a83eee488004"),
+      u("1507003211169-0a1dd7228f2d"), u("1593032465175-481ac7f401a0"),
+    ],
+  },
+  "grooming": {
+    female: [],
+    male: [
+      u("1605497788044-5a32c7078486"), u("1581824283135-0666cf353f35"),
+      u("1500648767791-00dcc994a43e"), u("1492562080023-ab3db95bfbce"),
+      u("1519085360753-af0119f7cbe7"), u("1521119989659-a83eee488004"),
+      u("1593032465175-481ac7f401a0"), u("1507003211169-0a1dd7228f2d"),
+      u("1488161628813-04466f872be2"), u("1531123897727-8f129e1688ce"),
+    ],
+  },
+  "sexy": {
+    female: [
+      u("1525026198548-4baa812f1183"), u("1539109136881-3be0616acf4b"),
+      u("1485178575877-1a13bf489dfe"), u("1566174053879-31528523f8ae"),
+      u("1490481651871-ab68de25d43d"), u("1571908599407-cdb918ed83bf"),
+      u("1517438476312-10d79c5f25e3"), u("1496747611176-843222e1e57c"),
+    ],
+    male: [
+      u("1531123897727-8f129e1688ce"), u("1492447166138-50c3889fccb1"),
+      u("1488161628813-04466f872be2"), u("1483721310020-03333e577078"),
+      u("1552058544-f2b08422138a"),    u("1500648767791-00dcc994a43e"),
+    ],
+  },
+  "swimwear": {
+    female: [
+      u("1570976447640-ac859d960c4b"), u("1502323777036-f29e3972d82f"),
+      u("1515886657613-9f3515b0c78f"), u("1485178575877-1a13bf489dfe"),
+      u("1488426862026-3ee34a7d66df"), u("1483985988355-763728e1935b"),
+    ],
+    male: [
+      u("1530268729831-4b0b9e170218"), u("1532910404247-7ee9488d7292"),
+      u("1502720433255-614171a1835e"), u("1500648767791-00dcc994a43e"),
+      u("1531123897727-8f129e1688ce"), u("1488161628813-04466f872be2"),
     ],
   },
   "urban-hiphop": {
     female: [
-      u("1525026198548-4baa812f1183"),
-      u("1539109136881-3be0616acf4b"),
-      u("1485178575877-1a13bf489dfe"),
+      u("1525026198548-4baa812f1183"), u("1539109136881-3be0616acf4b"),
+      u("1485178575877-1a13bf489dfe"), u("1517438476312-10d79c5f25e3"),
+      u("1496747611176-843222e1e57c"), u("1551803091-e20673f15770"),
     ],
     male: [
-      u("1492447166138-50c3889fccb1"),
-      u("1483721310020-03333e577078"),
-      u("1552058544-f2b08422138a"),
+      u("1492447166138-50c3889fccb1"), u("1483721310020-03333e577078"),
+      u("1552058544-f2b08422138a"), u("1488161628813-04466f872be2"),
+      u("1531123897727-8f129e1688ce"), u("1539109136881-3be0616acf4b"),
     ],
   },
   "rugged": {
-    female: DEFAULT_FEMALE.slice(0, 3),
+    female: [
+      u("1495121605193-b116b5b09a55"), u("1485178575877-1a13bf489dfe"),
+      u("1488426862026-3ee34a7d66df"), u("1517841905240-472988babdf9"),
+    ],
     male: [
-      u("1488161628813-04466f872be2"),
-      u("1593032465175-481ac7f401a0"),
-      u("1500648767791-00dcc994a43e"),
+      u("1488161628813-04466f872be2"), u("1593032465175-481ac7f401a0"),
+      u("1500648767791-00dcc994a43e"), u("1605497788044-5a32c7078486"),
+      u("1521119989659-a83eee488004"), u("1531123897727-8f129e1688ce"),
+      u("1492447166138-50c3889fccb1"), u("1483721310020-03333e577078"),
     ],
   },
   "techwear": {
     female: [
-      u("1517438476312-10d79c5f25e3"),
-      u("1539109136881-3be0616acf4b"),
-      u("1517841905240-472988babdf9"),
+      u("1517438476312-10d79c5f25e3"), u("1539109136881-3be0616acf4b"),
+      u("1517841905240-472988babdf9"), u("1485178575877-1a13bf489dfe"),
+      u("1525026198548-4baa812f1183"), u("1496747611176-843222e1e57c"),
     ],
     male: [
-      u("1483721310020-03333e577078"),
-      u("1552058544-f2b08422138a"),
-      u("1531123897727-8f129e1688ce"),
+      u("1483721310020-03333e577078"), u("1552058544-f2b08422138a"),
+      u("1531123897727-8f129e1688ce"), u("1488161628813-04466f872be2"),
+      u("1492447166138-50c3889fccb1"), u("1500648767791-00dcc994a43e"),
     ],
   },
   "date-night": {
     female: [
-      u("1566174053879-31528523f8ae"),
-      u("1490481651871-ab68de25d43d"),
-      u("1525026198548-4baa812f1183"),
+      u("1566174053879-31528523f8ae"), u("1490481651871-ab68de25d43d"),
+      u("1525026198548-4baa812f1183"), u("1571908599407-cdb918ed83bf"),
+      u("1485178575877-1a13bf489dfe"), u("1483985988355-763728e1935b"),
     ],
     male: [
-      u("1507003211169-0a1dd7228f2d"),
-      u("1521119989659-a83eee488004"),
-      u("1593032465175-481ac7f401a0"),
+      u("1507003211169-0a1dd7228f2d"), u("1521119989659-a83eee488004"),
+      u("1593032465175-481ac7f401a0"), u("1488161628813-04466f872be2"),
+      u("1492447166138-50c3889fccb1"), u("1500648767791-00dcc994a43e"),
     ],
   },
   "lingerie": {
     female: [
-      u("1566174053879-31528523f8ae"),
-      u("1525026198548-4baa812f1183"),
-      u("1485178575877-1a13bf489dfe"),
+      u("1566174053879-31528523f8ae"), u("1525026198548-4baa812f1183"),
+      u("1485178575877-1a13bf489dfe"), u("1571908599407-cdb918ed83bf"),
+      u("1490481651871-ab68de25d43d"), u("1517438476312-10d79c5f25e3"),
     ],
     male: [],
   },
   "y2k": {
     female: [
-      u("1517438476312-10d79c5f25e3"),
-      u("1485178575877-1a13bf489dfe"),
-      u("1539109136881-3be0616acf4b"),
+      u("1517438476312-10d79c5f25e3"), u("1485178575877-1a13bf489dfe"),
+      u("1539109136881-3be0616acf4b"), u("1525026198548-4baa812f1183"),
+      u("1496747611176-843222e1e57c"), u("1551803091-e20673f15770"),
     ],
-    male: DEFAULT_MALE.slice(0, 3),
+    male: [
+      u("1483721310020-03333e577078"), u("1552058544-f2b08422138a"),
+      u("1531123897727-8f129e1688ce"), u("1488161628813-04466f872be2"),
+    ],
   },
   "cottagecore": {
     female: [
-      u("1495121605193-b116b5b09a55"),
-      u("1517841905240-472988babdf9"),
-      u("1515886657613-9f3515b0c78f"),
+      u("1495121605193-b116b5b09a55"), u("1517841905240-472988babdf9"),
+      u("1515886657613-9f3515b0c78f"), u("1485178575877-1a13bf489dfe"),
+      u("1488426862026-3ee34a7d66df"), u("1483985988355-763728e1935b"),
     ],
-    male: DEFAULT_MALE.slice(0, 3),
+    male: DEFAULT_MALE,
   },
-  "icon-looks": {
+  "fitness": {
     female: [
-      u("1483985988355-763728e1935b"),
-      u("1485178575877-1a13bf489dfe"),
-      u("1496747611176-843222e1e57c"),
+      u("1518310383802-640c2de311b6"), u("1571019613454-1cb2f99b2d8b"),
+      u("1599058917212-d750089bc07e"), u("1517836357463-d25dfeac3438"),
+      u("1581009146145-b5ef050c2e1e"), u("1574680096145-d05b474e2155"),
+      u("1571945153237-4929e783af4a"), u("1483721310020-03333e577078"),
     ],
     male: [
-      u("1488161628813-04466f872be2"),
-      u("1492447166138-50c3889fccb1"),
-      u("1521119989659-a83eee488004"),
+      u("1567013127542-490d757e51fc"), u("1583500178690-f7fd39c44a66"),
+      u("1571019614242-c5c5dee9f50b"), u("1532009877282-3340270e0529"),
+      u("1605296867424-35fc25c9212a"), u("1581009146145-b5ef050c2e1e"),
+      u("1517836357463-d25dfeac3438"), u("1574680096145-d05b474e2155"),
     ],
   },
   "wedding-gowns": {
     female: [
-      u("1519225421980-715cb0215aed"),
-      u("1494178270175-e96de2971df9"),
-      u("1583900985737-6d0495555783"),
+      u("1519225421980-715cb0215aed"), u("1494178270175-e96de2971df9"),
+      u("1583900985737-6d0495555783"), u("1566174053879-31528523f8ae"),
+      u("1490481651871-ab68de25d43d"), u("1571908599407-cdb918ed83bf"),
     ],
     male: [],
   },
   "tuxedos": {
     female: [],
     male: [
-      u("1507003211169-0a1dd7228f2d"),
-      u("1593032465175-481ac7f401a0"),
-      u("1521119989659-a83eee488004"),
+      u("1507003211169-0a1dd7228f2d"), u("1593032465175-481ac7f401a0"),
+      u("1521119989659-a83eee488004"), u("1488161628813-04466f872be2"),
+      u("1506794778202-cad84cf45f1d"), u("1500648767791-00dcc994a43e"),
     ],
   },
   "jewelry-accessories": {
     female: [
-      u("1515562141207-7a88fb7ce338"),
-      u("1611591437281-460bfbe1220a"),
-      u("1535632787350-4e68ef0ac584"),
+      u("1515562141207-7a88fb7ce338"), u("1611591437281-460bfbe1220a"),
+      u("1535632787350-4e68ef0ac584"), u("1599643478518-a784e5dc4c8f"),
+      u("1605100804763-247f67b3557e"), u("1573408301185-9146fe634ad0"),
     ],
     male: [
-      u("1611591437281-460bfbe1220a"),
-      u("1599643478518-a784e5dc4c8f"),
-      u("1535632787350-4e68ef0ac584"),
+      u("1611591437281-460bfbe1220a"), u("1599643478518-a784e5dc4c8f"),
+      u("1535632787350-4e68ef0ac584"), u("1605100804763-247f67b3557e"),
     ],
   },
   "sunglasses-eyewear": {
     female: [
-      u("1556306535-0f09a537f0a3"),
-      u("1572635196237-14b3f281503f"),
-      u("1577803645773-f96470509666"),
+      u("1556306535-0f09a537f0a3"), u("1572635196237-14b3f281503f"),
+      u("1577803645773-f96470509666"), u("1502767089025-6748d4ef9f24"),
+      u("1574258495973-f010dfbb5371"), u("1511499767150-a48a237f0083"),
     ],
     male: [
-      u("1556306535-0f09a537f0a3"),
-      u("1502767089025-6748d4ef9f24"),
-      u("1577803645773-f96470509666"),
+      u("1556306535-0f09a537f0a3"), u("1502767089025-6748d4ef9f24"),
+      u("1577803645773-f96470509666"), u("1572635196237-14b3f281503f"),
+      u("1574258495973-f010dfbb5371"), u("1511499767150-a48a237f0083"),
     ],
   },
   "hats-headwear": {
     female: [
-      u("1571513722275-4b41940f54b8"),
-      u("1521369909029-2afed882baee"),
-      u("1517841905240-472988babdf9"),
+      u("1571513722275-4b41940f54b8"), u("1521369909029-2afed882baee"),
+      u("1517841905240-472988babdf9"), u("1485178575877-1a13bf489dfe"),
+      u("1495121605193-b116b5b09a55"), u("1488426862026-3ee34a7d66df"),
     ],
     male: [
-      u("1521369909029-2afed882baee"),
-      u("1488161628813-04466f872be2"),
-      u("1492447166138-50c3889fccb1"),
+      u("1521369909029-2afed882baee"), u("1488161628813-04466f872be2"),
+      u("1492447166138-50c3889fccb1"), u("1500648767791-00dcc994a43e"),
+      u("1506794778202-cad84cf45f1d"), u("1531123897727-8f129e1688ce"),
     ],
   },
   "bags-purses": {
     female: [
-      u("1584917865442-de89df76afd3"),
-      u("1591561954557-26941169b49e"),
-      u("1548036328-c9fa89d128fa"),
+      u("1584917865442-de89df76afd3"), u("1591561954557-26941169b49e"),
+      u("1548036328-c9fa89d128fa"),    u("1566150905458-1bf1fc113f0d"),
+      u("1590874103328-eac38a683ce7"), u("1576566588028-4147f3842f27"),
     ],
     male: [
-      u("1548036328-c9fa89d128fa"),
-      u("1591561954557-26941169b49e"),
-      u("1584917865442-de89df76afd3"),
+      u("1548036328-c9fa89d128fa"), u("1591561954557-26941169b49e"),
+      u("1584917865442-de89df76afd3"), u("1547949003-9792a18a2601"),
     ],
   },
   "shoes-sneakers": {
     female: [
-      u("1542291026-7eec264c27ff"),
-      u("1543163521-1bf539c55dd2"),
-      u("1595950653106-6c9ebd614d3a"),
+      u("1542291026-7eec264c27ff"), u("1543163521-1bf539c55dd2"),
+      u("1595950653106-6c9ebd614d3a"), u("1525966222134-fcfa99b8ae77"),
+      u("1600185365778-7886d2c3a76e"), u("1549298916-b41d501d3772"),
+      u("1551107696-a4b0c5a0d9a2"),    u("1606107557195-0e29a4b5b4aa"),
     ],
     male: [
-      u("1542291026-7eec264c27ff"),
-      u("1525966222134-fcfa99b8ae77"),
-      u("1600185365778-7886d2c3a76e"),
+      u("1542291026-7eec264c27ff"), u("1525966222134-fcfa99b8ae77"),
+      u("1600185365778-7886d2c3a76e"), u("1549298916-b41d501d3772"),
+      u("1551107696-a4b0c5a0d9a2"),    u("1606107557195-0e29a4b5b4aa"),
+      u("1543163521-1bf539c55dd2"), u("1595950653106-6c9ebd614d3a"),
     ],
   },
   "cosplay": {
     female: [
-      u("1612036782180-6f0b6cd846fe"),
-      u("1542596594-649edbc13630"),
-      u("1607604276583-eef5d076aa5f"),
+      u("1612036782180-6f0b6cd846fe"), u("1542596594-649edbc13630"),
+      u("1607604276583-eef5d076aa5f"), u("1583089892943-e02e5b017b6a"),
+      u("1605125571577-fdd0c52d5fef"), u("1601933973783-43cf8a7d4c5f"),
     ],
     male: [
-      u("1542596594-649edbc13630"),
-      u("1607604276583-eef5d076aa5f"),
-      u("1612036782180-6f0b6cd846fe"),
-    ],
-  },
-};
-
-// Per-sub-style overrides — used when a specific sub-style needs distinct visuals.
-// Keyed as `${categoryId}:${subId}`. Mixes diverse models, gender-matched.
-const SUB_OVERRIDES: Record<string, { female?: string[]; male?: string[] }> = {
-  // Makeup & Beauty (women)
-  "makeup-only:soft-glam": {
-    female: [
-      u("1503236823255-94609f598e71"), // Black woman dewy glam
-      u("1487412720507-e7ab37603c6f"), // Asian soft beauty
-      u("1526045478516-99145907023c"), // Editorial soft glow
-    ],
-  },
-  "makeup-only:bold-beat": {
-    female: [
-      u("1457972729786-0411a3b2b626"), // Bold smoky eye
-      u("1531746020798-e6953c6e8e04"), // Statement red lip
-      u("1512496015851-a90fb38ba796"), // Dramatic full beat
-    ],
-  },
-  "makeup-only:no-makeup-makeup": {
-    female: [
-      u("1542838132-92c53300491e"),  // Natural skin Black woman
-      u("1488426862026-3ee34a7d66df"), // Latina natural glow
-      u("1517841905240-472988babdf9"), // South-Asian fresh face
-    ],
-  },
-  "makeup-only:editorial": {
-    female: [
-      u("1583001931096-959e9a1a6223"), // Avant-garde editorial
-      u("1526045478516-99145907023c"), // High-fashion makeup
-      u("1457972729786-0411a3b2b626"), // Artistic concept
-    ],
-  },
-  "makeup-only:glass-skin": {
-    female: [
-      u("1487412720507-e7ab37603c6f"), // K-beauty glass skin
-      u("1503236823255-94609f598e71"), // Luminous Black skin
-      u("1542838132-92c53300491e"),  // Hydrated dewy
-    ],
-  },
-  // Grooming & Skincare (men)
-  "makeup-only:clean-cut": {
-    male: [
-      u("1500648767791-00dcc994a43e"), // Skincare White man
-      u("1492562080023-ab3db95bfbce"), // Black man clean fade
-      u("1519085360753-af0119f7cbe7"), // Asian sharp cut
-    ],
-  },
-  "makeup-only:rugged-grooming": {
-    male: [
-      u("1605497788044-5a32c7078486"), // Bearded man
-      u("1488161628813-04466f872be2"), // Textured hair Black man
-      u("1521119989659-a83eee488004"), // Rugged Asian
-    ],
-  },
-  "makeup-only:modern-gent": {
-    male: [
-      u("1581824283135-0666cf353f35"), // Modern grooming
-      u("1507003211169-0a1dd7228f2d"), // Polished Black gent
-      u("1593032465175-481ac7f401a0"), // Styled hair gent
-    ],
-  },
-  "makeup-only:buzz-fresh": {
-    male: [
-      u("1492562080023-ab3db95bfbce"), // Buzz cut Black man
-      u("1500648767791-00dcc994a43e"), // Buzz White man
-      u("1519085360753-af0119f7cbe7"), // Buzz Asian man
-    ],
-  },
-  // Grooming Essentials category sub-styles
-  "grooming:clean-cut": {
-    male: [
-      u("1500648767791-00dcc994a43e"),
-      u("1492562080023-ab3db95bfbce"),
-      u("1519085360753-af0119f7cbe7"),
-    ],
-  },
-  "grooming:rugged-grooming": {
-    male: [
-      u("1605497788044-5a32c7078486"),
-      u("1488161628813-04466f872be2"),
-      u("1521119989659-a83eee488004"),
-    ],
-  },
-  "grooming:modern-gent": {
-    male: [
-      u("1581824283135-0666cf353f35"),
-      u("1507003211169-0a1dd7228f2d"),
-      u("1593032465175-481ac7f401a0"),
-    ],
-  },
-  "grooming:buzz-fresh": {
-    male: [
-      u("1492562080023-ab3db95bfbce"),
-      u("1500648767791-00dcc994a43e"),
-      u("1519085360753-af0119f7cbe7"),
+      u("1542596594-649edbc13630"), u("1607604276583-eef5d076aa5f"),
+      u("1612036782180-6f0b6cd846fe"), u("1583089892943-e02e5b017b6a"),
+      u("1605125571577-fdd0c52d5fef"), u("1601933973783-43cf8a7d4c5f"),
     ],
   },
 };
 
 /**
- * Returns up to 3 inspiration image URLs for a given category + sub + gender.
- * Priority: per-sub override → category pool → diverse default pool.
+ * Returns 3 inspiration images, unique per sub-style via deterministic hash.
+ * Same sub-id always picks the same trio (stable UI); different sub-ids
+ * within the same category get different trios from the bank.
  */
 export function getSubStyleImages(
   categoryId: string,
   subId: string,
   gender: Gender,
 ): string[] {
-  // 1. Per-sub override
-  const override = SUB_OVERRIDES[`${categoryId}:${subId}`];
-  if (override) {
-    const arr = gender === "male" ? override.male : override.female;
-    if (arr && arr.length > 0) return arr.slice(0, 3);
+  const bank = CATEGORY_BANKS[categoryId];
+  if (bank) {
+    const arr = gender === "male" ? bank.male : bank.female;
+    if (arr && arr.length > 0) return pickTrio(arr, `${categoryId}:${subId}`);
   }
-  // 2. Category pool
-  const pool = CATEGORY_POOLS[categoryId];
-  if (pool) {
-    const arr = gender === "male" ? pool.male : pool.female;
-    if (arr && arr.length > 0) return arr.slice(0, 3);
-  }
-  // 3. Fallback: rotate the default pool deterministically by sub id length
   const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
-  const offset = (subId.length * 7) % defaults.length;
-  return [
-    defaults[offset % defaults.length],
-    defaults[(offset + 1) % defaults.length],
-    defaults[(offset + 2) % defaults.length],
-  ];
+  return pickTrio(defaults, `${categoryId}:${subId}`);
 }
