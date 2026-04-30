@@ -17,27 +17,40 @@ function hash(s: string): number {
   return Math.abs(h);
 }
 
-// Pick 3 distinct images from a bank, seeded by the sub id.
-function pickTrio(bank: string[], seed: string): string[] {
+// Pick distinct images from a bank, seeded by the sub id.
+function pickTrio(bank: string[], seed: string, count = 3): string[] {
   if (bank.length === 0) return [];
-  if (bank.length <= 3) return bank.slice(0, 3);
+  if (bank.length <= count) return bank.slice(0, count);
   const start = hash(seed) % bank.length;
   const stride = (hash(seed + "x") % (bank.length - 1)) + 1;
   const used = new Set<number>();
   const out: string[] = [];
   let i = start;
-  for (let attempts = 0; attempts < bank.length && out.length < 3; attempts++) {
+  for (let attempts = 0; attempts < bank.length && out.length < count; attempts++) {
     if (!used.has(i)) {
       used.add(i);
       out.push(bank[i]);
     }
     i = (i + stride) % bank.length;
   }
-  for (let offset = 0; offset < bank.length && out.length < 3; offset++) {
+  for (let offset = 0; offset < bank.length && out.length < count; offset++) {
     const next = (start + offset) % bank.length;
     if (!used.has(next)) out.push(bank[next]);
   }
   return out;
+}
+
+function uniqueByFirstSeen(images: string[]): string[] {
+  return images.filter((img, idx, arr) => arr.indexOf(img) === idx);
+}
+
+function addUnique(target: string[], candidates: string[], used?: Set<string>, limit = 3) {
+  for (const img of candidates) {
+    if (target.length >= limit) break;
+    if (!img || target.includes(img) || used?.has(img)) continue;
+    target.push(img);
+    used?.add(img);
+  }
 }
 
 // ============================================================================
