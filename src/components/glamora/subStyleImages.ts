@@ -54,6 +54,64 @@ const DEFAULT_MALE = [
   u("1488161628813-04466f872be2"), u("1492447166138-50c3889fccb1"),
 ];
 
+// Required representation anchors: every inspiration trio includes Black and
+// Hispanic/Latina/Latino models, then one style-specific image for context.
+const REPRESENTATION_POOLS: Record<Gender, { black: string[]; hispanic: string[]; beautyBlack: string[]; beautyHispanic: string[] }> = {
+  female: {
+    black: [
+      u("1634826260499-7d97a6049913"), u("1766193228857-e6e82a6c367c"),
+      u("1641427493563-5cc9cf1a9950"), u("1711925844152-8c9d51163ba2"),
+      u("1775259038056-298d0819cb45"), u("1542838132-92c53300491e"),
+      u("1503236823255-94609f598e71"), u("1525026198548-4baa812f1183"),
+    ],
+    hispanic: [
+      u("1565325058695-f614c1580d7e"), u("1617380518330-7c5ca1dafdef"),
+      u("1488426862026-3ee34a7d66df"), u("1485178575877-1a13bf489dfe"),
+      u("1495121605193-b116b5b09a55"), u("1496747611176-843222e1e57c"),
+      u("1524504388940-b1c1722653e1"), u("1517841905240-472988babdf9"),
+    ],
+    beautyBlack: [
+      u("1770283553838-769c5f97d55c"), u("1766465525389-2c817a267fbf"),
+      u("1503236823255-94609f598e71"), u("1542838132-92c53300491e"),
+      u("1765991735465-eae91b52065e"), u("1526045478516-99145907023c"),
+    ],
+    beautyHispanic: [
+      u("1630084775816-7abb7383ded5"), u("1646335940131-0e25ade32348"),
+      u("1565325058695-f614c1580d7e"), u("1617380518330-7c5ca1dafdef"),
+      u("1488426862026-3ee34a7d66df"), u("1522337360788-8b13dee7a37e"),
+    ],
+  },
+  male: {
+    black: [
+      u("1546572797-e8c933a75a1f"), u("1552324864-5f7f0dec9b3d"),
+      u("1614483573119-1e3b2be05565"), u("1754577060078-21315dd188c8"),
+      u("1492447166138-50c3889fccb1"), u("1483721310020-03333e577078"),
+      u("1552058544-f2b08422138a"), u("1531123897727-8f129e1688ce"),
+    ],
+    hispanic: [
+      u("1542326529804-0cd9d861ebaa"), u("1585159797364-f2dfa42d79c3"),
+      u("1774542583509-a4471c0af45f"), u("1768935706759-f2be765b3aec"),
+      u("1658250365092-7d24166eb605"), u("1500648767791-00dcc994a43e"),
+      u("1521119989659-a83eee488004"), u("1593032465175-481ac7f401a0"),
+    ],
+    beautyBlack: [
+      u("1546572797-e8c933a75a1f"), u("1552324864-5f7f0dec9b3d"),
+      u("1614483573119-1e3b2be05565"), u("1754577060078-21315dd188c8"),
+    ],
+    beautyHispanic: [
+      u("1542326529804-0cd9d861ebaa"), u("1585159797364-f2dfa42d79c3"),
+      u("1768935706759-f2be765b3aec"), u("1658250365092-7d24166eb605"),
+    ],
+  },
+};
+
+const BEAUTY_CATEGORY_IDS = new Set(["makeup-only", "grooming"]);
+
+function pickOne(pool: string[], seed: string): string | null {
+  if (pool.length === 0) return null;
+  return pool[hash(seed) % pool.length];
+}
+
 // Each category has a wide pool — picker rotates through to give each sub a unique trio.
 const CATEGORY_BANKS: Record<string, { female: string[]; male: string[] }> = {
   "full-style": {
