@@ -3,6 +3,7 @@ import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check,
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
+import { getSubStyleImages } from "./subStyleImages";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
@@ -984,27 +985,67 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                           ? `linear-gradient(135deg, hsla(var(${accentLight}) / 0.12), hsla(var(${accent}) / 0.05))`
                           : "hsl(var(--card))",
                         transition: "all 0.2s",
-                        display: "flex", alignItems: "center", gap: 12,
+                        display: "flex", flexDirection: "column", gap: 10,
                       }}
                     >
-                      <div style={{
-                        width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-                        background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.08)`,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        transition: "all 0.2s", fontSize: 16,
-                      }}>
-                        {isActive
-                          ? <Check size={14} color="white" />
-                          : <span>{sub.emoji}</span>}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
-                          {sub.label}
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{
+                          width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+                          background: isActive ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.08)`,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          transition: "all 0.2s", fontSize: 16,
+                        }}>
+                          {isActive
+                            ? <Check size={14} color="white" />
+                            : <span>{sub.emoji}</span>}
                         </div>
-                        <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.3 }}>
-                          {sub.desc}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 2 }}>
+                            {sub.label}
+                          </div>
+                          <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", lineHeight: 1.3 }}>
+                            {sub.desc}
+                          </div>
                         </div>
                       </div>
+                      {/* Inspiration image grid — diverse models, gender-matched */}
+                      {(() => {
+                        const imgs = getSubStyleImages(catId, sub.id, prefs.gender);
+                        if (!imgs.length) return null;
+                        return (
+                          <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr 1fr",
+                            gap: 6,
+                            marginTop: 2,
+                          }}>
+                            {imgs.map((src, i) => (
+                              <div key={i} style={{
+                                position: "relative",
+                                width: "100%",
+                                paddingTop: "125%",
+                                borderRadius: 8,
+                                overflow: "hidden",
+                                background: "hsla(var(--glamora-gold) / 0.06)",
+                                border: `1px solid hsla(var(${accent}) / 0.12)`,
+                              }}>
+                                <img
+                                  src={src}
+                                  alt={`${sub.label} inspiration ${i + 1}`}
+                                  loading="lazy"
+                                  style={{
+                                    position: "absolute", inset: 0,
+                                    width: "100%", height: "100%",
+                                    objectFit: "cover",
+                                    display: "block",
+                                  }}
+                                  onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })}
