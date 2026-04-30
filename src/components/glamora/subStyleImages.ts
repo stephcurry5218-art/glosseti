@@ -376,23 +376,129 @@ const CATEGORY_POOLS: Record<string, { female: string[]; male: string[] }> = {
   },
 };
 
+// Per-sub-style overrides — used when a specific sub-style needs distinct visuals.
+// Keyed as `${categoryId}:${subId}`. Mixes diverse models, gender-matched.
+const SUB_OVERRIDES: Record<string, { female?: string[]; male?: string[] }> = {
+  // Makeup & Beauty (women)
+  "makeup-only:soft-glam": {
+    female: [
+      u("1503236823255-94609f598e71"), // Black woman dewy glam
+      u("1487412720507-e7ab37603c6f"), // Asian soft beauty
+      u("1526045478516-99145907023c"), // Editorial soft glow
+    ],
+  },
+  "makeup-only:bold-beat": {
+    female: [
+      u("1457972729786-0411a3b2b626"), // Bold smoky eye
+      u("1531746020798-e6953c6e8e04"), // Statement red lip
+      u("1512496015851-a90fb38ba796"), // Dramatic full beat
+    ],
+  },
+  "makeup-only:no-makeup-makeup": {
+    female: [
+      u("1542838132-92c53300491e"),  // Natural skin Black woman
+      u("1488426862026-3ee34a7d66df"), // Latina natural glow
+      u("1517841905240-472988babdf9"), // South-Asian fresh face
+    ],
+  },
+  "makeup-only:editorial": {
+    female: [
+      u("1583001931096-959e9a1a6223"), // Avant-garde editorial
+      u("1526045478516-99145907023c"), // High-fashion makeup
+      u("1457972729786-0411a3b2b626"), // Artistic concept
+    ],
+  },
+  "makeup-only:glass-skin": {
+    female: [
+      u("1487412720507-e7ab37603c6f"), // K-beauty glass skin
+      u("1503236823255-94609f598e71"), // Luminous Black skin
+      u("1542838132-92c53300491e"),  // Hydrated dewy
+    ],
+  },
+  // Grooming & Skincare (men)
+  "makeup-only:clean-cut": {
+    male: [
+      u("1500648767791-00dcc994a43e"), // Skincare White man
+      u("1492562080023-ab3db95bfbce"), // Black man clean fade
+      u("1519085360753-af0119f7cbe7"), // Asian sharp cut
+    ],
+  },
+  "makeup-only:rugged-grooming": {
+    male: [
+      u("1605497788044-5a32c7078486"), // Bearded man
+      u("1488161628813-04466f872be2"), // Textured hair Black man
+      u("1521119989659-a83eee488004"), // Rugged Asian
+    ],
+  },
+  "makeup-only:modern-gent": {
+    male: [
+      u("1581824283135-0666cf353f35"), // Modern grooming
+      u("1507003211169-0a1dd7228f2d"), // Polished Black gent
+      u("1593032465175-481ac7f401a0"), // Styled hair gent
+    ],
+  },
+  "makeup-only:buzz-fresh": {
+    male: [
+      u("1492562080023-ab3db95bfbce"), // Buzz cut Black man
+      u("1500648767791-00dcc994a43e"), // Buzz White man
+      u("1519085360753-af0119f7cbe7"), // Buzz Asian man
+    ],
+  },
+  // Grooming Essentials category sub-styles
+  "grooming:clean-cut": {
+    male: [
+      u("1500648767791-00dcc994a43e"),
+      u("1492562080023-ab3db95bfbce"),
+      u("1519085360753-af0119f7cbe7"),
+    ],
+  },
+  "grooming:rugged-grooming": {
+    male: [
+      u("1605497788044-5a32c7078486"),
+      u("1488161628813-04466f872be2"),
+      u("1521119989659-a83eee488004"),
+    ],
+  },
+  "grooming:modern-gent": {
+    male: [
+      u("1581824283135-0666cf353f35"),
+      u("1507003211169-0a1dd7228f2d"),
+      u("1593032465175-481ac7f401a0"),
+    ],
+  },
+  "grooming:buzz-fresh": {
+    male: [
+      u("1492562080023-ab3db95bfbce"),
+      u("1500648767791-00dcc994a43e"),
+      u("1519085360753-af0119f7cbe7"),
+    ],
+  },
+};
+
 /**
- * Returns up to 3 inspiration image URLs for a given category + gender.
- * Falls back to a diverse default pool when no curated set exists.
+ * Returns up to 3 inspiration image URLs for a given category + sub + gender.
+ * Priority: per-sub override → category pool → diverse default pool.
  */
 export function getSubStyleImages(
   categoryId: string,
-  _subId: string,
+  subId: string,
   gender: Gender,
 ): string[] {
+  // 1. Per-sub override
+  const override = SUB_OVERRIDES[`${categoryId}:${subId}`];
+  if (override) {
+    const arr = gender === "male" ? override.male : override.female;
+    if (arr && arr.length > 0) return arr.slice(0, 3);
+  }
+  // 2. Category pool
   const pool = CATEGORY_POOLS[categoryId];
   if (pool) {
     const arr = gender === "male" ? pool.male : pool.female;
     if (arr && arr.length > 0) return arr.slice(0, 3);
   }
-  // Fallback: rotate the default pool deterministically by sub id length
+  // 3. Fallback: rotate the default pool deterministically by sub id length
   const defaults = gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE;
-  const offset = (_subId.length * 7) % defaults.length;
+  const offset = (subId.length * 7) % defaults.length;
   return [
     defaults[offset % defaults.length],
     defaults[(offset + 1) % defaults.length],
