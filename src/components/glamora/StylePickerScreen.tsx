@@ -3,9 +3,6 @@ import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check,
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
-import { getSubStyleImages } from "./subStyleImages";
-import ImageLightbox from "./ImageLightbox";
-import InspoThumb from "./InspoThumb";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
@@ -672,7 +669,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string; category: string; subId: string } | null>(null);
+  
   
   const isMale = prefs.gender === "male";
 
@@ -710,7 +707,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
-  const visibleInspoImages = new Set<string>();
+  
 
   return (
     <>
@@ -986,31 +983,6 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                           </div>
                         </div>
                       </div>
-                      {/* Inspiration image grid — diverse models, gender-matched */}
-                      {(() => {
-                        const imgs = getSubStyleImages(catId, sub.id, prefs.gender, visibleInspoImages);
-                        if (!imgs.length) return null;
-                        return (
-                          <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr 1fr",
-                            gap: 6,
-                            marginTop: 2,
-                          }}>
-                            {imgs.map((src, i) => (
-                              <InspoThumb
-                                key={i}
-                                src={src}
-                                category={catId}
-                                subId={sub.id}
-                                subLabel={sub.label}
-                                accent={accent}
-                                onOpen={() => setLightbox({ images: imgs, index: i, title: sub.label, category: catId, subId: sub.id })}
-                              />
-                            ))}
-                          </div>
-                        );
-                      })()}
                     </div>
                   );
                 })}
@@ -1098,16 +1070,6 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         </button>
       </div>
     </div>
-    {lightbox && (
-      <ImageLightbox
-        images={lightbox.images}
-        startIndex={lightbox.index}
-        title={lightbox.title}
-        category={lightbox.category}
-        subId={lightbox.subId}
-        onClose={() => setLightbox(null)}
-      />
-    )}
     </>
   );
 };
