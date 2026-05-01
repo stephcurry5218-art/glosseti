@@ -113,7 +113,8 @@ export const PROMOS: SeasonalPromo[] = [
     gradient: "linear-gradient(135deg, hsla(340 40% 65% / 0.15), hsla(45 60% 55% / 0.1))",
     border: "hsla(340 40% 65% / 0.3)", accentColor: "hsl(340 40% 65%)",
     months: [4, 5], dayRange: [1, 30],
-    picks: [
+     picks: [
+      { label: "Bride", emoji: "👰", category: "wedding-gowns", subcategory: "classic-ballgown", desc: "Your dream wedding gown" },
       { label: "Wedding Guest", emoji: "👗", category: "formal", subcategory: "cocktail", desc: "Elegant guest outfit" },
       { label: "Bridesmaid Chic", emoji: "💐", category: "formal", subcategory: "garden-party", desc: "Coordinated bridesmaid look" },
       { label: "Groom's Style", emoji: "🤵", category: "formal", subcategory: "black-tie", desc: "Sharp wedding day suit" },
