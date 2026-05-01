@@ -692,13 +692,11 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   const toggleCategory = (id: StyleCategory) => {
     setSelected(prev => {
-      if (prev.includes(id)) {
-        if (prev.length <= 1) return prev;
-        setSelectedSubs(s => { const copy = { ...s }; delete copy[id]; return copy; });
-        setCustomDetails(s => { const copy = { ...s }; delete copy[id]; return copy; });
-        return prev.filter(c => c !== id);
-      }
-      return [...prev, id];
+      if (prev.includes(id) && prev.length === 1) return prev;
+      // Single-select: replace and clear all subs/details from previous category
+      setSelectedSubs({});
+      setCustomDetails({});
+      return [id];
     });
   };
 
@@ -735,17 +733,8 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         }}>
           <Check size={16} color={`hsl(var(${accent}))`} />
           <span style={{ fontSize: 12, color: "hsl(var(--glamora-char))", fontWeight: 500 }}>
-            Select one or more styles to mix & match
+            Pick one style — refine the details with Gio after
           </span>
-          {selected.length > 1 && (
-            <span style={{
-              marginLeft: "auto", padding: "3px 10px", borderRadius: 100,
-              background: `hsl(var(${accent}))`, color: "white",
-              fontSize: 11, fontWeight: 700,
-            }}>
-              {selected.length}
-            </span>
-          )}
         </div>
 
         {/* Holiday Picks — shown when coming from seasonal banner */}
@@ -889,9 +878,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                 {catLabel} — Refine Your Vibe
               </div>
               <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", marginBottom: 12, lineHeight: 1.4 }}>
-                {(catId === "couples" || catId === "parent-child")
-                  ? `Select one or more sub-styles for ${catLabel.toLowerCase()} — mix & match!`
-                  : `Pick a sub-style for ${catLabel.toLowerCase()} (optional)`}
+                Pick a sub-style for {catLabel.toLowerCase()} (optional)
               </div>
               {/* Search bar for cosplay */}
               {catId === "cosplay" && (
@@ -956,30 +943,16 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                       </div>
                     );
                   }
-                  const isMultiSub = catId === "couples" || catId === "parent-child";
                   const currentVal = selectedSubs[catId];
-                  const isActive = isMultiSub
-                    ? Array.isArray(currentVal) && currentVal.includes(sub.id)
-                    : currentVal === sub.id;
+                  const isActive = currentVal === sub.id;
                   return (
                     <div
                       key={sub.id}
                       onClick={() => {
-                        if (isMultiSub) {
-                          setSelectedSubs(prev => {
-                            const arr = Array.isArray(prev[catId]) ? [...(prev[catId] as string[])] : prev[catId] ? [prev[catId] as string] : [];
-                            if (arr.includes(sub.id)) {
-                              const filtered = arr.filter(s => s !== sub.id);
-                              return { ...prev, [catId]: filtered.length ? filtered : undefined as any };
-                            }
-                            return { ...prev, [catId]: [...arr, sub.id] };
-                          });
-                        } else {
-                          setSelectedSubs(prev => ({
-                            ...prev,
-                            [catId]: isActive ? undefined as any : sub.id,
-                          }));
-                        }
+                        setSelectedSubs(prev => ({
+                          ...prev,
+                          [catId]: isActive ? undefined as any : sub.id,
+                        }));
                       }}
                       style={{
                         padding: "12px 14px", borderRadius: 14, cursor: "pointer",
