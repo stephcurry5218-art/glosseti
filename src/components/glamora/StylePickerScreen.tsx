@@ -986,31 +986,6 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
                           </div>
                         </div>
                       </div>
-                      {/* Inspiration image grid — diverse models, gender-matched */}
-                      {(() => {
-                        const imgs = getSubStyleImages(catId, sub.id, prefs.gender, visibleInspoImages);
-                        if (!imgs.length) return null;
-                        return (
-                          <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr 1fr",
-                            gap: 6,
-                            marginTop: 2,
-                          }}>
-                            {imgs.map((src, i) => (
-                              <InspoThumb
-                                key={i}
-                                src={src}
-                                category={catId}
-                                subId={sub.id}
-                                subLabel={sub.label}
-                                accent={accent}
-                                onOpen={() => setLightbox({ images: imgs, index: i, title: sub.label, category: catId, subId: sub.id })}
-                              />
-                            ))}
-                          </div>
-                        );
-                      })()}
                     </div>
                   );
                 })}
