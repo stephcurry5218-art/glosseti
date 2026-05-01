@@ -3,9 +3,6 @@ import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check,
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
-import { getSubStyleImages } from "./subStyleImages";
-import ImageLightbox from "./ImageLightbox";
-import InspoThumb from "./InspoThumb";
 
 interface Props {
   prefs: { styleCategory: StyleCategory; gender: "male" | "female" };
@@ -672,7 +669,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
-  const [lightbox, setLightbox] = useState<{ images: string[]; index: number; title: string; category: string; subId: string } | null>(null);
+  
   
   const isMale = prefs.gender === "male";
 
@@ -710,7 +707,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
-  const visibleInspoImages = new Set<string>();
+  
 
   return (
     <>
