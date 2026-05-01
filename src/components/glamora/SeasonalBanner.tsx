@@ -89,22 +89,6 @@ export const PROMOS: SeasonalPromo[] = [
       { label: "Brunch Chic", emoji: "🥞", category: "full-style", subcategory: "brunch-ready", desc: "Easter brunch styling" },
     ],
   },
-  // Prom Season (Apr 15 – May 15)
-  {
-    id: "prom-season", title: "Prom Season 👑",
-    subtitle: "Make it unforgettable — glam gowns, sharp suits & total looks", cta: "Prom Looks",
-    icon: Crown,
-    gradient: "linear-gradient(135deg, hsla(280 55% 55% / 0.18), hsla(320 60% 50% / 0.12), hsla(var(--glamora-gold) / 0.08))",
-    border: "hsla(280 55% 55% / 0.35)", accentColor: "hsl(280 55% 60%)",
-    months: [3, 4], dayRange: [15, 15],
-    picks: [
-      { label: "Prom Glam Gown", emoji: "👗", category: "formal", subcategory: "gala-evening", desc: "Show-stopping prom dress" },
-      { label: "Sharp Prom Suit", emoji: "🤵", category: "formal", subcategory: "black-tie", desc: "Tailored suit for prom night" },
-      { label: "Teen Makeup Glam", emoji: "💄", category: "makeup-only" as StyleCategory, subcategory: "glam-evening", desc: "Age-appropriate prom glam" },
-      { label: "Prom Couple Match", emoji: "💕", category: "couples", subcategory: "matching-elegance", desc: "Coordinated couple prom look" },
-      { label: "After-Party Fit", emoji: "🎉", category: "teens" as StyleCategory, subcategory: "y2k-retro", desc: "Fun after-prom outfit swap" },
-    ],
-  },
   // Graduation Season (May 15 – Jun 5)
   {
     id: "graduation", title: "Graduation Glam 🎓",

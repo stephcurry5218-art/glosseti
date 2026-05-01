@@ -5,7 +5,7 @@ import { PROMOS, getCurrentPromo, type SeasonalPromo, type HolidayPick } from ".
 
 // Event-specific promos (subset with dayRange = specific events, not generic seasons)
 const EVENT_IDS = [
-  "prom-season", "graduation", "back-to-school", "valentines", "easter",
+  "graduation", "back-to-school", "valentines", "easter",
   "mothers-day", "fathers-day", "halloween", "thanksgiving", "holiday",
   "july-4th", "memorial-day", "new-year", "spring-break", "black-friday",
   "wedding-season",
