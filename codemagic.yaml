@@ -64,19 +64,23 @@ workflows:
           set -e
           npx cap sync ios
 
-      - name: Copy app icon into AppIcon.appiconset
+      - name: Generate iOS app icon and splash screens from assets/
         script: |
           set -e
-          SRC="assets/AppIcon.png"
-          DEST_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
-          if [ ! -f "$SRC" ]; then
-            echo "Source icon $SRC not found"
-            exit 1
-          fi
-          mkdir -p "$DEST_DIR"
-          cp "$SRC" "$DEST_DIR/AppIcon-512@2x.png"
-          echo "Copied $SRC to $DEST_DIR/AppIcon-512@2x.png"
-          ls -la "$DEST_DIR"
+          # Uses @capacitor/assets to regenerate every AppIcon size AND
+          # the LaunchScreen Splash imageset from our real Glosseti logo,
+          # replacing Capacitor's default template logo that ships with
+          # `npx cap add ios`.
+          npx @capacitor/assets generate --ios \
+            --assetPath assets \
+            --iconBackgroundColor '#0F0B09' \
+            --iconBackgroundColorDark '#0F0B09' \
+            --splashBackgroundColor '#0F0B09' \
+            --splashBackgroundColorDark '#0F0B09'
+          echo "AppIcon contents:"
+          ls -la ios/App/App/Assets.xcassets/AppIcon.appiconset || true
+          echo "Splash contents:"
+          ls -la ios/App/App/Assets.xcassets/Splash.imageset || true
 
       - name: Inject iOS permission strings into Info.plist
         script: |
