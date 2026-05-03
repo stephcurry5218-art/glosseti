@@ -258,15 +258,12 @@ function pickOne(pool: string[], seed: string, exclude: Set<string>): string | n
   return pool[start]; // fallback
 }
 
-import { getCachedTrio, setCachedTrio } from "./savedInspiration";
-
 /**
- * Returns 3 inspiration images per sub-style — guaranteed:
- *  - 3 different races per trio (full diversity)
- *  - no duplicates within the trio
- *  - no duplicates across categories (category-partitioned slices)
- *  - gender-matched
- *  - cached in localStorage so trio is stable for the user
+ * Returns 3 inspiration images per sub-style.
+ * RANDOMIZED per call: shuffles from the full master pool (much larger than
+ * any per-category slice) so users see fresh photos every visit.
+ * Still guarantees: 3 different races, no dupes in trio, gender-matched,
+ * excludes anything in `usedImages`.
  */
 export function getSubStyleImages(
   categoryId: string,
@@ -274,32 +271,6 @@ export function getSubStyleImages(
   gender: Gender,
   usedImages?: Set<string>,
 ): string[] {
-  // 1. Cached trio wins (stable across sessions).
-  const cached = getCachedTrio(categoryId, subId, gender);
-  if (cached && cached.length >= 3) {
-    if (usedImages) cached.forEach(u => usedImages.add(u));
-    return cached.slice(0, 3);
-  }
-
-  // 2. Resolve the slice for this category. If category isn't in the partition
-  //    table, fall back to using its name hash as the index.
-  const catIdx = CATEGORY_ORDER.indexOf(categoryId);
-  const fallbackIdx = catIdx >= 0 ? catIdx : (hash(categoryId) % 50);
-  const slices = CATEGORY_SLICES[categoryId] || {
-    female: {
-      black: buildSlices(MASTER_POOL.female.black, fallbackIdx, SLICE_SIZE),
-      white: buildSlices(MASTER_POOL.female.white, fallbackIdx, SLICE_SIZE),
-      hispanic: buildSlices(MASTER_POOL.female.hispanic, fallbackIdx, SLICE_SIZE),
-      asian: buildSlices(MASTER_POOL.female.asian, fallbackIdx, SLICE_SIZE),
-    },
-    male: {
-      black: buildSlices(MASTER_POOL.male.black, fallbackIdx, SLICE_SIZE),
-      white: buildSlices(MASTER_POOL.male.white, fallbackIdx, SLICE_SIZE),
-      hispanic: buildSlices(MASTER_POOL.male.hispanic, fallbackIdx, SLICE_SIZE),
-      asian: buildSlices(MASTER_POOL.male.asian, fallbackIdx, SLICE_SIZE),
-    },
-  };
-
   const isBeauty = BEAUTY_CATEGORY_IDS.has(categoryId);
   const beautyIsApplicable = isBeauty && (
     (categoryId === "makeup-only" && gender === "female") ||
@@ -310,56 +281,46 @@ export function getSubStyleImages(
     if (beautyIsApplicable) {
       return categoryId === "makeup-only" ? BEAUTY_POOL[race] : GROOMING_POOL[race];
     }
-    return slices[gender][race];
+    return MASTER_POOL[gender][race];
   };
 
-  // 3. Rotate starting race per sub-style — guarantees grid-wide diversity.
-  const startIdx = hash(`${categoryId}:${subId}:race`) % RACES.length;
+  const startIdx = Math.floor(Math.random() * RACES.length);
   const rotated: Race[] = RACES.map((_, i) => RACES[(startIdx + i) % RACES.length]);
 
   const trio: string[] = [];
   const localExclude = new Set<string>(usedImages || []);
 
-  // 4. Pick one model from each of the first 3 races (always different races).
+  const pickRandom = (pool: string[]): string | null => {
+    const candidates = pool.filter(p => !localExclude.has(p) && !trio.includes(p));
+    if (candidates.length === 0) return null;
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  };
+
   for (let i = 0; i < 3; i++) {
-    const race = rotated[i];
-    const pick = pickOne(poolFor(race), `${categoryId}:${subId}:${race}`, localExclude);
-    if (pick && !trio.includes(pick)) {
-      trio.push(pick);
-      localExclude.add(pick);
-      usedImages?.add(pick);
-    }
+    const pick = pickRandom(poolFor(rotated[i]));
+    if (pick) { trio.push(pick); localExclude.add(pick); usedImages?.add(pick); }
   }
 
-  // 5. Top up if any race pool was empty (e.g. lingerie/wedding for male).
   if (trio.length < 3) {
-    const allRaces = [...rotated, ...rotated]; // try 4th race + repeats
-    for (const race of allRaces) {
+    for (const race of [...rotated, ...rotated]) {
       if (trio.length >= 3) break;
-      const pick = pickOne(poolFor(race), `${categoryId}:${subId}:${race}:fill`, localExclude);
-      if (pick && !trio.includes(pick)) {
-        trio.push(pick);
-        localExclude.add(pick);
-        usedImages?.add(pick);
-      }
+      const pick = pickRandom(poolFor(race));
+      if (pick) { trio.push(pick); localExclude.add(pick); usedImages?.add(pick); }
     }
   }
 
-  // 6. Last-resort fallback: any image from master pool.
   if (trio.length < 3) {
     const fallback = [
       ...MASTER_POOL[gender].black, ...MASTER_POOL[gender].white,
       ...MASTER_POOL[gender].hispanic, ...MASTER_POOL[gender].asian,
-    ];
+    ].sort(() => Math.random() - 0.5);
     for (const img of fallback) {
       if (trio.length >= 3) break;
       if (!trio.includes(img) && !localExclude.has(img)) {
-        trio.push(img);
-        usedImages?.add(img);
+        trio.push(img); usedImages?.add(img);
       }
     }
   }
 
-  if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
 }
