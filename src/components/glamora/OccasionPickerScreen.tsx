@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
@@ -309,9 +309,223 @@ const MALE: Record<OccasionId, Vibe[]> = {
   ],
 };
 
+// ============================================================================
+// EXTRA VIBE POOLS — additional sub-styles per occasion so users get an abundance
+// of choices. Each visit randomly samples 12 vibes from base + extras combined,
+// and "Show more" reshuffles to surface fresh ones.
+// ============================================================================
+
+const FEMALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
+  swimwear: [
+    { id: "f-swm-13", label: "Halter Bikini",     query: "halter bikini swimsuit",                image: img("1556306535-0f09a537f0a3"), category: "swimwear", subcategory: "halter-bikini" },
+    { id: "f-swm-14", label: "Cheeky Bottoms",    query: "cheeky bikini bottoms beach",           image: img("1502767089025-6748d4ef9f24"), category: "swimwear", subcategory: "cheeky-bottoms" },
+    { id: "f-swm-15", label: "Cut Out One-Piece", query: "cutout one piece swimsuit",             image: img("1611591437281-460bfbe1220a"), category: "swimwear", subcategory: "cutout-one-piece" },
+    { id: "f-swm-16", label: "Neon Bikini",       query: "neon bright bikini swimsuit",           image: img("1620063633168-8ec1bcc1bcec"), category: "swimwear", subcategory: "neon-bikini" },
+    { id: "f-swm-17", label: "Vintage Pinup",     query: "vintage pinup swimsuit retro",          image: img("1525026198548-4baa812f1183"), category: "swimwear", subcategory: "vintage-pinup-swim" },
+    { id: "f-swm-18", label: "Body Chain Swim",   query: "swimsuit body chain jewelry",           image: img("1601412436009-d964bd02edbc"), category: "swimwear", subcategory: "body-chain-swim" },
+    { id: "f-swm-19", label: "Boho Crochet",      query: "boho crochet bikini beach",             image: img("1581824283135-0666cf353f35"), category: "swimwear", subcategory: "boho-crochet" },
+    { id: "f-swm-20", label: "Black Monokini",    query: "black monokini swimsuit",               image: img("1641427493563-5cc9cf1a9950"), category: "swimwear", subcategory: "black-monokini" },
+    { id: "f-swm-21", label: "Ruffle Bikini",     query: "ruffle frill bikini",                   image: img("1605497788044-5a32c7078486"), category: "swimwear", subcategory: "ruffle-bikini" },
+    { id: "f-swm-22", label: "Belted Swimsuit",   query: "belted swimsuit beach",                 image: img("1614593894937-8e84a52e5a2c"), category: "swimwear", subcategory: "belted-swim" },
+    { id: "f-swm-23", label: "Tie-Dye Bikini",    query: "tie dye bikini swimsuit",               image: img("1606902965551-dce093cda6e7"), category: "swimwear", subcategory: "tie-dye-bikini" },
+    { id: "f-swm-24", label: "Asymmetric Swim",   query: "asymmetric one shoulder swimsuit",      image: img("1539109136881-3be0616acf4b"), category: "swimwear", subcategory: "asymmetric-swim" },
+  ],
+  casual: [
+    { id: "f-cas-13", label: "Mom Jeans",         query: "mom jeans outfit",                      image: img("1485231183945-fffde7cc051e"), category: "casual", subcategory: "mom-jeans" },
+    { id: "f-cas-14", label: "Wide Leg Pants",    query: "wide leg pants outfit casual",          image: img("1542295669297-4d352b042bca"), category: "casual", subcategory: "wide-leg-pants" },
+    { id: "f-cas-15", label: "Crop Top & Jeans",  query: "crop top jeans casual outfit",          image: img("1611042553365-9b101441c135"), category: "casual", subcategory: "crop-jeans" },
+    { id: "f-cas-16", label: "Sweater Weather",   query: "oversized sweater outfit",              image: img("1490481651871-ab68de25d43d"), category: "casual", subcategory: "sweater-weather" },
+    { id: "f-cas-17", label: "Skirt & Tee",       query: "midi skirt tshirt casual outfit",       image: img("1521223890158-f9f7c3d5d504"), category: "casual", subcategory: "skirt-tee" },
+    { id: "f-cas-18", label: "Overalls",          query: "denim overalls outfit",                 image: img("1469334031218-e382a71b716b"), category: "casual", subcategory: "overalls" },
+    { id: "f-cas-19", label: "Sweat Set",         query: "matching sweatsuit set outfit",         image: img("1517438476312-10d79c5f25e3"), category: "casual", subcategory: "sweat-set" },
+    { id: "f-cas-20", label: "Flannel Layered",   query: "flannel shirt layered outfit",          image: img("1604004215695-c54b6f3df1e7"), category: "casual", subcategory: "flannel-layered" },
+    { id: "f-cas-21", label: "Maxi Skirt",        query: "maxi skirt casual outfit",              image: img("1607746882042-944635dfe10e"), category: "casual", subcategory: "maxi-skirt-casual" },
+    { id: "f-cas-22", label: "Vest Layered",      query: "vest layered outfit fall",              image: img("1485518882345-15568b007407"), category: "casual", subcategory: "vest-layered" },
+    { id: "f-cas-23", label: "Cardigan Set",      query: "cardigan set outfit casual",            image: img("1591348278863-a8fb3887e2aa"), category: "casual", subcategory: "cardigan-set" },
+    { id: "f-cas-24", label: "Slip Skirt Casual", query: "slip skirt casual everyday outfit",     image: img("1565325058695-f614c1580d7e"), category: "casual", subcategory: "slip-skirt-casual" },
+  ],
+  glam: [
+    { id: "f-glm-13", label: "Velvet Gown",       query: "velvet gown elegant",                   image: img("1605100804763-247f67b3557e"), category: "full-style", subcategory: "velvet-gown" },
+    { id: "f-glm-14", label: "Backless Dress",    query: "backless dress evening",                image: img("1620063633168-8ec1bcc1bcec"), category: "sexy", subcategory: "backless-dress" },
+    { id: "f-glm-15", label: "Sheer Detail",      query: "sheer dress fashion outfit",            image: img("1622495966321-49b35b3a8d4f"), category: "sexy", subcategory: "sheer-detail" },
+    { id: "f-glm-16", label: "Metallic Mini",     query: "metallic mini dress night",             image: img("1641427493563-5cc9cf1a9950"), category: "full-style", subcategory: "metallic-mini" },
+    { id: "f-glm-17", label: "Asymmetric Hem",    query: "asymmetric hem dress outfit",           image: img("1539109136881-3be0616acf4b"), category: "full-style", subcategory: "asymmetric-hem" },
+    { id: "f-glm-18", label: "Lace Bodysuit",     query: "lace bodysuit night out",               image: img("1601412436009-d964bd02edbc"), category: "sexy", subcategory: "lace-bodysuit" },
+    { id: "f-glm-19", label: "Halter Gown",       query: "halter neck evening gown",              image: img("1599643478518-a784e5dc4c8f"), category: "full-style", subcategory: "halter-gown" },
+    { id: "f-glm-20", label: "Plunge Neckline",   query: "plunging neckline dress glam",          image: img("1571513722275-4b41940f54b8"), category: "sexy", subcategory: "plunge-neckline" },
+    { id: "f-glm-21", label: "Strapless Mini",    query: "strapless mini dress night",            image: img("1525026198548-4baa812f1183"), category: "full-style", subcategory: "strapless-mini" },
+    { id: "f-glm-22", label: "Ruched Dress",      query: "ruched bodycon dress",                  image: img("1634826260499-7d97a6049913"), category: "sexy", subcategory: "ruched-dress" },
+    { id: "f-glm-23", label: "Crystal Embellish", query: "crystal embellished dress glam",        image: img("1502323777036-f29e3972d82f"), category: "full-style", subcategory: "crystal-embellish" },
+    { id: "f-glm-24", label: "Mesh Long Sleeve",  query: "mesh long sleeve dress glam",           image: img("1614593894937-8e84a52e5a2c"), category: "full-style", subcategory: "mesh-long-sleeve" },
+  ],
+  formal: [
+    { id: "f-fml-13", label: "Pant Suit",         query: "women pant suit professional",          image: img("1487412720507-e7ab37603c6f"), category: "formal", subcategory: "pant-suit" },
+    { id: "f-fml-14", label: "Sheath Dress",      query: "sheath dress office",                   image: img("1495365200479-c4ed1d35e1aa"), category: "formal", subcategory: "sheath-dress" },
+    { id: "f-fml-15", label: "Pussybow Blouse",   query: "pussybow blouse office outfit",         image: img("1591348122449-02525d70379b"), category: "formal", subcategory: "pussybow-blouse" },
+    { id: "f-fml-16", label: "Cape Blazer",       query: "cape blazer professional",              image: img("1581044777550-4cfa60707c03"), category: "formal", subcategory: "cape-blazer" },
+    { id: "f-fml-17", label: "A-Line Skirt",      query: "a line skirt office outfit",            image: img("1485178575877-1a13bf489dfe"), category: "formal", subcategory: "a-line-skirt" },
+    { id: "f-fml-18", label: "Knit Set Workwear", query: "knit set workwear",                     image: img("1601049541289-9b1b7bbbfe19"), category: "formal", subcategory: "knit-set-work" },
+    { id: "f-fml-19", label: "Pleated Trousers",  query: "pleated trousers women office",         image: img("1531123414780-f74242c2b052"), category: "formal", subcategory: "pleated-trousers" },
+    { id: "f-fml-20", label: "Belted Coat",       query: "belted coat outfit professional",       image: img("1571945153237-4929e783af4a"), category: "formal", subcategory: "belted-coat" },
+  ],
+  streetwear: [
+    { id: "f-str-13", label: "Puffer Coat",       query: "puffer coat streetwear women",          image: img("1571908599407-cdb918ed83bf"), category: "streetwear", subcategory: "puffer-coat" },
+    { id: "f-str-14", label: "Skater Skirt",      query: "skater skirt streetwear outfit",        image: img("1503236823255-94609f598e71"), category: "streetwear", subcategory: "skater-skirt" },
+    { id: "f-str-15", label: "Y2K Streetwear",    query: "y2k streetwear outfit",                 image: img("1583900985737-6d0495555783"), category: "y2k", subcategory: "y2k-street" },
+    { id: "f-str-16", label: "Mesh Top Layered",  query: "mesh top streetwear layered",           image: img("1492106087820-71f1a00d2b11"), category: "streetwear", subcategory: "mesh-layered" },
+    { id: "f-str-17", label: "Wide Leg Cargo",    query: "wide leg cargo streetwear",             image: img("1602910344008-22f323cc1817"), category: "streetwear", subcategory: "wide-cargo" },
+    { id: "f-str-18", label: "Crop Hoodie Set",   query: "crop hoodie streetwear set",            image: img("1517438476312-10d79c5f25e3"), category: "streetwear", subcategory: "crop-hoodie-set" },
+    { id: "f-str-19", label: "Varsity Jacket",    query: "varsity jacket streetwear women",       image: img("1531746020798-e6953c6e8e04"), category: "streetwear", subcategory: "varsity-jacket" },
+    { id: "f-str-20", label: "Combat Boots Fit",  query: "combat boots streetwear outfit women",  image: img("1581338834647-b0fb40704e21"), category: "streetwear", subcategory: "combat-boots-fit" },
+  ],
+  "date-night": [
+    { id: "f-dat-13", label: "Mini Slip Dress",   query: "mini slip dress date night",            image: img("1567784177951-6fa58317e16b"), category: "date-night", subcategory: "mini-slip" },
+    { id: "f-dat-14", label: "Corset Top Look",   query: "corset top date outfit",                image: img("1622495966321-49b35b3a8d4f"), category: "date-night", subcategory: "corset-date" },
+    { id: "f-dat-15", label: "Velvet Mini",       query: "velvet mini dress date",                image: img("1597223557154-721c1cecc4b0"), category: "date-night", subcategory: "velvet-mini" },
+    { id: "f-dat-16", label: "Romantic Skirt",    query: "romantic midi skirt date outfit",       image: img("1535632787350-4e68ef0ac584"), category: "date-night", subcategory: "romantic-skirt" },
+    { id: "f-dat-17", label: "Mesh Sleeve Dress", query: "mesh sleeve mini dress date",           image: img("1605497788044-5a32c7078486"), category: "date-night", subcategory: "mesh-sleeve-date" },
+    { id: "f-dat-18", label: "Cowl Neck Dress",   query: "cowl neck satin dress date",            image: img("1592621385612-4d7129426394"), category: "date-night", subcategory: "cowl-neck" },
+    { id: "f-dat-19", label: "Halter Mini",       query: "halter mini dress date night",          image: img("1581574919402-5b7d733224d6"), category: "date-night", subcategory: "halter-mini-date" },
+    { id: "f-dat-20", label: "Romantic Blouse",   query: "romantic ruffle blouse date outfit",    image: img("1629019279055-d2a8c0c50bb3"), category: "date-night", subcategory: "romantic-blouse" },
+  ],
+  vacation: [
+    { id: "f-vac-13", label: "Crochet Set",       query: "crochet vacation set outfit",           image: img("1581824283135-0666cf353f35"), category: "resort", subcategory: "crochet-set" },
+    { id: "f-vac-14", label: "Kaftan",            query: "kaftan beach cover up",                 image: img("1606902965551-dce093cda6e7"), category: "resort", subcategory: "kaftan" },
+    { id: "f-vac-15", label: "Cutout Maxi",       query: "cutout maxi dress vacation",            image: img("1610276198568-eb6d0ff53e48"), category: "resort", subcategory: "cutout-maxi" },
+    { id: "f-vac-16", label: "Wrap Skirt Set",    query: "wrap skirt vacation outfit",            image: img("1494578379344-d6c710782a3d"), category: "resort", subcategory: "wrap-skirt-set" },
+    { id: "f-vac-17", label: "Beach Crochet",     query: "crochet beach outfit dress",            image: img("1521223890158-f9f7c3d5d504"), category: "resort", subcategory: "beach-crochet" },
+    { id: "f-vac-18", label: "Tropical Maxi",     query: "tropical maxi dress vacation",          image: img("1488426862026-3ee34a7d66df"), category: "resort", subcategory: "tropical-maxi" },
+    { id: "f-vac-19", label: "Resort Set",        query: "resort matching set outfit",            image: img("1617922001439-4a2e6562f328"), category: "resort", subcategory: "resort-matching-set" },
+    { id: "f-vac-20", label: "Beach Romper",      query: "beach romper vacation outfit",          image: img("1574258495973-f010dfbb5371"), category: "resort", subcategory: "beach-romper" },
+  ],
+  fitness: [
+    { id: "f-fit-13", label: "Crop Tank Set",     query: "crop tank legging set women gym",       image: img("1571019613454-1cb2f99b2d8b"), category: "fitness", subcategory: "crop-tank-set" },
+    { id: "f-fit-14", label: "Bike Shorts Set",   query: "bike shorts matching set women",        image: img("1605125571577-fdd0c52d5fef"), category: "fitness", subcategory: "bike-shorts-set" },
+    { id: "f-fit-15", label: "Hot Yoga",          query: "hot yoga outfit women",                 image: img("1599058917212-d750089bc07e"), category: "fitness", subcategory: "hot-yoga" },
+    { id: "f-fit-16", label: "Dance Class",       query: "dance class outfit women",              image: img("1648671095177-d00c1f6264e9"), category: "fitness", subcategory: "dance-class" },
+    { id: "f-fit-17", label: "Trail Hike",        query: "trail hiking outfit women",             image: img("1612036782180-6f0b6cd846fe"), category: "fitness", subcategory: "trail-hike-w" },
+    { id: "f-fit-18", label: "Cardio Set",        query: "cardio gym outfit women",               image: img("1574680096145-d05b474e2155"), category: "fitness", subcategory: "cardio-set" },
+    { id: "f-fit-19", label: "Outdoor Yoga",      query: "outdoor yoga outfit women",             image: img("1591726328133-b4e2b0031cb2"), category: "fitness", subcategory: "outdoor-yoga" },
+    { id: "f-fit-20", label: "Color Block Set",   query: "color block athletic set women",        image: img("1517836357463-d25dfeac3438"), category: "fitness", subcategory: "color-block-set" },
+  ],
+  cosplay: [
+    { id: "f-cos-13", label: "Demon Huntress",    query: "demon huntress cosplay woman",          image: img("1601933973783-43cf8a7d4c5f"), category: "cosplay", subcategory: "demon-huntress" },
+    { id: "f-cos-14", label: "Forest Elf",        query: "elf cosplay woman forest",              image: img("1607604276583-eef5d076aa5f"), category: "cosplay", subcategory: "forest-elf" },
+    { id: "f-cos-15", label: "Pirate Captain F",  query: "pirate captain cosplay woman",          image: img("1542596594-649edbc13630"), category: "cosplay", subcategory: "pirate-captain-f" },
+    { id: "f-cos-16", label: "Cat Hero",          query: "cat hero cosplay woman",                image: img("1666073090334-f2a9c8a86d14"), category: "cosplay", subcategory: "cat-hero" },
+    { id: "f-cos-17", label: "Royal Princess",    query: "royal princess cosplay woman",          image: img("1628619447698-d17aa1899220"), category: "cosplay", subcategory: "royal-princess" },
+    { id: "f-cos-18", label: "Battle Goddess",    query: "battle goddess cosplay woman",          image: img("1631652367427-726f96b37cf1"), category: "cosplay", subcategory: "battle-goddess" },
+    { id: "f-cos-19", label: "Phantom Thief",     query: "phantom thief cosplay woman",           image: img("1688633201440-73f30feb06ba"), category: "cosplay", subcategory: "phantom-thief" },
+    { id: "f-cos-20", label: "Star Princess",     query: "star princess cosplay woman",           image: img("1570751057249-92751f496ee3"), category: "cosplay", subcategory: "star-princess" },
+  ],
+};
+
+const MALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
+  swimwear: [
+    { id: "m-swm-13", label: "Color Block Trunk", query: "men color block swim trunks",           image: img("1605296867424-35fc25c9212a"), category: "swimwear", subcategory: "color-block-trunk" },
+    { id: "m-swm-14", label: "Floral Trunks",     query: "men floral swim trunks",                image: img("1583089892943-e02e5b017b6a"), category: "swimwear", subcategory: "floral-trunks" },
+    { id: "m-swm-15", label: "Striped Swim",      query: "men striped swim trunks beach",         image: img("1571019614242-c5c5dee9f50b"), category: "swimwear", subcategory: "striped-swim" },
+    { id: "m-swm-16", label: "Resort Swim Set",   query: "men resort swim shirt trunks set",      image: img("1567013127542-490d757e51fc"), category: "swimwear", subcategory: "resort-swim-set" },
+    { id: "m-swm-17", label: "Geo Print Swim",    query: "men geometric print swim trunks",       image: img("1532009877282-3340270e0529"), category: "swimwear", subcategory: "geo-print-swim" },
+    { id: "m-swm-18", label: "Solid Black Trunk", query: "men solid black swim trunks",           image: img("1493666438817-866a91353ca9"), category: "swimwear", subcategory: "solid-black-trunk" },
+    { id: "m-swm-19", label: "Pool Party",        query: "men pool party swim outfit",            image: img("1547949003-9792a18a2601"), category: "swimwear", subcategory: "pool-party-m" },
+    { id: "m-swm-20", label: "Beach Bum Look",    query: "men beach bum casual swim",             image: img("1521119989659-a83eee488004"), category: "swimwear", subcategory: "beach-bum" },
+  ],
+  casual: [
+    { id: "m-cas-13", label: "Crewneck Sweater",  query: "men crewneck sweater outfit",           image: img("1506794778202-cad84cf45f1d"), category: "casual", subcategory: "crewneck-sweater" },
+    { id: "m-cas-14", label: "Henley Fit",        query: "men henley shirt outfit",               image: img("1507003211169-0a1dd7228f2d"), category: "casual", subcategory: "henley-fit" },
+    { id: "m-cas-15", label: "Flannel Layered",   query: "men flannel layered outfit",            image: img("1542326529804-0cd9d861ebaa"), category: "casual", subcategory: "flannel-layered-m" },
+    { id: "m-cas-16", label: "Cardigan Layer",    query: "men cardigan layered outfit",           image: img("1488161628813-04466f872be2"), category: "casual", subcategory: "cardigan-layer-m" },
+    { id: "m-cas-17", label: "Vest & Tee",        query: "men vest layered tee outfit",           image: img("1493106819501-66d381c466f1"), category: "casual", subcategory: "vest-tee-m" },
+    { id: "m-cas-18", label: "Slim Chinos",       query: "men slim chinos casual outfit",         image: img("1492447166138-50c3889fccb1"), category: "casual", subcategory: "slim-chinos" },
+    { id: "m-cas-19", label: "Crewneck & Jeans",  query: "men crewneck jeans casual",             image: img("1519085360753-af0119f7cbe7"), category: "casual", subcategory: "crewneck-jeans" },
+    { id: "m-cas-20", label: "Camp Collar Shirt", query: "men camp collar shirt outfit",          image: img("1564564321837-a57b7070ac4f"), category: "casual", subcategory: "camp-collar" },
+  ],
+  glam: [
+    { id: "m-glm-13", label: "Silk Shirt",        query: "men silk shirt evening outfit",         image: img("1547949003-9792a18a2601"), category: "full-style", subcategory: "silk-shirt-m" },
+    { id: "m-glm-14", label: "Double Breasted",   query: "men double breasted blazer",            image: img("1552324864-5f7f0dec9b3d"), category: "formal", subcategory: "double-breasted-m" },
+    { id: "m-glm-15", label: "Velvet Blazer",     query: "men velvet blazer night",               image: img("1768935706759-f2be765b3aec"), category: "full-style", subcategory: "velvet-blazer-m" },
+    { id: "m-glm-16", label: "Bomber Glam",       query: "men bomber jacket dressy outfit",       image: img("1614483573119-1e3b2be05565"), category: "edgy", subcategory: "bomber-glam-m" },
+    { id: "m-glm-17", label: "Slim Tux Look",     query: "men slim tuxedo modern outfit",         image: img("1500648767791-00dcc994a43e"), category: "formal", subcategory: "slim-tux-m" },
+    { id: "m-glm-18", label: "Statement Coat",    query: "men statement long coat outfit",        image: img("1495707902641-75cac588d2e9"), category: "edgy", subcategory: "statement-coat-m" },
+    { id: "m-glm-19", label: "Embellished Shirt", query: "men embellished shirt night",           image: img("1763906802570-be2a2609757f"), category: "full-style", subcategory: "embellished-shirt-m" },
+    { id: "m-glm-20", label: "Layered Chains",    query: "men layered chains outfit night",       image: img("1754577060078-21315dd188c8"), category: "icon-looks", subcategory: "layered-chains-m" },
+  ],
+  formal: [
+    { id: "m-fml-13", label: "Pinstripe Suit",    query: "men pinstripe suit professional",       image: img("1543163521-1bf539c55dd2"), category: "formal", subcategory: "pinstripe-suit" },
+    { id: "m-fml-14", label: "Charcoal Gray Suit",query: "men charcoal gray suit",                image: img("1567013127542-490d757e51fc"), category: "formal", subcategory: "charcoal-gray-suit" },
+    { id: "m-fml-15", label: "Wedding Guest",     query: "men wedding guest outfit",              image: img("1500648767791-00dcc994a43e"), category: "formal", subcategory: "wedding-guest" },
+    { id: "m-fml-16", label: "Bow Tie Black",     query: "men bow tie tuxedo",                    image: img("1571019614242-c5c5dee9f50b"), category: "formal", subcategory: "bow-tie-black" },
+    { id: "m-fml-17", label: "Earth Tone Suit",   query: "men earth tone brown suit",             image: img("1532009877282-3340270e0529"), category: "formal", subcategory: "earth-tone-suit" },
+    { id: "m-fml-18", label: "Linen Suit",        query: "men linen suit summer",                 image: img("1583500178690-f7fd39c44a66"), category: "formal", subcategory: "linen-suit-m" },
+    { id: "m-fml-19", label: "Vest Layered Suit", query: "men three piece vest suit",             image: img("1542291026-7eec264c27ff"), category: "formal", subcategory: "vest-suit" },
+    { id: "m-fml-20", label: "Modern Cropped",    query: "men cropped trouser suit modern",       image: img("1595950653106-6c9ebd614d3a"), category: "formal", subcategory: "modern-cropped-suit" },
+  ],
+  streetwear: [
+    { id: "m-str-13", label: "Puffer Vest",       query: "men puffer vest streetwear",            image: img("1525966222134-fcfa99b8ae77"), category: "streetwear", subcategory: "puffer-vest-m" },
+    { id: "m-str-14", label: "Skate Fit",         query: "men skate streetwear outfit",           image: img("1551107696-a4b0c5a0d9a2"), category: "streetwear", subcategory: "skate-fit" },
+    { id: "m-str-15", label: "Tech Streetwear",   query: "men techwear streetwear outfit",        image: img("1686350751255-20a12bbe4880"), category: "techwear", subcategory: "tech-streetwear" },
+    { id: "m-str-16", label: "Hype Sneakers",     query: "men hype sneakers streetwear",          image: img("1721152839659-dabbacabd5d6"), category: "streetwear", subcategory: "hype-sneakers" },
+    { id: "m-str-17", label: "Distressed Denim",  query: "men distressed denim streetwear",       image: img("1770576934845-759db89fcd3f"), category: "streetwear", subcategory: "distressed-denim-m" },
+    { id: "m-str-18", label: "Jersey Streetwear", query: "men sports jersey streetwear",          image: img("1606107557195-0e29a4b5b4aa"), category: "streetwear", subcategory: "jersey-street" },
+    { id: "m-str-19", label: "Trench Coat",       query: "men trench coat streetwear",            image: img("1770821214788-6605c5c3075b"), category: "streetwear", subcategory: "trench-street" },
+    { id: "m-str-20", label: "Quilted Jacket",    query: "men quilted jacket streetwear",         image: img("1599058917212-d750089bc07e"), category: "streetwear", subcategory: "quilted-jacket" },
+  ],
+  "date-night": [
+    { id: "m-dat-13", label: "Polo & Chinos",     query: "men polo chinos date outfit",           image: img("1521369909029-2afed882baee"), category: "date-night", subcategory: "polo-chinos-date" },
+    { id: "m-dat-14", label: "Cardigan Date",     query: "men cardigan date outfit",              image: img("1530268729831-4b0b9e170218"), category: "date-night", subcategory: "cardigan-date-m" },
+    { id: "m-dat-15", label: "Bomber Date",       query: "men bomber jacket date outfit",         image: img("1492562080023-ab3db95bfbce"), category: "date-night", subcategory: "bomber-date" },
+    { id: "m-dat-16", label: "Henley Date",       query: "men henley date outfit",                image: img("1542838132-92c53300491e"), category: "date-night", subcategory: "henley-date" },
+    { id: "m-dat-17", label: "Knit Polo",         query: "men knit polo date outfit",             image: img("1761498443962-1f00eed12137"), category: "date-night", subcategory: "knit-polo" },
+    { id: "m-dat-18", label: "Blazer Tee Jeans",  query: "men blazer tshirt jeans date outfit",   image: img("1502720433255-614171a1835e"), category: "date-night", subcategory: "blazer-tee-jeans" },
+    { id: "m-dat-19", label: "Crewneck Date",     query: "men crewneck sweater date outfit",      image: img("1532910404247-7ee9488d7292"), category: "date-night", subcategory: "crewneck-date" },
+    { id: "m-dat-20", label: "Bold Print Shirt",  query: "men bold print shirt date outfit",      image: img("1591561954557-26941169b49e"), category: "date-night", subcategory: "bold-print-shirt-m" },
+  ],
+  vacation: [
+    { id: "m-vac-13", label: "Bermuda Shorts",    query: "men bermuda shorts vacation outfit",    image: img("1593032465175-481ac7f401a0"), category: "resort", subcategory: "bermuda-shorts" },
+    { id: "m-vac-14", label: "Linen Pants",       query: "men linen pants vacation outfit",       image: img("1531123897727-8f129e1688ce"), category: "resort", subcategory: "linen-pants-m" },
+    { id: "m-vac-15", label: "Hawaiian Shirt",    query: "men hawaiian shirt vacation",           image: img("1555529669-e69e7aa0ba9a"), category: "resort", subcategory: "hawaiian-shirt" },
+    { id: "m-vac-16", label: "Boat Trip Look",    query: "men boat trip outfit nautical",         image: img("1500648767791-00dcc994a43e"), category: "resort", subcategory: "boat-trip" },
+    { id: "m-vac-17", label: "Pool Side Shirt",   query: "men poolside shirt outfit",             image: img("1607604276583-eef5d076aa5f"), category: "resort", subcategory: "pool-side-m" },
+    { id: "m-vac-18", label: "Vacation Polo",     query: "men polo vacation outfit",              image: img("1495707902641-75cac588d2e9"), category: "resort", subcategory: "vacation-polo" },
+    { id: "m-vac-19", label: "Resort Linen Set",  query: "men resort linen matching set",         image: img("1612036782180-6f0b6cd846fe"), category: "resort", subcategory: "resort-linen-set" },
+    { id: "m-vac-20", label: "Beach Walk",        query: "men beach walk outfit casual",          image: img("1605125571577-fdd0c52d5fef"), category: "resort", subcategory: "beach-walk" },
+  ],
+  fitness: [
+    { id: "m-fit-13", label: "Compression Set",   query: "men compression workout set gym",       image: img("1551836022-deb4988cc6c0"), category: "fitness", subcategory: "compression-set" },
+    { id: "m-fit-14", label: "Bodybuilding",      query: "men bodybuilding gym outfit",           image: img("1502323777036-f29e3972d82f"), category: "fitness", subcategory: "bodybuilding" },
+    { id: "m-fit-15", label: "Trail Hike",        query: "men trail hiking outfit",               image: img("1574258495973-f010dfbb5371"), category: "fitness", subcategory: "trail-hike-m" },
+    { id: "m-fit-16", label: "Sprint Outfit",     query: "men sprint running outfit",             image: img("1572635196237-14b3f281503f"), category: "fitness", subcategory: "sprint-outfit" },
+    { id: "m-fit-17", label: "Climbing Gear",     query: "men rock climbing outfit gear",         image: img("1573408301185-9146fe634ad0"), category: "fitness", subcategory: "climbing-gear" },
+    { id: "m-fit-18", label: "Mma Training",      query: "men mma boxing training outfit",        image: img("1535632787350-4e68ef0ac584"), category: "fitness", subcategory: "mma-training" },
+    { id: "m-fit-19", label: "Sports Jersey Kit", query: "men sports jersey kit",                 image: img("1577803645773-f96470509666"), category: "fitness", subcategory: "sports-jersey-kit" },
+    { id: "m-fit-20", label: "Court Sneakers",    query: "men court sneakers gym outfit",         image: img("1502767089025-6748d4ef9f24"), category: "fitness", subcategory: "court-sneakers" },
+  ],
+  cosplay: [
+    { id: "m-cos-13", label: "Royal King",        query: "royal king cosplay man",                image: img("1641427493563-5cc9cf1a9950"), category: "cosplay", subcategory: "royal-king" },
+    { id: "m-cos-14", label: "Bounty Hunter",     query: "bounty hunter cosplay man",             image: img("1620063633168-8ec1bcc1bcec"), category: "cosplay", subcategory: "bounty-hunter" },
+    { id: "m-cos-15", label: "Demon Lord",        query: "demon lord cosplay man",                image: img("1622495966321-49b35b3a8d4f"), category: "cosplay", subcategory: "demon-lord" },
+    { id: "m-cos-16", label: "Cyber Detective",   query: "cyber detective cosplay man",           image: img("1602910344008-22f323cc1817"), category: "cosplay", subcategory: "cyber-detective" },
+    { id: "m-cos-17", label: "Forest Ranger",     query: "forest ranger cosplay man",             image: img("1571908599407-cdb918ed83bf"), category: "cosplay", subcategory: "forest-ranger" },
+    { id: "m-cos-18", label: "Steampunk Inventor",query: "steampunk inventor cosplay man",        image: img("1632481151312-4b4f3306e7e6"), category: "cosplay", subcategory: "steampunk-inventor" },
+    { id: "m-cos-19", label: "Arctic Explorer",   query: "arctic explorer cosplay man",           image: img("1605497788044-5a32c7078486"), category: "cosplay", subcategory: "arctic-explorer" },
+    { id: "m-cos-20", label: "Royal Knight",      query: "royal knight cosplay man armor",        image: img("1617922001439-4a2e6562f328"), category: "cosplay", subcategory: "royal-knight" },
+  ],
+};
+
+// Merge base + extras into combined pools
+const FEMALE_FULL: Record<OccasionId, Vibe[]> = Object.fromEntries(
+  (Object.keys(FEMALE) as OccasionId[]).map(k => [k, [...FEMALE[k], ...(FEMALE_EXTRA[k] || [])]])
+) as Record<OccasionId, Vibe[]>;
+
+const MALE_FULL: Record<OccasionId, Vibe[]> = Object.fromEntries(
+  (Object.keys(MALE) as OccasionId[]).map(k => [k, [...MALE[k], ...(MALE_EXTRA[k] || [])]])
+) as Record<OccasionId, Vibe[]>;
+
 const PER_VIBE_OCCASIONS: ReadonlySet<OccasionId> = new Set([
   "swimwear", "casual", "glam", "formal", "streetwear", "date-night", "vacation",
 ]);
+
 
 const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: LucideIcon }> = [
   { id: "casual",     label: "Casual",          desc: "Effortless everyday looks",        Icon: Coffee },
@@ -328,8 +542,18 @@ const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: 
 const OCCASIONS: Occasion[] = OCCASION_META.map(meta => ({
   ...meta,
   usePerVibePhotos: PER_VIBE_OCCASIONS.has(meta.id),
-  vibes: { female: FEMALE[meta.id], male: MALE[meta.id] },
+  vibes: { female: FEMALE_FULL[meta.id], male: MALE_FULL[meta.id] },
 }));
+
+const VISIBLE_PER_BATCH = 12;
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [stage, setStage] = useState<"occasion" | "vibe">("occasion");
@@ -338,6 +562,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [genericPhotos, setGenericPhotos] = useState<string[] | null>(null);
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [page, setPage] = useState(1);
+  const [shuffleNonce, setShuffleNonce] = useState(0);
   const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
@@ -349,11 +574,23 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
   }, [stage]);
 
-  // Randomize starting page each time user enters a new occasion so the
-  // category preview images feel fresh on every visit (cycles through pages 1-5).
+  // Randomize starting page + reset shuffle when entering a new occasion.
   useEffect(() => {
-    if (stage === "vibe") setPage(Math.floor(Math.random() * 5) + 1);
+    if (stage === "vibe") {
+      setPage(Math.floor(Math.random() * 5) + 1);
+      setShuffleNonce(n => n + 1);
+    }
   }, [stage, selected?.id]);
+
+  // Randomized subset of vibes shown for this visit. Reshuffles whenever
+  // the user taps "Show more" so they get a fresh batch from the larger pool.
+  const visibleVibes = useMemo(() => {
+    if (!selected) return [] as Vibe[];
+    const all = selected.vibes[gender];
+    if (all.length <= VISIBLE_PER_BATCH) return all;
+    return shuffle(all).slice(0, VISIBLE_PER_BATCH);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?.id, gender, shuffleNonce]);
 
   // Fetch the right photos based on the selected occasion's mode + page.
   useEffect(() => {
@@ -363,7 +600,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     setGenericPhotos(null);
     setLoadingPhotos(true);
 
-    const vibes = selected.vibes[gender];
+    const vibes = visibleVibes;
 
     if (selected.usePerVibePhotos) {
       const queries: VibeQuery[] = vibes.map((v, i) => ({
@@ -381,7 +618,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
 
     return () => { cancelled = true; };
-  }, [stage, selected, gender, page]);
+  }, [stage, selected, gender, page, visibleVibes]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
@@ -493,7 +730,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       {stage === "vibe" && selected && (
         <div ref={vibeRef} className="anim-fadeUp" style={{ padding: "16px 18px 40px" }}>
           <div className="section-label" style={{ marginBottom: 10, paddingLeft: 4 }}>
-            Tap the vibe that speaks to you · {selected.vibes[gender].length} looks
+            Tap the vibe that speaks to you · {visibleVibes.length} of {selected.vibes[gender].length} looks
           </div>
           <div
             style={{
@@ -502,7 +739,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
               gap: 8,
             }}
           >
-            {selected.vibes[gender].map((v, i) => (
+            {visibleVibes.map((v, i) => (
               <button
                 key={v.id}
                 onClick={() => handleVibe(v, photoFor(v, i))}
