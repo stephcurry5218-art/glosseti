@@ -17,6 +17,7 @@ import SplashScreen from "./SplashScreen";
 import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
 import StylePickerScreen from "./StylePickerScreen";
+import OccasionPickerScreen from "./OccasionPickerScreen";
 import UploadScreen from "./UploadScreen";
 import LoadingScreen from "./LoadingScreen";
 import StyledResultScreen from "./StyledResultScreen";
@@ -40,7 +41,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile" | "my-closet";
+type Screen = "splash" | "entrance" | "home" | "occasion" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile" | "my-closet";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
@@ -161,9 +162,14 @@ const GlamoraApp = () => {
       {screen === "home" && (
         <HomeScreen
           onGetStyled={(initialCategory?: StyleCategory) => {
-            if (initialCategory) setPrefs(p => ({ ...p, styleCategory: initialCategory }));
-            setActiveHolidayId(null);
-            go("style-picker");
+            if (initialCategory) {
+              setPrefs(p => ({ ...p, styleCategory: initialCategory }));
+              setActiveHolidayId(null);
+              go("style-picker");
+            } else {
+              setActiveHolidayId(null);
+              go("occasion");
+            }
           }}
           onHolidayPick={(holidayId: string) => {
             setActiveHolidayId(holidayId);
@@ -204,6 +210,17 @@ const GlamoraApp = () => {
         />
       )}
       {screen === "auth" && <AuthScreen onBack={() => go("home")} onSuccess={() => go("home")} />}
+      {screen === "occasion" && (
+        <OccasionPickerScreen
+          gender={prefs.gender}
+          onBack={() => go("home")}
+          onNext={(category, subcategory) => {
+            setPrefs(p => ({ ...p, styleCategory: category, styleSubcategory: subcategory }));
+            setActiveHolidayId(null);
+            go("upload");
+          }}
+        />
+      )}
       {screen === "style-picker" && (
         <StylePickerScreen prefs={prefs} onBack={() => go("home")}
           holidayId={activeHolidayId}
@@ -218,7 +235,7 @@ const GlamoraApp = () => {
           }} />
       )}
       {screen === "upload" && (
-        <UploadScreen prefs={prefs} onBack={() => go("style-picker")} onAnalyze={handleStartGeneration} />
+        <UploadScreen prefs={prefs} onBack={() => go(prefs.styleSubcategory ? "occasion" : "style-picker")} onAnalyze={handleStartGeneration} />
       )}
       {screen === "loading" && (
         <LoadingScreen prefs={prefs} onDone={(imageUrl) => { setStyledImageUrl(imageUrl); go("results"); }} />
@@ -249,7 +266,7 @@ const GlamoraApp = () => {
       {screen === "tutorial" && <TutorialScreen lookName={selectedLook} onBack={() => go("results")} onHome={() => go("home")} />}
       {screen === "profile" && (
         <ProfileScreen onBack={() => go("home")} savedCount={savedStyles.length} onSaved={() => go("saved")}
-          onGetStyled={() => go("style-picker")} gender={prefs.gender} user={user}
+          onGetStyled={() => go("occasion")} gender={prefs.gender} user={user}
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
           subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
           onSettings={() => go("settings")}
@@ -283,7 +300,7 @@ const GlamoraApp = () => {
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
           onLookSelect={(name) => { setSelectedLook(name); go("tutorial"); }}
-          onGetStyled={() => go("style-picker")} gender={prefs.gender} />
+          onGetStyled={() => go("occasion")} gender={prefs.gender} />
       )}
 
 
