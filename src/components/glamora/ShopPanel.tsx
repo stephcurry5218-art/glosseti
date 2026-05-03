@@ -226,46 +226,59 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
 
                   {/* Always-on retailer chooser — guarantees Fashion Nova is one of 3 options */}
                   <div style={{
-                    padding: "0 16px 12px", display: "flex", flexWrap: "wrap", gap: 6,
+                    padding: "0 16px 12px",
                   }}>
-                    {(() => {
-                      const primary = { store: tierData.store, item: tierData.item };
-                      const chips: { store: string; item: string; key: string }[] = [
-                        { ...primary, key: "primary" },
-                      ];
-                      if (tierData.store !== "Fashion Nova") {
-                        chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn" });
-                      }
-                      if (tierData.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
-                        chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
-                      }
-                      return chips.slice(0, 3).map((c) => (
-                        <a
-                          key={c.key}
-                          href={getShopUrl(c.store, c.item)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            fontSize: 10, fontWeight: 700,
-                            padding: "5px 10px", borderRadius: 999,
-                            border: c.store === "Fashion Nova"
-                              ? "1px solid hsla(340 80% 55% / 0.45)"
-                              : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
-                            background: c.store === "Fashion Nova"
-                              ? "hsla(340 80% 55% / 0.10)"
-                              : "hsla(var(--glamora-cream2) / 0.5)",
-                            color: c.store === "Fashion Nova"
-                              ? "hsl(340 70% 45%)"
-                              : "hsl(var(--glamora-char))",
-                            textDecoration: "none",
-                            display: "inline-flex", alignItems: "center", gap: 4,
-                            fontFamily: "'Jost', sans-serif",
-                          }}
-                        >
-                          Shop on {c.store} <ExternalLink size={10} />
-                        </a>
-                      ));
-                    })()}
+                    <div style={{
+                      fontSize: 9, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase",
+                      color: "hsl(var(--glamora-gray))", marginBottom: 6,
+                      fontFamily: "'Jost', sans-serif",
+                    }}>
+                      Also shop at
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      {(() => {
+                        const primary = { store: tierData.store, item: tierData.item };
+                        const chips: { store: string; item: string; key: string }[] = [];
+                        // Always include Fashion Nova FIRST (unless it IS the primary)
+                        if (primary.store !== "Fashion Nova") {
+                          chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn" });
+                        }
+                        chips.push({ ...primary, key: "primary" });
+                        if (primary.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
+                          chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
+                        }
+                        return chips.slice(0, 3).map((c) => {
+                          const isFN = c.store === "Fashion Nova";
+                          return (
+                            <a
+                              key={c.key}
+                              href={getShopUrl(c.store, c.item)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                fontSize: 10, fontWeight: 700,
+                                padding: "6px 11px", borderRadius: 999,
+                                border: isFN
+                                  ? "1.5px solid hsla(340 80% 55% / 0.6)"
+                                  : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
+                                background: isFN
+                                  ? "linear-gradient(135deg, hsla(340 80% 55% / 0.18), hsla(340 80% 55% / 0.08))"
+                                  : "hsla(var(--glamora-cream2) / 0.5)",
+                                color: isFN
+                                  ? "hsl(340 70% 42%)"
+                                  : "hsl(var(--glamora-char))",
+                                textDecoration: "none",
+                                display: "inline-flex", alignItems: "center", gap: 4,
+                                fontFamily: "'Jost', sans-serif",
+                                boxShadow: isFN ? "0 2px 8px hsla(340 80% 55% / 0.25)" : "none",
+                              }}
+                            >
+                              {isFN ? "🔥 " : ""}Shop on {c.store} <ExternalLink size={10} />
+                            </a>
+                          );
+                        });
+                      })()}
+                    </div>
                   </div>
 
                   {/* Expanded — show all 3 tiers for this item */}
