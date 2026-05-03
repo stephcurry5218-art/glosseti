@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem, Users, Heart } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 import { fixImageOrientation } from "./fixImageOrientation";
+import FlowStepper from "./FlowStepper";
 
 interface Props {
   prefs: UserPrefs;
