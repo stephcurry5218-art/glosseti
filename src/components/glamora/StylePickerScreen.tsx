@@ -1053,8 +1053,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
         <button
           className="btn-primary btn-rose"
-          disabled={false}
+          disabled={!current}
           onClick={() => {
+            if (!current) return;
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
               .filter(([, v]) => v && (Array.isArray(v) ? v.length > 0 : true))
@@ -1071,9 +1072,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
             background: isMale
               ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
               : undefined,
-            opacity: 1,
+            opacity: current ? 1 : 0.5,
           }}>
-          Continue — Upload Photo <ArrowRight size={16} />
+          {current ? <>Continue — Upload Photo <ArrowRight size={16} /></> : "Pick a style to continue"}
         </button>
       </div>
     </div>
