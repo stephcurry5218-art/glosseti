@@ -9,6 +9,7 @@ import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
 import LookPriceCard from "./LookPriceCard";
+import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
