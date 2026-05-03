@@ -321,9 +321,21 @@ const MALE: Record<OccasionId, Vibe[]> = {
     { id: "m-cos-11", label: "Vampire Lord",     query: "vampire cosplay man",                   image: img("1605497788044-5a32c7078486"), category: "cosplay", subcategory: "vampire-lord" },
     { id: "m-cos-12", label: "Samurai",          query: "samurai cosplay man",                   image: img("1617922001439-4a2e6562f328"), category: "cosplay", subcategory: "samurai" },
   ],
+  makeup: [
+    { id: "m-mkp-01", label: "Clean Cut",         query: "men clean cut groomed face",            image: img("1492562080023-ab3db95bfbce"), category: "grooming", subcategory: "clean-cut" },
+    { id: "m-mkp-02", label: "Rugged Beard",      query: "men rugged beard grooming",             image: img("1500648767791-00dcc994a43e"), category: "grooming", subcategory: "rugged-grooming" },
+    { id: "m-mkp-03", label: "Modern Gent",       query: "men styled hair stubble groomed",       image: img("1506794778202-cad84cf45f1d"), category: "grooming", subcategory: "modern-gent" },
+    { id: "m-mkp-04", label: "Buzz & Fresh",      query: "men buzz cut clean skin",               image: img("1531427186611-ecfd6d936c79"), category: "grooming", subcategory: "buzz-fresh" },
+    { id: "m-mkp-05", label: "Skin Glow",         query: "men skincare glowing skin",             image: img("1564564321837-a57b7070ac4f"), category: "grooming", subcategory: "skin-glow" },
+    { id: "m-mkp-06", label: "Sharp Fade",        query: "men sharp fade haircut",                image: img("1622519407650-3df9883f76a5"), category: "grooming", subcategory: "sharp-fade" },
+    { id: "m-mkp-07", label: "Full Beard",        query: "men full beard styled",                 image: img("1492447166138-50c3889fccb1"), category: "grooming", subcategory: "full-beard" },
+    { id: "m-mkp-08", label: "Slick Back",        query: "men slick back hairstyle",              image: img("1488161628813-04466f872be2"), category: "grooming", subcategory: "slick-back" },
+    { id: "m-mkp-09", label: "Textured Crop",     query: "men textured crop haircut",             image: img("1519085360753-af0119f7cbe7"), category: "grooming", subcategory: "textured-crop" },
+    { id: "m-mkp-10", label: "Goatee Style",      query: "men goatee facial hair",                image: img("1463453091185-61582044d556"), category: "grooming", subcategory: "goatee" },
+    { id: "m-mkp-11", label: "Curly Top",         query: "men curly hair styled",                 image: img("1507003211169-0a1dd7228f2d"), category: "grooming", subcategory: "curly-top" },
+    { id: "m-mkp-12", label: "Long Hair Groom",   query: "men long hair groomed",                 image: img("1542327897-d73f4005b533"), category: "grooming", subcategory: "long-hair-groom" },
+  ],
 };
-
-// ============================================================================
 // EXTRA VIBE POOLS — additional sub-styles per occasion so users get an abundance
 // of choices. Each visit randomly samples 12 vibes from base + extras combined,
 // and "Show more" reshuffles to surface fresh ones.
