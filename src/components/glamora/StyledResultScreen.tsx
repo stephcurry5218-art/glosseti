@@ -541,7 +541,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     )}
                   </div>
                   {shopItems.length > 0 ? (
-                    <ShopPanel items={shopItems} />
+                   <ShopPanel
+                     items={shopItems}
+                     swappingIndex={swappingIndex}
+                     onSwapItem={lookName ? (idx) => swapShopItem(lookName, activeHotspot, idx, shopItems) : undefined}
+                   />
                   ) : (
                     <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 8 }}>
                       {isLoadingAi ? "Building your curated shopping list…" : "Select a style below to see shopping options"}
