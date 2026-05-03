@@ -224,6 +224,50 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                     )}
                   </div>
 
+                  {/* Always-on retailer chooser — guarantees Fashion Nova is one of 3 options */}
+                  <div style={{
+                    padding: "0 16px 12px", display: "flex", flexWrap: "wrap", gap: 6,
+                  }}>
+                    {(() => {
+                      const primary = { store: tierData.store, item: tierData.item };
+                      const chips: { store: string; item: string; key: string }[] = [
+                        { ...primary, key: "primary" },
+                      ];
+                      if (tierData.store !== "Fashion Nova") {
+                        chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn" });
+                      }
+                      if (tierData.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
+                        chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
+                      }
+                      return chips.slice(0, 3).map((c) => (
+                        <a
+                          key={c.key}
+                          href={getShopUrl(c.store, c.item)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontSize: 10, fontWeight: 700,
+                            padding: "5px 10px", borderRadius: 999,
+                            border: c.store === "Fashion Nova"
+                              ? "1px solid hsla(340 80% 55% / 0.45)"
+                              : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
+                            background: c.store === "Fashion Nova"
+                              ? "hsla(340 80% 55% / 0.10)"
+                              : "hsla(var(--glamora-cream2) / 0.5)",
+                            color: c.store === "Fashion Nova"
+                              ? "hsl(340 70% 45%)"
+                              : "hsl(var(--glamora-char))",
+                            textDecoration: "none",
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            fontFamily: "'Jost', sans-serif",
+                          }}
+                        >
+                          Shop on {c.store} <ExternalLink size={10} />
+                        </a>
+                      ));
+                    })()}
+                  </div>
+
                   {/* Expanded — show all 3 tiers for this item */}
                   {isExpanded && (
                     <div style={{
