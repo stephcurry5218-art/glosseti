@@ -487,7 +487,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                 }}
               >
                 <img
-                  src={v.image}
+                  src={pexelsPhotos?.[i] || v.image}
                   alt={v.label}
                   loading="lazy"
                   decoding="async"
@@ -495,6 +495,13 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                     width: "100%", height: "100%",
                     objectFit: "cover", objectPosition: "center top",
                     display: "block",
+                    opacity: loadingPhotos && !pexelsPhotos ? 0.55 : 1,
+                    transition: "opacity 0.3s",
+                  }}
+                  onError={(e) => {
+                    // If Pexels URL fails, fall back to the static image.
+                    const el = e.currentTarget as HTMLImageElement;
+                    if (el.src !== v.image) el.src = v.image;
                   }}
                 />
                 <div
