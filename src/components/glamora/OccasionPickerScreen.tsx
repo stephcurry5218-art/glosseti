@@ -178,6 +178,20 @@ const FEMALE: Record<OccasionId, Vibe[]> = {
     { id: "f-cos-11", label: "Galaxy Heroine",    query: "space heroine cosplay woman",           image: img("1631652367427-726f96b37cf1"), category: "cosplay", subcategory: "galaxy-heroine" },
     { id: "f-cos-12", label: "Underwater Princess",query: "mermaid princess cosplay woman",       image: img("1570751057249-92751f496ee3"), category: "cosplay", subcategory: "underwater-princess" },
   ],
+  makeup: [
+    { id: "f-mkp-01", label: "Soft Glam",         query: "soft glam makeup woman face",           image: img("1487412947147-5cebf100ffc2"), category: "makeup-only", subcategory: "soft-glam" },
+    { id: "f-mkp-02", label: "Bold Beat",         query: "bold dramatic makeup woman face",       image: img("1503104834685-7205e8607eb9"), category: "makeup-only", subcategory: "bold-beat" },
+    { id: "f-mkp-03", label: "No-Makeup Makeup",  query: "natural no makeup look woman",          image: img("1531746020798-e6953c6e8e04"), category: "makeup-only", subcategory: "no-makeup-makeup" },
+    { id: "f-mkp-04", label: "Smokey Eye",        query: "smokey eye makeup woman",               image: img("1522337360788-8b13dee7a37e"), category: "makeup-only", subcategory: "smokey-eye" },
+    { id: "f-mkp-05", label: "Red Lip Classic",   query: "red lipstick classic makeup woman",     image: img("1512496015851-a90fb38ba796"), category: "makeup-only", subcategory: "red-lip-classic" },
+    { id: "f-mkp-06", label: "Bronzed Goddess",   query: "bronzed glow makeup woman",             image: img("1457972729786-0411a3b2b626"), category: "makeup-only", subcategory: "bronzed-goddess" },
+    { id: "f-mkp-07", label: "Glass Skin",        query: "glass skin dewy makeup",                image: img("1614283233556-f35b0c801ef1"), category: "makeup-only", subcategory: "glass-skin" },
+    { id: "f-mkp-08", label: "Editorial",         query: "editorial high fashion makeup",         image: img("1571908599407-cdb918ed83bf"), category: "makeup-only", subcategory: "editorial" },
+    { id: "f-mkp-09", label: "Berry Lip",         query: "berry lip makeup woman",                image: img("1531123414780-f74242c2b052"), category: "makeup-only", subcategory: "berry-lip" },
+    { id: "f-mkp-10", label: "Graphic Liner",     query: "graphic eyeliner makeup",               image: img("1604004215695-c54b6f3df1e7"), category: "makeup-only", subcategory: "graphic-liner" },
+    { id: "f-mkp-11", label: "Glitter Eye",       query: "glitter eye makeup",                    image: img("1620916566398-39f1143ab7be"), category: "makeup-only", subcategory: "glitter-eye" },
+    { id: "f-mkp-12", label: "Sun-Kissed",        query: "sun kissed bronzer makeup",             image: img("1542596594-649edbc13630"), category: "makeup-only", subcategory: "sun-kissed" },
+  ],
 };
 
 const MALE: Record<OccasionId, Vibe[]> = {
