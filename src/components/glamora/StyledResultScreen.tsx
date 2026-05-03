@@ -149,6 +149,45 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
 
+  // Back-view preview (e.g. for swimwear, dresses) — generated on demand
+  const [backViewUrl, setBackViewUrl] = useState<string | null>(null);
+  const [backViewLoading, setBackViewLoading] = useState(false);
+  const [backViewError, setBackViewError] = useState<string | null>(null);
+  const [showBackView, setShowBackView] = useState(false);
+
+  const generateBackView = async () => {
+    if (backViewUrl || backViewLoading || !prefs.photoBase64) return;
+    setBackViewLoading(true);
+    setBackViewError(null);
+    try {
+      const localMidnight = new Date(); localMidnight.setHours(0, 0, 0, 0);
+      const devMode = (() => { try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; } })();
+      const { data, error } = await supabase.functions.invoke("generate-styled-image", {
+        body: {
+          imageBase64: prefs.photoBase64,
+          styleCategory: prefs.styleCategory,
+          styleSubcategory: prefs.styleSubcategory || undefined,
+          photoType: prefs.photoType,
+          gender: prefs.gender,
+          generationMode: prefs.generationMode,
+          clientLocalMidnight: localMidnight.toISOString(),
+          devMode,
+          viewAngle: "back",
+        },
+      });
+      if (error || data?.error || !data?.imageUrl) {
+        setBackViewError("Couldn't generate the back view. Try again.");
+      } else {
+        setBackViewUrl(data.imageUrl);
+        setShowBackView(true);
+      }
+    } catch {
+      setBackViewError("Couldn't generate the back view. Try again.");
+    } finally {
+      setBackViewLoading(false);
+    }
+  };
+
   const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
     const key = `${lookName}|${hotspot}`;
     if (aiShopItems[key] || aiShopLoading[key]) return;
