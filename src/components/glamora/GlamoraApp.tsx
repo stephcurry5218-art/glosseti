@@ -266,7 +266,7 @@ const GlamoraApp = () => {
       {screen === "tutorial" && <TutorialScreen lookName={selectedLook} onBack={() => go("results")} onHome={() => go("home")} />}
       {screen === "profile" && (
         <ProfileScreen onBack={() => go("home")} savedCount={savedStyles.length} onSaved={() => go("saved")}
-          onGetStyled={() => go("style-picker")} gender={prefs.gender} user={user}
+          onGetStyled={() => go("occasion")} gender={prefs.gender} user={user}
           onSignOut={handleSignOut} onSignIn={() => go("auth")}
           subscription={subscription} onShowPaywall={() => setShowPaywall(true)}
           onSettings={() => go("settings")}
@@ -300,7 +300,7 @@ const GlamoraApp = () => {
       {screen === "saved" && (
         <SavedLooksScreen onBack={() => go("home")} savedStyles={savedStyles}
           onLookSelect={(name) => { setSelectedLook(name); go("tutorial"); }}
-          onGetStyled={() => go("style-picker")} gender={prefs.gender} />
+          onGetStyled={() => go("occasion")} gender={prefs.gender} />
       )}
 
 
