@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { maybeRequestFirstSessionReview } from "./requestAppReview";
 import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, AlertTriangle, Camera, Sun, Lightbulb, ShoppingBag } from "lucide-react";
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
@@ -153,6 +154,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
 
   const hasOriginal = !!prefs.photoBase64;
   const hasStyled = !!styledImageUrl;
+
+  // Trigger native rating prompt once after the user's first completed style session.
+  useEffect(() => {
+    if (hasStyled) maybeRequestFirstSessionReview();
+  }, [hasStyled]);
 
   const scrollTo = (direction: "top" | "bottom") => {
     const el = scrollRef.current;
