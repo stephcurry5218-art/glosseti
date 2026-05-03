@@ -10,7 +10,7 @@ interface Props {
   onNext: (category: StyleCategory, subcategory: string, vibeLabel: string) => void;
 }
 
-type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "fitness" | "cosplay";
+type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay";
 
 interface Vibe {
   id: string;
