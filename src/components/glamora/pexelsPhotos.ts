@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type Gender = "female" | "male";
 export type OccasionId =
   | "casual" | "glam" | "formal" | "streetwear" | "date-night"
-  | "vacation" | "swimwear" | "fitness" | "cosplay";
+  | "vacation" | "swimwear" | "fitness" | "cosplay" | "makeup";
 
 export interface PexelsPhoto { url: string; alt: string; id: number; }
 
