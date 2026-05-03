@@ -600,7 +600,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     setGenericPhotos(null);
     setLoadingPhotos(true);
 
-    const vibes = selected.vibes[gender];
+    const vibes = visibleVibes;
 
     if (selected.usePerVibePhotos) {
       const queries: VibeQuery[] = vibes.map((v, i) => ({
@@ -618,7 +618,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
 
     return () => { cancelled = true; };
-  }, [stage, selected, gender, page]);
+  }, [stage, selected, gender, page, visibleVibes]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
