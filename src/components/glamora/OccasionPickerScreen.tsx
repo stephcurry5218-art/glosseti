@@ -334,6 +334,8 @@ const OCCASIONS: Occasion[] = OCCASION_META.map(meta => ({
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [stage, setStage] = useState<"occasion" | "vibe">("occasion");
   const [selected, setSelected] = useState<Occasion | null>(null);
+  const [pexelsPhotos, setPexelsPhotos] = useState<string[] | null>(null);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const vibeRef = useRef<HTMLDivElement>(null);
@@ -343,6 +345,21 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       vibeRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [stage]);
+
+  // Fetch fresh, gender-correct photos from Pexels when an occasion is selected.
+  useEffect(() => {
+    if (stage !== "vibe" || !selected) return;
+    let cancelled = false;
+    setPexelsPhotos(null);
+    setLoadingPhotos(true);
+    fetchVibePhotos(selected.id, gender)
+      .then((photos) => {
+        if (cancelled) return;
+        if (photos.length > 0) setPexelsPhotos(photos.map(p => p.url));
+      })
+      .finally(() => { if (!cancelled) setLoadingPhotos(false); });
+    return () => { cancelled = true; };
+  }, [stage, selected, gender]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
