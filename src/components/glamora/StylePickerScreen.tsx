@@ -725,6 +725,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
           <div className="header-sub">{isMale ? "What's your vibe, king?" : "What are you looking for?"}</div>
         </div>
       </div>
+      <FlowStepper current="style" gender={prefs.gender} />
 
       <div style={{ padding: "0 22px" }}>
         {/* Multi-select hint */}
