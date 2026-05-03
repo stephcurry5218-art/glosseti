@@ -739,7 +739,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
               gap: 8,
             }}
           >
-            {selected.vibes[gender].map((v, i) => (
+            {visibleVibes.map((v, i) => (
               <button
                 key={v.id}
                 onClick={() => handleVibe(v, photoFor(v, i))}
