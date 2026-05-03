@@ -294,7 +294,9 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const CurrentIcon = steps[step].Icon;
 
   return (
-    <div className="screen enter" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "0 32px" }}>
+    <div className="screen enter" style={{ display: "flex", flexDirection: "column", minHeight: "100%" }}>
+      <FlowStepper current="generate" gender={prefs.gender} />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 32px" }}>
       {/* Spinner + icon */}
       <div style={{ position: "relative", width: 120, height: 120, marginBottom: 32 }}>
         <div style={{
