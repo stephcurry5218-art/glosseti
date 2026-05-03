@@ -665,10 +665,11 @@ const customDetailPlaceholders: Record<string, string> = {
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
-  const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
+  const [selected, setSelected] = useState<StyleCategory[]>([]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
+  const subcategoryRef = useRef<HTMLDivElement | null>(null);
   
   
   const isMale = prefs.gender === "male";
