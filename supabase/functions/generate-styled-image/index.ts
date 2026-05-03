@@ -394,8 +394,15 @@ serve(async (req) => {
     const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || teensOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
+    const subcategoryLabel = styleSubcategory ? styleSubcategory.replace(/-/g, " ") : "";
+    // Detect if the subcategory implies a specific garment/item type so the AI cannot drift
+    const garmentLockTerms = ["dress", "gown", "skirt", "suit", "tuxedo", "jumpsuit", "romper", "blazer", "coat", "swimsuit", "bikini", "lingerie", "robe", "kimono"];
+    const lockedGarment = garmentLockTerms.find(g => subcategoryLabel.toLowerCase().includes(g));
+    const garmentLockNote = lockedGarment
+      ? `\n\nSTRICT ITEM-TYPE LOCK: The user explicitly chose a ${lockedGarment.toUpperCase()} for this look. The generated outfit MUST feature a ${lockedGarment} as the hero garment. Do NOT substitute pants, jeans, separates, or any other garment type. Any styling tweaks must keep the ${lockedGarment} as the centerpiece.`
+      : "";
     const subcategoryNote = styleSubcategory
-      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${combinedOverride}`
+      ? `\n\nSUB-STYLE DIRECTION: Apply a "${subcategoryLabel}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${garmentLockNote}${combinedOverride}`
       : combinedOverride;
 
     // Makeup preference for female users
