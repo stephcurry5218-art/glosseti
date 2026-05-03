@@ -9,6 +9,7 @@ import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
 import LookPriceCard from "./LookPriceCard";
+import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -141,6 +142,40 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const looks = styleLooks[prefs.styleCategory] || styleLooks["full-style"];
   const userCustomDetails = parseCustomDetails(prefs.styleSubcategory);
   const hotspotPositions = getHotspotPositions(isMale, userCustomDetails);
+
+  // AI-curated shop items keyed by `${lookName}|${hotspot}` — fetched on demand
+  const [aiShopItems, setAiShopItems] = useState<Record<string, ShopItem[]>>({});
+  const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
+
+  const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
+    const key = `${lookName}|${hotspot}`;
+    if (aiShopItems[key] || aiShopLoading[key]) return;
+    setAiShopLoading(prev => ({ ...prev, [key]: true }));
+    try {
+      const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+        body: {
+          styleCategory: prefs.styleCategory,
+          styleSubcategory: prefs.styleSubcategory,
+          lookName,
+          gender: prefs.gender,
+          hotspot,
+        },
+      });
+      if (!error && data?.items?.length) {
+        setAiShopItems(prev => ({ ...prev, [key]: data.items }));
+      }
+    } catch (err) {
+      console.warn("AI shop suggestions failed, falling back to static lookData", err);
+    } finally {
+      setAiShopLoading(prev => ({ ...prev, [key]: false }));
+    }
+  };
+
+  useEffect(() => {
+    const lookName = (styleLooks[prefs.styleCategory] || styleLooks["full-style"])[0]?.name;
+    if (activeHotspot && lookName) fetchAiShopItems(lookName, activeHotspot);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeHotspot, prefs.styleCategory, prefs.styleSubcategory]);
 
   const analysisCards: { label: string; value: string; Icon: LucideIcon }[] = isMakeup
     ? [
@@ -431,6 +466,10 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               const customTerm = getCustomDetailForHotspot(activeHotspot, userCustomDetails);
               const detected = customTerm ? detectStoreFromText(customTerm) : null;
 
+              const aiKey = lookName ? `${lookName}|${activeHotspot}` : "";
+              const aiItems = aiKey ? aiShopItems[aiKey] : undefined;
+              const isLoadingAi = aiKey ? aiShopLoading[aiKey] : false;
+
               let shopItems: ShopItem[];
               if (customTerm) {
                 // User specified a custom item — build a single shop entry routing to the right store
@@ -444,6 +483,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     budget: { store: "Amazon", item: customTerm, price: "$$" },
                   },
                 }];
+              } else if (aiItems && aiItems.length > 0) {
+                // Prefer AI-curated, occasion-aware shop list across multiple retailers
+                shopItems = aiItems;
               } else {
                 shopItems = data
                   ? data.filter(step => step.shop).map(step => ({
@@ -460,12 +502,15 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
                       Shop {hotspotPositions[activeHotspot].label}
                     </div>
+                    {isLoadingAi && (
+                      <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>Curating…</div>
+                    )}
                   </div>
                   {shopItems.length > 0 ? (
                     <ShopPanel items={shopItems} />
                   ) : (
                     <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 8 }}>
-                      Select a style below to see shopping options
+                      {isLoadingAi ? "Building your curated shopping list…" : "Select a style below to see shopping options"}
                     </div>
                   )}
                   {/* Look selection */}

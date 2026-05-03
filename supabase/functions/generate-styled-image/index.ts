@@ -394,8 +394,15 @@ serve(async (req) => {
     const combinedOverride = swimwearOverride || iconOverride || cosplayOverride || babyOverride || kidsOverride || teensOverride || parentChildOverride || couplesOverride;
 
     // Add subcategory refinement context
+    const subcategoryLabel = styleSubcategory ? styleSubcategory.replace(/-/g, " ") : "";
+    // Detect if the subcategory implies a specific garment/item type so the AI cannot drift
+    const garmentLockTerms = ["dress", "gown", "skirt", "suit", "tuxedo", "jumpsuit", "romper", "blazer", "coat", "swimsuit", "bikini", "lingerie", "robe", "kimono"];
+    const lockedGarment = garmentLockTerms.find(g => subcategoryLabel.toLowerCase().includes(g));
+    const garmentLockNote = lockedGarment
+      ? `\n\nSTRICT ITEM-TYPE LOCK: The user explicitly chose a ${lockedGarment.toUpperCase()} for this look. The generated outfit MUST feature a ${lockedGarment} as the hero garment. Do NOT substitute pants, jeans, separates, or any other garment type. Any styling tweaks must keep the ${lockedGarment} as the centerpiece.`
+      : "";
     const subcategoryNote = styleSubcategory
-      ? `\n\nSUB-STYLE DIRECTION: Apply a "${styleSubcategory.replace(/-/g, " ")}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${combinedOverride}`
+      ? `\n\nSUB-STYLE DIRECTION: Apply a "${subcategoryLabel}" aesthetic within the ${styleCategory.replace(/-/g, " ")} category. This should strongly influence the color palette, silhouettes, fabric choices, accessories, and overall mood of the look. Make it distinctly feel like this sub-style.${garmentLockNote}${combinedOverride}`
       : combinedOverride;
 
     // Makeup preference for female users
@@ -536,9 +543,10 @@ serve(async (req) => {
           : isRevealing
             ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style.`
             : `${facePreservation} Keep the person's exact body shape, proportions, and background. Change ONLY their clothing and accessories. Realistic clothing, warm lighting.`;
+      const stylistCraftNote = "\n\nSTYLIST CRAFT: Treat this like a real celebrity stylist's pull — every piece should feel intentional, current-season trendy, and tailored to flatter this specific person's body type, skin tone, and undertone. Choose silhouettes that highlight their best features, colors that complement their complexion, and 1-2 fashion-forward statement details (texture, an unexpected accessory, a current trending element) that elevate the look beyond a generic outfit. Avoid anything boring, dated, or formulaic.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`;
 
       const contentParts: any[] = [
         { type: "text", text: editPrompt },
