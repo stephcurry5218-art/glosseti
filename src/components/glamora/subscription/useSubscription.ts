@@ -117,6 +117,25 @@ export function useSubscription() {
     return () => subscription.unsubscribe();
   }, [state.tier, fetchUsage]);
 
+  // Auto-reset at local midnight: refetch usage / clear anon counter
+  useEffect(() => {
+    const now = new Date();
+    const next = new Date(now);
+    next.setHours(24, 0, 0, 1);
+    const ms = next.getTime() - now.getTime();
+    const t = setTimeout(() => {
+      if (userId) {
+        fetchUsage(userId, state.tier);
+      } else {
+        saveAnonUsage(0);
+        setAnonUsage(0);
+        setUsageCount(0);
+        setState(prev => ({ ...prev, monthlyGenerations: 0 }));
+      }
+    }, ms);
+    return () => clearTimeout(t);
+  }, [userId, state.tier, fetchUsage, usageCount]);
+
   const isDevMode = () => {
     try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; }
   };
