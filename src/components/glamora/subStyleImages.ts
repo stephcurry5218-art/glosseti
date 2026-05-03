@@ -636,15 +636,30 @@ export function getSubStyleImages(
     stylePick = pickTrio(defaults, `${categoryId}:${subId}:style`);
   }
   const representation = REPRESENTATION_POOLS[gender];
-  const blackPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyBlack : representation.black;
-  const hispanicPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyHispanic : representation.hispanic;
+  const isBeauty = BEAUTY_CATEGORY_IDS.has(categoryId);
+  const poolFor = (race: Race) => (isBeauty ? representation.beauty[race] : representation[race]);
+
+  // Rotate the starting race per sub-style so no race dominates across grids.
+  const startIdx = hash(`${categoryId}:${subId}:race-rotate`) % RACES.length;
+  const rotated: Race[] = RACES.map((_, i) => RACES[(startIdx + i) % RACES.length]);
+
   const trio: string[] = [];
-  addUnique(trio, [pickOne(blackPool, `${categoryId}:${subId}:black`)].filter(Boolean) as string[], usedImages);
-  addUnique(trio, [pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`)].filter(Boolean) as string[], usedImages);
+  // Pick 1 model from each of 3 different races for guaranteed diversity.
+  for (let i = 0; i < 3; i++) {
+    const race = rotated[i];
+    const pick = pickOne(poolFor(race), `${categoryId}:${subId}:${race}`);
+    if (pick) addUnique(trio, [pick], usedImages);
+  }
+  // Top up with style-specific picks if any slot was a duplicate.
   addUnique(trio, stylePick, usedImages);
   const fallbackPool = categoryId === "makeup-only" && gender === "female"
     ? FEMALE_MAKEUP_FACE_SHOTS
-    : [...blackPool, ...hispanicPool, ...stylePick, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+    : [
+        ...poolFor(rotated[3]),
+        ...poolFor(rotated[0]), ...poolFor(rotated[1]), ...poolFor(rotated[2]),
+        ...stylePick,
+        ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE),
+      ];
   addUnique(trio, pickTrio(uniqueByFirstSeen(fallbackPool), `${categoryId}:${subId}:fallback`, 20), usedImages);
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
