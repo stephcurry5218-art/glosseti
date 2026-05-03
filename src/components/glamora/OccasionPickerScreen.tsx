@@ -176,6 +176,54 @@ const OCCASIONS: Occasion[] = [
       ],
     },
   },
+  {
+    id: "fitness",
+    label: "Fitness",
+    desc: "Gym, run, yoga, sport-ready",
+    Icon: Dumbbell,
+    vibes: {
+      female: [
+        { id: "yoga-set-f", label: "Yoga Set", image: img("1518310383802-640c2de311b6"), category: "fitness", subcategory: "yoga-pants-set" },
+        { id: "nike-2pc-f", label: "Nike 2-Piece", image: img("1571019613454-1cb2f99b2d8b"), category: "fitness", subcategory: "nike-2piece-women" },
+        { id: "pilates-f", label: "Pilates", image: img("1599058917212-d750089bc07e"), category: "fitness", subcategory: "pilates-set" },
+        { id: "running-f", label: "Running", image: img("1571945153237-4929e783af4a"), category: "fitness", subcategory: "running-kit" },
+        { id: "tennis-f", label: "Tennis", image: img("1581009146145-b5ef050c2e1e"), category: "fitness", subcategory: "tennis-outfit" },
+        { id: "boxing-f", label: "Boxing", image: img("1517836357463-d25dfeac3438"), category: "fitness", subcategory: "boxing-mma" },
+      ],
+      male: [
+        { id: "nike-2pc-m", label: "Nike 2-Piece", image: img("1571019614242-c5c5dee9f50b"), category: "fitness", subcategory: "nike-2piece-men" },
+        { id: "lifting-m", label: "Lifting", image: img("1583500178690-f7fd39c44a66"), category: "fitness", subcategory: "gym-lifting" },
+        { id: "running-m", label: "Running", image: img("1567013127542-490d757e51fc"), category: "fitness", subcategory: "running-kit" },
+        { id: "crossfit-m", label: "CrossFit", image: img("1532009877282-3340270e0529"), category: "fitness", subcategory: "crossfit-fit" },
+        { id: "boxing-m", label: "Boxing / MMA", image: img("1605296867424-35fc25c9212a"), category: "fitness", subcategory: "boxing-mma" },
+        { id: "hiking-m", label: "Hiking", image: img("1574680096145-d05b474e2155"), category: "fitness", subcategory: "outdoor-hiking" },
+      ],
+    },
+  },
+  {
+    id: "cosplay",
+    label: "Cosplay",
+    desc: "Become the character",
+    Icon: Star,
+    vibes: {
+      female: [
+        { id: "moon-guardian", label: "Moon Guardian", image: img("1612036782180-6f0b6cd846fe"), category: "cosplay", subcategory: "magical-moon-guardian" },
+        { id: "magical-girl", label: "Magical Girl", image: img("1542596594-649edbc13630"), category: "cosplay", subcategory: "magical-girl-wand" },
+        { id: "ice-queen", label: "Ice Queen", image: img("1607604276583-eef5d076aa5f"), category: "cosplay", subcategory: "ice-queen" },
+        { id: "amazonian-f", label: "Amazonian Warrior", image: img("1583089892943-e02e5b017b6a"), category: "cosplay", subcategory: "amazonian-warrior" },
+        { id: "witch-f", label: "Witch / Sorceress", image: img("1605125571577-fdd0c52d5fef"), category: "cosplay", subcategory: "witch-sorceress" },
+        { id: "vampire-f", label: "Vampire Noble", image: img("1601933973783-43cf8a7d4c5f"), category: "cosplay", subcategory: "vampire-noble" },
+      ],
+      male: [
+        { id: "saiyan", label: "Saiyan Warrior", image: img("1542596594-649edbc13630"), category: "cosplay", subcategory: "saiyan-warrior" },
+        { id: "ninja", label: "Ninja Shinobi", image: img("1607604276583-eef5d076aa5f"), category: "cosplay", subcategory: "ninja-shinobi" },
+        { id: "demon-slayer", label: "Demon Slayer", image: img("1612036782180-6f0b6cd846fe"), category: "cosplay", subcategory: "demon-slayer-warrior" },
+        { id: "hylian-hero", label: "Hylian Hero", image: img("1583089892943-e02e5b017b6a"), category: "cosplay", subcategory: "hylian-hero" },
+        { id: "web-slinger", label: "Web Slinger", image: img("1605125571577-fdd0c52d5fef"), category: "cosplay", subcategory: "web-slinger" },
+        { id: "dark-knight", label: "Dark Vigilante", image: img("1601933973783-43cf8a7d4c5f"), category: "cosplay", subcategory: "dark-knight-vigilante" },
+      ],
+    },
+  },
 ];
 
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
