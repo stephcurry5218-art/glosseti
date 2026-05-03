@@ -529,15 +529,22 @@ serve(async (req) => {
 
         const data = await response.json();
         const firstImage = data.choices?.[0]?.message?.images?.[0];
+        const imageUrl = firstImage?.image_url?.url ?? firstImage?.url ?? null;
+
+        if (!imageUrl) {
+          console.warn(`No image from ${model} on attempt ${attempt + 1}/${maxRetries}, retrying with fallback model...`);
+          lastError = new Error("NO_IMAGE_RETURNED");
+          continue;
+        }
 
         return {
-          generatedImage: firstImage?.image_url?.url ?? firstImage?.url ?? null,
+          generatedImage: imageUrl,
           textResponse: data.choices?.[0]?.message?.content || "",
         };
       }
 
-      // All retries exhausted
-      throw lastError || new Error("RATE_LIMITED");
+      // All retries exhausted — return null instead of throwing so outer fallback runs
+      return { generatedImage: null as string | null, textResponse: "" };
     };
 
     // Strong gender enforcement (skip for baby, kids, teens, parent-child, and couples categories)
