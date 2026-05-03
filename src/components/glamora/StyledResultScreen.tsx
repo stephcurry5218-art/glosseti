@@ -143,6 +143,40 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const userCustomDetails = parseCustomDetails(prefs.styleSubcategory);
   const hotspotPositions = getHotspotPositions(isMale, userCustomDetails);
 
+  // AI-curated shop items keyed by `${lookName}|${hotspot}` — fetched on demand
+  const [aiShopItems, setAiShopItems] = useState<Record<string, ShopItem[]>>({});
+  const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
+
+  const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
+    const key = `${lookName}|${hotspot}`;
+    if (aiShopItems[key] || aiShopLoading[key]) return;
+    setAiShopLoading(prev => ({ ...prev, [key]: true }));
+    try {
+      const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+        body: {
+          styleCategory: prefs.styleCategory,
+          styleSubcategory: prefs.styleSubcategory,
+          lookName,
+          gender: prefs.gender,
+          hotspot,
+        },
+      });
+      if (!error && data?.items?.length) {
+        setAiShopItems(prev => ({ ...prev, [key]: data.items }));
+      }
+    } catch (err) {
+      console.warn("AI shop suggestions failed, falling back to static lookData", err);
+    } finally {
+      setAiShopLoading(prev => ({ ...prev, [key]: false }));
+    }
+  };
+
+  useEffect(() => {
+    const lookName = (styleLooks[prefs.styleCategory] || styleLooks["full-style"])[0]?.name;
+    if (activeHotspot && lookName) fetchAiShopItems(lookName, activeHotspot);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeHotspot, prefs.styleCategory, prefs.styleSubcategory]);
+
   const analysisCards: { label: string; value: string; Icon: LucideIcon }[] = isMakeup
     ? [
         { label: "Face Shape", value: analysis.faceShape, Icon: Diamond },
