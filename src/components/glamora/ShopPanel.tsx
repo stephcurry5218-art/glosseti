@@ -91,8 +91,30 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
               {/* View All mode — show all 3 tiers inline */}
               {viewAll ? (
                 <div style={{ padding: "12px 16px" }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))", marginBottom: 10 }}>
-                    {item.label}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 8 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
+                      {item.label}
+                    </div>
+                    {onSwapItem && (
+                      <button
+                        onClick={() => onSwapItem(idx)}
+                        disabled={swappingIndex === idx}
+                        style={{
+                          background: "hsla(var(--glamora-rose-dark) / 0.1)",
+                          border: "1px solid hsla(var(--glamora-rose-dark) / 0.25)",
+                          borderRadius: 8, padding: "4px 9px",
+                          display: "flex", alignItems: "center", gap: 4,
+                          cursor: swappingIndex === idx ? "wait" : "pointer",
+                          color: "hsl(var(--glamora-rose-dark))",
+                          fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 700,
+                          opacity: swappingIndex === idx ? 0.6 : 1,
+                        }}
+                      >
+                        <RefreshCw size={11} style={{
+                          animation: swappingIndex === idx ? "spin 1s linear infinite" : "none",
+                        }} /> Swap
+                      </button>
+                    )}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     {tiers.map((t) => {
