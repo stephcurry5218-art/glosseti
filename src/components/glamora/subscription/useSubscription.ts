@@ -60,7 +60,10 @@ export function useSubscription() {
   const fetchUsage = useCallback(async (uid: string, currentTier: SubscriptionTier) => {
     let startDate: string;
     if (currentTier === "free") {
-      startDate = getCurrentDayISO() + "T00:00:00.000Z";
+      // Local midnight — resets at user's local midnight, not UTC
+      const localMidnight = new Date();
+      localMidnight.setHours(0, 0, 0, 0);
+      startDate = localMidnight.toISOString();
     } else {
       startDate = getCurrentMonth() + "-01T00:00:00.000Z";
     }
