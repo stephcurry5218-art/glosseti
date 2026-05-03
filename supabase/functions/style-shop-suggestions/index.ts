@@ -61,8 +61,14 @@ STRICT RULES:
   · mid: ${stores.mid.join(", ")}
   · budget: ${stores.budget.join(", ")}
 - Vary the retailers across items in the same tier so the user sees a mix.
-- Use realistic, specific product names a stylist would actually pull.
 - Use realistic prices: luxury $150-$2000, mid $40-$200, budget $15-$80. Format as "$120" or "$1,250".
+
+PRODUCT NAME REQUIREMENTS (CRITICAL — these become the search query on each retailer):
+- Each "item" string MUST be a fully descriptive product name a shopper could paste into a search bar to find the EXACT piece.
+- ALWAYS include: COLOR (specific — e.g. "blush pink", "emerald green", "ivory", not just "pink"), GARMENT TYPE (e.g. "triangle bikini bottom", "satin slip midi dress", "wide-leg linen trousers"), and STYLE/CUT details (e.g. "high-waisted", "off-shoulder", "tie-side", "ribbed", "cropped").
+- When relevant, also include MATERIAL/FABRIC (silk, satin, ribbed knit, linen, leather, denim) and PATTERN (floral, gingham, leopard, solid).
+- 6 to 14 words per item. Example GOOD: "Blush pink ribbed tie-side bikini bottom high-waisted". Example BAD: "Bikini bottom" / "Pink bikini".
+- The "label" field stays short (e.g. "Bikini Bottom", "Heels"). The descriptive text goes in each tier's "item" field.
 - ${swapLine}`;
 
     const userPrompt = `STYLE CATEGORY: ${styleCategory || "full-style"}
