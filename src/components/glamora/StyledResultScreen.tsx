@@ -155,6 +155,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const hasOriginal = !!prefs.photoBase64;
   const hasStyled = !!styledImageUrl;
 
+  // Trigger native rating prompt once after the user's first completed style session.
+  useEffect(() => {
+    if (hasStyled) maybeRequestFirstSessionReview();
+  }, [hasStyled]);
+
   const scrollTo = (direction: "top" | "bottom") => {
     const el = scrollRef.current;
     if (!el) return;
