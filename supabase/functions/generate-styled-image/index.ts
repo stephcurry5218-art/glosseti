@@ -615,6 +615,15 @@ serve(async (req) => {
 
       const poseAnglePreservation = " CRITICAL POSE & CAMERA ANGLE PRESERVATION: Keep the EXACT same camera angle, viewpoint, and body orientation as the uploaded photo. If the uploaded photo shows the person from the back, the result MUST also show them from the back. If from the side, keep the side view. If from the front, keep the front view. If from a 3/4 angle, keep that 3/4 angle. Do NOT rotate the person, do NOT flip them to face the camera, do NOT change which direction their body or face is pointing. Preserve the same pose, stance, head tilt, and limb positions. The only thing that changes is the clothing (and background where noted).";
 
+      // Suppress unwanted headwear unless the style description above explicitly calls for one
+      // (e.g. cottagecore straw hat, cowboy hat, witch hat, fascinator, bucket hat, beanie, cap, etc.)
+      const styleDescLower = (styleDesc || "").toLowerCase();
+      const styleMentionsHat = /\b(hat|cap|beanie|beret|fascinator|headpiece|headwear|turban|bonnet|visor|fedora|bandana|headscarf|crown|tiara|veil|helmet|hood)\b/.test(styleDescLower);
+      const isHatsCategory = styleSubcategory === "hats-headwear" || styleCategory === "hats-headwear";
+      const noHatNote = (!styleMentionsHat && !isHatsCategory)
+        ? " DO NOT add any hat, cap, beanie, beret, fascinator, visor, headband, or any other headwear of any kind. The head must be bare unless the outfit description above explicitly mentions headwear. Preserve the person's natural hair as the only thing on their head."
+        : "";
+
       const keepNote = isSwimwear
         ? `${facePreservation} Keep the person's exact body shape and proportions.${poseAnglePreservation} Restyle ONLY their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting that matches the original camera angle. Professional fashion editorial style.`
         : isLingerie
