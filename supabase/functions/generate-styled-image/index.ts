@@ -14,7 +14,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode } = body;
+    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode, inspirationImageUrl, recreateMode, vibeLabel } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -621,9 +621,21 @@ serve(async (req) => {
             ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style.`
             : `${facePreservation} Keep the person's exact body shape, proportions, and background. Change ONLY their clothing and accessories. Realistic clothing, warm lighting.`;
       const stylistCraftNote = "\n\nSTYLIST CRAFT: Treat this like a real celebrity stylist's pull — every piece should feel intentional, current-season trendy, and tailored to flatter this specific person's body type, skin tone, and undertone. Choose silhouettes that highlight their best features, colors that complement their complexion, and 1-2 fashion-forward statement details (texture, an unexpected accessory, a current trending element) that elevate the look beyond a generic outfit. Avoid anything boring, dated, or formulaic.";
+
+      // Inspiration-image directive — the LAST image in `contentParts` is the
+      // inspiration reference (not the user). Two modes:
+      //   - exact:    copy the outfit pixel-for-pixel onto the user
+      //   - inspired: use only as a vibe reference, generate an authentic look
+      const hasInspiration = typeof inspirationImageUrl === "string" && inspirationImageUrl.length > 0;
+      const inspirationNote = hasInspiration
+        ? (recreateMode === "exact"
+          ? `\n\nINSPIRATION IMAGE — RECREATE EXACTLY: A second image is attached at the END of this message showing an outfit${vibeLabel ? ` ("${vibeLabel}")` : ""}. The user wants this EXACT outfit on themselves. You MUST replicate every garment, color, fabric, silhouette, accessory, hairstyle vibe, and styling detail from that reference photo onto the user's body. Do NOT improvise the outfit — match the reference as faithfully as possible. Only the FACE and BODY in the final image must be the user's; the OUTFIT must match the reference.`
+          : `\n\nINSPIRATION IMAGE — INSPIRED BY: A second image is attached at the END of this message${vibeLabel ? ` showing the "${vibeLabel}" vibe` : ""}. Use it ONLY as mood/aesthetic reference for color palette, silhouette family, and overall vibe. Generate an ORIGINAL, authentic outfit that captures the same energy but is NOT a copy. Tailor every choice to this specific person.`)
+        : "";
+
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`;
 
       const contentParts: any[] = [
         { type: "text", text: editPrompt },
@@ -638,6 +650,10 @@ serve(async (req) => {
       // Add second photo for dual-photo parent-child mode
       if (hasDualPhotos) {
         contentParts.push({ type: "image_url", image_url: { url: secondImageBase64 } });
+      }
+      // Add inspiration photo LAST so the prompt's "image at the END" reference holds.
+      if (hasInspiration) {
+        contentParts.push({ type: "image_url", image_url: { url: inspirationImageUrl } });
       }
 
       messages = [

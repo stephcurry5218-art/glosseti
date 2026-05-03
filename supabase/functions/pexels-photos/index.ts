@@ -59,7 +59,7 @@ function pickPortrait(p: PexelsPhoto) {
 
 interface QueryReq { key: string; query: string; ethnicity?: string }
 
-async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gender) {
+async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gender, page: number) {
   const noun = GENDER_NOUN[gender] || "person";
   const seen = new Set<number>();
   const out: Record<string, { url: string; alt: string; id: number }> = {};
@@ -69,10 +69,10 @@ async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gend
     queries.map(async (q) => {
       const ethnicity = q.ethnicity ? `${q.ethnicity} ` : "";
       // First attempt: ethnicity + noun + query
-      let photos = await searchPexels(apiKey, `${ethnicity}${noun} ${q.query}`, 15, 1);
+      let photos = await searchPexels(apiKey, `${ethnicity}${noun} ${q.query}`, 15, page);
       // Fallback: drop ethnicity tag
       if (photos.length < 3) {
-        const more = await searchPexels(apiKey, `${noun} ${q.query}`, 15, 1);
+        const more = await searchPexels(apiKey, `${noun} ${q.query}`, 15, page);
         photos = photos.concat(more);
       }
       return { key: q.key, photos };
@@ -93,14 +93,14 @@ async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gend
   return out;
 }
 
-async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Gender) {
+async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Gender, page: number) {
   const baseTerm = OCCASION_TERMS[occasion][gender];
   const noun = GENDER_NOUN[gender];
 
   const results = await Promise.all(
     ETHNICITIES.map(async (e) => {
       const q = `${e.tag} ${noun} ${baseTerm}`;
-      const photos = await searchPexels(apiKey, q, 6, 1);
+      const photos = await searchPexels(apiKey, q, 6, page);
       return { tag: e.tag, want: e.weight, photos };
     })
   );
@@ -120,7 +120,7 @@ async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Ge
   }
 
   if (picked.length < 12) {
-    const fallback = await searchPexels(apiKey, `${noun} ${baseTerm}`, 30, 1);
+    const fallback = await searchPexels(apiKey, `${noun} ${baseTerm}`, 30, page);
     for (const p of fallback) {
       if (picked.length >= 12) break;
       if (seen.has(p.id)) continue;
@@ -151,12 +151,14 @@ Deno.serve(async (req) => {
       });
     }
 
+    const page = Math.max(1, Math.min(20, Number(body.page) || 1));
+
     // Mode 2: per-vibe queries
     if (Array.isArray(body.queries)) {
       const queries = (body.queries as QueryReq[])
         .filter(q => q && typeof q.key === "string" && typeof q.query === "string")
         .slice(0, 24);
-      const photos = await handleQueryMode(PEXELS_API_KEY, queries, gender);
+      const photos = await handleQueryMode(PEXELS_API_KEY, queries, gender, page);
       return new Response(JSON.stringify({ photos }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -169,7 +171,7 @@ Deno.serve(async (req) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const photos = await handleOccasionMode(PEXELS_API_KEY, occasion, gender);
+    const photos = await handleOccasionMode(PEXELS_API_KEY, occasion, gender, page);
     return new Response(JSON.stringify({ photos }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

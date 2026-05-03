@@ -229,6 +229,9 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
             ...(prefs.makeupPreference ? { makeupPreference: prefs.makeupPreference } : {}),
             ...(faceReferenceUrls.length > 0 ? { faceReferenceUrls } : {}),
+            ...(prefs.inspirationImageUrl ? { inspirationImageUrl: prefs.inspirationImageUrl } : {}),
+            ...(prefs.recreateMode ? { recreateMode: prefs.recreateMode } : {}),
+            ...(prefs.vibeLabel ? { vibeLabel: prefs.vibeLabel } : {}),
           },
         });
         if (error || data?.error) {

@@ -8,7 +8,13 @@ import { fetchVibePhotos, fetchVibePhotosByQuery, type VibeQuery } from "./pexel
 interface Props {
   gender: Gender;
   onBack: () => void;
-  onNext: (category: StyleCategory, subcategory: string, vibeLabel: string) => void;
+  onNext: (
+    category: StyleCategory,
+    subcategory: string,
+    vibeLabel: string,
+    inspirationImageUrl?: string,
+    recreateMode?: "exact" | "inspired",
+  ) => void;
 }
 
 type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay";
@@ -331,6 +337,8 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [perVibePhotos, setPerVibePhotos] = useState<Record<string, string> | null>(null);
   const [genericPhotos, setGenericPhotos] = useState<string[] | null>(null);
   const [loadingPhotos, setLoadingPhotos] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const vibeRef = useRef<HTMLDivElement>(null);
@@ -341,7 +349,12 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
   }, [stage]);
 
-  // Fetch the right photos based on the selected occasion's mode.
+  // Reset page when entering a new occasion
+  useEffect(() => {
+    if (stage === "vibe") setPage(1);
+  }, [stage, selected?.id]);
+
+  // Fetch the right photos based on the selected occasion's mode + page.
   useEffect(() => {
     if (stage !== "vibe" || !selected) return;
     let cancelled = false;
@@ -355,27 +368,34 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       const queries: VibeQuery[] = vibes.map((v, i) => ({
         id: v.id,
         query: v.query,
-        ethnicity: eth(i),
+        ethnicity: eth(i + (page - 1)),
       }));
-      fetchVibePhotosByQuery(selected.id, gender, queries)
+      fetchVibePhotosByQuery(selected.id, gender, queries, page)
         .then((map) => { if (!cancelled) setPerVibePhotos(map); })
         .finally(() => { if (!cancelled) setLoadingPhotos(false); });
     } else {
-      fetchVibePhotos(selected.id, gender)
+      fetchVibePhotos(selected.id, gender, page)
         .then((photos) => { if (!cancelled && photos.length > 0) setGenericPhotos(photos.map(p => p.url)); })
         .finally(() => { if (!cancelled) setLoadingPhotos(false); });
     }
 
     return () => { cancelled = true; };
-  }, [stage, selected, gender]);
+  }, [stage, selected, gender, page]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
     setTimeout(() => setStage("vibe"), 180);
   };
 
-  const handleVibe = (v: Vibe) => {
-    onNext(v.category, v.subcategory, v.label);
+  const handleVibe = (v: Vibe, image: string) => {
+    setPendingVibe({ vibe: v, image });
+  };
+
+  const confirmChoice = (mode: "exact" | "inspired") => {
+    if (!pendingVibe) return;
+    const { vibe, image } = pendingVibe;
+    setPendingVibe(null);
+    onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
   };
 
   const photoFor = (v: Vibe, i: number): string => {
@@ -484,7 +504,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
             {selected.vibes[gender].map((v, i) => (
               <button
                 key={v.id}
-                onClick={() => handleVibe(v)}
+                onClick={() => handleVibe(v, photoFor(v, i))}
                 className="anim-scaleIn"
                 style={{
                   animationDelay: `${i * 40}ms`,
@@ -548,6 +568,129 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                 </div>
               </button>
             ))}
+          </div>
+
+          {/* Show more options */}
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={loadingPhotos}
+              style={{
+                padding: "10px 20px",
+                borderRadius: 999,
+                border: `1px solid hsla(var(${accent}) / 0.45)`,
+                background: `linear-gradient(135deg, hsla(var(${accent}) / 0.12), hsla(var(--glamora-gold) / 0.06))`,
+                color: "hsl(var(--glamora-char))",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: loadingPhotos ? "wait" : "pointer",
+                boxShadow: `0 0 14px hsla(var(${accent}) / 0.25)`,
+                opacity: loadingPhotos ? 0.7 : 1,
+              }}
+            >
+              {loadingPhotos ? "Loading…" : `Show more options${page > 1 ? ` · page ${page + 1}` : ""}`}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Recreate vs Inspired modal ── */}
+      {pendingVibe && (
+        <div
+          onClick={() => setPendingVibe(null)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 60,
+            background: "hsla(0 0% 0% / 0.72)",
+            backdropFilter: "blur(8px)",
+            display: "flex", alignItems: "flex-end", justifyContent: "center",
+            padding: 16,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="anim-slideUp"
+            style={{
+              width: "100%", maxWidth: 460,
+              background: "hsl(var(--card))",
+              border: "1px solid hsla(0 0% 100% / 0.08)",
+              borderRadius: 24,
+              padding: 20,
+              boxShadow: "0 -10px 40px hsla(0 0% 0% / 0.5)",
+              marginBottom: "env(safe-area-inset-bottom, 0px)",
+            }}
+          >
+            <div style={{ display: "flex", gap: 14, marginBottom: 16 }}>
+              <img
+                src={pendingVibe.image}
+                alt={pendingVibe.vibe.label}
+                style={{
+                  width: 84, height: 112, borderRadius: 12,
+                  objectFit: "cover", flexShrink: 0,
+                  border: `1px solid hsla(var(${accent}) / 0.35)`,
+                }}
+              />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", lineHeight: 1.15 }}>
+                  {pendingVibe.vibe.label}
+                </div>
+                <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
+                  How should we style you?
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => confirmChoice("exact")}
+              style={{
+                width: "100%", textAlign: "left",
+                padding: "14px 16px", marginBottom: 10,
+                borderRadius: 16,
+                border: `1.5px solid hsla(var(${accent}) / 0.55)`,
+                background: `linear-gradient(135deg, hsla(var(${accent}) / 0.18), hsla(var(--glamora-gold) / 0.08))`,
+                color: "hsl(var(--glamora-char))",
+                cursor: "pointer",
+                boxShadow: `0 0 18px hsla(var(${accent}) / 0.3)`,
+              }}
+            >
+              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Recreate this exact look</div>
+              <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))" }}>
+                Put this exact outfit on me — same pieces, colors, and details.
+              </div>
+            </button>
+
+            <button
+              onClick={() => confirmChoice("inspired")}
+              style={{
+                width: "100%", textAlign: "left",
+                padding: "14px 16px",
+                borderRadius: 16,
+                border: "1.5px solid hsla(0 0% 100% / 0.12)",
+                background: "hsla(0 0% 100% / 0.04)",
+                color: "hsl(var(--glamora-char))",
+                cursor: "pointer",
+              }}
+            >
+              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Inspired by this vibe</div>
+              <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))" }}>
+                Create a similar but original look tailored to me.
+              </div>
+            </button>
+
+            <button
+              onClick={() => setPendingVibe(null)}
+              style={{
+                width: "100%", marginTop: 10,
+                padding: "10px",
+                borderRadius: 12,
+                border: "none",
+                background: "transparent",
+                color: "hsl(var(--glamora-gray))",
+                fontSize: 13,
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

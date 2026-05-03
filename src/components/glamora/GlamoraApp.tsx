@@ -55,6 +55,12 @@ export interface UserPrefs {
   generationMode: GenerationMode;
   
   makeupPreference?: "natural" | "glam";
+  /** URL of the inspiration photo the user picked from the vibe grid. */
+  inspirationImageUrl?: string;
+  /** "exact" = recreate the inspiration outfit on the user; "inspired" = similar but authentic. */
+  recreateMode?: "exact" | "inspired";
+  /** Human-readable vibe label chosen from the grid (e.g. "String Bikini"). */
+  vibeLabel?: string;
 }
 
 const GlamoraApp = () => {
@@ -214,8 +220,15 @@ const GlamoraApp = () => {
         <OccasionPickerScreen
           gender={prefs.gender}
           onBack={() => go("home")}
-          onNext={(category, subcategory) => {
-            setPrefs(p => ({ ...p, styleCategory: category, styleSubcategory: subcategory }));
+          onNext={(category, subcategory, vibeLabel, inspirationImageUrl, recreateMode) => {
+            setPrefs(p => ({
+              ...p,
+              styleCategory: category,
+              styleSubcategory: subcategory,
+              vibeLabel,
+              inspirationImageUrl,
+              recreateMode,
+            }));
             setActiveHolidayId(null);
             go("upload");
           }}
