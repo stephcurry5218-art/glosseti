@@ -3,6 +3,7 @@ import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, 
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
+import { fetchVibePhotos } from "./pexelsPhotos";
 
 interface Props {
   gender: Gender;
