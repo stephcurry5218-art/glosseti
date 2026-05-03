@@ -236,6 +236,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           <div className="header-sub">{isMakeup ? "AI Beauty Result" : "AI Style Result"}</div>
         </div>
       </div>
+      <FlowStepper current="result" gender={prefs.gender} />
 
       <div style={{ padding: "0 22px" }}>
         {/* Error card when generation failed */}
