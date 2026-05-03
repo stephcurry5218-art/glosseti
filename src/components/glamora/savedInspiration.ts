@@ -2,7 +2,7 @@
 // 1. Trio cache — locks the picked images for each sub-style so they never change for this user
 // 2. Favorites — list of saved inspiration image URLs with metadata
 
-const TRIO_KEY = "glamora_inspo_trios_v5";
+const TRIO_KEY = "glamora_inspo_trios_v6";
 const FAVS_KEY = "glamora_inspo_favorites_v1";
 
 export interface SavedInspiration {
