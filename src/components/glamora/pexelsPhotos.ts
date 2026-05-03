@@ -62,8 +62,9 @@ export async function fetchVibePhotosByQuery(
   occasion: OccasionId,
   gender: Gender,
   queries: VibeQuery[],
+  page: number = 1,
 ): Promise<Record<string, string>> {
-  const key = `${gender}:${occasion}:perVibe`;
+  const key = `${gender}:${occasion}:perVibe:p${page}`;
   const cache = readCache();
   const hit = cache[key];
   if (hit && Date.now() - hit.ts < TTL_MS) {
@@ -76,6 +77,7 @@ export async function fetchVibePhotosByQuery(
     const { data, error } = await supabase.functions.invoke("pexels-photos", {
       body: {
         gender,
+        page,
         queries: queries.map(q => ({ key: q.id, query: q.query, ethnicity: q.ethnicity })),
       },
     });
