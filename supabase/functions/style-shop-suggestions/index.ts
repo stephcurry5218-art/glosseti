@@ -107,7 +107,7 @@ Build the curated shopping list now.`;
                           luxury: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.luxury },
+                              store: { type: "string", enum: stores.luxury },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
@@ -116,7 +116,7 @@ Build the curated shopping list now.`;
                           mid: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.mid },
+                              store: { type: "string", enum: stores.mid },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
@@ -125,7 +125,7 @@ Build the curated shopping list now.`;
                           budget: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.budget },
+                              store: { type: "string", enum: stores.budget },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
