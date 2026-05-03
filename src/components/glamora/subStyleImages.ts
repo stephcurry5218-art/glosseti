@@ -72,56 +72,100 @@ const DEFAULT_MALE = [
   u("1488161628813-04466f872be2"), u("1492447166138-50c3889fccb1"),
 ];
 
-// Required representation anchors: every inspiration trio includes Black and
-// Hispanic/Latina/Latino models, then one style-specific image for context.
-const REPRESENTATION_POOLS: Record<Gender, { black: string[]; hispanic: string[]; beautyBlack: string[]; beautyHispanic: string[] }> = {
+// Required representation anchors: every inspiration trio rotates through
+// Black, White, Hispanic/Latina, and Asian models (gender-matched), so every
+// user sees themselves represented and no race dominates any grid.
+type Race = "black" | "white" | "hispanic" | "asian";
+const RACES: Race[] = ["black", "white", "hispanic", "asian"];
+
+const REPRESENTATION_POOLS: Record<Gender, Record<Race, string[]> & { beauty: Record<Race, string[]> }> = {
   female: {
     black: [
-      u("1634826260499-7d97a6049913"), u("1766193228857-e6e82a6c367c"),
-      u("1641427493563-5cc9cf1a9950"), u("1711925844152-8c9d51163ba2"),
-      u("1775259038056-298d0819cb45"), u("1542838132-92c53300491e"),
+      u("1634826260499-7d97a6049913"), u("1641427493563-5cc9cf1a9950"),
+      u("1711925844152-8c9d51163ba2"), u("1542838132-92c53300491e"),
       u("1503236823255-94609f598e71"), u("1525026198548-4baa812f1183"),
+      u("1573496359142-b8d87734a5a2"), u("1592621385612-4d7129426394"),
+    ],
+    white: [
+      u("1529626455594-4ff0802cfb7e"), u("1488426862026-3ee34a7d66df"),
+      u("1534528741775-53994a69daeb"), u("1495121605193-b116b5b09a55"),
+      u("1517841905240-472988babdf9"), u("1496747611176-843222e1e57c"),
+      u("1483985988355-763728e1935b"), u("1524504388940-b1c1722653e1"),
     ],
     hispanic: [
       u("1565325058695-f614c1580d7e"), u("1617380518330-7c5ca1dafdef"),
-      u("1488426862026-3ee34a7d66df"), u("1485178575877-1a13bf489dfe"),
-      u("1495121605193-b116b5b09a55"), u("1496747611176-843222e1e57c"),
-      u("1524504388940-b1c1722653e1"), u("1517841905240-472988babdf9"),
+      u("1485178575877-1a13bf489dfe"), u("1551803091-e20673f15770"),
+      u("1571908599407-cdb918ed83bf"), u("1583900985737-6d0495555783"),
+      u("1494178270175-e96de2971df9"), u("1517438476312-10d79c5f25e3"),
     ],
-    beautyBlack: [
-      face("1591726328133-b4e2b0031cb2"), face("1666073090334-f2a9c8a86d14"),
-      face("1595051780009-1a8f6f4fac9e"), face("1631825598395-58692acfee5c"),
-      face("1688633201440-73f30feb06ba"), face("1601599009979-f85c21cbd703"),
-      face("1648671095177-d00c1f6264e9"), face("1705486525499-1aaa9388de94"),
+    asian: [
+      u("1551836022-deb4988cc6c0"), u("1581044777550-4cfa60707c03"),
+      u("1502323777036-f29e3972d82f"), u("1581338834647-b0fb40704e21"),
+      u("1611042553365-9b101441c135"), u("1495365200479-c4ed1d35e1aa"),
+      u("1492106087820-71f1a00d2b11"), u("1531123414780-f74242c2b052"),
     ],
-    beautyHispanic: [
-      face("1628619447698-d17aa1899220"), face("1563827517575-7d43935ca7f6"),
-      face("1631652367427-726f96b37cf1"), face("1563827525259-22d51d5e7452"),
-      face("1570751057249-92751f496ee3"), face("1605052063083-858e6a650919"),
-      face("1565630918451-2bab9571feec"), face("1582727476685-9813d181cf75"),
-    ],
+    beauty: {
+      black: [
+        face("1591726328133-b4e2b0031cb2"), face("1666073090334-f2a9c8a86d14"),
+        face("1595051780009-1a8f6f4fac9e"), face("1631825598395-58692acfee5c"),
+        face("1688633201440-73f30feb06ba"), face("1601599009979-f85c21cbd703"),
+      ],
+      white: [
+        face("1542838132-92c53300491e"), face("1522337360788-8b13dee7a37e"),
+        face("1531746020798-e6953c6e8e04"), face("1488426862026-3ee34a7d66df"),
+        face("1721152839659-dabbacabd5d6"), face("1770821214788-6605c5c3075b"),
+      ],
+      hispanic: [
+        face("1628619447698-d17aa1899220"), face("1563827517575-7d43935ca7f6"),
+        face("1631652367427-726f96b37cf1"), face("1563827525259-22d51d5e7452"),
+        face("1570751057249-92751f496ee3"), face("1605052063083-858e6a650919"),
+      ],
+      asian: [
+        face("1531123414780-f74242c2b052"), face("1492106087820-71f1a00d2b11"),
+        face("1611042553365-9b101441c135"), face("1495365200479-c4ed1d35e1aa"),
+        face("1502323777036-f29e3972d82f"), face("1581338834647-b0fb40704e21"),
+      ],
+    },
   },
   male: {
     black: [
       u("1546572797-e8c933a75a1f"), u("1552324864-5f7f0dec9b3d"),
       u("1614483573119-1e3b2be05565"), u("1754577060078-21315dd188c8"),
-      u("1492447166138-50c3889fccb1"), u("1483721310020-03333e577078"),
-      u("1552058544-f2b08422138a"), u("1531123897727-8f129e1688ce"),
+      u("1483721310020-03333e577078"), u("1552058544-f2b08422138a"),
+    ],
+    white: [
+      u("1506794778202-cad84cf45f1d"), u("1507003211169-0a1dd7228f2d"),
+      u("1519085360753-af0119f7cbe7"), u("1472099645785-5658abf4ff4e"),
+      u("1500648767791-00dcc994a43e"), u("1531123897727-8f129e1688ce"),
     ],
     hispanic: [
       u("1542326529804-0cd9d861ebaa"), u("1585159797364-f2dfa42d79c3"),
-      u("1774542583509-a4471c0af45f"), u("1768935706759-f2be765b3aec"),
-      u("1658250365092-7d24166eb605"), u("1500648767791-00dcc994a43e"),
+      u("1768935706759-f2be765b3aec"), u("1658250365092-7d24166eb605"),
       u("1521119989659-a83eee488004"), u("1593032465175-481ac7f401a0"),
     ],
-    beautyBlack: [
-      u("1546572797-e8c933a75a1f"), u("1552324864-5f7f0dec9b3d"),
-      u("1614483573119-1e3b2be05565"), u("1754577060078-21315dd188c8"),
+    asian: [
+      u("1492447166138-50c3889fccb1"), u("1488161628813-04466f872be2"),
+      u("1531746020798-e6953c6e8e04"), u("1564564321837-a57b7070ac4f"),
+      u("1517841905240-472988babdf9"), u("1492562080023-ab3db95bfbce"),
     ],
-    beautyHispanic: [
-      u("1542326529804-0cd9d861ebaa"), u("1585159797364-f2dfa42d79c3"),
-      u("1768935706759-f2be765b3aec"), u("1658250365092-7d24166eb605"),
-    ],
+    beauty: {
+      black: [
+        u("1546572797-e8c933a75a1f"), u("1552324864-5f7f0dec9b3d"),
+        u("1614483573119-1e3b2be05565"), u("1754577060078-21315dd188c8"),
+      ],
+      white: [
+        u("1506794778202-cad84cf45f1d"), u("1507003211169-0a1dd7228f2d"),
+        u("1500648767791-00dcc994a43e"), u("1531123897727-8f129e1688ce"),
+      ],
+      hispanic: [
+        u("1542326529804-0cd9d861ebaa"), u("1585159797364-f2dfa42d79c3"),
+        u("1768935706759-f2be765b3aec"), u("1658250365092-7d24166eb605"),
+      ],
+      asian: [
+        u("1492447166138-50c3889fccb1"), u("1488161628813-04466f872be2"),
+        u("1564564321837-a57b7070ac4f"), u("1492562080023-ab3db95bfbce"),
+      ],
+    },
   },
 };
 
@@ -592,15 +636,30 @@ export function getSubStyleImages(
     stylePick = pickTrio(defaults, `${categoryId}:${subId}:style`);
   }
   const representation = REPRESENTATION_POOLS[gender];
-  const blackPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyBlack : representation.black;
-  const hispanicPool = BEAUTY_CATEGORY_IDS.has(categoryId) ? representation.beautyHispanic : representation.hispanic;
+  const isBeauty = BEAUTY_CATEGORY_IDS.has(categoryId);
+  const poolFor = (race: Race) => (isBeauty ? representation.beauty[race] : representation[race]);
+
+  // Rotate the starting race per sub-style so no race dominates across grids.
+  const startIdx = hash(`${categoryId}:${subId}:race-rotate`) % RACES.length;
+  const rotated: Race[] = RACES.map((_, i) => RACES[(startIdx + i) % RACES.length]);
+
   const trio: string[] = [];
-  addUnique(trio, [pickOne(blackPool, `${categoryId}:${subId}:black`)].filter(Boolean) as string[], usedImages);
-  addUnique(trio, [pickOne(hispanicPool, `${categoryId}:${subId}:hispanic`)].filter(Boolean) as string[], usedImages);
+  // Pick 1 model from each of 3 different races for guaranteed diversity.
+  for (let i = 0; i < 3; i++) {
+    const race = rotated[i];
+    const pick = pickOne(poolFor(race), `${categoryId}:${subId}:${race}`);
+    if (pick) addUnique(trio, [pick], usedImages);
+  }
+  // Top up with style-specific picks if any slot was a duplicate.
   addUnique(trio, stylePick, usedImages);
   const fallbackPool = categoryId === "makeup-only" && gender === "female"
     ? FEMALE_MAKEUP_FACE_SHOTS
-    : [...blackPool, ...hispanicPool, ...stylePick, ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE)];
+    : [
+        ...poolFor(rotated[3]),
+        ...poolFor(rotated[0]), ...poolFor(rotated[1]), ...poolFor(rotated[2]),
+        ...stylePick,
+        ...(gender === "male" ? DEFAULT_MALE : DEFAULT_FEMALE),
+      ];
   addUnique(trio, pickTrio(uniqueByFirstSeen(fallbackPool), `${categoryId}:${subId}:fallback`, 20), usedImages);
   if (trio.length > 0) setCachedTrio(categoryId, subId, gender, trio);
   return trio;
