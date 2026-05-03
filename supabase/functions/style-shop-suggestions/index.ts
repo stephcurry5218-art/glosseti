@@ -7,8 +7,8 @@ const corsHeaders = {
 };
 
 const ALLOWED_STORES = {
-  luxury: ["Nordstrom", "Bloomingdale's", "Net-a-Porter", "Saks Fifth Avenue"],
-  mid: ["ASOS", "Zara", "H&M", "Mango", "Revolve"],
+  luxury: ["Nordstrom", "Bloomingdale's", "Net-a-Porter", "Saks Fifth Avenue", "Revolve", "Fashion Nova"],
+  mid: ["ASOS", "Zara", "H&M", "Mango", "Revolve", "Fashion Nova"],
   budget: ["Shein", "Amazon Fashion", "Fashion Nova"],
 };
 
