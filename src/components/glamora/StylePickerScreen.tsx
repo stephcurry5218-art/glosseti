@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag, Search, X, Gift } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
+import FlowStepper from "./FlowStepper";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 
