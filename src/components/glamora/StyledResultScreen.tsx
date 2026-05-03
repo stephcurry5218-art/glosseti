@@ -147,6 +147,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   // AI-curated shop items keyed by `${lookName}|${hotspot}` — fetched on demand
   const [aiShopItems, setAiShopItems] = useState<Record<string, ShopItem[]>>({});
   const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
+  const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
 
   const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
     const key = `${lookName}|${hotspot}`;
@@ -169,6 +170,37 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
       console.warn("AI shop suggestions failed, falling back to static lookData", err);
     } finally {
       setAiShopLoading(prev => ({ ...prev, [key]: false }));
+    }
+  };
+
+  const swapShopItem = async (lookName: string, hotspot: HotspotId, index: number, currentItems: ShopItem[]) => {
+    const key = `${lookName}|${hotspot}`;
+    setSwappingIndex(index);
+    try {
+      const excludeItems = currentItems.map(i => i.label);
+      const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+        body: {
+          styleCategory: prefs.styleCategory,
+          styleSubcategory: prefs.styleSubcategory,
+          lookName,
+          gender: prefs.gender,
+          hotspot,
+          excludeItems,
+          swapOnly: true,
+        },
+      });
+      const newItem = data?.items?.[0];
+      if (!error && newItem) {
+        setAiShopItems(prev => {
+          const list = [...(prev[key] || currentItems)];
+          list[index] = newItem;
+          return { ...prev, [key]: list };
+        });
+      }
+    } catch (err) {
+      console.warn("Swap failed", err);
+    } finally {
+      setSwappingIndex(null);
     }
   };
 
@@ -509,7 +541,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     )}
                   </div>
                   {shopItems.length > 0 ? (
-                    <ShopPanel items={shopItems} />
+                   <ShopPanel
+                     items={shopItems}
+                     swappingIndex={swappingIndex}
+                     onSwapItem={lookName ? (idx) => swapShopItem(lookName, activeHotspot, idx, shopItems) : undefined}
+                   />
                   ) : (
                     <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 8 }}>
                       {isLoadingAi ? "Building your curated shopping list…" : "Select a style below to see shopping options"}

@@ -12,42 +12,65 @@ const ALLOWED_STORES = {
   budget: ["Shein", "Amazon Fashion", "Fashion Nova"],
 };
 
+// Cosplay routes to costume-specific retailers across all tiers.
+const COSPLAY_STORES = {
+  luxury: ["EZCosplay", "Miccostumes", "CosplayShopper"],
+  mid: ["Hot Topic", "Spirit Halloween", "EZCosplay"],
+  budget: ["Party City", "Amazon Fashion", "Spirit Halloween"],
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { styleCategory, styleSubcategory, lookName, gender, hotspot, refinementContext } = await req.json();
+    const { styleCategory, styleSubcategory, lookName, gender, hotspot, refinementContext, excludeItems, swapOnly } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const isMale = gender === "male";
     const genderWord = isMale ? "men's" : "women's";
+    const isCosplay = styleCategory === "cosplay";
+    const stores = isCosplay ? COSPLAY_STORES : ALLOWED_STORES;
 
     const occasionLine = styleSubcategory
-      ? `OCCASION/SUB-STYLE: "${styleSubcategory.replace(/-/g, " ")}" — ALL items MUST be appropriate for this exact occasion. If the sub-style implies a specific garment (dress, gown, suit, swimsuit, etc.), the hero piece MUST be that garment — never substitute pants for a dress, or casual wear for formal.`
+      ? `OCCASION/SUB-STYLE: "${styleSubcategory.replace(/-/g, " ")}" — ALL items MUST be appropriate for this exact occasion. If the sub-style implies a specific garment (dress, gown, suit, swimsuit, costume piece, etc.), the hero piece MUST be that garment.`
       : "";
 
     const hotspotLine = hotspot
-      ? `FOCUS AREA: "${hotspot}" — only suggest items relevant to this category (e.g. "shoes" → only footwear, "top" → only tops/blouses/jackets, "bottom" → only bottoms appropriate for the occasion).`
+      ? `FOCUS AREA: "${hotspot}" — only suggest items relevant to this category (e.g. "shoes" → only footwear, "top" → only tops/jackets, "accessories" → only accessories/wigs/props for cosplay).`
       : "";
 
-    const systemPrompt = `You are Glosseti's expert shopping curator. Build a cohesive, occasion-appropriate ${genderWord} shopping list across THREE price tiers (luxury, mid, budget). 
+    const cosplayLine = isCosplay
+      ? `COSPLAY MODE: This is a costume look. Suggest costume pieces, wigs, props, accessories, and themed makeup/body paint. Use costume retailers only. Items should be original, fan-inspired descriptions — never use copyrighted character names; describe by aesthetic (e.g. "Orange martial-arts gi", "Sailor-style schoolgirl uniform with red bow", "Green pointed-ear elf tunic").`
+      : "";
+
+    const excludeLine = excludeItems && Array.isArray(excludeItems) && excludeItems.length > 0
+      ? `EXCLUDE — do NOT suggest any of these already-shown items (pick something visually different): ${excludeItems.slice(0, 10).map((s: string) => `"${s}"`).join(", ")}`
+      : "";
+
+    const swapLine = swapOnly
+      ? `SWAP MODE: Return EXACTLY ONE alternative item for the focus area that complements the rest of the look but is visibly different from the excluded items.`
+      : `Return 4-6 items that together form a complete, polished look (hero piece + complementary pieces + shoes + 1-2 accessories).`;
+
+    const systemPrompt = `You are Glosseti's expert shopping curator. Build a cohesive, occasion-appropriate ${genderWord} shopping list across THREE price tiers (luxury, mid, budget).
 
 STRICT RULES:
 - Every item MUST match the occasion/sub-style exactly. A prom dress request must NEVER include pants or casual wear.
 - For each item return ONE store per tier from these allowed lists ONLY:
-  · luxury: ${ALLOWED_STORES.luxury.join(", ")}
-  · mid: ${ALLOWED_STORES.mid.join(", ")}
-  · budget: ${ALLOWED_STORES.budget.join(", ")}
-- Vary the retailers across items in the same tier so the user sees a mix (don't pick Nordstrom for every luxury item).
-- Use realistic, specific product names a stylist would actually pull (e.g. "Mac Duggal Sequin Mermaid Gown", not "fancy dress").
+  · luxury: ${stores.luxury.join(", ")}
+  · mid: ${stores.mid.join(", ")}
+  · budget: ${stores.budget.join(", ")}
+- Vary the retailers across items in the same tier so the user sees a mix.
+- Use realistic, specific product names a stylist would actually pull.
 - Use realistic prices: luxury $150-$2000, mid $40-$200, budget $15-$80. Format as "$120" or "$1,250".
-- Return 4-6 items that together form a complete, polished look (hero piece + complementary pieces + shoes + 1-2 accessories).`;
+- ${swapLine}`;
 
     const userPrompt = `STYLE CATEGORY: ${styleCategory || "full-style"}
 LOOK NAME: ${lookName || "(no specific look)"}
 ${occasionLine}
 ${hotspotLine}
+${cosplayLine}
+${excludeLine}
 ${refinementContext ? `USER REFINEMENT: ${String(refinementContext).slice(0, 400)}` : ""}
 
 Build the curated shopping list now.`;
@@ -84,7 +107,7 @@ Build the curated shopping list now.`;
                           luxury: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.luxury },
+                              store: { type: "string", enum: stores.luxury },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
@@ -93,7 +116,7 @@ Build the curated shopping list now.`;
                           mid: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.mid },
+                              store: { type: "string", enum: stores.mid },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
@@ -102,7 +125,7 @@ Build the curated shopping list now.`;
                           budget: {
                             type: "object",
                             properties: {
-                              store: { type: "string", enum: ALLOWED_STORES.budget },
+                              store: { type: "string", enum: stores.budget },
                               item: { type: "string" },
                               price: { type: "string" },
                             },
