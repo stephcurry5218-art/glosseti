@@ -543,9 +543,10 @@ serve(async (req) => {
           : isRevealing
             ? `${facePreservation} Keep the person's exact body shape and proportions. Restyle ONLY their clothing to match the described outfit. Change the background to match the setting described. Professional fashion editorial style.`
             : `${facePreservation} Keep the person's exact body shape, proportions, and background. Change ONLY their clothing and accessories. Realistic clothing, warm lighting.`;
+      const stylistCraftNote = "\n\nSTYLIST CRAFT: Treat this like a real celebrity stylist's pull — every piece should feel intentional, current-season trendy, and tailored to flatter this specific person's body type, skin tone, and undertone. Choose silhouettes that highlight their best features, colors that complement their complexion, and 1-2 fashion-forward statement details (texture, an unexpected accessory, a current trending element) that elevate the look beyond a generic outfit. Avoid anything boring, dated, or formulaic.";
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${refinementNote}`;
 
       const contentParts: any[] = [
         { type: "text", text: editPrompt },
