@@ -151,12 +151,14 @@ Deno.serve(async (req) => {
       });
     }
 
+    const page = Math.max(1, Math.min(20, Number(body.page) || 1));
+
     // Mode 2: per-vibe queries
     if (Array.isArray(body.queries)) {
       const queries = (body.queries as QueryReq[])
         .filter(q => q && typeof q.key === "string" && typeof q.query === "string")
         .slice(0, 24);
-      const photos = await handleQueryMode(PEXELS_API_KEY, queries, gender);
+      const photos = await handleQueryMode(PEXELS_API_KEY, queries, gender, page);
       return new Response(JSON.stringify({ photos }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -169,7 +171,7 @@ Deno.serve(async (req) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const photos = await handleOccasionMode(PEXELS_API_KEY, occasion, gender);
+    const photos = await handleOccasionMode(PEXELS_API_KEY, occasion, gender, page);
     return new Response(JSON.stringify({ photos }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
