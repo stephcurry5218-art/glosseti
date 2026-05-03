@@ -177,6 +177,29 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                         transform: isExpanded ? "rotate(90deg)" : "rotate(0)",
                       }} />
                     </button>
+                    {onSwapItem && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onSwapItem(idx); }}
+                        disabled={swappingIndex === idx}
+                        title="Swap this piece for an alternative"
+                        style={{
+                          background: "hsla(var(--glamora-rose-dark) / 0.1)",
+                          border: "1px solid hsla(var(--glamora-rose-dark) / 0.25)",
+                          borderRadius: 8, padding: "5px 9px",
+                          display: "flex", alignItems: "center", gap: 4,
+                          cursor: swappingIndex === idx ? "wait" : "pointer",
+                          color: "hsl(var(--glamora-rose-dark))",
+                          fontFamily: "'Jost', sans-serif", fontSize: 10, fontWeight: 700,
+                          opacity: swappingIndex === idx ? 0.6 : 1,
+                          marginLeft: 2,
+                        }}
+                      >
+                        <RefreshCw size={11} style={{
+                          animation: swappingIndex === idx ? "spin 1s linear infinite" : "none",
+                        }} />
+                        Swap
+                      </button>
+                    )}
                   </div>
 
                   {/* Expanded — show all 3 tiers for this item */}
