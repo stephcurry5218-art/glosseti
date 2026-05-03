@@ -8,7 +8,13 @@ import { fetchVibePhotos, fetchVibePhotosByQuery, type VibeQuery } from "./pexel
 interface Props {
   gender: Gender;
   onBack: () => void;
-  onNext: (category: StyleCategory, subcategory: string, vibeLabel: string) => void;
+  onNext: (
+    category: StyleCategory,
+    subcategory: string,
+    vibeLabel: string,
+    inspirationImageUrl?: string,
+    recreateMode?: "exact" | "inspired",
+  ) => void;
 }
 
 type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay";
