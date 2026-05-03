@@ -337,6 +337,8 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [perVibePhotos, setPerVibePhotos] = useState<Record<string, string> | null>(null);
   const [genericPhotos, setGenericPhotos] = useState<string[] | null>(null);
   const [loadingPhotos, setLoadingPhotos] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const vibeRef = useRef<HTMLDivElement>(null);
@@ -347,7 +349,12 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
   }, [stage]);
 
-  // Fetch the right photos based on the selected occasion's mode.
+  // Reset page when entering a new occasion
+  useEffect(() => {
+    if (stage === "vibe") setPage(1);
+  }, [stage, selected?.id]);
+
+  // Fetch the right photos based on the selected occasion's mode + page.
   useEffect(() => {
     if (stage !== "vibe" || !selected) return;
     let cancelled = false;
@@ -361,27 +368,34 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       const queries: VibeQuery[] = vibes.map((v, i) => ({
         id: v.id,
         query: v.query,
-        ethnicity: eth(i),
+        ethnicity: eth(i + (page - 1)),
       }));
-      fetchVibePhotosByQuery(selected.id, gender, queries)
+      fetchVibePhotosByQuery(selected.id, gender, queries, page)
         .then((map) => { if (!cancelled) setPerVibePhotos(map); })
         .finally(() => { if (!cancelled) setLoadingPhotos(false); });
     } else {
-      fetchVibePhotos(selected.id, gender)
+      fetchVibePhotos(selected.id, gender, page)
         .then((photos) => { if (!cancelled && photos.length > 0) setGenericPhotos(photos.map(p => p.url)); })
         .finally(() => { if (!cancelled) setLoadingPhotos(false); });
     }
 
     return () => { cancelled = true; };
-  }, [stage, selected, gender]);
+  }, [stage, selected, gender, page]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
     setTimeout(() => setStage("vibe"), 180);
   };
 
-  const handleVibe = (v: Vibe) => {
-    onNext(v.category, v.subcategory, v.label);
+  const handleVibe = (v: Vibe, image: string) => {
+    setPendingVibe({ vibe: v, image });
+  };
+
+  const confirmChoice = (mode: "exact" | "inspired") => {
+    if (!pendingVibe) return;
+    const { vibe, image } = pendingVibe;
+    setPendingVibe(null);
+    onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
   };
 
   const photoFor = (v: Vibe, i: number): string => {
