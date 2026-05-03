@@ -103,8 +103,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
       </div>
+      <FlowStepper current="photo" gender={prefs.gender} />
 
-      <div style={{ padding: "0 22px", marginTop: 16 }}>
+      <div style={{ padding: "0 22px", marginTop: 12 }}>
         {/* Mode toggle: On Me vs Mannequin — hide for dual photo categories */}
         {!isFaceCategory && !isDualPhotoCategory && (
           <div className="anim-fadeUp" style={{
