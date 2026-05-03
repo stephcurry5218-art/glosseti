@@ -349,9 +349,10 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
   }, [stage]);
 
-  // Reset page when entering a new occasion
+  // Randomize starting page each time user enters a new occasion so the
+  // category preview images feel fresh on every visit (cycles through pages 1-5).
   useEffect(() => {
-    if (stage === "vibe") setPage(1);
+    if (stage === "vibe") setPage(Math.floor(Math.random() * 5) + 1);
   }, [stage, selected?.id]);
 
   // Fetch the right photos based on the selected occasion's mode + page.
