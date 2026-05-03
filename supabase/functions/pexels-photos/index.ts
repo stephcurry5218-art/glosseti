@@ -93,14 +93,14 @@ async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gend
   return out;
 }
 
-async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Gender) {
+async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Gender, page: number) {
   const baseTerm = OCCASION_TERMS[occasion][gender];
   const noun = GENDER_NOUN[gender];
 
   const results = await Promise.all(
     ETHNICITIES.map(async (e) => {
       const q = `${e.tag} ${noun} ${baseTerm}`;
-      const photos = await searchPexels(apiKey, q, 6, 1);
+      const photos = await searchPexels(apiKey, q, 6, page);
       return { tag: e.tag, want: e.weight, photos };
     })
   );
@@ -120,7 +120,7 @@ async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Ge
   }
 
   if (picked.length < 12) {
-    const fallback = await searchPexels(apiKey, `${noun} ${baseTerm}`, 30, 1);
+    const fallback = await searchPexels(apiKey, `${noun} ${baseTerm}`, 30, page);
     for (const p of fallback) {
       if (picked.length >= 12) break;
       if (seen.has(p.id)) continue;
