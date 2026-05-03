@@ -466,6 +466,10 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               const customTerm = getCustomDetailForHotspot(activeHotspot, userCustomDetails);
               const detected = customTerm ? detectStoreFromText(customTerm) : null;
 
+              const aiKey = lookName ? `${lookName}|${activeHotspot}` : "";
+              const aiItems = aiKey ? aiShopItems[aiKey] : undefined;
+              const isLoadingAi = aiKey ? aiShopLoading[aiKey] : false;
+
               let shopItems: ShopItem[];
               if (customTerm) {
                 // User specified a custom item — build a single shop entry routing to the right store
@@ -479,6 +483,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     budget: { store: "Amazon", item: customTerm, price: "$$" },
                   },
                 }];
+              } else if (aiItems && aiItems.length > 0) {
+                // Prefer AI-curated, occasion-aware shop list across multiple retailers
+                shopItems = aiItems;
               } else {
                 shopItems = data
                   ? data.filter(step => step.shop).map(step => ({
@@ -495,12 +502,15 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                     <div style={{ fontSize: 15, fontWeight: 600, color: "hsl(var(--glamora-char))" }}>
                       Shop {hotspotPositions[activeHotspot].label}
                     </div>
+                    {isLoadingAi && (
+                      <div style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>Curating…</div>
+                    )}
                   </div>
                   {shopItems.length > 0 ? (
                     <ShopPanel items={shopItems} />
                   ) : (
                     <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 8 }}>
-                      Select a style below to see shopping options
+                      {isLoadingAi ? "Building your curated shopping list…" : "Select a style below to see shopping options"}
                     </div>
                   )}
                   {/* Look selection */}
