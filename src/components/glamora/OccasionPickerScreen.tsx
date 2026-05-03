@@ -3,6 +3,7 @@ import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, 
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
+import { fetchVibePhotos } from "./pexelsPhotos";
 
 interface Props {
   gender: Gender;
@@ -333,6 +334,8 @@ const OCCASIONS: Occasion[] = OCCASION_META.map(meta => ({
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [stage, setStage] = useState<"occasion" | "vibe">("occasion");
   const [selected, setSelected] = useState<Occasion | null>(null);
+  const [pexelsPhotos, setPexelsPhotos] = useState<string[] | null>(null);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const vibeRef = useRef<HTMLDivElement>(null);
@@ -342,6 +345,21 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       vibeRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [stage]);
+
+  // Fetch fresh, gender-correct photos from Pexels when an occasion is selected.
+  useEffect(() => {
+    if (stage !== "vibe" || !selected) return;
+    let cancelled = false;
+    setPexelsPhotos(null);
+    setLoadingPhotos(true);
+    fetchVibePhotos(selected.id, gender)
+      .then((photos) => {
+        if (cancelled) return;
+        if (photos.length > 0) setPexelsPhotos(photos.map(p => p.url));
+      })
+      .finally(() => { if (!cancelled) setLoadingPhotos(false); });
+    return () => { cancelled = true; };
+  }, [stage, selected, gender]);
 
   const handleOccasion = (o: Occasion) => {
     setSelected(o);
@@ -469,7 +487,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                 }}
               >
                 <img
-                  src={v.image}
+                  src={pexelsPhotos?.[i] || v.image}
                   alt={v.label}
                   loading="lazy"
                   decoding="async"
@@ -477,6 +495,13 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                     width: "100%", height: "100%",
                     objectFit: "cover", objectPosition: "center top",
                     display: "block",
+                    opacity: loadingPhotos && !pexelsPhotos ? 0.55 : 1,
+                    transition: "opacity 0.3s",
+                  }}
+                  onError={(e) => {
+                    // If Pexels URL fails, fall back to the static image.
+                    const el = e.currentTarget as HTMLImageElement;
+                    if (el.src !== v.image) el.src = v.image;
                   }}
                 />
                 <div
