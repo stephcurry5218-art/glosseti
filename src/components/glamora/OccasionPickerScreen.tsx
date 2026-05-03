@@ -545,6 +545,16 @@ const OCCASIONS: Occasion[] = OCCASION_META.map(meta => ({
   vibes: { female: FEMALE_FULL[meta.id], male: MALE_FULL[meta.id] },
 }));
 
+const VISIBLE_PER_BATCH = 12;
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [stage, setStage] = useState<"occasion" | "vibe">("occasion");
   const [selected, setSelected] = useState<Occasion | null>(null);
@@ -552,6 +562,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [genericPhotos, setGenericPhotos] = useState<string[] | null>(null);
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [page, setPage] = useState(1);
+  const [shuffleNonce, setShuffleNonce] = useState(0);
   const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
