@@ -483,6 +483,11 @@ serve(async (req) => {
 
 
     const requestImage = async (messages: any[]) => {
+      // Try preview model first; fall back to stable nano-banana if it returns no image
+      const modelChain = [
+        "google/gemini-3.1-flash-image-preview",
+        "google/gemini-2.5-flash-image",
+      ];
       const maxRetries = 3;
       let lastError: Error | null = null;
 
@@ -492,6 +497,7 @@ serve(async (req) => {
           await new Promise((r) => setTimeout(r, 2000 * attempt));
         }
 
+        const model = modelChain[Math.min(attempt, modelChain.length - 1)];
         const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -499,7 +505,7 @@ serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "google/gemini-3.1-flash-image-preview",
+            model,
             messages,
             modalities: ["image", "text"],
           }),
