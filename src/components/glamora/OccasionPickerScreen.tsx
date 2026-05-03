@@ -17,7 +17,7 @@ interface Props {
   ) => void;
 }
 
-type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay";
+type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay" | "makeup";
 
 interface Vibe {
   id: string;
