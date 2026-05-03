@@ -177,7 +177,30 @@ const OCCASIONS: Occasion[] = [
     },
   },
   {
-    id: "fitness",
+    id: "swimwear",
+    label: "Swimwear",
+    desc: "Bikinis, one-pieces, poolside",
+    Icon: Waves,
+    vibes: {
+      female: [
+        { id: "string-bikini", label: "String Bikini", image: img("1570976447640-ac859d960c4b"), category: "swimwear", subcategory: "string-bikini" },
+        { id: "high-waist-bikini", label: "High-Waist Bikini", image: img("1502323777036-f29e3972d82f"), category: "swimwear", subcategory: "high-waist-bikini" },
+        { id: "one-piece", label: "One-Piece", image: img("1515886657613-9f3515b0c78f"), category: "swimwear", subcategory: "one-piece" },
+        { id: "cutout-swim", label: "Cut-Out Swim", image: img("1485178575877-1a13bf489dfe"), category: "swimwear", subcategory: "cutout-swim" },
+        { id: "tropical-bikini", label: "Tropical Print", image: img("1488426862026-3ee34a7d66df"), category: "swimwear", subcategory: "tropical-print-bikini" },
+        { id: "swim-coverup-f", label: "Coverup & Sarong", image: img("1483985988355-763728e1935b"), category: "swimwear", subcategory: "swim-coverup" },
+      ],
+      male: [
+        { id: "swim-trunks", label: "Classic Trunks", image: img("1530268729831-4b0b9e170218"), category: "swimwear", subcategory: "swim-shorts" },
+        { id: "board-shorts", label: "Board Shorts", image: img("1532910404247-7ee9488d7292"), category: "swimwear", subcategory: "board-shorts" },
+        { id: "tailored-swim", label: "Tailored Swim", image: img("1502720433255-614171a1835e"), category: "swimwear", subcategory: "tailored-swim" },
+        { id: "tropical-trunks", label: "Tropical Print", image: img("1500648767791-00dcc994a43e"), category: "swimwear", subcategory: "tropical-trunks" },
+        { id: "swim-shirt-combo", label: "Linen Shirt Combo", image: img("1531123897727-8f129e1688ce"), category: "swimwear", subcategory: "swim-linen-combo" },
+        { id: "speedo-swim", label: "Speedo Brief", image: img("1488161628813-04466f872be2"), category: "swimwear", subcategory: "speedo-brief" },
+      ],
+    },
+  },
+  {
     label: "Fitness",
     desc: "Gym, run, yoga, sport-ready",
     Icon: Dumbbell,
