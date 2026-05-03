@@ -26,8 +26,8 @@ function writeCache(c: CacheShape) {
 const inflight = new Map<string, Promise<unknown>>();
 
 // ── Mode 1: 12 generic photos per occasion (legacy, used by fitness/cosplay) ──
-export async function fetchVibePhotos(occasion: OccasionId, gender: Gender): Promise<PexelsPhoto[]> {
-  const key = `${gender}:${occasion}:generic`;
+export async function fetchVibePhotos(occasion: OccasionId, gender: Gender, page: number = 1): Promise<PexelsPhoto[]> {
+  const key = `${gender}:${occasion}:generic:p${page}`;
   const cache = readCache();
   const hit = cache[key];
   if (hit && Date.now() - hit.ts < TTL_MS) {
@@ -38,7 +38,7 @@ export async function fetchVibePhotos(occasion: OccasionId, gender: Gender): Pro
 
   const p = (async () => {
     const { data, error } = await supabase.functions.invoke("pexels-photos", {
-      body: { occasion, gender },
+      body: { occasion, gender, page },
     });
     if (error || !data?.photos?.length) {
       console.warn("[pexels] fetch failed", error);
