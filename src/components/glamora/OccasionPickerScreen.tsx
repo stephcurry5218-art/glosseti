@@ -730,7 +730,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
       {stage === "vibe" && selected && (
         <div ref={vibeRef} className="anim-fadeUp" style={{ padding: "16px 18px 40px" }}>
           <div className="section-label" style={{ marginBottom: 10, paddingLeft: 4 }}>
-            Tap the vibe that speaks to you · {selected.vibes[gender].length} looks
+            Tap the vibe that speaks to you · {visibleVibes.length} of {selected.vibes[gender].length} looks
           </div>
           <div
             style={{
