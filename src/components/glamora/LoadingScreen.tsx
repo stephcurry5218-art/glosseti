@@ -417,6 +417,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
           }} />
         </div>
       </div>
+      </div>
     </div>
   );
 };
