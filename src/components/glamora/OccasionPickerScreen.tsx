@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check } from "lucide-react";
+import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
@@ -10,7 +10,7 @@ interface Props {
   onNext: (category: StyleCategory, subcategory: string, vibeLabel: string) => void;
 }
 
-type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation";
+type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "fitness" | "cosplay";
 
 interface Vibe {
   id: string;
