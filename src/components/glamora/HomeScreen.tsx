@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock, Clock } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
@@ -7,8 +7,9 @@ import SeasonalBanner from "./SeasonalBanner";
 import EventPromos from "./EventPromos";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
-import { MONTHLY_CAPS } from "./subscription/types";
+import { MONTHLY_CAPS, FREE_DAILY_LIMIT } from "./subscription/types";
 import UsageBadge from "./subscription/UsageBadge";
+import { useResetCountdown } from "./subscription/useResetCountdown";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
