@@ -710,6 +710,25 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
         >
           {OCCASIONS.map((o, i) => {
             const isSel = selected?.id === o.id;
+            const isHighlight = HIGHLIGHT_OCCASIONS.has(o.id);
+            const label = o.genderLabel ? o.genderLabel[gender] : o.label;
+            const desc = o.genderDesc ? o.genderDesc[gender] : o.desc;
+            const tileBg = isHighlight
+              ? "linear-gradient(135deg, hsla(330 80% 58% / 0.28), hsla(36 90% 60% / 0.22) 60%, hsla(280 70% 55% / 0.20))"
+              : isSel
+                ? `linear-gradient(135deg, hsla(var(${accent}) / 0.28), hsla(var(--glamora-gold) / 0.16))`
+                : `linear-gradient(135deg, hsla(var(${accent}) / 0.10), hsl(var(--card)))`;
+            const border = isHighlight
+              ? "1.5px solid hsla(36 95% 70% / 0.7)"
+              : `1.5px solid ${isSel ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.22)`}`;
+            const shadow = isHighlight
+              ? "0 0 26px hsla(330 80% 58% / 0.45), 0 0 40px hsla(36 90% 60% / 0.28), 0 6px 22px hsla(0 0% 0% / 0.4)"
+              : isSel
+                ? `0 0 26px hsla(var(${accent}) / 0.45), 0 4px 22px hsla(0 0% 0% / 0.35)`
+                : `0 4px 18px hsla(0 0% 0% / 0.3), 0 0 14px hsla(var(${accent}) / 0.12)`;
+            const iconBg = isHighlight
+              ? "linear-gradient(135deg, hsl(330 85% 62%), hsl(36 95% 60%) 55%, hsl(280 75% 60%))"
+              : `linear-gradient(135deg, hsl(var(${accent})), hsl(var(--glamora-gold-light)))`;
             return (
               <button
                 key={o.id}
@@ -719,13 +738,9 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                   animationDelay: `${i * 60}ms`,
                   padding: "20px 14px",
                   borderRadius: 22,
-                  border: `1.5px solid ${isSel ? `hsl(var(${accent}))` : "hsla(0 0% 100% / 0.08)"}`,
-                  background: isSel
-                    ? `linear-gradient(135deg, hsla(var(${accent}) / 0.18), hsla(var(--glamora-gold) / 0.08))`
-                    : "hsl(var(--card))",
-                  boxShadow: isSel
-                    ? `0 0 24px hsla(var(${accent}) / 0.35), 0 4px 20px hsla(0 0% 0% / 0.3)`
-                    : "0 2px 14px hsla(0 0% 0% / 0.22)",
+                  border,
+                  background: tileBg,
+                  boxShadow: shadow,
                   color: "hsl(var(--glamora-char))",
                   cursor: "pointer",
                   display: "flex",
@@ -734,24 +749,42 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                   gap: 10,
                   textAlign: "left",
                   minHeight: 130,
+                  position: "relative",
                   transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
+                {isHighlight && (
+                  <span
+                    style={{
+                      position: "absolute", top: 10, right: 10,
+                      fontSize: 9, fontWeight: 700, letterSpacing: 1,
+                      padding: "3px 8px", borderRadius: 999,
+                      background: "linear-gradient(135deg, hsl(36 95% 60%), hsl(330 85% 62%))",
+                      color: "hsl(18 22% 7%)",
+                      boxShadow: "0 0 12px hsla(36 95% 60% / 0.6)",
+                    }}
+                  >
+                    NEW
+                  </span>
+                )}
                 <div
                   style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    background: `linear-gradient(135deg, hsl(var(${accent})), hsl(var(--glamora-gold-light)))`,
+                    width: 44, height: 44, borderRadius: 13,
+                    background: iconBg,
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    boxShadow: isHighlight
+                      ? "0 0 18px hsla(330 85% 62% / 0.55), inset 0 1px 0 hsla(0 0% 100% / 0.3)"
+                      : `0 0 14px hsla(var(${accent}) / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.25)`,
                   }}
                 >
-                  <o.Icon size={20} color="white" />
+                  <o.Icon size={22} color="white" strokeWidth={2.2} />
                 </div>
                 <div>
                   <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, lineHeight: 1.15 }}>
-                    {o.label}
+                    {label}
                   </div>
-                  <div style={{ fontSize: 11.5, color: "hsl(var(--glamora-gray))", marginTop: 4, lineHeight: 1.35 }}>
-                    {o.desc}
+                  <div style={{ fontSize: 11.5, color: "hsl(var(--glamora-char2))", marginTop: 4, lineHeight: 1.35, opacity: 0.85 }}>
+                    {desc}
                   </div>
                 </div>
               </button>
