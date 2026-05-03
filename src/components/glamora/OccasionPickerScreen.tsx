@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves } from "lucide-react";
+import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves, Palette } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
@@ -17,7 +17,7 @@ interface Props {
   ) => void;
 }
 
-type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay";
+type OccasionId = "casual" | "glam" | "formal" | "streetwear" | "date-night" | "vacation" | "swimwear" | "fitness" | "cosplay" | "makeup";
 
 interface Vibe {
   id: string;
@@ -35,6 +35,8 @@ interface Occasion {
   label: string;
   desc: string;
   Icon: LucideIcon;
+  genderLabel?: { male: string; female: string };
+  genderDesc?: { male: string; female: string };
   /** When true, fetch one targeted photo per vibe via per-query mode. */
   usePerVibePhotos: boolean;
   vibes: { female: Vibe[]; male: Vibe[] };
@@ -178,6 +180,20 @@ const FEMALE: Record<OccasionId, Vibe[]> = {
     { id: "f-cos-11", label: "Galaxy Heroine",    query: "space heroine cosplay woman",           image: img("1631652367427-726f96b37cf1"), category: "cosplay", subcategory: "galaxy-heroine" },
     { id: "f-cos-12", label: "Underwater Princess",query: "mermaid princess cosplay woman",       image: img("1570751057249-92751f496ee3"), category: "cosplay", subcategory: "underwater-princess" },
   ],
+  makeup: [
+    { id: "f-mkp-01", label: "Soft Glam",         query: "soft glam makeup woman face",           image: img("1487412947147-5cebf100ffc2"), category: "makeup-only", subcategory: "soft-glam" },
+    { id: "f-mkp-02", label: "Bold Beat",         query: "bold dramatic makeup woman face",       image: img("1503104834685-7205e8607eb9"), category: "makeup-only", subcategory: "bold-beat" },
+    { id: "f-mkp-03", label: "No-Makeup Makeup",  query: "natural no makeup look woman",          image: img("1531746020798-e6953c6e8e04"), category: "makeup-only", subcategory: "no-makeup-makeup" },
+    { id: "f-mkp-04", label: "Smokey Eye",        query: "smokey eye makeup woman",               image: img("1522337360788-8b13dee7a37e"), category: "makeup-only", subcategory: "smokey-eye" },
+    { id: "f-mkp-05", label: "Red Lip Classic",   query: "red lipstick classic makeup woman",     image: img("1512496015851-a90fb38ba796"), category: "makeup-only", subcategory: "red-lip-classic" },
+    { id: "f-mkp-06", label: "Bronzed Goddess",   query: "bronzed glow makeup woman",             image: img("1457972729786-0411a3b2b626"), category: "makeup-only", subcategory: "bronzed-goddess" },
+    { id: "f-mkp-07", label: "Glass Skin",        query: "glass skin dewy makeup",                image: img("1614283233556-f35b0c801ef1"), category: "makeup-only", subcategory: "glass-skin" },
+    { id: "f-mkp-08", label: "Editorial",         query: "editorial high fashion makeup",         image: img("1571908599407-cdb918ed83bf"), category: "makeup-only", subcategory: "editorial" },
+    { id: "f-mkp-09", label: "Berry Lip",         query: "berry lip makeup woman",                image: img("1531123414780-f74242c2b052"), category: "makeup-only", subcategory: "berry-lip" },
+    { id: "f-mkp-10", label: "Graphic Liner",     query: "graphic eyeliner makeup",               image: img("1604004215695-c54b6f3df1e7"), category: "makeup-only", subcategory: "graphic-liner" },
+    { id: "f-mkp-11", label: "Glitter Eye",       query: "glitter eye makeup",                    image: img("1620916566398-39f1143ab7be"), category: "makeup-only", subcategory: "glitter-eye" },
+    { id: "f-mkp-12", label: "Sun-Kissed",        query: "sun kissed bronzer makeup",             image: img("1542596594-649edbc13630"), category: "makeup-only", subcategory: "sun-kissed" },
+  ],
 };
 
 const MALE: Record<OccasionId, Vibe[]> = {
@@ -307,9 +323,21 @@ const MALE: Record<OccasionId, Vibe[]> = {
     { id: "m-cos-11", label: "Vampire Lord",     query: "vampire cosplay man",                   image: img("1605497788044-5a32c7078486"), category: "cosplay", subcategory: "vampire-lord" },
     { id: "m-cos-12", label: "Samurai",          query: "samurai cosplay man",                   image: img("1617922001439-4a2e6562f328"), category: "cosplay", subcategory: "samurai" },
   ],
+  makeup: [
+    { id: "m-mkp-01", label: "Clean Cut",         query: "men clean cut groomed face",            image: img("1492562080023-ab3db95bfbce"), category: "grooming", subcategory: "clean-cut" },
+    { id: "m-mkp-02", label: "Rugged Beard",      query: "men rugged beard grooming",             image: img("1500648767791-00dcc994a43e"), category: "grooming", subcategory: "rugged-grooming" },
+    { id: "m-mkp-03", label: "Modern Gent",       query: "men styled hair stubble groomed",       image: img("1506794778202-cad84cf45f1d"), category: "grooming", subcategory: "modern-gent" },
+    { id: "m-mkp-04", label: "Buzz & Fresh",      query: "men buzz cut clean skin",               image: img("1531427186611-ecfd6d936c79"), category: "grooming", subcategory: "buzz-fresh" },
+    { id: "m-mkp-05", label: "Skin Glow",         query: "men skincare glowing skin",             image: img("1564564321837-a57b7070ac4f"), category: "grooming", subcategory: "skin-glow" },
+    { id: "m-mkp-06", label: "Sharp Fade",        query: "men sharp fade haircut",                image: img("1622519407650-3df9883f76a5"), category: "grooming", subcategory: "sharp-fade" },
+    { id: "m-mkp-07", label: "Full Beard",        query: "men full beard styled",                 image: img("1492447166138-50c3889fccb1"), category: "grooming", subcategory: "full-beard" },
+    { id: "m-mkp-08", label: "Slick Back",        query: "men slick back hairstyle",              image: img("1488161628813-04466f872be2"), category: "grooming", subcategory: "slick-back" },
+    { id: "m-mkp-09", label: "Textured Crop",     query: "men textured crop haircut",             image: img("1519085360753-af0119f7cbe7"), category: "grooming", subcategory: "textured-crop" },
+    { id: "m-mkp-10", label: "Goatee Style",      query: "men goatee facial hair",                image: img("1463453091185-61582044d556"), category: "grooming", subcategory: "goatee" },
+    { id: "m-mkp-11", label: "Curly Top",         query: "men curly hair styled",                 image: img("1507003211169-0a1dd7228f2d"), category: "grooming", subcategory: "curly-top" },
+    { id: "m-mkp-12", label: "Long Hair Groom",   query: "men long hair groomed",                 image: img("1542327897-d73f4005b533"), category: "grooming", subcategory: "long-hair-groom" },
+  ],
 };
-
-// ============================================================================
 // EXTRA VIBE POOLS — additional sub-styles per occasion so users get an abundance
 // of choices. Each visit randomly samples 12 vibes from base + extras combined,
 // and "Show more" reshuffles to surface fresh ones.
@@ -523,11 +551,16 @@ const MALE_FULL: Record<OccasionId, Vibe[]> = Object.fromEntries(
 ) as Record<OccasionId, Vibe[]>;
 
 const PER_VIBE_OCCASIONS: ReadonlySet<OccasionId> = new Set([
-  "swimwear", "casual", "glam", "formal", "streetwear", "date-night", "vacation",
+  "swimwear", "casual", "glam", "formal", "streetwear", "date-night", "vacation", "makeup",
 ]);
 
+const HIGHLIGHT_OCCASIONS: ReadonlySet<OccasionId> = new Set(["makeup"]);
 
-const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: LucideIcon }> = [
+const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: LucideIcon; genderLabel?: { male: string; female: string }; genderDesc?: { male: string; female: string } }> = [
+  { id: "makeup",     label: "Makeup",          desc: "Beauty, glam, and grooming",
+    genderLabel: { male: "Grooming", female: "Makeup" },
+    genderDesc:  { male: "Hair, beard, skincare — sharp & fresh", female: "Beauty looks — soft glam to bold beat" },
+    Icon: Palette },
   { id: "casual",     label: "Casual",          desc: "Effortless everyday looks",        Icon: Coffee },
   { id: "glam",       label: "Glam · Night Out",desc: "Bold, sparkly, unforgettable",     Icon: Sparkles },
   { id: "formal",     label: "Formal · Work",   desc: "Polished, powerful, professional", Icon: Briefcase },
@@ -677,6 +710,25 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
         >
           {OCCASIONS.map((o, i) => {
             const isSel = selected?.id === o.id;
+            const isHighlight = HIGHLIGHT_OCCASIONS.has(o.id);
+            const label = o.genderLabel ? o.genderLabel[gender] : o.label;
+            const desc = o.genderDesc ? o.genderDesc[gender] : o.desc;
+            const tileBg = isHighlight
+              ? "linear-gradient(135deg, hsla(330 80% 58% / 0.28), hsla(36 90% 60% / 0.22) 60%, hsla(280 70% 55% / 0.20))"
+              : isSel
+                ? `linear-gradient(135deg, hsla(var(${accent}) / 0.28), hsla(var(--glamora-gold) / 0.16))`
+                : `linear-gradient(135deg, hsla(var(${accent}) / 0.10), hsl(var(--card)))`;
+            const border = isHighlight
+              ? "1.5px solid hsla(36 95% 70% / 0.7)"
+              : `1.5px solid ${isSel ? `hsl(var(${accent}))` : `hsla(var(${accent}) / 0.22)`}`;
+            const shadow = isHighlight
+              ? "0 0 26px hsla(330 80% 58% / 0.45), 0 0 40px hsla(36 90% 60% / 0.28), 0 6px 22px hsla(0 0% 0% / 0.4)"
+              : isSel
+                ? `0 0 26px hsla(var(${accent}) / 0.45), 0 4px 22px hsla(0 0% 0% / 0.35)`
+                : `0 4px 18px hsla(0 0% 0% / 0.3), 0 0 14px hsla(var(${accent}) / 0.12)`;
+            const iconBg = isHighlight
+              ? "linear-gradient(135deg, hsl(330 85% 62%), hsl(36 95% 60%) 55%, hsl(280 75% 60%))"
+              : `linear-gradient(135deg, hsl(var(${accent})), hsl(var(--glamora-gold-light)))`;
             return (
               <button
                 key={o.id}
@@ -686,13 +738,9 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                   animationDelay: `${i * 60}ms`,
                   padding: "20px 14px",
                   borderRadius: 22,
-                  border: `1.5px solid ${isSel ? `hsl(var(${accent}))` : "hsla(0 0% 100% / 0.08)"}`,
-                  background: isSel
-                    ? `linear-gradient(135deg, hsla(var(${accent}) / 0.18), hsla(var(--glamora-gold) / 0.08))`
-                    : "hsl(var(--card))",
-                  boxShadow: isSel
-                    ? `0 0 24px hsla(var(${accent}) / 0.35), 0 4px 20px hsla(0 0% 0% / 0.3)`
-                    : "0 2px 14px hsla(0 0% 0% / 0.22)",
+                  border,
+                  background: tileBg,
+                  boxShadow: shadow,
                   color: "hsl(var(--glamora-char))",
                   cursor: "pointer",
                   display: "flex",
@@ -701,24 +749,42 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
                   gap: 10,
                   textAlign: "left",
                   minHeight: 130,
+                  position: "relative",
                   transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
+                {isHighlight && (
+                  <span
+                    style={{
+                      position: "absolute", top: 10, right: 10,
+                      fontSize: 9, fontWeight: 700, letterSpacing: 1,
+                      padding: "3px 8px", borderRadius: 999,
+                      background: "linear-gradient(135deg, hsl(36 95% 60%), hsl(330 85% 62%))",
+                      color: "hsl(18 22% 7%)",
+                      boxShadow: "0 0 12px hsla(36 95% 60% / 0.6)",
+                    }}
+                  >
+                    NEW
+                  </span>
+                )}
                 <div
                   style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    background: `linear-gradient(135deg, hsl(var(${accent})), hsl(var(--glamora-gold-light)))`,
+                    width: 44, height: 44, borderRadius: 13,
+                    background: iconBg,
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    boxShadow: isHighlight
+                      ? "0 0 18px hsla(330 85% 62% / 0.55), inset 0 1px 0 hsla(0 0% 100% / 0.3)"
+                      : `0 0 14px hsla(var(${accent}) / 0.4), inset 0 1px 0 hsla(0 0% 100% / 0.25)`,
                   }}
                 >
-                  <o.Icon size={20} color="white" />
+                  <o.Icon size={22} color="white" strokeWidth={2.2} />
                 </div>
                 <div>
                   <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, lineHeight: 1.15 }}>
-                    {o.label}
+                    {label}
                   </div>
-                  <div style={{ fontSize: 11.5, color: "hsl(var(--glamora-gray))", marginTop: 4, lineHeight: 1.35 }}>
-                    {o.desc}
+                  <div style={{ fontSize: 11.5, color: "hsl(var(--glamora-char2))", marginTop: 4, lineHeight: 1.35, opacity: 0.85 }}>
+                    {desc}
                   </div>
                 </div>
               </button>
