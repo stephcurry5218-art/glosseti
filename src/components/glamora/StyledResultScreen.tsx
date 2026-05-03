@@ -188,6 +188,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           hotspot,
           excludeItems,
           swapOnly: true,
+          styledImageUrl,
         },
       });
       const newItem = data?.items?.[0];
