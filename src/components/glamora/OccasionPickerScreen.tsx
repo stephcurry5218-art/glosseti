@@ -542,7 +542,7 @@ const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: 
 const OCCASIONS: Occasion[] = OCCASION_META.map(meta => ({
   ...meta,
   usePerVibePhotos: PER_VIBE_OCCASIONS.has(meta.id),
-  vibes: { female: FEMALE[meta.id], male: MALE[meta.id] },
+  vibes: { female: FEMALE_FULL[meta.id], male: MALE_FULL[meta.id] },
 }));
 
 const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
