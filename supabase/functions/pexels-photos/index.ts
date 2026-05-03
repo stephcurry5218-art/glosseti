@@ -59,7 +59,7 @@ function pickPortrait(p: PexelsPhoto) {
 
 interface QueryReq { key: string; query: string; ethnicity?: string }
 
-async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gender) {
+async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gender, page: number) {
   const noun = GENDER_NOUN[gender] || "person";
   const seen = new Set<number>();
   const out: Record<string, { url: string; alt: string; id: number }> = {};
@@ -69,10 +69,10 @@ async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gend
     queries.map(async (q) => {
       const ethnicity = q.ethnicity ? `${q.ethnicity} ` : "";
       // First attempt: ethnicity + noun + query
-      let photos = await searchPexels(apiKey, `${ethnicity}${noun} ${q.query}`, 15, 1);
+      let photos = await searchPexels(apiKey, `${ethnicity}${noun} ${q.query}`, 15, page);
       // Fallback: drop ethnicity tag
       if (photos.length < 3) {
-        const more = await searchPexels(apiKey, `${noun} ${q.query}`, 15, 1);
+        const more = await searchPexels(apiKey, `${noun} ${q.query}`, 15, page);
         photos = photos.concat(more);
       }
       return { key: q.key, photos };
