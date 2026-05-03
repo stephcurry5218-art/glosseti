@@ -86,6 +86,7 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
+  const { long: resetLong, short: resetShort } = useResetCountdown();
 
   // Secret dev mode toggle
   const tapCount = useRef(0);
