@@ -35,6 +35,8 @@ interface Occasion {
   label: string;
   desc: string;
   Icon: LucideIcon;
+  genderLabel?: { male: string; female: string };
+  genderDesc?: { male: string; female: string };
   /** When true, fetch one targeted photo per vibe via per-query mode. */
   usePerVibePhotos: boolean;
   vibes: { female: Vibe[]; male: Vibe[] };
