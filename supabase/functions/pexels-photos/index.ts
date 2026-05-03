@@ -1,6 +1,11 @@
 // Pexels-backed inspiration photos for the occasion picker.
-// Returns 12 diverse, gender-correct, outfit-relevant photos per (occasion, gender).
-// Diversity is enforced server-side by combining 4 ethnicity-tagged sub-queries.
+//
+// Two modes:
+//   1) {occasion, gender}                        → 12 generic photos for that occasion (legacy, used for fitness/cosplay)
+//   2) {queries: [{key,query,ethnicity?}], gender}  → one specific photo per query, deduped across the batch.
+//
+// Mode 2 is used for the 7 occasions where every vibe label needs an exact visual match
+// (swimwear, casual, glam, formal, streetwear, date-night, vacation).
 
 import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
 
@@ -16,7 +21,6 @@ type Occasion =
   | "casual" | "glam" | "formal" | "streetwear" | "date-night"
   | "vacation" | "swimwear" | "fitness" | "cosplay";
 
-// Per-occasion outfit keyword (kept tight so Pexels returns clothed full-body shots).
 const OCCASION_TERMS: Record<Occasion, { female: string; male: string }> = {
   casual:       { female: "casual outfit street fashion",        male: "casual outfit street fashion men" },
   glam:         { female: "evening dress night out fashion",     male: "men suit night out fashion" },
@@ -29,8 +33,7 @@ const OCCASION_TERMS: Record<Occasion, { female: string; male: string }> = {
   cosplay:      { female: "cosplay costume fashion",             male: "cosplay costume men fashion" },
 };
 
-// Ethnicity tags rotated for diversity (3 photos per ethnicity → 12 total).
-const ETHNICITIES: Array<{ tag: string; weight: number }> = [
+const ETHNICITIES = [
   { tag: "black",    weight: 3 },
   { tag: "white",    weight: 3 },
   { tag: "hispanic", weight: 3 },
@@ -50,6 +53,85 @@ async function searchPexels(apiKey: string, query: string, perPage: number, page
   return data.photos || [];
 }
 
+function pickPortrait(p: PexelsPhoto) {
+  return p.src.portrait || p.src.large || p.src.medium;
+}
+
+interface QueryReq { key: string; query: string; ethnicity?: string }
+
+async function handleQueryMode(apiKey: string, queries: QueryReq[], gender: Gender) {
+  const noun = GENDER_NOUN[gender] || "person";
+  const seen = new Set<number>();
+  const out: Record<string, { url: string; alt: string; id: number }> = {};
+
+  // Run searches in parallel but resolve sequentially so dedupe is deterministic.
+  const results = await Promise.all(
+    queries.map(async (q) => {
+      const ethnicity = q.ethnicity ? `${q.ethnicity} ` : "";
+      // First attempt: ethnicity + noun + query
+      let photos = await searchPexels(apiKey, `${ethnicity}${noun} ${q.query}`, 15, 1);
+      // Fallback: drop ethnicity tag
+      if (photos.length < 3) {
+        const more = await searchPexels(apiKey, `${noun} ${q.query}`, 15, 1);
+        photos = photos.concat(more);
+      }
+      return { key: q.key, photos };
+    })
+  );
+
+  for (const { key, photos } of results) {
+    let chosen: PexelsPhoto | null = null;
+    for (const p of photos) {
+      if (!seen.has(p.id)) { chosen = p; break; }
+    }
+    if (!chosen && photos.length > 0) chosen = photos[0]; // last resort dup
+    if (chosen) {
+      seen.add(chosen.id);
+      out[key] = { url: pickPortrait(chosen), alt: chosen.alt, id: chosen.id };
+    }
+  }
+  return out;
+}
+
+async function handleOccasionMode(apiKey: string, occasion: Occasion, gender: Gender) {
+  const baseTerm = OCCASION_TERMS[occasion][gender];
+  const noun = GENDER_NOUN[gender];
+
+  const results = await Promise.all(
+    ETHNICITIES.map(async (e) => {
+      const q = `${e.tag} ${noun} ${baseTerm}`;
+      const photos = await searchPexels(apiKey, q, 6, 1);
+      return { tag: e.tag, want: e.weight, photos };
+    })
+  );
+
+  const seen = new Set<number>();
+  const picked: { url: string; alt: string; id: number }[] = [];
+
+  for (const group of results) {
+    let taken = 0;
+    for (const p of group.photos) {
+      if (taken >= group.want) break;
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      picked.push({ url: pickPortrait(p), alt: p.alt, id: p.id });
+      taken++;
+    }
+  }
+
+  if (picked.length < 12) {
+    const fallback = await searchPexels(apiKey, `${noun} ${baseTerm}`, 30, 1);
+    for (const p of fallback) {
+      if (picked.length >= 12) break;
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      picked.push({ url: pickPortrait(p), alt: p.alt, id: p.id });
+    }
+  }
+
+  return picked.slice(0, 12);
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -62,54 +144,33 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const occasion = body.occasion as Occasion;
     const gender = body.gender as Gender;
-
-    if (!OCCASION_TERMS[occasion] || !GENDER_NOUN[gender]) {
-      return new Response(JSON.stringify({ error: "Invalid occasion or gender" }), {
+    if (!GENDER_NOUN[gender]) {
+      return new Response(JSON.stringify({ error: "Invalid gender" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const baseTerm = OCCASION_TERMS[occasion][gender];
-    const noun = GENDER_NOUN[gender];
-
-    // Fan out: one search per ethnicity, ask for 6 to give us headroom for dedupe.
-    const results = await Promise.all(
-      ETHNICITIES.map(async (e) => {
-        const q = `${e.tag} ${noun} ${baseTerm}`;
-        const photos = await searchPexels(PEXELS_API_KEY, q, 6, 1);
-        return { tag: e.tag, want: e.weight, photos };
-      })
-    );
-
-    const seen = new Set<number>();
-    const picked: { url: string; alt: string; id: number }[] = [];
-
-    // Take up to `want` per ethnicity, deduped by photo id.
-    for (const group of results) {
-      let taken = 0;
-      for (const p of group.photos) {
-        if (taken >= group.want) break;
-        if (seen.has(p.id)) continue;
-        seen.add(p.id);
-        picked.push({ url: p.src.portrait || p.src.large || p.src.medium, alt: p.alt, id: p.id });
-        taken++;
-      }
+    // Mode 2: per-vibe queries
+    if (Array.isArray(body.queries)) {
+      const queries = (body.queries as QueryReq[])
+        .filter(q => q && typeof q.key === "string" && typeof q.query === "string")
+        .slice(0, 24);
+      const photos = await handleQueryMode(PEXELS_API_KEY, queries, gender);
+      return new Response(JSON.stringify({ photos }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // Top-up with a generic search if we under-filled (some ethnicity queries return < 3).
-    if (picked.length < 12) {
-      const fallback = await searchPexels(PEXELS_API_KEY, `${noun} ${baseTerm}`, 30, 1);
-      for (const p of fallback) {
-        if (picked.length >= 12) break;
-        if (seen.has(p.id)) continue;
-        seen.add(p.id);
-        picked.push({ url: p.src.portrait || p.src.large || p.src.medium, alt: p.alt, id: p.id });
-      }
+    // Mode 1: occasion only
+    const occasion = body.occasion as Occasion;
+    if (!OCCASION_TERMS[occasion]) {
+      return new Response(JSON.stringify({ error: "Invalid occasion" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-
-    return new Response(JSON.stringify({ photos: picked.slice(0, 12) }), {
+    const photos = await handleOccasionMode(PEXELS_API_KEY, occasion, gender);
+    return new Response(JSON.stringify({ photos }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
