@@ -91,7 +91,15 @@ Build the curated shopping list now.`;
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
+          {
+            role: "user",
+            content: styledImageUrl
+              ? [
+                  { type: "text", text: `${userPrompt}\n\nThe attached image is the EXACT styled look the user is shopping. Identify each visible garment's precise color, cut, fabric, and styling details and reflect them verbatim in the "item" search strings.` },
+                  { type: "image_url", image_url: { url: styledImageUrl } },
+                ]
+              : userPrompt,
+          },
         ],
         tools: [{
           type: "function",
