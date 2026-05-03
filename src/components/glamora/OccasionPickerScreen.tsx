@@ -549,11 +549,16 @@ const MALE_FULL: Record<OccasionId, Vibe[]> = Object.fromEntries(
 ) as Record<OccasionId, Vibe[]>;
 
 const PER_VIBE_OCCASIONS: ReadonlySet<OccasionId> = new Set([
-  "swimwear", "casual", "glam", "formal", "streetwear", "date-night", "vacation",
+  "swimwear", "casual", "glam", "formal", "streetwear", "date-night", "vacation", "makeup",
 ]);
 
+const HIGHLIGHT_OCCASIONS: ReadonlySet<OccasionId> = new Set(["makeup"]);
 
-const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: LucideIcon }> = [
+const OCCASION_META: Array<{ id: OccasionId; label: string; desc: string; Icon: LucideIcon; genderLabel?: { male: string; female: string }; genderDesc?: { male: string; female: string } }> = [
+  { id: "makeup",     label: "Makeup",          desc: "Beauty, glam, and grooming",
+    genderLabel: { male: "Grooming", female: "Makeup" },
+    genderDesc:  { male: "Hair, beard, skincare — sharp & fresh", female: "Beauty looks — soft glam to bold beat" },
+    Icon: Palette },
   { id: "casual",     label: "Casual",          desc: "Effortless everyday looks",        Icon: Coffee },
   { id: "glam",       label: "Glam · Night Out",desc: "Bold, sparkly, unforgettable",     Icon: Sparkles },
   { id: "formal",     label: "Formal · Work",   desc: "Polished, powerful, professional", Icon: Briefcase },
