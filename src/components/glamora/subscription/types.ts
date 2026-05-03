@@ -49,10 +49,11 @@ export const PLANS: SubscriptionPlan[] = [
     monthlyPrice: 14.99,
     weeklyPrice: 4.99,
     yearlyPrice: null,
-    highlighted: false,
+    highlighted: true,
+    badge: "Best Value",
     monthlyGenerationCap: 50,
     features: [
-      "50 AI generations per month",
+      "Unlimited AI looks",
       "No watermark on images",
       "Advanced personalization",
       "Full makeup & outfit tutorials",
