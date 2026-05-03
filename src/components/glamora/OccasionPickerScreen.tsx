@@ -201,6 +201,7 @@ const OCCASIONS: Occasion[] = [
     },
   },
   {
+    id: "fitness",
     label: "Fitness",
     desc: "Gym, run, yoga, sport-ready",
     Icon: Dumbbell,
