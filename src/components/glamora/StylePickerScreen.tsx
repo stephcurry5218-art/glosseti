@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag, Search, X, Gift } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
+import FlowStepper from "./FlowStepper";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentPromo, type HolidayPick } from "./SeasonalBanner";
 
@@ -724,6 +725,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
           <div className="header-sub">{isMale ? "What's your vibe, king?" : "What are you looking for?"}</div>
         </div>
       </div>
+      <FlowStepper current="style" gender={prefs.gender} />
 
       <div style={{ padding: "0 22px" }}>
         {/* Multi-select hint */}

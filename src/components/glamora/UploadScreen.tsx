@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Camera, UserRound, Target, Sun, CircleOff, Sparkles, ShirtIcon, Flower2, Gem, Users, Heart } from "lucide-react";
 import type { UserPrefs, PhotoType, GenerationMode } from "./GlamoraApp";
 import { fixImageOrientation } from "./fixImageOrientation";
+import FlowStepper from "./FlowStepper";
 
 interface Props {
   prefs: UserPrefs;
@@ -102,8 +103,9 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
           </div>
         </div>
       </div>
+      <FlowStepper current="photo" gender={prefs.gender} />
 
-      <div style={{ padding: "0 22px", marginTop: 16 }}>
+      <div style={{ padding: "0 22px", marginTop: 12 }}>
         {/* Mode toggle: On Me vs Mannequin — hide for dual photo categories */}
         {!isFaceCategory && !isDualPhotoCategory && (
           <div className="anim-fadeUp" style={{

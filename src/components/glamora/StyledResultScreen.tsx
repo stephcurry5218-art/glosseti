@@ -11,6 +11,7 @@ import ShopPanel, { type ShopItem } from "./ShopPanel";
 import LookPriceCard from "./LookPriceCard";
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
+import FlowStepper from "./FlowStepper";
 
 interface Props {
   prefs: UserPrefs;
@@ -235,6 +236,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           <div className="header-sub">{isMakeup ? "AI Beauty Result" : "AI Style Result"}</div>
         </div>
       </div>
+      <FlowStepper current="result" gender={prefs.gender} />
 
       <div style={{ padding: "0 22px" }}>
         {/* Error card when generation failed */}

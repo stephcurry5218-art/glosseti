@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { DEMO_MODE, getDemoStyledImage } from "./demoMode";
 import type { UserPrefs } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
+import FlowStepper from "./FlowStepper";
 
 interface Props {
   prefs: UserPrefs;
@@ -293,7 +294,9 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
   const CurrentIcon = steps[step].Icon;
 
   return (
-    <div className="screen enter" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "0 32px" }}>
+    <div className="screen enter" style={{ display: "flex", flexDirection: "column", minHeight: "100%" }}>
+      <FlowStepper current="generate" gender={prefs.gender} />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 32px" }}>
       {/* Spinner + icon */}
       <div style={{ position: "relative", width: 120, height: 120, marginBottom: 32 }}>
         <div style={{
@@ -413,6 +416,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             transition: "width 0.6s ease",
           }} />
         </div>
+      </div>
       </div>
     </div>
   );
