@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Shirt, Flame, Heart, Clock, Dumbbell, Briefcase, Smile, Palette, Check, ArrowRight, Gem, GraduationCap, Zap, Umbrella, Scissors, Star, Sparkles, Flower2, Crown, ShoppingBag, Search, X, Gift } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 import type { LucideIcon } from "lucide-react";
@@ -665,10 +665,11 @@ const customDetailPlaceholders: Record<string, string> = {
 };
 
 const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
-  const [selected, setSelected] = useState<StyleCategory[]>([prefs.styleCategory]);
+  const [selected, setSelected] = useState<StyleCategory[]>([]);
   const [selectedSubs, setSelectedSubs] = useState<Record<string, string | string[]>>({});
   const [customDetails, setCustomDetails] = useState<Record<string, string>>({});
   const [cosplaySearch, setCosplaySearch] = useState("");
+  const subcategoryRef = useRef<HTMLDivElement | null>(null);
   
   
   const isMale = prefs.gender === "male";
@@ -695,6 +696,10 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
       setCustomDetails({});
       return [id];
     });
+    // Smoothly glide to the subcategory section after selection
+    setTimeout(() => {
+      subcategoryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
   };
 
   const handleHolidayPick = (pick: HolidayPick) => {
@@ -703,7 +708,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   // Show detail for the most recently selected and use it as the primary generation style
   const primarySelected = selected[selected.length - 1];
-  const current = filtered.find(c => c.id === primarySelected) || filtered[0];
+  const current = primarySelected ? filtered.find(c => c.id === primarySelected) : undefined;
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
@@ -836,16 +841,18 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         </div>
 
         {/* Selected detail — show for last selected */}
-        <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14 }}>
-          <div className="section-label" style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
-            <current.Icon size={14} color="hsl(var(--glamora-gray))" />
-            What's Included in {current.genderLabel ? current.genderLabel[prefs.gender] : current.label}
+        {current && (
+          <div ref={subcategoryRef} className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14, scrollMarginTop: 16 }}>
+            <div className="section-label" style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+              <current.Icon size={14} color="hsl(var(--glamora-gray))" />
+              What's Included in {current.genderLabel ? current.genderLabel[prefs.gender] : current.label}
+            </div>
+            <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>{current.desc}</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
+            </div>
           </div>
-          <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>{current.desc}</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
-          </div>
-        </div>
+        )}
 
         {/* Cosplay disclaimer */}
         {selected.includes("cosplay") && (
@@ -1046,8 +1053,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
         <button
           className="btn-primary btn-rose"
-          disabled={false}
+          disabled={!current}
           onClick={() => {
+            if (!current) return;
             // Combine all selected sub-styles with optional custom details
             const combinedSubs = Object.entries(selectedSubs)
               .filter(([, v]) => v && (Array.isArray(v) ? v.length > 0 : true))
@@ -1064,9 +1072,9 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
             background: isMale
               ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
               : undefined,
-            opacity: 1,
+            opacity: current ? 1 : 0.5,
           }}>
-          Continue — Upload Photo <ArrowRight size={16} />
+          {current ? <>Continue — Upload Photo <ArrowRight size={16} /></> : "Pick a style to continue"}
         </button>
       </div>
     </div>
