@@ -180,6 +180,10 @@ export function useSubscription() {
       return false;
     }
     recordGeneration();
+    // Free tier: if this generation just consumed the last allowance, show paywall right away
+    if (state.tier === "free" && usageCount + 1 >= cap) {
+      setTimeout(() => setShowPaywall(true), 600);
+    }
     return true;
   }, [userId, anonUsage, usageCount, cap, recordGeneration]);
 
