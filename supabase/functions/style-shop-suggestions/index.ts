@@ -69,6 +69,8 @@ STRICT RULES:
 LOOK NAME: ${lookName || "(no specific look)"}
 ${occasionLine}
 ${hotspotLine}
+${cosplayLine}
+${excludeLine}
 ${refinementContext ? `USER REFINEMENT: ${String(refinementContext).slice(0, 400)}` : ""}
 
 Build the curated shopping list now.`;
