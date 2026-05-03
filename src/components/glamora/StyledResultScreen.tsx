@@ -455,7 +455,11 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             <div className="glamora-card anim-fadeUp d2" style={{ position: "relative", overflow: "hidden", borderRadius: 22 }}>
               {showWatermark && <Watermark />}
               {styledImageUrl ? (
-                <img src={styledImageUrl} alt="Your styled look" style={{ width: "100%", height: 420, objectFit: "cover", borderRadius: 22, display: "block" }} />
+                <img
+                  src={showBackView && backViewUrl ? backViewUrl : styledImageUrl}
+                  alt={showBackView ? "Back view of your styled look" : "Your styled look"}
+                  style={{ width: "100%", height: 420, objectFit: "cover", borderRadius: 22, display: "block" }}
+                />
               ) : (
                 <div style={{
                   width: "100%", height: 420, borderRadius: 22,
@@ -464,6 +468,52 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 }}>
                   <Sparkles size={56} color="hsl(var(--glamora-gray))" strokeWidth={1} />
                   <div style={{ fontSize: 14, color: "hsl(var(--glamora-gray-light))" }}>AI-styled image</div>
+                </div>
+              )}
+
+              {/* Back-view toggle pill (top-right) */}
+              {hasStyled && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (backViewUrl) {
+                      setShowBackView((v) => !v);
+                    } else {
+                      generateBackView();
+                    }
+                  }}
+                  disabled={backViewLoading}
+                  style={{
+                    position: "absolute", top: 12, right: 12, zIndex: 5,
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "8px 12px", borderRadius: 100,
+                    background: showBackView
+                      ? "linear-gradient(135deg, hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold)))"
+                      : "hsla(0 0% 0% / 0.6)",
+                    backdropFilter: "blur(10px)",
+                    border: "1.5px solid hsla(var(--glamora-gold) / 0.4)",
+                    color: "#fff", fontSize: 11, fontWeight: 700,
+                    fontFamily: "'Jost', sans-serif", cursor: backViewLoading ? "wait" : "pointer",
+                    boxShadow: "0 2px 10px hsla(0 0% 0% / 0.3)",
+                    opacity: backViewLoading ? 0.7 : 1,
+                  }}
+                >
+                  <RotateCw size={12} style={backViewLoading ? { animation: "spin 1s linear infinite" } : undefined} />
+                  {backViewLoading
+                    ? "Generating…"
+                    : backViewUrl
+                      ? (showBackView ? "Front View" : "Back View")
+                      : "See Back View"}
+                </button>
+              )}
+              {backViewError && (
+                <div style={{
+                  position: "absolute", bottom: 12, left: 12, right: 12, zIndex: 5,
+                  padding: "8px 12px", borderRadius: 12,
+                  background: "hsla(var(--glamora-rose-dark) / 0.9)",
+                  color: "#fff", fontSize: 11, fontWeight: 600, textAlign: "center",
+                }}>
+                  {backViewError}
                 </div>
               )}
 
