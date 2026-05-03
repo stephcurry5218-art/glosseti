@@ -645,8 +645,8 @@ serve(async (req) => {
         : "";
 
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`;
 
       const contentParts: any[] = [
         { type: "text", text: editPrompt },
