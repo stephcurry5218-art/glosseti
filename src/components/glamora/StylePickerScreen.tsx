@@ -841,16 +841,18 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
         </div>
 
         {/* Selected detail — show for last selected */}
-        <div className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14 }}>
-          <div className="section-label" style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
-            <current.Icon size={14} color="hsl(var(--glamora-gray))" />
-            What's Included in {current.genderLabel ? current.genderLabel[prefs.gender] : current.label}
+        {current && (
+          <div ref={subcategoryRef} className="glamora-card anim-fadeUp" style={{ padding: "16px 16px", marginBottom: 14, scrollMarginTop: 16 }}>
+            <div className="section-label" style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+              <current.Icon size={14} color="hsl(var(--glamora-gray))" />
+              What's Included in {current.genderLabel ? current.genderLabel[prefs.gender] : current.label}
+            </div>
+            <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>{current.desc}</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
+            </div>
           </div>
-          <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginBottom: 10, lineHeight: 1.4 }}>{current.desc}</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {current.includes.map(item => (<span key={item} className="pill-tag">{item}</span>))}
-          </div>
-        </div>
+        )}
 
         {/* Cosplay disclaimer */}
         {selected.includes("cosplay") && (
