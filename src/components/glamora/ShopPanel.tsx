@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid } from "lucide-react";
+import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid, RefreshCw } from "lucide-react";
 import { getShopUrl } from "./affiliateUrls";
 
 export type ShopItem = {
@@ -14,6 +14,10 @@ export type ShopItem = {
 interface Props {
   items: ShopItem[];
   accent?: string;
+  /** When provided, each item shows a "Swap" button that calls this with the item's index. */
+  onSwapItem?: (index: number) => Promise<void> | void;
+  /** Per-index swap loading state. */
+  swappingIndex?: number | null;
 }
 
 const tiers = [
@@ -22,7 +26,7 @@ const tiers = [
   { key: "budget" as const, label: "Budget", icon: Coins, color: "var(--glamora-success)", bg: "var(--glamora-success)" },
 ] as const;
 
-const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)" }: Props) => {
+const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swappingIndex }: Props) => {
   const [activeTier, setActiveTier] = useState<"luxury" | "mid" | "budget">("mid");
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
   const [viewAll, setViewAll] = useState(false);
