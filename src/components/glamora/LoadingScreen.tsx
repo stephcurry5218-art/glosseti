@@ -213,6 +213,8 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         }
 
         console.log("Starting AI generation...", { styleCategory: prefs.styleCategory, photoType: prefs.photoType, generationMode: prefs.generationMode, hasRefinement: !!gioRefinement, faceRefs: faceReferenceUrls.length });
+        const localMidnight = new Date(); localMidnight.setHours(0, 0, 0, 0);
+        const devMode = (() => { try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; } })();
         const { data, error } = await supabase.functions.invoke("generate-styled-image", {
           body: {
             imageBase64: prefs.photoBase64,
@@ -222,6 +224,8 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             photoType: prefs.photoType,
             gender: prefs.gender,
             generationMode: prefs.generationMode,
+            clientLocalMidnight: localMidnight.toISOString(),
+            devMode,
             ...(gioRefinement ? { refinementContext: gioRefinement } : {}),
             ...(prefs.makeupPreference ? { makeupPreference: prefs.makeupPreference } : {}),
             ...(faceReferenceUrls.length > 0 ? { faceReferenceUrls } : {}),
@@ -230,7 +234,9 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         if (error || data?.error) {
           const errMsg = data?.error || error?.message || "";
           console.error("AI generation error:", errMsg);
-          if (errMsg.includes("credits exhausted") || errMsg.includes("402")) {
+          if (errMsg === "free_limit_reached" || errMsg.includes("free_limit_reached")) {
+            setAiError("You've used all 3 free looks for today. Upgrade or wait for the daily reset to continue.");
+          } else if (errMsg.includes("credits exhausted") || errMsg.includes("402")) {
             setAiError("AI credits exhausted. Go to Settings → Cloud & AI balance to add funds, then try again.");
           } else if (errMsg.includes("Rate limited") || errMsg.includes("429")) {
             setAiError("Too many requests — please wait a moment, then tap to retry.");

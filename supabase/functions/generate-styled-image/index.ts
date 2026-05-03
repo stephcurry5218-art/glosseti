@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,13 +7,76 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const FREE_DAILY_LIMIT = 3;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls } = await req.json();
+    const body = await req.json();
+    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // ===== Server-side paywall enforcement =====
+    // Block free-tier users who have already used their 3 daily looks. This
+    // prevents bypass via refresh, retry, or clearing localStorage.
+    const authHeader = req.headers.get("Authorization") || "";
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+
+    if (SUPABASE_URL && SUPABASE_ANON_KEY && authHeader.startsWith("Bearer ")) {
+      const supa = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: userData } = await supa.auth.getUser();
+      const user = userData?.user;
+      if (user && !devMode) {
+        // Resolve "today" boundary — accept client's local midnight if reasonable,
+        // otherwise fall back to UTC midnight.
+        let startISO: string;
+        const parsed = clientLocalMidnight ? new Date(clientLocalMidnight) : null;
+        const now = Date.now();
+        if (parsed && !isNaN(parsed.getTime()) && now - parsed.getTime() < 36 * 3600 * 1000 && parsed.getTime() <= now) {
+          startISO = parsed.toISOString();
+        } else {
+          const m = new Date(); m.setUTCHours(0, 0, 0, 0);
+          startISO = m.toISOString();
+        }
+
+        // Count today's FREE-tier generations. Premium records carry tier='premium'
+        // and do not count toward the free cap.
+        const { count, error: countErr } = await supa
+          .from("usage_tracking")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("tier", "free")
+          .gte("created_at", startISO);
+
+        if (!countErr && (count ?? 0) >= FREE_DAILY_LIMIT) {
+          // Check if they have any premium records today — if so, allow.
+          const { count: premiumCount } = await supa
+            .from("usage_tracking")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user.id)
+            .eq("tier", "premium")
+            .gte("created_at", startISO);
+
+          if ((premiumCount ?? 0) === 0) {
+            return new Response(
+              JSON.stringify({
+                error: "free_limit_reached",
+                message: "You've used all 3 free looks for today. Upgrade or wait for the daily reset.",
+                usageToday: count,
+                limit: FREE_DAILY_LIMIT,
+              }),
+              { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+            );
+          }
+        }
+      }
+    }
+
 
     const isMale = gender === "male";
 
