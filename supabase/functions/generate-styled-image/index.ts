@@ -483,6 +483,11 @@ serve(async (req) => {
 
 
     const requestImage = async (messages: any[]) => {
+      // Try preview model first; fall back to stable nano-banana if it returns no image
+      const modelChain = [
+        "google/gemini-3.1-flash-image-preview",
+        "google/gemini-2.5-flash-image",
+      ];
       const maxRetries = 3;
       let lastError: Error | null = null;
 
@@ -492,6 +497,7 @@ serve(async (req) => {
           await new Promise((r) => setTimeout(r, 2000 * attempt));
         }
 
+        const model = modelChain[Math.min(attempt, modelChain.length - 1)];
         const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -499,7 +505,7 @@ serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "google/gemini-3.1-flash-image-preview",
+            model,
             messages,
             modalities: ["image", "text"],
           }),
@@ -523,15 +529,22 @@ serve(async (req) => {
 
         const data = await response.json();
         const firstImage = data.choices?.[0]?.message?.images?.[0];
+        const imageUrl = firstImage?.image_url?.url ?? firstImage?.url ?? null;
+
+        if (!imageUrl) {
+          console.warn(`No image from ${model} on attempt ${attempt + 1}/${maxRetries}, retrying with fallback model...`);
+          lastError = new Error("NO_IMAGE_RETURNED");
+          continue;
+        }
 
         return {
-          generatedImage: firstImage?.image_url?.url ?? firstImage?.url ?? null,
+          generatedImage: imageUrl,
           textResponse: data.choices?.[0]?.message?.content || "",
         };
       }
 
-      // All retries exhausted
-      throw lastError || new Error("RATE_LIMITED");
+      // All retries exhausted — return null instead of throwing so outer fallback runs
+      return { generatedImage: null as string | null, textResponse: "" };
     };
 
     // Strong gender enforcement (skip for baby, kids, teens, parent-child, and couples categories)
