@@ -60,7 +60,10 @@ export function useSubscription() {
   const fetchUsage = useCallback(async (uid: string, currentTier: SubscriptionTier) => {
     let startDate: string;
     if (currentTier === "free") {
-      startDate = getCurrentDayISO() + "T00:00:00.000Z";
+      // Local midnight — resets at user's local midnight, not UTC
+      const localMidnight = new Date();
+      localMidnight.setHours(0, 0, 0, 0);
+      startDate = localMidnight.toISOString();
     } else {
       startDate = getCurrentMonth() + "-01T00:00:00.000Z";
     }
@@ -114,6 +117,25 @@ export function useSubscription() {
     return () => subscription.unsubscribe();
   }, [state.tier, fetchUsage]);
 
+  // Auto-reset at local midnight: refetch usage / clear anon counter
+  useEffect(() => {
+    const now = new Date();
+    const next = new Date(now);
+    next.setHours(24, 0, 0, 1);
+    const ms = next.getTime() - now.getTime();
+    const t = setTimeout(() => {
+      if (userId) {
+        fetchUsage(userId, state.tier);
+      } else {
+        saveAnonUsage(0);
+        setAnonUsage(0);
+        setUsageCount(0);
+        setState(prev => ({ ...prev, monthlyGenerations: 0 }));
+      }
+    }, ms);
+    return () => clearTimeout(t);
+  }, [userId, state.tier, fetchUsage, usageCount]);
+
   const isDevMode = () => {
     try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; }
   };
@@ -158,6 +180,10 @@ export function useSubscription() {
       return false;
     }
     recordGeneration();
+    // Free tier: if this generation just consumed the last allowance, show paywall right away
+    if (state.tier === "free" && usageCount + 1 >= cap) {
+      setTimeout(() => setShowPaywall(true), 600);
+    }
     return true;
   }, [userId, anonUsage, usageCount, cap, recordGeneration]);
 

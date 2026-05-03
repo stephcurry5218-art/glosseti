@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock } from "lucide-react";
+import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock, Clock } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
 import DailyLookCard from "./DailyLookCard";
@@ -7,8 +7,9 @@ import SeasonalBanner from "./SeasonalBanner";
 import EventPromos from "./EventPromos";
 import type { Gender, StyleCategory } from "./GlamoraApp";
 import type { SubscriptionState } from "./subscription/types";
-import { MONTHLY_CAPS } from "./subscription/types";
+import { MONTHLY_CAPS, FREE_DAILY_LIMIT } from "./subscription/types";
 import UsageBadge from "./subscription/UsageBadge";
+import { useResetCountdown } from "./subscription/useResetCountdown";
 
 interface Props {
   onGetStyled: (initialCategory?: StyleCategory) => void;
@@ -85,6 +86,7 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
   const isMale = gender === "male";
   const accent = "var(--glamora-gold)";
   const accentLight = "var(--glamora-gold-light)";
+  const { long: resetLong, short: resetShort } = useResetCountdown();
 
   // Secret dev mode toggle
   const tapCount = useRef(0);
@@ -228,30 +230,43 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
 
       {/* Remaining generations counter */}
       {(() => {
-        const cap = MONTHLY_CAPS[subscription.tier];
-        const used = cap - remainingGenerations;
+        const isFree = subscription.tier === "free";
+        const cap = isFree ? FREE_DAILY_LIMIT : MONTHLY_CAPS[subscription.tier];
+        const used = Math.max(0, cap - remainingGenerations);
         const pct = Math.min((used / cap) * 100, 100);
-        const isLow = remainingGenerations <= 1;
         const isEmpty = remainingGenerations <= 0;
+        const isWarning = remainingGenerations === 1;
+        const accentColor = isEmpty
+          ? "hsl(var(--destructive))"
+          : isWarning
+            ? "hsl(28 95% 55%)"
+            : "hsl(var(--glamora-gold))";
+        const borderColor = isEmpty
+          ? "hsla(var(--destructive) / 0.25)"
+          : isWarning
+            ? "hsla(28 95% 55% / 0.3)"
+            : "hsla(var(--glamora-gold) / 0.15)";
         return (
           <div className="anim-fadeUp d1" style={{
             margin: "0 20px", marginTop: -20, position: "relative", zIndex: 10,
             padding: "12px 16px", borderRadius: 16,
             background: "hsla(0 0% 0% / 0.5)",
             backdropFilter: "blur(12px)",
-            border: `1px solid ${isLow ? "hsla(var(--destructive) / 0.25)" : "hsla(var(--glamora-gold) / 0.15)"}`,
+            border: `1px solid ${borderColor}`,
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Zap size={14} color={isLow ? "hsl(var(--destructive))" : "hsl(var(--glamora-gold))"} />
+                <Zap size={14} color={accentColor} />
                 <span style={{
                   fontSize: 12, fontWeight: 600,
-                  color: isLow ? "hsl(var(--destructive))" : "hsla(0 0% 100% / 0.85)",
+                  color: isEmpty || isWarning ? accentColor : "hsla(0 0% 100% / 0.85)",
                 }}>
-                  {isEmpty ? "No looks remaining" : `${remainingGenerations} of ${cap} looks remaining ${subscription.tier === "free" ? "today" : "this month"}`}
+                  {isEmpty
+                    ? "0 looks remaining today"
+                    : `${remainingGenerations} look${remainingGenerations === 1 ? "" : "s"} remaining ${isFree ? "today" : "this month"}`}
                 </span>
               </div>
-              {subscription.tier === "free" && (
+              {isFree && (
                 <button onClick={onShowPaywall} style={{
                   fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 100,
                   background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
@@ -269,12 +284,23 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
               <div style={{
                 height: "100%", borderRadius: 100,
                 width: `${100 - pct}%`,
-                background: isLow
+                background: isEmpty
                   ? "linear-gradient(90deg, hsl(var(--destructive)), hsla(var(--destructive) / 0.6))"
-                  : "linear-gradient(90deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                  : isWarning
+                    ? "linear-gradient(90deg, hsl(28 95% 55%), hsl(35 95% 60%))"
+                    : "linear-gradient(90deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
                 transition: "width 0.5s ease",
               }} />
             </div>
+            {isFree && (
+              <div style={{
+                marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
+                fontSize: 10.5, color: "hsla(0 0% 100% / 0.55)", fontFamily: "'Jost', sans-serif",
+              }}>
+                <Clock size={11} />
+                <span>Resets in <span style={{ color: "hsla(0 0% 100% / 0.85)", fontVariantNumeric: "tabular-nums" }}>{resetShort}</span></span>
+              </div>
+            )}
           </div>
         );
       })()}
