@@ -147,6 +147,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   // AI-curated shop items keyed by `${lookName}|${hotspot}` — fetched on demand
   const [aiShopItems, setAiShopItems] = useState<Record<string, ShopItem[]>>({});
   const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
+  const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
 
   const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
     const key = `${lookName}|${hotspot}`;
