@@ -173,6 +173,37 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
     }
   };
 
+  const swapShopItem = async (lookName: string, hotspot: HotspotId, index: number, currentItems: ShopItem[]) => {
+    const key = `${lookName}|${hotspot}`;
+    setSwappingIndex(index);
+    try {
+      const excludeItems = currentItems.map(i => i.label);
+      const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+        body: {
+          styleCategory: prefs.styleCategory,
+          styleSubcategory: prefs.styleSubcategory,
+          lookName,
+          gender: prefs.gender,
+          hotspot,
+          excludeItems,
+          swapOnly: true,
+        },
+      });
+      const newItem = data?.items?.[0];
+      if (!error && newItem) {
+        setAiShopItems(prev => {
+          const list = [...(prev[key] || currentItems)];
+          list[index] = newItem;
+          return { ...prev, [key]: list };
+        });
+      }
+    } catch (err) {
+      console.warn("Swap failed", err);
+    } finally {
+      setSwappingIndex(null);
+    }
+  };
+
   useEffect(() => {
     const lookName = (styleLooks[prefs.styleCategory] || styleLooks["full-style"])[0]?.name;
     if (activeHotspot && lookName) fetchAiShopItems(lookName, activeHotspot);
