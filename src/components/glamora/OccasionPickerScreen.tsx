@@ -574,11 +574,23 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     }
   }, [stage]);
 
-  // Randomize starting page each time user enters a new occasion so the
-  // category preview images feel fresh on every visit (cycles through pages 1-5).
+  // Randomize starting page + reset shuffle when entering a new occasion.
   useEffect(() => {
-    if (stage === "vibe") setPage(Math.floor(Math.random() * 5) + 1);
+    if (stage === "vibe") {
+      setPage(Math.floor(Math.random() * 5) + 1);
+      setShuffleNonce(n => n + 1);
+    }
   }, [stage, selected?.id]);
+
+  // Randomized subset of vibes shown for this visit. Reshuffles whenever
+  // the user taps "Show more" so they get a fresh batch from the larger pool.
+  const visibleVibes = useMemo(() => {
+    if (!selected) return [] as Vibe[];
+    const all = selected.vibes[gender];
+    if (all.length <= VISIBLE_PER_BATCH) return all;
+    return shuffle(all).slice(0, VISIBLE_PER_BATCH);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?.id, gender, shuffleNonce]);
 
   // Fetch the right photos based on the selected occasion's mode + page.
   useEffect(() => {
