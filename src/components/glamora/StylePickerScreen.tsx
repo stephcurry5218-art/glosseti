@@ -696,6 +696,10 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
       setCustomDetails({});
       return [id];
     });
+    // Smoothly glide to the subcategory section after selection
+    setTimeout(() => {
+      subcategoryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
   };
 
   const handleHolidayPick = (pick: HolidayPick) => {
@@ -704,7 +708,7 @@ const StylePickerScreen = ({ prefs, onBack, onNext, holidayId }: Props) => {
 
   // Show detail for the most recently selected and use it as the primary generation style
   const primarySelected = selected[selected.length - 1];
-  const current = filtered.find(c => c.id === primarySelected) || filtered[0];
+  const current = primarySelected ? filtered.find(c => c.id === primarySelected) : undefined;
 
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const accentLight = isMale ? "--glamora-gold-light" : "--glamora-rose";
