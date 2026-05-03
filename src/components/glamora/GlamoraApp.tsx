@@ -17,6 +17,7 @@ import SplashScreen from "./SplashScreen";
 import EntranceScreen from "./EntranceScreen";
 import HomeScreen from "./HomeScreen";
 import StylePickerScreen from "./StylePickerScreen";
+import OccasionPickerScreen from "./OccasionPickerScreen";
 import UploadScreen from "./UploadScreen";
 import LoadingScreen from "./LoadingScreen";
 import StyledResultScreen from "./StyledResultScreen";
@@ -40,7 +41,7 @@ export type PhotoType = "selfie" | "full-body";
 export type Gender = "male" | "female";
 export type GenerationMode = "on-me" | "mannequin";
 
-type Screen = "splash" | "entrance" | "home" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile" | "my-closet";
+type Screen = "splash" | "entrance" | "home" | "occasion" | "style-picker" | "upload" | "loading" | "results" | "tutorial" | "profile" | "saved" | "auth" | "settings" | "admin-suggestions" | "face-profile" | "my-closet";
 
 export interface UserPrefs {
   styleCategory: StyleCategory;
