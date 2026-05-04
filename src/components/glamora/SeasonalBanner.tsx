@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Crown, GraduationCap, Heart, Snowflake, Sun, Leaf, TreePine, PartyPopper, Star, Sparkles, Gift, Flower2, Baby, Ghost, Flag } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 
@@ -343,24 +344,36 @@ export const PROMOS: SeasonalPromo[] = [
 ];
 
 export function getCurrentPromo(): SeasonalPromo {
-  const now = new Date();
+  return getActivePromos()[0];
+}
+
+/**
+ * Returns every promo currently appropriate for today's date, ordered by relevance:
+ * 1. Date-specific holidays in their active window (e.g. Mother's Day in early May)
+ * 2. The current macro-season fallback (winter / spring / summer / fall)
+ * The list is automatically date-driven — no manual scheduling required.
+ */
+export function getActivePromos(now: Date = new Date()): SeasonalPromo[] {
   const month = now.getMonth();
   const day = now.getDate();
 
-  const specific = PROMOS.filter(p => p.dayRange).find(p => {
+  const inWindow = (p: SeasonalPromo): boolean => {
+    if (!p.dayRange) return p.months.includes(month);
     if (p.months.length === 1) {
-      return p.months[0] === month && day >= p.dayRange![0] && day <= p.dayRange![1];
+      return p.months[0] === month && day >= p.dayRange[0] && day <= p.dayRange[1];
     }
-    const [startMonth, endMonth] = [p.months[0], p.months[p.months.length - 1]];
-    if (month === startMonth && day >= p.dayRange![0]) return true;
-    if (month === endMonth && day <= p.dayRange![1]) return true;
+    const startMonth = p.months[0];
+    const endMonth = p.months[p.months.length - 1];
+    if (month === startMonth && day >= p.dayRange[0]) return true;
+    if (month === endMonth && day <= p.dayRange[1]) return true;
     if (p.months.length > 2 && month > startMonth && month < endMonth) return true;
     return false;
-  });
+  };
 
-  if (specific) return specific;
-  const seasonal = PROMOS.filter(p => !p.dayRange).find(p => p.months.includes(month));
-  return seasonal || PROMOS[PROMOS.length - 1];
+  const specific = PROMOS.filter((p) => p.dayRange && inWindow(p));
+  const seasonal = PROMOS.filter((p) => !p.dayRange && p.months.includes(month));
+  const combined = [...specific, ...seasonal];
+  return combined.length ? combined : [PROMOS[PROMOS.length - 1]];
 }
 
 interface Props {
@@ -368,8 +381,28 @@ interface Props {
 }
 
 const SeasonalBanner = ({ onHolidayPick }: Props) => {
-  const promo = getCurrentPromo();
+  const activePromos = useMemo(() => getActivePromos(), []);
+  const [index, setIndex] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
+
+  // Auto-rotate every 5s when there are multiple active promos.
+  useEffect(() => {
+    if (activePromos.length <= 1) return;
+    const t = setInterval(() => {
+      setIndex((i) => (i + 1) % activePromos.length);
+      setAnimKey((k) => k + 1);
+    }, 5000);
+    return () => clearInterval(t);
+  }, [activePromos.length]);
+
+  const promo = activePromos[index];
   const Icon = promo.icon;
+  const hasMultiple = activePromos.length > 1;
+
+  const goTo = (i: number) => {
+    setIndex(i);
+    setAnimKey((k) => k + 1);
+  };
 
   return (
     <div
@@ -389,6 +422,7 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
         boxShadow: `0 4px 20px hsla(0 0% 0% / 0.35), 0 0 30px ${promo.accentColor.replace(")", " / 0.08)")}, inset 0 1px 0 hsla(0 0% 100% / 0.06)`,
         backdropFilter: "blur(12px)",
         animation: "subtle-pulse 3s ease-in-out infinite",
+        transition: "background 0.4s ease, border-color 0.4s ease",
       }}
     >
       {/* Shimmer sweep */}
@@ -400,33 +434,75 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
       }} />
 
       {/* Animated icon */}
-      <div style={{
-        width: 44, height: 44, borderRadius: 13, flexShrink: 0,
-        background: `${promo.accentColor.replace(")", " / 0.2)")}`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: `0 3px 12px ${promo.accentColor.replace(")", " / 0.25)")}`,
-        position: "relative", zIndex: 2,
-        animation: "icon-glow 2s ease-in-out infinite alternate",
-      }}>
+      <div
+        key={`icon-${animKey}`}
+        style={{
+          width: 44, height: 44, borderRadius: 13, flexShrink: 0,
+          background: `${promo.accentColor.replace(")", " / 0.2)")}`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: `0 3px 12px ${promo.accentColor.replace(")", " / 0.25)")}`,
+          position: "relative", zIndex: 2,
+          animation: "icon-glow 2s ease-in-out infinite alternate, promo-slide-in 0.45s ease-out",
+        }}
+      >
         <Icon size={21} color={promo.accentColor} />
       </div>
 
-      <div style={{ flex: 1, position: "relative", zIndex: 2 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "hsla(0 0% 100% / 0.95)", letterSpacing: 0.2 }}>
+      <div
+        key={`text-${animKey}`}
+        style={{
+          flex: 1, position: "relative", zIndex: 2, minWidth: 0,
+          animation: "promo-slide-in 0.45s ease-out",
+        }}
+      >
+        <div style={{
+          fontSize: 14, fontWeight: 700, color: "hsla(0 0% 100% / 0.95)", letterSpacing: 0.2,
+          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+        }}>
           {promo.title}
         </div>
-        <div style={{ fontSize: 10.5, color: "hsla(0 0% 100% / 0.55)", marginTop: 2, lineHeight: 1.3 }}>
+        <div style={{
+          fontSize: 10.5, color: "hsla(0 0% 100% / 0.55)", marginTop: 2, lineHeight: 1.3,
+          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+        }}>
           {promo.subtitle}
         </div>
+
+        {/* Dot indicators */}
+        {hasMultiple && (
+          <div style={{
+            display: "flex", gap: 4, marginTop: 6,
+          }}>
+            {activePromos.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => { e.stopPropagation(); goTo(i); }}
+                aria-label={`Show promo ${i + 1}`}
+                style={{
+                  width: i === index ? 14 : 5, height: 5, borderRadius: 999,
+                  border: "none", padding: 0, cursor: "pointer",
+                  background: i === index
+                    ? promo.accentColor
+                    : "hsla(0 0% 100% / 0.25)",
+                  transition: "all 0.3s ease",
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      <div style={{
-        display: "flex", alignItems: "center", gap: 4,
-        position: "relative", zIndex: 2,
-        padding: "5px 10px", borderRadius: 100,
-        background: `${promo.accentColor.replace(")", " / 0.15)")}`,
-        border: `1px solid ${promo.accentColor.replace(")", " / 0.2)")}`,
-      }}>
+      <div
+        key={`cta-${animKey}`}
+        style={{
+          display: "flex", alignItems: "center", gap: 4,
+          position: "relative", zIndex: 2,
+          padding: "5px 10px", borderRadius: 100,
+          background: `${promo.accentColor.replace(")", " / 0.15)")}`,
+          border: `1px solid ${promo.accentColor.replace(")", " / 0.2)")}`,
+          animation: "promo-slide-in 0.45s ease-out",
+        }}
+      >
         <span style={{ fontSize: 10, fontWeight: 700, color: promo.accentColor }}>{promo.cta}</span>
         <ArrowRight size={12} color={promo.accentColor} />
       </div>
@@ -439,6 +515,10 @@ const SeasonalBanner = ({ onHolidayPick }: Props) => {
         @keyframes icon-glow {
           0% { box-shadow: 0 3px 12px ${promo.accentColor.replace(")", " / 0.2)")}; }
           100% { box-shadow: 0 4px 18px ${promo.accentColor.replace(")", " / 0.35)")}; }
+        }
+        @keyframes promo-slide-in {
+          0% { opacity: 0; transform: translateX(14px); }
+          100% { opacity: 1; transform: translateX(0); }
         }
       `}</style>
     </div>
