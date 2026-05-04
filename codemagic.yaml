@@ -151,8 +151,15 @@ workflows:
           MARKETING_VERSION="1.0.2"
           echo "Setting marketing version to $MARKETING_VERSION"
           agvtool new-marketing-version $MARKETING_VERSION
-          NEW_BUILD_NUMBER=$(($BUILD_NUMBER + 1))
-          echo "Setting build number to $NEW_BUILD_NUMBER"
+          LATEST_TF_BUILD=$(app-store-connect get-latest-testflight-build-number "$APP_APPLE_ID" --version "$MARKETING_VERSION" 2>/dev/null || echo "")
+          if [ -z "$LATEST_TF_BUILD" ] || [ "$LATEST_TF_BUILD" = "null" ]; then
+            LATEST_TF_BUILD=$(app-store-connect get-latest-build-number "$APP_APPLE_ID" 2>/dev/null || echo "0")
+          fi
+          NEW_BUILD_NUMBER=$(($LATEST_TF_BUILD + 1))
+          if [ "$NEW_BUILD_NUMBER" -le "$BUILD_NUMBER" ]; then
+            NEW_BUILD_NUMBER=$(($BUILD_NUMBER + 1))
+          fi
+          echo "Setting build number to $NEW_BUILD_NUMBER (TestFlight latest: $LATEST_TF_BUILD, Codemagic counter: $BUILD_NUMBER)"
           agvtool new-version -all $NEW_BUILD_NUMBER
 
       - name: Build iOS archive
