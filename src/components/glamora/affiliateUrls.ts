@@ -175,7 +175,7 @@ const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam
   "Primary": { base: (q) => `https://www.primary.com/search?q=${encodeURIComponent(q)}` },
   "PatPat": { base: (q) => `https://us.patpat.com/search?q=${encodeURIComponent(q)}` },
   "BabyGap": { base: (q) => `https://www.gap.com/browse/search.do?searchText=${encodeURIComponent(q)}+baby` },
-  "Revolve": { base: (q) => `https://www.revolve.com/r/Search?query=${encodeURIComponent(q)}` },
+  "Revolve": { base: (q) => `https://www.revolve.com/r/Search.jsp?search=${encodeURIComponent(q)}` },
   "Steve Madden": { base: (q) => `https://www.stevemadden.com/search?q=${encodeURIComponent(q)}` },
   "Dr. Martens": { base: (q) => `https://www.drmartens.com/us/en/search?q=${encodeURIComponent(q)}` },
   "Birkenstock": { base: (q) => `https://www.birkenstock.com/us/search?q=${encodeURIComponent(q)}` },
