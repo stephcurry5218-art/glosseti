@@ -3,6 +3,48 @@
 const AFFILIATE_TAG = "glamora0e-20"; // Amazon Associates tag
 const UTM = "utm_source=glamora&utm_medium=app&utm_campaign=stylist";
 
+/**
+ * Fashion Nova's `/search?q=` endpoint redirects to the homepage, so we deep-link
+ * into the most relevant /collections/<slug> based on keywords in the query, and
+ * fall back to a Google "site:fashionnova.com" search that lands on real product
+ * pages instead of the FN homepage.
+ */
+const FN_COLLECTION_KEYWORDS: Array<{ slug: string; match: RegExp }> = [
+  { slug: "swimwear", match: /\b(bikini|swim(suit|wear)?|tankini|monokini|one[- ]?piece|cover[- ]?up)\b/i },
+  { slug: "dresses", match: /\b(dress|gown|maxi|midi|mini[- ]?dress|bodycon|slip[- ]?dress)\b/i },
+  { slug: "jumpsuits", match: /\b(jumpsuit|romper|playsuit|catsuit|bodysuit)\b/i },
+  { slug: "skirts", match: /\b(skirt)\b/i },
+  { slug: "jeans", match: /\b(jeans?|denim)\b/i },
+  { slug: "bottoms", match: /\b(pants?|trousers?|leggings?|shorts?|joggers?|cargos?|sweatpants?)\b/i },
+  { slug: "activewear", match: /\b(active(wear)?|sports?[- ]?bra|gym|yoga|workout|leggings?)\b/i },
+  { slug: "lingerie", match: /\b(lingerie|bra|panty|panties|thong|teddy|babydoll|chemise)\b/i },
+  { slug: "shoes", match: /\b(heels?|stilettos?|sneakers?|boots?|sandals?|pumps?|loafers?|mules?|flats?|shoes?)\b/i },
+  { slug: "accessories", match: /\b(bag|handbag|clutch|tote|purse|belt|hat|sunglasses|jewelry|earrings?|necklace|bracelet|ring|scarf|wallet)\b/i },
+  { slug: "tops", match: /\b(top|blouse|shirt|tee|t[- ]?shirt|tank|crop[- ]?top|cami|bodysuit|sweater|hoodie|cardigan)\b/i },
+  { slug: "dresses", match: /\b(prom|formal|cocktail|evening|gala)\b/i },
+];
+
+const buildFashionNovaUrl = (query: string): string => {
+  const q = (query || "").trim();
+  const isMen = /\b(men'?s?|guy|guys|male|him|his)\b/i.test(q);
+  const collectionRoot = isMen ? "https://www.fashionnova.com/collections/mens-all" : null;
+
+  // Pick the best matching collection slug for women's; men's catalog uses one root collection
+  if (!collectionRoot) {
+    for (const entry of FN_COLLECTION_KEYWORDS) {
+      if (entry.match.test(q)) {
+        // Strip the matched keyword from the in-collection filter to keep results broad
+        return `https://www.fashionnova.com/collections/${entry.slug}?q=${encodeURIComponent(q)}`;
+      }
+    }
+  }
+
+  // Fallback: Google "I'm feeling lucky"-style site search lands on real product pages,
+  // not the FN homepage. This is the most reliable way to deep-link a query into FN.
+  return `https://www.google.com/search?q=${encodeURIComponent(`site:fashionnova.com ${q}`)}`;
+};
+
+
 const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam?: string }> = {
   "Amazon": { base: (q) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}`, affiliateParam: `tag=${AFFILIATE_TAG}` },
   "Sephora": { base: (q) => `https://www.sephora.com/search?keyword=${encodeURIComponent(q)}` },
