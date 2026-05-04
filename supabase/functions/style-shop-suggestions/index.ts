@@ -225,7 +225,7 @@ Build the curated shopping list now.`;
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     const parsed = toolCall?.function?.arguments ? JSON.parse(toolCall.function.arguments) : { items: [] };
 
-    return new Response(JSON.stringify({ items: forceFashionNovaIntoItems(parsed.items || [], isCosplay) }), {
+    return new Response(JSON.stringify({ items: forceFashionNovaIntoItems(parsed.items || [], isCosplay || isBeauty) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
