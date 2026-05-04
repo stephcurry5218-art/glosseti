@@ -144,10 +144,13 @@ workflows:
           keychain add-certificates
           xcode-project use-profiles
 
-      - name: Increment build number
+      - name: Set marketing version and increment build number
         script: |
           set -e
           cd ios/App
+          MARKETING_VERSION="1.0.1"
+          echo "Setting marketing version to $MARKETING_VERSION"
+          agvtool new-marketing-version $MARKETING_VERSION
           NEW_BUILD_NUMBER=$(($BUILD_NUMBER + 1))
           echo "Setting build number to $NEW_BUILD_NUMBER"
           agvtool new-version -all $NEW_BUILD_NUMBER
