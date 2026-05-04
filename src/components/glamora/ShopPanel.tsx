@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid, RefreshCw } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid, RefreshCw, Store, X } from "lucide-react";
 import { getShopUrl } from "./affiliateUrls";
 
 export type ShopItem = {
