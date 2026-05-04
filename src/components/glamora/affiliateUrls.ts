@@ -27,20 +27,18 @@ const FN_COLLECTION_KEYWORDS: Array<{ slug: string; match: RegExp }> = [
 const buildFashionNovaUrl = (query: string): string => {
   const q = (query || "").trim();
   const isMen = /\b(men'?s?|guy|guys|male|him|his)\b/i.test(q);
-  const collectionRoot = isMen ? "https://www.fashionnova.com/collections/mens-all" : null;
 
-  // Pick the best matching collection slug for women's; men's catalog uses one root collection
-  if (!collectionRoot) {
-    for (const entry of FN_COLLECTION_KEYWORDS) {
-      if (entry.match.test(q)) {
-        // Strip the matched keyword from the in-collection filter to keep results broad
-        return `https://www.fashionnova.com/collections/${entry.slug}?q=${encodeURIComponent(q)}`;
-      }
+  if (isMen) {
+    return `https://www.fashionnova.com/collections/mens-all?q=${encodeURIComponent(q)}`;
+  }
+
+  for (const entry of FN_COLLECTION_KEYWORDS) {
+    if (entry.match.test(q)) {
+      return `https://www.fashionnova.com/collections/${entry.slug}?q=${encodeURIComponent(q)}`;
     }
   }
 
-  // Fallback: Google "I'm feeling lucky"-style site search lands on real product pages,
-  // not the FN homepage. This is the most reliable way to deep-link a query into FN.
+  // Fallback: Google site-search lands on real product pages, not FN homepage.
   return `https://www.google.com/search?q=${encodeURIComponent(`site:fashionnova.com ${q}`)}`;
 };
 
