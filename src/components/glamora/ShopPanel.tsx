@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid, RefreshCw } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ExternalLink, Crown, Sparkles, Coins, ChevronRight, LayoutGrid, RefreshCw, Store, X } from "lucide-react";
 import { getShopUrl } from "./affiliateUrls";
 
 export type ShopItem = {
@@ -60,11 +60,58 @@ const ensureFashionNovaStore = (item: ShopItem): ShopItem => {
   };
 };
 
+// Per-tier extra retailers always offered as quick links so users can compare anywhere.
+const EXTRA_RETAILERS_BY_TIER: Record<"luxury" | "mid" | "budget", string[]> = {
+  luxury: ["Nordstrom", "Sephora", "Revolve", "Net-a-Porter"],
+  mid: ["Fashion Nova", "ASOS", "Zara", "Ulta", "Target"],
+  budget: ["Fashion Nova", "Amazon Fashion", "Shein", "Target", "e.l.f."],
+};
+
 const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swappingIndex }: Props) => {
   const [activeTier, setActiveTier] = useState<"luxury" | "mid" | "budget">("budget");
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
   const [viewAll, setViewAll] = useState(false);
-  const visibleItems = items.map(ensureFashionNovaStore);
+  const [retailerFilters, setRetailerFilters] = useState<Set<string>>(new Set());
+  const enrichedItems = useMemo(() => items.map(ensureFashionNovaStore), [items]);
+
+  // Build the union of every retailer that appears across all items + tiers,
+  // plus the curated extras for the active tier so Fashion Nova/Target/etc.
+  // always appear as toggleable chips even if the AI didn't pick them.
+  const availableRetailers = useMemo(() => {
+    const set = new Set<string>();
+    enrichedItems.forEach((it) => {
+      Object.values(it.stores).forEach((s) => s?.store && set.add(s.store));
+    });
+    EXTRA_RETAILERS_BY_TIER[activeTier].forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.luxury.forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.mid.forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.budget.forEach((s) => set.add(s));
+    return Array.from(set).sort((a, b) => {
+      // Pin Fashion Nova first, then alphabetical
+      if (a === "Fashion Nova") return -1;
+      if (b === "Fashion Nova") return 1;
+      return a.localeCompare(b);
+    });
+  }, [enrichedItems, activeTier]);
+
+  const toggleRetailer = (name: string) => {
+    setRetailerFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+  const clearRetailers = () => setRetailerFilters(new Set());
+
+  // If the user has selected retailer filters, only show items whose active-tier
+  // store matches one of the selected retailers. Items with no matching tier are hidden.
+  const visibleItems = useMemo(() => {
+    if (retailerFilters.size === 0) return enrichedItems;
+    return enrichedItems.filter((it) =>
+      Object.values(it.stores).some((s) => retailerFilters.has(s?.store))
+    );
+  }, [enrichedItems, retailerFilters]);
 
   if (!items.length) return null;
 
@@ -108,6 +155,85 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
       >
         <LayoutGrid size={14} /> {viewAll ? "Single Tier View" : "View All Stores"}
       </button>
+
+      {/* Retailer filter chips — toggle which stores to show */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          marginBottom: 8,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            fontSize: 10, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase",
+            color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
+          }}>
+            <Store size={11} /> Filter by retailer
+          </div>
+          {retailerFilters.size > 0 && (
+            <button
+              onClick={clearRetailers}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                display: "flex", alignItems: "center", gap: 3,
+                fontSize: 10, fontWeight: 700, color: "hsl(var(--glamora-rose-dark))",
+                fontFamily: "'Jost', sans-serif",
+              }}
+            >
+              <X size={11} /> Clear ({retailerFilters.size})
+            </button>
+          )}
+        </div>
+        <div style={{
+          display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4,
+          WebkitOverflowScrolling: "touch", scrollbarWidth: "none",
+        }}>
+          {availableRetailers.map((name) => {
+            const isFN = name === "Fashion Nova";
+            const isActive = retailerFilters.has(name);
+            return (
+              <button
+                key={name}
+                onClick={() => toggleRetailer(name)}
+                style={{
+                  flexShrink: 0,
+                  padding: "6px 11px", borderRadius: 999,
+                  fontSize: 10, fontWeight: 700,
+                  fontFamily: "'Jost', sans-serif",
+                  cursor: "pointer", whiteSpace: "nowrap",
+                  border: isActive
+                    ? `1.5px solid hsl(${isFN ? "340 80% 55%" : "var(--glamora-rose-dark)"})`
+                    : isFN
+                      ? "1.5px solid hsla(340 80% 55% / 0.45)"
+                      : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
+                  background: isActive
+                    ? `hsla(${isFN ? "340 80% 55%" : "var(--glamora-rose-dark)"} / 0.18)`
+                    : isFN
+                      ? "linear-gradient(135deg, hsla(340 80% 55% / 0.12), hsla(340 80% 55% / 0.04))"
+                      : "hsla(var(--glamora-cream2) / 0.5)",
+                  color: isActive
+                    ? `hsl(${isFN ? "340 70% 42%" : "var(--glamora-rose-dark)"})`
+                    : isFN
+                      ? "hsl(340 70% 42%)"
+                      : "hsl(var(--glamora-char))",
+                  transition: "all 0.15s",
+                }}
+              >
+                {isFN ? "🔥 " : ""}{name}
+              </button>
+            );
+          })}
+        </div>
+        {retailerFilters.size > 0 && visibleItems.length === 0 && (
+          <div style={{
+            marginTop: 8, padding: "10px 12px", borderRadius: 8,
+            background: "hsla(var(--glamora-cream2) / 0.5)",
+            fontSize: 11, color: "hsl(var(--glamora-gray))",
+            fontFamily: "'Jost', sans-serif", textAlign: "center",
+          }}>
+            No items match the selected retailers. Try clearing filters.
+          </div>
+        )}
+      </div>
 
       {/* Item list */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -276,27 +402,29 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                         const itemIsBeauty = isBeautyItem(item);
                         const chips: { store: string; item: string; key: string; highlight?: boolean }[] = [];
 
-                        if (itemIsBeauty) {
-                          // Beauty items → prioritize Sephora + Ulta as alt chips
-                          if (primary.store !== "Sephora") {
-                            chips.push({ store: "Sephora", item: tierData.item, key: "sephora", highlight: true });
-                          }
-                          chips.push({ ...primary, key: "primary" });
-                          if (primary.store !== "Ulta" && !chips.some(c => c.store === "Ulta")) {
-                            chips.push({ store: "Ulta", item: tierData.item, key: "ulta" });
-                          }
-                        } else {
-                          // Fashion items → keep Fashion Nova as a guaranteed chip
-                          if (primary.store !== "Fashion Nova") {
-                            chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn", highlight: true });
-                          }
-                          chips.push({ ...primary, key: "primary" });
-                          if (primary.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
-                            chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
-                          }
+                        // Curated retailer set per context
+                        const curated = itemIsBeauty
+                          ? ["Sephora", "Ulta", "Fashion Nova", "Target", "Amazon"]
+                          : ["Fashion Nova", "Amazon Fashion", "Target", "ASOS", "Shein"];
+
+                        // Always pin Fashion Nova first when available
+                        if (primary.store !== "Fashion Nova" && curated.includes("Fashion Nova")) {
+                          chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn", highlight: true });
+                        }
+                        // Add the AI's primary pick
+                        chips.push({ ...primary, key: "primary", highlight: primary.store === "Fashion Nova" });
+                        // Then layer in curated retailers (skip duplicates / active filters)
+                        for (const store of curated) {
+                          if (chips.some((c) => c.store === store)) continue;
+                          chips.push({ store, item: tierData.item, key: store });
                         }
 
-                        return chips.slice(0, 3).map((c) => {
+                        // If user has retailer filters active, only show chips matching the filter
+                        const filtered = retailerFilters.size > 0
+                          ? chips.filter((c) => retailerFilters.has(c.store))
+                          : chips;
+
+                        return filtered.slice(0, 5).map((c) => {
                           const isHL = c.highlight;
                           return (
                             <a
