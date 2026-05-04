@@ -125,7 +125,7 @@ const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam
   "The North Face": { base: (q) => `https://www.thenorthface.com/en-us/search?q=${encodeURIComponent(q)}` },
   "ASOS": { base: (q) => `https://www.asos.com/us/search/?q=${encodeURIComponent(q)}` },
   "SHEIN": { base: (q) => `https://us.shein.com/pdsearch/${encodeURIComponent(q)}/` },
-  "Fashion Nova": { base: (q) => `https://www.fashionnova.com/search?q=${encodeURIComponent(q)}` },
+  "Fashion Nova": { base: (q) => buildFashionNovaUrl(q) },
   // Baby & Kids Stores
   "Carter's": { base: (q) => `https://www.carters.com/search?q=${encodeURIComponent(q)}` },
   "Old Navy": { base: (q) => `https://oldnavy.gap.com/browse/search.do?searchText=${encodeURIComponent(q)}` },
