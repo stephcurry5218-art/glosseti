@@ -344,24 +344,36 @@ export const PROMOS: SeasonalPromo[] = [
 ];
 
 export function getCurrentPromo(): SeasonalPromo {
-  const now = new Date();
+  return getActivePromos()[0];
+}
+
+/**
+ * Returns every promo currently appropriate for today's date, ordered by relevance:
+ * 1. Date-specific holidays in their active window (e.g. Mother's Day in early May)
+ * 2. The current macro-season fallback (winter / spring / summer / fall)
+ * The list is automatically date-driven — no manual scheduling required.
+ */
+export function getActivePromos(now: Date = new Date()): SeasonalPromo[] {
   const month = now.getMonth();
   const day = now.getDate();
 
-  const specific = PROMOS.filter(p => p.dayRange).find(p => {
+  const inWindow = (p: SeasonalPromo): boolean => {
+    if (!p.dayRange) return p.months.includes(month);
     if (p.months.length === 1) {
-      return p.months[0] === month && day >= p.dayRange![0] && day <= p.dayRange![1];
+      return p.months[0] === month && day >= p.dayRange[0] && day <= p.dayRange[1];
     }
-    const [startMonth, endMonth] = [p.months[0], p.months[p.months.length - 1]];
-    if (month === startMonth && day >= p.dayRange![0]) return true;
-    if (month === endMonth && day <= p.dayRange![1]) return true;
+    const startMonth = p.months[0];
+    const endMonth = p.months[p.months.length - 1];
+    if (month === startMonth && day >= p.dayRange[0]) return true;
+    if (month === endMonth && day <= p.dayRange[1]) return true;
     if (p.months.length > 2 && month > startMonth && month < endMonth) return true;
     return false;
-  });
+  };
 
-  if (specific) return specific;
-  const seasonal = PROMOS.filter(p => !p.dayRange).find(p => p.months.includes(month));
-  return seasonal || PROMOS[PROMOS.length - 1];
+  const specific = PROMOS.filter((p) => p.dayRange && inWindow(p));
+  const seasonal = PROMOS.filter((p) => !p.dayRange && p.months.includes(month));
+  const combined = [...specific, ...seasonal];
+  return combined.length ? combined : [PROMOS[PROMOS.length - 1]];
 }
 
 interface Props {
