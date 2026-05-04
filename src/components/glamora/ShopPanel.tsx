@@ -156,6 +156,85 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
         <LayoutGrid size={14} /> {viewAll ? "Single Tier View" : "View All Stores"}
       </button>
 
+      {/* Retailer filter chips — toggle which stores to show */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          marginBottom: 8,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            fontSize: 10, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase",
+            color: "hsl(var(--glamora-gray))", fontFamily: "'Jost', sans-serif",
+          }}>
+            <Store size={11} /> Filter by retailer
+          </div>
+          {retailerFilters.size > 0 && (
+            <button
+              onClick={clearRetailers}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                display: "flex", alignItems: "center", gap: 3,
+                fontSize: 10, fontWeight: 700, color: "hsl(var(--glamora-rose-dark))",
+                fontFamily: "'Jost', sans-serif",
+              }}
+            >
+              <X size={11} /> Clear ({retailerFilters.size})
+            </button>
+          )}
+        </div>
+        <div style={{
+          display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4,
+          WebkitOverflowScrolling: "touch", scrollbarWidth: "none",
+        }}>
+          {availableRetailers.map((name) => {
+            const isFN = name === "Fashion Nova";
+            const isActive = retailerFilters.has(name);
+            return (
+              <button
+                key={name}
+                onClick={() => toggleRetailer(name)}
+                style={{
+                  flexShrink: 0,
+                  padding: "6px 11px", borderRadius: 999,
+                  fontSize: 10, fontWeight: 700,
+                  fontFamily: "'Jost', sans-serif",
+                  cursor: "pointer", whiteSpace: "nowrap",
+                  border: isActive
+                    ? `1.5px solid hsl(${isFN ? "340 80% 55%" : "var(--glamora-rose-dark)"})`
+                    : isFN
+                      ? "1.5px solid hsla(340 80% 55% / 0.45)"
+                      : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
+                  background: isActive
+                    ? `hsla(${isFN ? "340 80% 55%" : "var(--glamora-rose-dark)"} / 0.18)`
+                    : isFN
+                      ? "linear-gradient(135deg, hsla(340 80% 55% / 0.12), hsla(340 80% 55% / 0.04))"
+                      : "hsla(var(--glamora-cream2) / 0.5)",
+                  color: isActive
+                    ? `hsl(${isFN ? "340 70% 42%" : "var(--glamora-rose-dark)"})`
+                    : isFN
+                      ? "hsl(340 70% 42%)"
+                      : "hsl(var(--glamora-char))",
+                  transition: "all 0.15s",
+                }}
+              >
+                {isFN ? "🔥 " : ""}{name}
+              </button>
+            );
+          })}
+        </div>
+        {retailerFilters.size > 0 && visibleItems.length === 0 && (
+          <div style={{
+            marginTop: 8, padding: "10px 12px", borderRadius: 8,
+            background: "hsla(var(--glamora-cream2) / 0.5)",
+            fontSize: 11, color: "hsl(var(--glamora-gray))",
+            fontFamily: "'Jost', sans-serif", textAlign: "center",
+          }}>
+            No items match the selected retailers. Try clearing filters.
+          </div>
+        )}
+      </div>
+
       {/* Item list */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {visibleItems.map((item, idx) => {
