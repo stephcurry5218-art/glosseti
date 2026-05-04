@@ -29,7 +29,7 @@ const buildFashionNovaUrl = (query: string): string => {
   const isMen = /\b(men'?s?|guy|guys|male|him|his)\b/i.test(q);
 
   if (isMen) {
-    return `https://www.fashionnova.com/collections/mens-all?q=${encodeURIComponent(q)}`;
+    return `https://www.fashionnova.com/collections/mens?q=${encodeURIComponent(q)}`;
   }
 
   for (const entry of FN_COLLECTION_KEYWORDS) {
