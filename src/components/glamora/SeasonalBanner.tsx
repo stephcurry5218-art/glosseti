@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Crown, GraduationCap, Heart, Snowflake, Sun, Leaf, TreePine, PartyPopper, Star, Sparkles, Gift, Flower2, Baby, Ghost, Flag } from "lucide-react";
 import type { StyleCategory } from "./GlamoraApp";
 
