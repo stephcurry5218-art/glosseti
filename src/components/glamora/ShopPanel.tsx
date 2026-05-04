@@ -26,10 +26,31 @@ const tiers = [
   { key: "budget" as const, label: "Budget", icon: Coins, color: "var(--glamora-success)", bg: "var(--glamora-success)" },
 ] as const;
 
+const FASHION_NOVA_STORE = "Fashion Nova";
+
+const ensureFashionNovaStore = (item: ShopItem): ShopItem => {
+  const hasFashionNova = Object.values(item.stores).some((option) => option.store === FASHION_NOVA_STORE);
+  if (hasFashionNova) return item;
+
+  const preferred = item.stores.mid || item.stores.budget || item.stores.luxury;
+  return {
+    ...item,
+    stores: {
+      ...item.stores,
+      budget: {
+        store: FASHION_NOVA_STORE,
+        item: preferred.item,
+        price: item.stores.budget?.price || "$$",
+      },
+    },
+  };
+};
+
 const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swappingIndex }: Props) => {
-  const [activeTier, setActiveTier] = useState<"luxury" | "mid" | "budget">("mid");
+  const [activeTier, setActiveTier] = useState<"luxury" | "mid" | "budget">("budget");
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
   const [viewAll, setViewAll] = useState(false);
+  const visibleItems = items.map(ensureFashionNovaStore);
 
   if (!items.length) return null;
 
@@ -76,7 +97,7 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
 
       {/* Item list */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {items.map((item, idx) => {
+        {visibleItems.map((item, idx) => {
           const tierData = item.stores[activeTier];
           const isExpanded = expandedItem === idx;
           const tierMeta = tiers.find(t => t.key === activeTier)!;

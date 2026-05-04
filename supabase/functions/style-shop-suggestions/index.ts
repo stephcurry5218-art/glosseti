@@ -19,6 +19,31 @@ const COSPLAY_STORES = {
   budget: ["Party City", "Amazon Fashion", "Spirit Halloween"],
 };
 
+const FASHION_NOVA_STORE = "Fashion Nova";
+
+const forceFashionNovaIntoItems = (items: any[], isCosplay: boolean) => {
+  if (!Array.isArray(items) || isCosplay) return Array.isArray(items) ? items : [];
+
+  return items.map((item) => {
+    const stores = item?.stores || {};
+    const hasFashionNova = Object.values(stores).some((store: any) => store?.store === FASHION_NOVA_STORE);
+    if (hasFashionNova) return item;
+
+    const source = stores.mid || stores.budget || stores.luxury || {};
+    return {
+      ...item,
+      stores: {
+        ...stores,
+        budget: {
+          store: FASHION_NOVA_STORE,
+          item: source.item || item?.label || "fashion outfit",
+          price: stores.budget?.price || "$39",
+        },
+      },
+    };
+  });
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -60,6 +85,7 @@ STRICT RULES:
   · luxury: ${stores.luxury.join(", ")}
   · mid: ${stores.mid.join(", ")}
   · budget: ${stores.budget.join(", ")}
+- Fashion Nova is REQUIRED for non-cosplay looks: at least one returned tier per item should use Fashion Nova whenever the item is fashion/apparel/shoes/accessories.
 - Vary the retailers across items in the same tier so the user sees a mix.
 - Use realistic prices: luxury $150-$2000, mid $40-$200, budget $15-$80. Format as "$120" or "$1,250".
 
@@ -172,7 +198,7 @@ Build the curated shopping list now.`;
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     const parsed = toolCall?.function?.arguments ? JSON.parse(toolCall.function.arguments) : { items: [] };
 
-    return new Response(JSON.stringify({ items: parsed.items || [] }), {
+    return new Response(JSON.stringify({ items: forceFashionNovaIntoItems(parsed.items || [], isCosplay) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
