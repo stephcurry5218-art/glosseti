@@ -12,6 +12,14 @@ const ALLOWED_STORES = {
   budget: ["Shein", "Amazon Fashion", "Fashion Nova"],
 };
 
+// Beauty / makeup / grooming routes to beauty retailers across all tiers.
+// Fashion Nova Beauty is intentionally included so it still pops up.
+const BEAUTY_STORES = {
+  luxury: ["Sephora", "Charlotte Tilbury", "Pat McGrath", "NARS", "Hourglass", "Estée Lauder", "Lancôme", "Bobbi Brown"],
+  mid: ["Ulta", "Fenty Beauty", "MAC", "Urban Decay", "Too Faced", "Tarte", "Benefit", "Rare Beauty", "Glossier", "Milk Makeup", "Anastasia Beverly Hills"],
+  budget: ["e.l.f.", "NYX", "ColourPop", "Morphe", "Fashion Nova"],
+};
+
 // Cosplay routes to costume-specific retailers across all tiers.
 const COSPLAY_STORES = {
   luxury: ["EZCosplay", "Miccostumes", "CosplayShopper"],
@@ -21,8 +29,8 @@ const COSPLAY_STORES = {
 
 const FASHION_NOVA_STORE = "Fashion Nova";
 
-const forceFashionNovaIntoItems = (items: any[], isCosplay: boolean) => {
-  if (!Array.isArray(items) || isCosplay) return Array.isArray(items) ? items : [];
+const forceFashionNovaIntoItems = (items: any[], skip: boolean) => {
+  if (!Array.isArray(items) || skip) return Array.isArray(items) ? items : [];
 
   return items.map((item) => {
     const stores = item?.stores || {};
