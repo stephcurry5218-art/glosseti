@@ -425,8 +425,6 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                           : chips;
 
                         return filtered.slice(0, 5).map((c) => {
-
-                        return chips.slice(0, 3).map((c) => {
                           const isHL = c.highlight;
                           return (
                             <a
