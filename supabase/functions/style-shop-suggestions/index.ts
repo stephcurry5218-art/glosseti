@@ -128,6 +128,7 @@ LOOK NAME: ${lookName || "(no specific look)"}
 ${occasionLine}
 ${hotspotLine}
 ${cosplayLine}
+${beautyLine}
 ${excludeLine}
 ${refinementContext ? `USER REFINEMENT: ${String(refinementContext).slice(0, 400)}` : ""}
 
