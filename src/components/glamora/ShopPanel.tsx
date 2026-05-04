@@ -60,11 +60,58 @@ const ensureFashionNovaStore = (item: ShopItem): ShopItem => {
   };
 };
 
+// Per-tier extra retailers always offered as quick links so users can compare anywhere.
+const EXTRA_RETAILERS_BY_TIER: Record<"luxury" | "mid" | "budget", string[]> = {
+  luxury: ["Nordstrom", "Sephora", "Revolve", "Net-a-Porter"],
+  mid: ["Fashion Nova", "ASOS", "Zara", "Ulta", "Target"],
+  budget: ["Fashion Nova", "Amazon Fashion", "Shein", "Target", "e.l.f."],
+};
+
 const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swappingIndex }: Props) => {
   const [activeTier, setActiveTier] = useState<"luxury" | "mid" | "budget">("budget");
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
   const [viewAll, setViewAll] = useState(false);
-  const visibleItems = items.map(ensureFashionNovaStore);
+  const [retailerFilters, setRetailerFilters] = useState<Set<string>>(new Set());
+  const enrichedItems = useMemo(() => items.map(ensureFashionNovaStore), [items]);
+
+  // Build the union of every retailer that appears across all items + tiers,
+  // plus the curated extras for the active tier so Fashion Nova/Target/etc.
+  // always appear as toggleable chips even if the AI didn't pick them.
+  const availableRetailers = useMemo(() => {
+    const set = new Set<string>();
+    enrichedItems.forEach((it) => {
+      Object.values(it.stores).forEach((s) => s?.store && set.add(s.store));
+    });
+    EXTRA_RETAILERS_BY_TIER[activeTier].forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.luxury.forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.mid.forEach((s) => set.add(s));
+    EXTRA_RETAILERS_BY_TIER.budget.forEach((s) => set.add(s));
+    return Array.from(set).sort((a, b) => {
+      // Pin Fashion Nova first, then alphabetical
+      if (a === "Fashion Nova") return -1;
+      if (b === "Fashion Nova") return 1;
+      return a.localeCompare(b);
+    });
+  }, [enrichedItems, activeTier]);
+
+  const toggleRetailer = (name: string) => {
+    setRetailerFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+  const clearRetailers = () => setRetailerFilters(new Set());
+
+  // If the user has selected retailer filters, only show items whose active-tier
+  // store matches one of the selected retailers. Items with no matching tier are hidden.
+  const visibleItems = useMemo(() => {
+    if (retailerFilters.size === 0) return enrichedItems;
+    return enrichedItems.filter((it) =>
+      Object.values(it.stores).some((s) => retailerFilters.has(s?.store))
+    );
+  }, [enrichedItems, retailerFilters]);
 
   if (!items.length) return null;
 
