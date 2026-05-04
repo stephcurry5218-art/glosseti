@@ -28,7 +28,21 @@ const tiers = [
 
 const FASHION_NOVA_STORE = "Fashion Nova";
 
+const BEAUTY_RETAILERS = new Set([
+  "Sephora", "Ulta", "Charlotte Tilbury", "Pat McGrath", "NARS", "Hourglass",
+  "Estée Lauder", "Lancôme", "Bobbi Brown", "Fenty Beauty", "MAC", "Urban Decay",
+  "Too Faced", "Tarte", "Benefit", "Rare Beauty", "Glossier", "Milk Makeup",
+  "Anastasia Beverly Hills", "e.l.f.", "NYX", "ColourPop", "Morphe", "Clinique",
+  "Laura Mercier", "Kosas",
+]);
+
+const isBeautyItem = (item: ShopItem): boolean =>
+  Object.values(item.stores).some((s) => BEAUTY_RETAILERS.has(s?.store));
+
 const ensureFashionNovaStore = (item: ShopItem): ShopItem => {
+  // Skip Fashion Nova injection for beauty/makeup items — keep beauty retailers pure.
+  if (isBeautyItem(item)) return item;
+
   const hasFashionNova = Object.values(item.stores).some((option) => option.store === FASHION_NOVA_STORE);
   if (hasFashionNova) return item;
 
