@@ -28,7 +28,21 @@ const tiers = [
 
 const FASHION_NOVA_STORE = "Fashion Nova";
 
+const BEAUTY_RETAILERS = new Set([
+  "Sephora", "Ulta", "Charlotte Tilbury", "Pat McGrath", "NARS", "Hourglass",
+  "Estée Lauder", "Lancôme", "Bobbi Brown", "Fenty Beauty", "MAC", "Urban Decay",
+  "Too Faced", "Tarte", "Benefit", "Rare Beauty", "Glossier", "Milk Makeup",
+  "Anastasia Beverly Hills", "e.l.f.", "NYX", "ColourPop", "Morphe", "Clinique",
+  "Laura Mercier", "Kosas",
+]);
+
+const isBeautyItem = (item: ShopItem): boolean =>
+  Object.values(item.stores).some((s) => BEAUTY_RETAILERS.has(s?.store));
+
 const ensureFashionNovaStore = (item: ShopItem): ShopItem => {
+  // Skip Fashion Nova injection for beauty/makeup items — keep beauty retailers pure.
+  if (isBeautyItem(item)) return item;
+
   const hasFashionNova = Object.values(item.stores).some((option) => option.store === FASHION_NOVA_STORE);
   if (hasFashionNova) return item;
 
@@ -259,17 +273,31 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                       {(() => {
                         const primary = { store: tierData.store, item: tierData.item };
-                        const chips: { store: string; item: string; key: string }[] = [];
-                        // Always include Fashion Nova FIRST (unless it IS the primary)
-                        if (primary.store !== "Fashion Nova") {
-                          chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn" });
+                        const itemIsBeauty = isBeautyItem(item);
+                        const chips: { store: string; item: string; key: string; highlight?: boolean }[] = [];
+
+                        if (itemIsBeauty) {
+                          // Beauty items → prioritize Sephora + Ulta as alt chips
+                          if (primary.store !== "Sephora") {
+                            chips.push({ store: "Sephora", item: tierData.item, key: "sephora", highlight: true });
+                          }
+                          chips.push({ ...primary, key: "primary" });
+                          if (primary.store !== "Ulta" && !chips.some(c => c.store === "Ulta")) {
+                            chips.push({ store: "Ulta", item: tierData.item, key: "ulta" });
+                          }
+                        } else {
+                          // Fashion items → keep Fashion Nova as a guaranteed chip
+                          if (primary.store !== "Fashion Nova") {
+                            chips.push({ store: "Fashion Nova", item: tierData.item, key: "fn", highlight: true });
+                          }
+                          chips.push({ ...primary, key: "primary" });
+                          if (primary.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
+                            chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
+                          }
                         }
-                        chips.push({ ...primary, key: "primary" });
-                        if (primary.store !== "Amazon Fashion" && !chips.some(c => c.store === "Amazon Fashion")) {
-                          chips.push({ store: "Amazon Fashion", item: tierData.item, key: "az" });
-                        }
+
                         return chips.slice(0, 3).map((c) => {
-                          const isFN = c.store === "Fashion Nova";
+                          const isHL = c.highlight;
                           return (
                             <a
                               key={c.key}
@@ -279,22 +307,22 @@ const ShopPanel = ({ items, accent = "var(--glamora-rose-dark)", onSwapItem, swa
                               style={{
                                 fontSize: 10, fontWeight: 700,
                                 padding: "6px 11px", borderRadius: 999,
-                                border: isFN
+                                border: isHL
                                   ? "1.5px solid hsla(340 80% 55% / 0.6)"
                                   : "1px solid hsla(var(--glamora-gray-light) / 0.25)",
-                                background: isFN
+                                background: isHL
                                   ? "linear-gradient(135deg, hsla(340 80% 55% / 0.18), hsla(340 80% 55% / 0.08))"
                                   : "hsla(var(--glamora-cream2) / 0.5)",
-                                color: isFN
+                                color: isHL
                                   ? "hsl(340 70% 42%)"
                                   : "hsl(var(--glamora-char))",
                                 textDecoration: "none",
                                 display: "inline-flex", alignItems: "center", gap: 4,
                                 fontFamily: "'Jost', sans-serif",
-                                boxShadow: isFN ? "0 2px 8px hsla(340 80% 55% / 0.25)" : "none",
+                                boxShadow: isHL ? "0 2px 8px hsla(340 80% 55% / 0.25)" : "none",
                               }}
                             >
-                              {isFN ? "🔥 " : ""}Shop on {c.store} <ExternalLink size={10} />
+                              {isHL ? (itemIsBeauty ? "✨ " : "🔥 ") : ""}Shop on {c.store} <ExternalLink size={10} />
                             </a>
                           );
                         });
