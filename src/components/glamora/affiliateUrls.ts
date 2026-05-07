@@ -38,8 +38,8 @@ const buildFashionNovaUrl = (query: string): string => {
     }
   }
 
-  // Fallback: Google site-search lands on real product pages, not FN homepage.
-  return `https://www.google.com/search?q=${encodeURIComponent(`site:fashionnova.com ${q}`)}`;
+  // Fallback: FN's all-products collection with query (lands on real product results, not Google)
+  return `https://www.fashionnova.com/collections/all?q=${encodeURIComponent(q)}`;
 };
 
 
