@@ -61,7 +61,7 @@ const FEMALE: Record<OccasionId, Vibe[]> = {
     { id: "f-swm-04", label: "Cut Out Swim",     query: "cut out swimsuit fashion",              image: img("1539109136881-3be0616acf4b"), category: "swimwear", subcategory: "cutout-swim" },
     { id: "f-swm-05", label: "Tropical Print",   query: "tropical floral print bikini swimsuit", image: img("1606107557195-0e29a4b5b4aa"), category: "swimwear", subcategory: "tropical-print-bikini" },
     { id: "f-swm-06", label: "Coverup and Sarong", query: "beach coverup sarong",                image: img("1556306535-0f09a537f0a3"), category: "swimwear", subcategory: "swim-coverup" },
-    { id: "f-swm-07", label: "Triangle Top",     query: "triangle bikini top",                   image: img("1502767089025-6748d4ef9f24"), category: "swimwear", subcategory: "triangle-top" },
+    { id: "f-swm-07", label: "Triangle Top",     query: "triangle bikini top",                   image: img("1556306535-0f09a537f0a3"), category: "swimwear", subcategory: "triangle-top" },
     { id: "f-swm-08", label: "Sporty Swim",      query: "sporty athletic swimsuit",              image: img("1611591437281-460bfbe1220a"), category: "swimwear", subcategory: "sporty-swim" },
     { id: "f-swm-09", label: "Crochet Bikini",   query: "crochet bikini swimsuit",               image: img("1581824283135-0666cf353f35"), category: "swimwear", subcategory: "crochet-bikini" },
     { id: "f-swm-10", label: "Bandeau",          query: "bandeau bikini top strapless",          image: img("1511499767150-a48a237f0083"), category: "swimwear", subcategory: "bandeau" },
@@ -303,7 +303,7 @@ const MALE: Record<OccasionId, Vibe[]> = {
     { id: "m-fit-05", label: "Boxing / MMA",     query: "men boxing mma outfit",                 image: img("1535632787350-4e68ef0ac584"), category: "fitness", subcategory: "boxing-mma" },
     { id: "m-fit-06", label: "Hiking",           query: "men hiking outfit outdoor",             image: img("1574258495973-f010dfbb5371"), category: "fitness", subcategory: "outdoor-hiking" },
     { id: "m-fit-07", label: "Basketball",       query: "men basketball outfit",                 image: img("1577803645773-f96470509666"), category: "fitness", subcategory: "basketball" },
-    { id: "m-fit-08", label: "Soccer Kit",       query: "men soccer kit outfit",                 image: img("1502767089025-6748d4ef9f24"), category: "fitness", subcategory: "soccer-kit" },
+    { id: "m-fit-08", label: "Soccer Kit",       query: "men soccer kit outfit",                 image: img("1571019613454-1cb2f99b2d8b"), category: "fitness", subcategory: "soccer-kit" },
     { id: "m-fit-09", label: "Tennis",           query: "men tennis outfit",                     image: img("1556306535-0f09a537f0a3"), category: "fitness", subcategory: "tennis-m" },
     { id: "m-fit-10", label: "Cycling",          query: "men cycling outfit",                    image: img("1511499767150-a48a237f0083"), category: "fitness", subcategory: "cycling-kit" },
     { id: "m-fit-11", label: "Yoga Flow",        query: "men yoga outfit",                       image: img("1512310604669-443f26c35f52"), category: "fitness", subcategory: "yoga-flow-m" },
@@ -346,7 +346,7 @@ const MALE: Record<OccasionId, Vibe[]> = {
 const FEMALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
   swimwear: [
     { id: "f-swm-13", label: "Halter Bikini",     query: "halter bikini swimsuit",                image: img("1556306535-0f09a537f0a3"), category: "swimwear", subcategory: "halter-bikini" },
-    { id: "f-swm-14", label: "Cheeky Bottoms",    query: "cheeky bikini bottoms beach",           image: img("1502767089025-6748d4ef9f24"), category: "swimwear", subcategory: "cheeky-bottoms" },
+    { id: "f-swm-14", label: "Cheeky Bottoms",    query: "cheeky bikini bottoms beach",           image: img("1620063633168-8ec1bcc1bcec"), category: "swimwear", subcategory: "cheeky-bottoms" },
     { id: "f-swm-15", label: "Cut Out One-Piece", query: "cutout one piece swimsuit",             image: img("1611591437281-460bfbe1220a"), category: "swimwear", subcategory: "cutout-one-piece" },
     { id: "f-swm-16", label: "Neon Bikini",       query: "neon bright bikini swimsuit",           image: img("1620063633168-8ec1bcc1bcec"), category: "swimwear", subcategory: "neon-bikini" },
     { id: "f-swm-17", label: "Vintage Pinup",     query: "vintage pinup swimsuit retro",          image: img("1525026198548-4baa812f1183"), category: "swimwear", subcategory: "vintage-pinup-swim" },
@@ -527,7 +527,7 @@ const MALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
     { id: "m-fit-17", label: "Climbing Gear",     query: "men rock climbing outfit gear",         image: img("1573408301185-9146fe634ad0"), category: "fitness", subcategory: "climbing-gear" },
     { id: "m-fit-18", label: "Mma Training",      query: "men mma boxing training outfit",        image: img("1535632787350-4e68ef0ac584"), category: "fitness", subcategory: "mma-training" },
     { id: "m-fit-19", label: "Sports Jersey Kit", query: "men sports jersey kit",                 image: img("1577803645773-f96470509666"), category: "fitness", subcategory: "sports-jersey-kit" },
-    { id: "m-fit-20", label: "Court Sneakers",    query: "men court sneakers gym outfit",         image: img("1502767089025-6748d4ef9f24"), category: "fitness", subcategory: "court-sneakers" },
+    { id: "m-fit-20", label: "Court Sneakers",    query: "men court sneakers gym outfit",         image: img("1571019613454-1cb2f99b2d8b"), category: "fitness", subcategory: "court-sneakers" },
   ],
   cosplay: [
     { id: "m-cos-13", label: "Royal King",        query: "royal king cosplay man",                image: img("1641427493563-5cc9cf1a9950"), category: "cosplay", subcategory: "royal-king" },
