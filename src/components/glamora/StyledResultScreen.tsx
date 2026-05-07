@@ -134,7 +134,7 @@ const handleDownload = async (imageUrl: string) => {
 
 const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onLookSelect, onRegenerate, onQuickRegenerate, showWatermark }: Props) => {
   const [activeHotspot, setActiveHotspot] = useState<HotspotId | null>(null);
-  const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("compare");
+  const [viewMode, setViewMode] = useState<"compare" | "image" | "list">("list");
   const [showTweaker, setShowTweaker] = useState(false);
   const [tweakedCategory, setTweakedCategory] = useState<StyleCategory>(prefs.styleCategory);
   const scrollRef = useRef<HTMLDivElement>(null);
