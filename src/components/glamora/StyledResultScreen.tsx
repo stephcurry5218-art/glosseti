@@ -155,6 +155,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const [backViewLoading, setBackViewLoading] = useState(false);
   const [backViewError, setBackViewError] = useState<string | null>(null);
   const [showBackView, setShowBackView] = useState(false);
+  const [showRetailerPicker, setShowRetailerPicker] = useState(false);
 
   const generateBackView = async () => {
     if (backViewUrl || backViewLoading || !prefs.photoBase64) return;
@@ -391,26 +392,102 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
-        {/* Shop This Image — single CTA, opens Google Lens visual search on the styled image */}
+        {/* Shop This Image — opens a retailer picker, then deep-links to that retailer's product search */}
         {hasStyled && styledImageUrl && (
+          <div className="anim-fadeUp" style={{ marginBottom: 16 }}>
+            <button
+              onClick={() => setShowRetailerPicker(v => !v)}
+              style={{
+                width: "100%", padding: "16px 24px", borderRadius: 16,
+                background: "linear-gradient(135deg, hsl(142 60% 42%), hsl(152 55% 48%))",
+                color: "#fff", fontSize: 16, fontWeight: 700, border: "none", cursor: "pointer",
+                fontFamily: "'Jost', sans-serif",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                boxShadow: "0 6px 24px hsla(142 60% 42% / 0.4)",
+                animation: showRetailerPicker ? "none" : "pulse2 3s ease-in-out infinite",
+              }}
+            >
+              <ShoppingBag size={20} /> Shop This Image
+              <ChevronDown size={18} style={{ transition: "transform 0.2s", transform: showRetailerPicker ? "rotate(180deg)" : "rotate(0)" }} />
+            </button>
+            {showRetailerPicker && (() => {
+              const lookName = looks[0]?.name || "";
+              const subStyle = (prefs.styleSubcategory || "").split(" + ")[0]?.split(":").pop()?.replace(/\[.*\]/, "").replace(/-/g, " ") || "";
+              const genderTerm = isMale ? "men" : "women";
+              const query = [genderTerm, subStyle, lookName].filter(Boolean).join(" ").trim();
+              const retailers = isMale
+                ? ["Amazon", "Nordstrom", "Zara", "H&M", "Uniqlo", "Ralph Lauren", "Shein"]
+                : ["Fashion Nova", "Amazon", "Shein", "Zara", "H&M", "Nordstrom", "Revolve"];
+              return (
+                <div style={{
+                  marginTop: 10, padding: 12, borderRadius: 14,
+                  background: "hsla(var(--glamora-cream2) / 0.6)",
+                  border: "1px solid hsla(var(--glamora-gold) / 0.2)",
+                  display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8,
+                }}>
+                  {retailers.map(store => (
+                    <a
+                      key={store}
+                      href={getShopUrl(store, query)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: "12px 10px", borderRadius: 10,
+                        background: "hsl(var(--glamora-char))",
+                        color: "hsl(var(--glamora-cream))",
+                        textDecoration: "none", fontSize: 13, fontWeight: 600,
+                        textAlign: "center", fontFamily: "'Jost', sans-serif",
+                        border: "1px solid hsla(var(--glamora-gold) / 0.25)",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      }}
+                    >
+                      {store} <ExternalLink size={12} />
+                    </a>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* View Back of Look — generates a back-view rendering of the styled image */}
+        {hasStyled && prefs.photoBase64 && (
           <button
             className="anim-fadeUp"
             onClick={() => {
-              const lensUrl = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(styledImageUrl)}`;
-              window.open(lensUrl, "_blank", "noopener,noreferrer");
+              if (backViewUrl) setShowBackView(v => !v);
+              else generateBackView();
             }}
+            disabled={backViewLoading}
             style={{
-              width: "100%", padding: "16px 24px", marginBottom: 16, borderRadius: 16,
-              background: "linear-gradient(135deg, hsl(142 60% 42%), hsl(152 55% 48%))",
-              color: "#fff", fontSize: 16, fontWeight: 700, border: "none", cursor: "pointer",
+              width: "100%", padding: "12px 18px", marginBottom: 16, borderRadius: 14,
+              background: "hsla(var(--glamora-char) / 0.85)",
+              color: "hsl(var(--glamora-cream))", fontSize: 14, fontWeight: 600,
+              border: "1.5px solid hsla(var(--glamora-gold) / 0.35)", cursor: backViewLoading ? "wait" : "pointer",
               fontFamily: "'Jost', sans-serif",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-              boxShadow: "0 6px 24px hsla(142 60% 42% / 0.4)",
-              animation: "pulse2 3s ease-in-out infinite",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             }}
           >
-            <ShoppingBag size={20} /> Shop This Image
+            <RotateCw size={16} />
+            {backViewLoading
+              ? "Generating back view…"
+              : backViewUrl
+                ? (showBackView ? "Hide Back View" : "Show Back View")
+                : "View From the Back"}
           </button>
+        )}
+        {backViewError && (
+          <div style={{ fontSize: 12, color: "hsl(var(--glamora-rose-dark))", marginTop: -8, marginBottom: 12, textAlign: "center" }}>
+            {backViewError}
+          </div>
+        )}
+        {showBackView && backViewUrl && (
+          <div className="glamora-card anim-fadeUp" style={{ overflow: "hidden", borderRadius: 18, marginBottom: 16 }}>
+            <img src={backViewUrl} alt="Back view of styled look" style={{ width: "100%", display: "block" }} />
+            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))", textAlign: "center", padding: "8px 12px" }}>
+              AI-generated back view
+            </div>
+          </div>
         )}
 
         {/* Shop This Look — price breakdown with deep-links to retailers like Fashion Nova */}
