@@ -89,7 +89,7 @@ const FEMALE: Record<OccasionId, Vibe[]> = {
     { id: "f-glm-04", label: "Sequin Look",      query: "sequin dress sparkle outfit",           image: img("1601412436009-d964bd02edbc"), category: "full-style", subcategory: "sequin-look" },
     { id: "f-glm-05", label: "All Black",        query: "all black glam outfit",                 image: img("1641427493563-5cc9cf1a9950"), category: "edgy", subcategory: "all-black-night" },
     { id: "f-glm-06", label: "Satin Slip",       query: "satin slip dress",                      image: img("1566174053879-31528523f8ae"), category: "full-style", subcategory: "satin-slip" },
-    { id: "f-glm-07", label: "Cut Out Dress",    query: "cut out dress fashion",                 image: img("1620063633168-8ec1bcc1bcec"), category: "sexy", subcategory: "cutout-dress" },
+    { id: "f-glm-07", label: "Cut Out Dress",    query: "cut out dress fashion",                 image: img("1531256379416-9f000e90aacc"), category: "sexy", subcategory: "cutout-dress" },
     { id: "f-glm-08", label: "Corset Top",       query: "corset top outfit",                     image: img("1622495966321-49b35b3a8d4f"), category: "sexy", subcategory: "corset-top" },
     { id: "f-glm-09", label: "Jumpsuit",         query: "elegant jumpsuit night out",            image: img("1502323777036-f29e3972d82f"), category: "full-style", subcategory: "jumpsuit" },
     { id: "f-glm-10", label: "Blazer Dress",     query: "blazer dress fashion",                  image: img("1599643478518-a784e5dc4c8f"), category: "full-style", subcategory: "blazer-dress" },
@@ -313,7 +313,7 @@ const MALE: Record<OccasionId, Vibe[]> = {
     { id: "m-cos-01", label: "Saiyan Warrior",   query: "saiyan warrior cosplay man",            image: img("1641427493563-5cc9cf1a9950"), category: "cosplay", subcategory: "saiyan-warrior" },
     { id: "m-cos-02", label: "Ninja Shinobi",    query: "ninja shinobi cosplay man",             image: img("1634826260499-7d97a6049913"), category: "cosplay", subcategory: "ninja-shinobi" },
     { id: "m-cos-03", label: "Demon Slayer",     query: "demon slayer cosplay man",              image: img("1711925844152-8c9d51163ba2"), category: "cosplay", subcategory: "demon-slayer-warrior" },
-    { id: "m-cos-04", label: "Hylian Hero",      query: "elf warrior cosplay man",               image: img("1620063633168-8ec1bcc1bcec"), category: "cosplay", subcategory: "hylian-hero" },
+    { id: "m-cos-04", label: "Hylian Hero",      query: "elf warrior cosplay man",               image: img("1517594422361-5eeb8ae275a9"), category: "cosplay", subcategory: "hylian-hero" },
     { id: "m-cos-05", label: "Web Slinger",      query: "spider hero cosplay man",               image: img("1622495966321-49b35b3a8d4f"), category: "cosplay", subcategory: "web-slinger" },
     { id: "m-cos-06", label: "Dark Vigilante",   query: "dark knight cosplay man",               image: img("1602910344008-22f323cc1817"), category: "cosplay", subcategory: "dark-knight-vigilante" },
     { id: "m-cos-07", label: "Space Marine",     query: "space marine cosplay man",              image: img("1517438476312-10d79c5f25e3"), category: "cosplay", subcategory: "space-marine" },
@@ -346,9 +346,9 @@ const MALE: Record<OccasionId, Vibe[]> = {
 const FEMALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
   swimwear: [
     { id: "f-swm-13", label: "Halter Bikini",     query: "halter bikini swimsuit",                image: img("1556306535-0f09a537f0a3"), category: "swimwear", subcategory: "halter-bikini" },
-    { id: "f-swm-14", label: "Cheeky Bottoms",    query: "cheeky bikini bottoms beach",           image: img("1620063633168-8ec1bcc1bcec"), category: "swimwear", subcategory: "cheeky-bottoms" },
+    { id: "f-swm-14", label: "Cheeky Bottoms",    query: "cheeky bikini bottoms beach",           image: img("1582719471384-894fbb16e074"), category: "swimwear", subcategory: "cheeky-bottoms" },
     { id: "f-swm-15", label: "Cut Out One-Piece", query: "cutout one piece swimsuit",             image: img("1611591437281-460bfbe1220a"), category: "swimwear", subcategory: "cutout-one-piece" },
-    { id: "f-swm-16", label: "Neon Bikini",       query: "neon bright bikini swimsuit",           image: img("1620063633168-8ec1bcc1bcec"), category: "swimwear", subcategory: "neon-bikini" },
+    { id: "f-swm-16", label: "Neon Bikini",       query: "neon bright bikini swimsuit",           image: img("1544465544-1b71aee9dfa3"), category: "swimwear", subcategory: "neon-bikini" },
     { id: "f-swm-17", label: "Vintage Pinup",     query: "vintage pinup swimsuit retro",          image: img("1525026198548-4baa812f1183"), category: "swimwear", subcategory: "vintage-pinup-swim" },
     { id: "f-swm-18", label: "Body Chain Swim",   query: "swimsuit body chain jewelry",           image: img("1601412436009-d964bd02edbc"), category: "swimwear", subcategory: "body-chain-swim" },
     { id: "f-swm-19", label: "Boho Crochet",      query: "boho crochet bikini beach",             image: img("1581824283135-0666cf353f35"), category: "swimwear", subcategory: "boho-crochet" },
@@ -374,7 +374,7 @@ const FEMALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
   ],
   glam: [
     { id: "f-glm-13", label: "Velvet Gown",       query: "velvet gown elegant",                   image: img("1605100804763-247f67b3557e"), category: "full-style", subcategory: "velvet-gown" },
-    { id: "f-glm-14", label: "Backless Dress",    query: "backless dress evening",                image: img("1620063633168-8ec1bcc1bcec"), category: "sexy", subcategory: "backless-dress" },
+    { id: "f-glm-14", label: "Backless Dress",    query: "backless dress evening",                image: img("1550159930-40066082a4fc"), category: "sexy", subcategory: "backless-dress" },
     { id: "f-glm-15", label: "Sheer Detail",      query: "sheer dress fashion outfit",            image: img("1622495966321-49b35b3a8d4f"), category: "sexy", subcategory: "sheer-detail" },
     { id: "f-glm-16", label: "Metallic Mini",     query: "metallic mini dress night",             image: img("1641427493563-5cc9cf1a9950"), category: "full-style", subcategory: "metallic-mini" },
     { id: "f-glm-17", label: "Asymmetric Hem",    query: "asymmetric hem dress outfit",           image: img("1539109136881-3be0616acf4b"), category: "full-style", subcategory: "asymmetric-hem" },
@@ -531,7 +531,7 @@ const MALE_EXTRA: Partial<Record<OccasionId, Vibe[]>> = {
   ],
   cosplay: [
     { id: "m-cos-13", label: "Royal King",        query: "royal king cosplay man",                image: img("1641427493563-5cc9cf1a9950"), category: "cosplay", subcategory: "royal-king" },
-    { id: "m-cos-14", label: "Bounty Hunter",     query: "bounty hunter cosplay man",             image: img("1620063633168-8ec1bcc1bcec"), category: "cosplay", subcategory: "bounty-hunter" },
+    { id: "m-cos-14", label: "Bounty Hunter",     query: "bounty hunter cosplay man",             image: img("1502720433255-614171a1835e"), category: "cosplay", subcategory: "bounty-hunter" },
     { id: "m-cos-15", label: "Demon Lord",        query: "demon lord cosplay man",                image: img("1622495966321-49b35b3a8d4f"), category: "cosplay", subcategory: "demon-lord" },
     { id: "m-cos-16", label: "Cyber Detective",   query: "cyber detective cosplay man",           image: img("1602910344008-22f323cc1817"), category: "cosplay", subcategory: "cyber-detective" },
     { id: "m-cos-17", label: "Forest Ranger",     query: "forest ranger cosplay man",             image: img("1571908599407-cdb918ed83bf"), category: "cosplay", subcategory: "forest-ranger" },
