@@ -484,19 +484,20 @@ serve(async (req) => {
 
     const requestImage = async (messages: any[]) => {
       // Try preview model first; fall back to stable nano-banana if it returns no image
+      // Use the fastest image model first; only fall back to alternates on failure.
+      // Avoid the slow pro-image-preview model in the hot path — it can take 30s+ per attempt.
       const modelChain = [
         "google/gemini-2.5-flash-image",
         "google/gemini-3.1-flash-image-preview",
-        "google/gemini-3-pro-image-preview",
         "google/gemini-2.5-flash-image",
       ];
-      const maxRetries = 4;
+      const maxRetries = 3;
       let lastError: Error | null = null;
 
       for (let attempt = 0; attempt < maxRetries; attempt++) {
         if (attempt > 0) {
-          // Exponential backoff: 2s, 4s
-          await new Promise((r) => setTimeout(r, 2000 * attempt));
+          // Short linear backoff: 800ms, 1600ms (was 2s, 4s, 6s)
+          await new Promise((r) => setTimeout(r, 800 * attempt));
         }
 
         const model = modelChain[Math.min(attempt, modelChain.length - 1)];
