@@ -8,6 +8,7 @@ import { getShopUrl, detectStoreFromText } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
+import LookPriceCard from "./LookPriceCard";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
@@ -411,6 +412,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
             <ShoppingBag size={20} /> Shop This Image
           </button>
         )}
+
+        {/* Shop This Look — price breakdown with deep-links to retailers like Fashion Nova */}
+        {hasStyled && looks[0] && <LookPriceCard lookName={looks[0].name} />}
 
         {/* View mode toggle */}
         <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
