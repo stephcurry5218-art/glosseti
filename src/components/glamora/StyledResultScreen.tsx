@@ -155,6 +155,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const [backViewLoading, setBackViewLoading] = useState(false);
   const [backViewError, setBackViewError] = useState<string | null>(null);
   const [showBackView, setShowBackView] = useState(false);
+  const [showRetailerPicker, setShowRetailerPicker] = useState(false);
 
   const generateBackView = async () => {
     if (backViewUrl || backViewLoading || !prefs.photoBase64) return;
