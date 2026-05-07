@@ -405,13 +405,8 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               animation: "pulse2 3s ease-in-out infinite",
             }}
           >
-            <ShoppingBag size={20} /> Shop This Look
+            <ShoppingBag size={20} /> Shop This Image
           </button>
-        )}
-
-        {/* Look Price Breakdown */}
-        {hasStyled && looks[0] && (
-          <LookPriceCard lookName={looks[0].name} />
         )}
 
         {/* View mode toggle */}
