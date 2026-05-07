@@ -486,10 +486,11 @@ serve(async (req) => {
       // Try preview model first; fall back to stable nano-banana if it returns no image
       const modelChain = [
         "google/gemini-2.5-flash-image",
-        "google/gemini-2.5-flash-image",
         "google/gemini-3.1-flash-image-preview",
+        "google/gemini-3-pro-image-preview",
+        "google/gemini-2.5-flash-image",
       ];
-      const maxRetries = 3;
+      const maxRetries = 4;
       let lastError: Error | null = null;
 
       for (let attempt = 0; attempt < maxRetries; attempt++) {
