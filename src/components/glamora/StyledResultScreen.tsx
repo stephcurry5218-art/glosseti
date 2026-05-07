@@ -390,11 +390,14 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
-        {/* Shop This Look CTA — always visible when image generated */}
-        {hasStyled && (
+        {/* Shop This Image — single CTA, opens Google Lens visual search on the styled image */}
+        {hasStyled && styledImageUrl && (
           <button
             className="anim-fadeUp"
-            onClick={() => onLookSelect(looks[0]?.name || "Full Style")}
+            onClick={() => {
+              const lensUrl = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(styledImageUrl)}`;
+              window.open(lensUrl, "_blank", "noopener,noreferrer");
+            }}
             style={{
               width: "100%", padding: "16px 24px", marginBottom: 16, borderRadius: 16,
               background: "linear-gradient(135deg, hsl(142 60% 42%), hsl(152 55% 48%))",
