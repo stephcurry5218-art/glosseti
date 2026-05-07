@@ -416,7 +416,6 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
         <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
           {([
             { id: "compare" as const, label: "Compare", Icon: Sparkles, show: hasOriginal && hasStyled },
-            { id: "image" as const, label: "Shop Image", Icon: Image, show: true },
             { id: "list" as const, label: "Style List", Icon: List, show: true },
           ]).filter(m => m.show).map((mode) => (
             <button key={mode.id} onClick={() => setViewMode(mode.id)} style={{
