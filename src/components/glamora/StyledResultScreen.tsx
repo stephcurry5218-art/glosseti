@@ -413,6 +413,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           </button>
         )}
 
+        {/* Shop This Look — price breakdown with deep-links to retailers like Fashion Nova */}
+        {hasStyled && looks[0] && <LookPriceCard lookName={looks[0].name} />}
+
         {/* View mode toggle */}
         <div className="anim-fadeUp d1" style={{ display: "flex", gap: 6, marginBottom: 16 }}>
           {([
