@@ -450,6 +450,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           </div>
         )}
 
+        {/* Shop This Look — 3 price tiers (Luxury / Mid / Budget) with deep-links */}
+        {hasStyled && looks[0] && <LookPriceCard lookName={looks[0].name} />}
+
         {backViewError && (
           <div style={{ fontSize: 12, color: "hsl(var(--glamora-rose-dark))", marginBottom: 12, textAlign: "center" }}>
             {backViewError}
