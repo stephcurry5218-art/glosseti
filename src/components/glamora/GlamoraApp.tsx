@@ -61,6 +61,8 @@ export interface UserPrefs {
   recreateMode?: "exact" | "inspired";
   /** Human-readable vibe label chosen from the grid (e.g. "String Bikini"). */
   vibeLabel?: string;
+  /** Free-form user description of the desired look. */
+  customPrompt?: string;
 }
 
 const GlamoraApp = () => {
@@ -220,7 +222,7 @@ const GlamoraApp = () => {
         <OccasionPickerScreen
           gender={prefs.gender}
           onBack={() => go("home")}
-          onNext={(category, subcategory, vibeLabel, inspirationImageUrl, recreateMode) => {
+          onNext={(category, subcategory, vibeLabel, inspirationImageUrl, recreateMode, customPrompt) => {
             setPrefs(p => ({
               ...p,
               styleCategory: category,
@@ -228,6 +230,7 @@ const GlamoraApp = () => {
               vibeLabel,
               inspirationImageUrl,
               recreateMode,
+              customPrompt,
             }));
             setActiveHolidayId(null);
             go("upload");

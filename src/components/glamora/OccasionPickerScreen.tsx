@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves, Palette } from "lucide-react";
+import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves, Palette, Wand2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
@@ -14,6 +14,7 @@ interface Props {
     vibeLabel: string,
     inspirationImageUrl?: string,
     recreateMode?: "exact" | "inspired",
+    customPrompt?: string,
   ) => void;
 }
 
@@ -597,6 +598,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [page, setPage] = useState(1);
   const [shuffleNonce, setShuffleNonce] = useState(0);
   const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
+  const [customPrompt, setCustomPrompt] = useState("");
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
   const vibeRef = useRef<HTMLDivElement>(null);
@@ -667,6 +669,13 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     const { vibe, image } = pendingVibe;
     setPendingVibe(null);
     onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
+  };
+
+  const submitCustomPrompt = () => {
+    const text = customPrompt.trim();
+    if (text.length < 4) return;
+    // Use a generic full-style category; the AI will follow the user's description.
+    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), undefined, undefined, text);
   };
 
   const photoFor = (v: Vibe, i: number): string => {
@@ -790,6 +799,75 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
               </button>
             );
           })}
+        </div>
+      )}
+
+      {stage === "occasion" && (
+        <div className="anim-fadeUp" style={{ padding: "4px 22px 24px" }}>
+          <div
+            style={{
+              padding: 16,
+              borderRadius: 22,
+              border: `1.5px solid hsla(var(${accent}) / 0.35)`,
+              background: `linear-gradient(135deg, hsla(var(${accent}) / 0.10), hsl(var(--card)))`,
+              boxShadow: `0 0 18px hsla(var(${accent}) / 0.18), 0 4px 18px hsla(0 0% 0% / 0.3)`,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <Wand2 size={16} color={`hsl(var(${accent}))`} />
+              <div className="serif" style={{ fontSize: 16, color: "hsl(var(--glamora-char))" }}>
+                Don't see what you want?
+              </div>
+            </div>
+            <div style={{ fontSize: 12, color: "hsl(var(--glamora-char2))", marginBottom: 10, lineHeight: 1.4 }}>
+              Describe the exact look you want and we'll style it on you.
+            </div>
+            <textarea
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value.slice(0, 400))}
+              placeholder="e.g. A cream silk slip dress with strappy gold heels, layered gold necklaces, soft beach waves, and a tan suede clutch…"
+              rows={3}
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                borderRadius: 12,
+                border: "1px solid hsla(0 0% 100% / 0.10)",
+                background: "hsla(0 0% 0% / 0.25)",
+                color: "hsl(var(--glamora-char))",
+                fontFamily: "'Jost', sans-serif",
+                fontSize: 13,
+                lineHeight: 1.4,
+                resize: "vertical",
+                outline: "none",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+              <span style={{ fontSize: 10, color: "hsl(var(--glamora-gray))" }}>
+                {customPrompt.length}/400
+              </span>
+              <button
+                onClick={submitCustomPrompt}
+                disabled={customPrompt.trim().length < 4}
+                style={{
+                  padding: "9px 18px",
+                  borderRadius: 999,
+                  border: "none",
+                  background: customPrompt.trim().length < 4
+                    ? "hsla(0 0% 100% / 0.06)"
+                    : `linear-gradient(135deg, hsl(var(${accent})), hsl(var(--glamora-gold-light)))`,
+                  color: customPrompt.trim().length < 4 ? "hsl(var(--glamora-gray))" : "white",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: customPrompt.trim().length < 4 ? "not-allowed" : "pointer",
+                  boxShadow: customPrompt.trim().length < 4 ? "none" : `0 0 16px hsla(var(${accent}) / 0.45)`,
+                  display: "flex", alignItems: "center", gap: 6,
+                }}
+              >
+                <Sparkles size={13} />
+                Style this look
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

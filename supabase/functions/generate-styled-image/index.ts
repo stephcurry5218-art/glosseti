@@ -14,7 +14,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode, inspirationImageUrl, recreateMode, vibeLabel, viewAngle } = body;
+    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode, inspirationImageUrl, recreateMode, vibeLabel, viewAngle, customPrompt } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -481,6 +481,11 @@ serve(async (req) => {
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
       : "";
 
+    // User's free-form description of the exact look they want
+    const customPromptNote = (customPrompt && typeof customPrompt === "string" && customPrompt.trim().length > 0)
+      ? `\n\nUSER'S EXACT REQUEST (HIGHEST PRIORITY — follow this description literally over any sub-style direction): "${customPrompt.trim().slice(0, 600)}". Build the outfit and styling exactly as the user described. Keep it tasteful, premium, and editorial.`
+      : "";
+
 
     const requestImage = async (messages: any[]) => {
       // Try preview model first; fall back to stable nano-banana if it returns no image
@@ -593,7 +598,7 @@ serve(async (req) => {
           : isTeens
             ? `a teen-sized ${isMale ? "boy's" : "girl's"} mannequin`
             : `a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin`;
-      editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}`;
+      editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}${customPromptNote}`;
 
       messages = [
         {
@@ -651,8 +656,8 @@ serve(async (req) => {
         : "";
 
       editPrompt = photoType === "full-body"
-        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`
-        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}`;
+        ? `Restyle this ${genderWord}'s outfit: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}${customPromptNote}`
+        : `Restyle this ${genderWord}'s look: ${styleDesc} ${keepNote}${noHatNote}${subcategoryNote}${genderEnforcement}${makeupNote}${stylistCraftNote}${inspirationNote}${refinementNote}${customPromptNote}`;
 
       const contentParts: any[] = [
         { type: "text", text: editPrompt },
