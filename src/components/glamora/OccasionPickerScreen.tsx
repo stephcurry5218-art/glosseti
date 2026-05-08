@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves, Palette } from "lucide-react";
+import { ArrowLeft, Coffee, Sparkles, Briefcase, Flame, Heart, Palmtree, Check, Dumbbell, Star, Waves, Palette, Wand2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { StyleCategory, Gender } from "./GlamoraApp";
 import FlowStepper from "./FlowStepper";
