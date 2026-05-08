@@ -34,14 +34,14 @@ const LookPriceCard = ({ lookName }: Props) => {
   if (!data) return null;
 
   // Collect all items with shop data across all categories
-  const allItems: { category: Category; title: string; shop: Record<PriceTier, { store: string; item: string; price: string }> }[] = [];
+  const allItems: { category: Category; title: string; detail: string; shop: Record<PriceTier, { store: string; item: string; price: string }> }[] = [];
 
   for (const cat of categoryOrder) {
     const steps = data[cat];
     if (!steps) continue;
     for (const step of steps) {
       if (step.shop) {
-        allItems.push({ category: cat, title: step.title, shop: step.shop });
+        allItems.push({ category: cat, title: step.title, detail: step.detail || "", shop: step.shop });
       }
     }
   }
