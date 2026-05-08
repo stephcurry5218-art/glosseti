@@ -414,7 +414,8 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               const lookName = looks[0]?.name || "";
               const subStyle = (prefs.styleSubcategory || "").split(" + ")[0]?.split(":").pop()?.replace(/\[.*\]/, "").replace(/-/g, " ") || "";
               const genderTerm = isMale ? "men" : "women";
-              const query = [genderTerm, subStyle, lookName].filter(Boolean).join(" ").trim();
+              const baseQuery = [genderTerm, subStyle, lookName].filter(Boolean).join(" ").trim();
+              const refinements = [prefs.customPrompt, prefs.styleSubcategory].filter(Boolean).join(" ");
               const retailers = isMale
                 ? ["Amazon", "Nordstrom", "Zara", "H&M", "Uniqlo", "Ralph Lauren", "Shein"]
                 : ["Fashion Nova", "Amazon", "Shein", "Zara", "H&M", "Nordstrom", "Revolve"];
@@ -428,7 +429,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                   {retailers.map(store => (
                     <a
                       key={store}
-                      href={getShopUrl(store, query)}
+                      href={getShopUrl(store, baseQuery, refinements)}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
