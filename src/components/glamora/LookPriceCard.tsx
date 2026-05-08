@@ -176,7 +176,7 @@ const LookPriceCard = ({ lookName }: Props) => {
               return (
                 <div key={idx} style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                   <a
-                    href={getShopUrl(tierData.store, tierData.item)}
+                    href={getShopUrl(tierData.store, tierData.item, item.detail)}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
