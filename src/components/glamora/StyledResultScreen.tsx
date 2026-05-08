@@ -175,6 +175,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           clientLocalMidnight: localMidnight.toISOString(),
           devMode,
           viewAngle: "back",
+          frontViewImageUrl: styledImageUrl || undefined,
         },
       });
       if (error || data?.error || !data?.imageUrl) {

@@ -14,7 +14,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode, inspirationImageUrl, recreateMode, vibeLabel, viewAngle, customPrompt } = body;
+    const { imageBase64, secondImageBase64, styleCategory, styleSubcategory, photoType, gender, generationMode, refinementContext, makeupPreference, faceReferenceUrls, clientLocalMidnight, devMode, inspirationImageUrl, recreateMode, vibeLabel, viewAngle, customPrompt, frontViewImageUrl } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -622,8 +622,12 @@ serve(async (req) => {
       const facePreservation = "CRITICAL FACIAL IDENTITY PRESERVATION: You MUST preserve this person's EXACT facial features with photographic accuracy. This means their exact eye shape, eye color, nose shape and size, lip shape and fullness, jawline, chin shape, cheekbone structure, eyebrow shape, forehead size, skin tone, skin texture, freckles, moles, facial hair, hairline, and hair color/texture. The face in the generated image must be immediately recognizable as the SAME person from the uploaded photo — not a similar-looking person, but the EXACT same person. Do NOT idealize, smooth, reshape, or alter any facial features. Do NOT change their ethnicity, skin tone, or facial proportions. The person viewing the result should instantly say 'that's me.'" + faceRefDirective;
 
       const isBackView = viewAngle === "back";
+      const hasFrontReference = isBackView && typeof frontViewImageUrl === "string" && frontViewImageUrl.length > 0;
+      const backOutfitMatchNote = hasFrontReference
+        ? ` AN ADDITIONAL REFERENCE IMAGE IS ATTACHED LAST showing the FRONT VIEW of the EXACT outfit this person is already wearing in the styled look. You MUST recreate that EXACT SAME outfit — every garment, every color, every fabric, every print, every accessory, every shoe, every piece of jewelry — identical to the front-view reference. Do NOT invent a new outfit. Do NOT change colors, fits, or any styling details. The ONLY difference between the front-view reference and your output is the camera angle (now showing the back instead of the front). Render how that exact outfit looks from behind — back of the top, back of the pants/skirt/dress, back of the shoes, back of the hair, back of any accessories.`
+        : "";
       const poseAnglePreservation = isBackView
-        ? " BACK-VIEW SHOT REQUESTED: Generate this image as a REAR-VIEW photograph showing the person from behind. The camera is positioned BEHIND the person, capturing the back of their head, shoulders, back, and the back of the outfit. The person is facing AWAY from the camera. This is essential so the user can see how the outfit (especially swimwear, dresses, or back details) fits from behind. Keep the same overall pose energy, body shape, hair color/length (now seen from behind), and skin tone — but the entire viewpoint must be the rear of the body. Same setting and lighting as a natural editorial back-shot."
+        ? ` BACK-VIEW SHOT REQUESTED: Generate this image as a REAR-VIEW photograph showing the person from behind. The camera is positioned BEHIND the person, capturing the back of their head, shoulders, back, and the back of the outfit. The person is facing AWAY from the camera. This is essential so the user can see how the outfit (especially swimwear, dresses, or back details) fits from behind. Keep the same overall pose energy, body shape, hair color/length (now seen from behind), and skin tone — but the entire viewpoint must be the rear of the body. Same setting and lighting as a natural editorial back-shot.${backOutfitMatchNote}`
         : " CRITICAL POSE & CAMERA ANGLE PRESERVATION: Keep the EXACT same camera angle, viewpoint, and body orientation as the uploaded photo. If the uploaded photo shows the person from the back, the result MUST also show them from the back. If from the side, keep the side view. If from the front, keep the front view. If from a 3/4 angle, keep that 3/4 angle. Do NOT rotate the person, do NOT flip them to face the camera, do NOT change which direction their body or face is pointing. Preserve the same pose, stance, head tilt, and limb positions. The only thing that changes is the clothing (and background where noted).";
 
       // Suppress unwanted headwear unless the style description above explicitly calls for one
@@ -676,6 +680,11 @@ serve(async (req) => {
       // Add inspiration photo LAST so the prompt's "image at the END" reference holds.
       if (hasInspiration) {
         contentParts.push({ type: "image_url", image_url: { url: inspirationImageUrl } });
+      }
+      // For back-view requests, append the previously-generated front-view styled image
+      // as the LAST reference so the model recreates the EXACT same outfit from behind.
+      if (hasFrontReference) {
+        contentParts.push({ type: "image_url", image_url: { url: frontViewImageUrl } });
       }
 
       messages = [
