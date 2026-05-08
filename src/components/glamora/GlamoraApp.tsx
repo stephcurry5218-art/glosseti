@@ -61,6 +61,8 @@ export interface UserPrefs {
   recreateMode?: "exact" | "inspired";
   /** Human-readable vibe label chosen from the grid (e.g. "String Bikini"). */
   vibeLabel?: string;
+  /** Free-form user description of the desired look. */
+  customPrompt?: string;
 }
 
 const GlamoraApp = () => {
