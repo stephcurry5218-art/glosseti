@@ -222,7 +222,7 @@ const GlamoraApp = () => {
         <OccasionPickerScreen
           gender={prefs.gender}
           onBack={() => go("home")}
-          onNext={(category, subcategory, vibeLabel, inspirationImageUrl, recreateMode) => {
+          onNext={(category, subcategory, vibeLabel, inspirationImageUrl, recreateMode, customPrompt) => {
             setPrefs(p => ({
               ...p,
               styleCategory: category,
@@ -230,6 +230,7 @@ const GlamoraApp = () => {
               vibeLabel,
               inspirationImageUrl,
               recreateMode,
+              customPrompt,
             }));
             setActiveHolidayId(null);
             go("upload");
