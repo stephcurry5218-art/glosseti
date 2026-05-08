@@ -69,8 +69,18 @@ serve(async (req) => {
       hotspot === "makeup";
     const stores = isCosplay ? COSPLAY_STORES : isBeauty ? BEAUTY_STORES : ALLOWED_STORES;
 
+    // Some sub-style slugs name an accessory (e.g. "layered-chains") but actually refer to a full
+    // head-to-toe outfit built AROUND that accessory. Disambiguate so the AI returns clothing first.
+    const subStyleClarifications: Record<string, string> = {
+      "layered-chains-m": "This is a complete men's going-out OUTFIT styled around layered chain necklaces — return clothing (graphic tee or silk shirt, tailored trousers or designer jeans, jacket, sneakers/boots) as the hero pieces, with the layered chains as ONE accessory item. Do NOT return a jewelry-only list.",
+      "layered-chains": "This is a complete OUTFIT styled with layered chain necklaces — return clothing (top, bottom, outerwear, shoes) as hero pieces and include layered chains as ONE accessory. Do NOT return a jewelry-only list.",
+    };
+    const subStyleHint = styleSubcategory && subStyleClarifications[styleSubcategory]
+      ? ` ${subStyleClarifications[styleSubcategory]}`
+      : "";
+
     const occasionLine = styleSubcategory
-      ? `OCCASION/SUB-STYLE: "${styleSubcategory.replace(/-/g, " ")}" — ALL items MUST be appropriate for this exact occasion. If the sub-style implies a specific garment (dress, gown, suit, swimsuit, costume piece, etc.), the hero piece MUST be that garment.`
+      ? `OCCASION/SUB-STYLE: "${styleSubcategory.replace(/-/g, " ")}" — ALL items MUST be appropriate for this exact occasion. If the sub-style implies a specific garment (dress, gown, suit, swimsuit, costume piece, etc.), the hero piece MUST be that garment.${subStyleHint}`
       : "";
 
     const hotspotLine = hotspot
