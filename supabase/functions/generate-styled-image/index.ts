@@ -598,7 +598,7 @@ serve(async (req) => {
           : isTeens
             ? `a teen-sized ${isMale ? "boy's" : "girl's"} mannequin`
             : `a ${isMale ? "male" : "female"} ${isMale ? "grey" : "white"} mannequin`;
-      editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}`;
+      editPrompt = `Fashion photo of ${mannequinType} displaying: ${styleDesc} Clean studio backdrop, soft lighting, realistic fabric textures. High-end lookbook style.${subcategoryNote}${genderEnforcement}${childSafetyDirective}${refinementNote}${customPromptNote}`;
 
       messages = [
         {
