@@ -34,14 +34,14 @@ const LookPriceCard = ({ lookName }: Props) => {
   if (!data) return null;
 
   // Collect all items with shop data across all categories
-  const allItems: { category: Category; title: string; shop: Record<PriceTier, { store: string; item: string; price: string }> }[] = [];
+  const allItems: { category: Category; title: string; detail: string; shop: Record<PriceTier, { store: string; item: string; price: string }> }[] = [];
 
   for (const cat of categoryOrder) {
     const steps = data[cat];
     if (!steps) continue;
     for (const step of steps) {
       if (step.shop) {
-        allItems.push({ category: cat, title: step.title, shop: step.shop });
+        allItems.push({ category: cat, title: step.title, detail: step.detail || "", shop: step.shop });
       }
     }
   }
@@ -176,7 +176,7 @@ const LookPriceCard = ({ lookName }: Props) => {
               return (
                 <div key={idx} style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                   <a
-                    href={getShopUrl(tierData.store, tierData.item)}
+                    href={getShopUrl(tierData.store, tierData.item, item.detail)}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -206,7 +206,7 @@ const LookPriceCard = ({ lookName }: Props) => {
                     <ExternalLink size={11} color="hsl(var(--glamora-gray))" />
                   </a>
                   <a
-                    href={getGoogleShoppingUrl(tierData.store, tierData.item)}
+                    href={getGoogleShoppingUrl(tierData.store, tierData.item, item.detail)}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

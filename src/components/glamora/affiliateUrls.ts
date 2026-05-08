@@ -182,12 +182,52 @@ const storeConfigs: Record<string, { base: (q: string) => string; affiliateParam
   "UGG": { base: (q) => `https://www.ugg.com/search?q=${encodeURIComponent(q)}` },
 };
 
-export const getShopUrl = (store: string, item: string): string => {
+/**
+ * Extract shopping-relevant refinement keywords (colors, materials, patterns,
+ * silhouettes) from a free-form style prompt so search links match the look
+ * the user actually generated.
+ */
+const COLOR_WORDS = [
+  "black","white","ivory","cream","beige","tan","camel","brown","chocolate","mocha","khaki","olive","sage","mint","emerald","forest","green","teal","turquoise","aqua","blue","navy","cobalt","denim","indigo","periwinkle","lavender","lilac","purple","plum","mauve","pink","rose","blush","fuchsia","magenta","coral","peach","salmon","red","crimson","burgundy","wine","maroon","rust","orange","mustard","yellow","gold","champagne","silver","grey","gray","charcoal","nude","metallic","pastel","neon","jewel-tone",
+];
+const MATERIAL_WORDS = [
+  "satin","silk","leather","faux-leather","suede","velvet","denim","linen","cotton","cashmere","knit","wool","tweed","sequin","sequined","mesh","lace","crochet","chiffon","tulle","organza","ribbed","corduroy","fleece","faux-fur","fur","metallic","glitter",
+];
+const PATTERN_WORDS = [
+  "floral","striped","stripe","plaid","checkered","houndstooth","polka-dot","animal-print","leopard","zebra","snake","tie-dye","ombré","ombre","gingham","paisley","abstract","geometric","color-block","colorblock","tropical-print",
+];
+const SILHOUETTE_WORDS = [
+  "bodycon","oversized","cropped","high-waisted","wide-leg","slim-fit","tailored","flared","mini","midi","maxi","wrap","bandeau","halter","strapless","off-shoulder","backless","puff-sleeve","corset","pleated",
+];
+
+export const extractStyleKeywords = (text: string): string[] => {
+  if (!text) return [];
+  const lower = ` ${text.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, " ")} `;
+  const found: string[] = [];
+  for (const word of [...COLOR_WORDS, ...MATERIAL_WORDS, ...PATTERN_WORDS, ...SILHOUETTE_WORDS]) {
+    const re = new RegExp(`\\s${word.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}\\s`, "i");
+    if (re.test(lower) && !found.includes(word)) found.push(word);
+  }
+  return found.slice(0, 5);
+};
+
+/** Combine a base item term with refinement keywords into a single shop query. */
+export const refineQuery = (item: string, refinements?: string | string[]): string => {
+  const base = (item || "").trim();
+  const refs = Array.isArray(refinements) ? refinements : extractStyleKeywords(refinements || "");
+  if (!refs.length) return base;
+  const lowerBase = base.toLowerCase();
+  const additions = refs.filter(r => !lowerBase.includes(r.toLowerCase()));
+  return additions.length ? `${base} ${additions.join(" ")}`.trim() : base;
+};
+
+export const getShopUrl = (store: string, item: string, refinements?: string | string[]): string => {
+  const finalQuery = refineQuery(item, refinements);
   const config = storeConfigs[store];
   if (!config) {
-    return `https://www.google.com/search?q=${encodeURIComponent(`${store} ${item}`)}&${UTM}`;
+    return `https://www.google.com/search?q=${encodeURIComponent(`${store} ${finalQuery}`)}&${UTM}`;
   }
-  const baseUrl = config.base(item);
+  const baseUrl = config.base(finalQuery);
   const separator = baseUrl.includes("?") ? "&" : "?";
   const params = [config.affiliateParam, UTM].filter(Boolean).join("&");
   return `${baseUrl}${separator}${params}`;
@@ -197,8 +237,9 @@ export const getAmazonSearchUrl = (searchTerm: string): string => {
   return `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}&tag=${AFFILIATE_TAG}&${UTM}`;
 };
 
-export const getGoogleShoppingUrl = (store: string, item: string): string => {
-  return `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(`${item} ${store}`)}&${UTM}`;
+export const getGoogleShoppingUrl = (store: string, item: string, refinements?: string | string[]): string => {
+  const finalQuery = refineQuery(item, refinements);
+  return `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(`${finalQuery} ${store}`)}&${UTM}`;
 };
 
 /** Detect a known store/brand name inside free-text and return { store, query } */
