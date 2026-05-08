@@ -671,6 +671,13 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
   };
 
+  const submitCustomPrompt = () => {
+    const text = customPrompt.trim();
+    if (text.length < 4) return;
+    // Use a generic full-style category; the AI will follow the user's description.
+    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), undefined, undefined, text);
+  };
+
   const photoFor = (v: Vibe, i: number): string => {
     if (selected?.usePerVibePhotos) return perVibePhotos?.[v.id] || v.image;
     return genericPhotos?.[i] || v.image;
