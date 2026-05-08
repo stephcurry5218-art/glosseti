@@ -206,7 +206,7 @@ const LookPriceCard = ({ lookName }: Props) => {
                     <ExternalLink size={11} color="hsl(var(--glamora-gray))" />
                   </a>
                   <a
-                    href={getGoogleShoppingUrl(tierData.store, tierData.item)}
+                    href={getGoogleShoppingUrl(tierData.store, tierData.item, item.detail)}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
