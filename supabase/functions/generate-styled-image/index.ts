@@ -681,6 +681,11 @@ serve(async (req) => {
       if (hasInspiration) {
         contentParts.push({ type: "image_url", image_url: { url: inspirationImageUrl } });
       }
+      // For back-view requests, append the previously-generated front-view styled image
+      // as the LAST reference so the model recreates the EXACT same outfit from behind.
+      if (hasFrontReference) {
+        contentParts.push({ type: "image_url", image_url: { url: frontViewImageUrl } });
+      }
 
       messages = [
         {
