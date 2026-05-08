@@ -481,6 +481,11 @@ serve(async (req) => {
       ? `\n\nIMPORTANT REFINEMENT from stylist: Apply these specific changes to the look while keeping it tasteful, premium, and editorial: ${normalizeRefinementContext(refinementContext)}`
       : "";
 
+    // User's free-form description of the exact look they want
+    const customPromptNote = (customPrompt && typeof customPrompt === "string" && customPrompt.trim().length > 0)
+      ? `\n\nUSER'S EXACT REQUEST (HIGHEST PRIORITY — follow this description literally over any sub-style direction): "${customPrompt.trim().slice(0, 600)}". Build the outfit and styling exactly as the user described. Keep it tasteful, premium, and editorial.`
+      : "";
+
 
     const requestImage = async (messages: any[]) => {
       // Try preview model first; fall back to stable nano-banana if it returns no image
