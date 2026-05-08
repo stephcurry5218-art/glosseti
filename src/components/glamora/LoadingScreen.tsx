@@ -232,6 +232,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
             ...(prefs.inspirationImageUrl ? { inspirationImageUrl: prefs.inspirationImageUrl } : {}),
             ...(prefs.recreateMode ? { recreateMode: prefs.recreateMode } : {}),
             ...(prefs.vibeLabel ? { vibeLabel: prefs.vibeLabel } : {}),
+            ...(prefs.customPrompt ? { customPrompt: prefs.customPrompt } : {}),
           },
         });
         if (error || data?.error) {
