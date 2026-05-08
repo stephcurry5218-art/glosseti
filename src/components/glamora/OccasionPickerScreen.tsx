@@ -14,6 +14,7 @@ interface Props {
     vibeLabel: string,
     inspirationImageUrl?: string,
     recreateMode?: "exact" | "inspired",
+    customPrompt?: string,
   ) => void;
 }
 
