@@ -192,8 +192,8 @@ const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) 
             fontSize: 13, textDecoration: "underline",
           }}>
             {remainingGenerations > 0
-              ? `Continue with Free (${remainingGenerations} left today)`
-              : "Continue with Free (resets at midnight)"}
+              ? `Continue with Free (${remainingGenerations} left)`
+              : "Continue with Free (trial used up)"}
           </button>
         </div>
 
