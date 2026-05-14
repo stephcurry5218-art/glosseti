@@ -58,21 +58,19 @@ export function useSubscription() {
 
   // Fetch current usage from the database (authenticated users only)
   const fetchUsage = useCallback(async (uid: string, currentTier: SubscriptionTier) => {
-    let startDate: string;
-    if (currentTier === "free") {
-      // Local midnight — resets at user's local midnight, not UTC
-      const localMidnight = new Date();
-      localMidnight.setHours(0, 0, 0, 0);
-      startDate = localMidnight.toISOString();
-    } else {
-      startDate = getCurrentMonth() + "-01T00:00:00.000Z";
-    }
-
-    const { count, error } = await supabase
+    let query = supabase
       .from("usage_tracking")
       .select("*", { count: "exact", head: true })
-      .eq("user_id", uid)
-      .gte("created_at", startDate);
+      .eq("user_id", uid);
+
+    if (currentTier !== "free") {
+      // Premium: count this billing month only
+      const startDate = getCurrentMonth() + "-01T00:00:00.000Z";
+      query = query.gte("created_at", startDate);
+    }
+    // Free: lifetime count (no date filter)
+
+    const { count, error } = await query;
 
     if (!error && count !== null) {
       setUsageCount(count);
@@ -117,8 +115,10 @@ export function useSubscription() {
     return () => subscription.unsubscribe();
   }, [state.tier, fetchUsage]);
 
-  // Auto-reset at local midnight: refetch usage / clear anon counter
+  // Auto-reset at local midnight: refetch usage for premium tier only.
+  // Free tier is now a lifetime trial, so it does NOT reset.
   useEffect(() => {
+    if (state.tier === "free") return;
     const now = new Date();
     const next = new Date(now);
     next.setHours(24, 0, 0, 1);
@@ -126,11 +126,6 @@ export function useSubscription() {
     const t = setTimeout(() => {
       if (userId) {
         fetchUsage(userId, state.tier);
-      } else {
-        saveAnonUsage(0);
-        setAnonUsage(0);
-        setUsageCount(0);
-        setState(prev => ({ ...prev, monthlyGenerations: 0 }));
       }
     }, ms);
     return () => clearTimeout(t);

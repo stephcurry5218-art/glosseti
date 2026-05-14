@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Crown, Check, X, Clock } from "lucide-react";
+import { Crown, Check, X } from "lucide-react";
 import type { SubscriptionTier } from "./types";
 import { purchaseSubscription, restorePurchases, isIAPAvailable } from "./iapService";
-import { useResetCountdown } from "./useResetCountdown";
 import { toast } from "sonner";
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) => {
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
-  const { long: resetLong } = useResetCountdown();
+  
 
   const handleRestore = async () => {
     if (!isIAPAvailable()) {
@@ -93,20 +92,8 @@ const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) 
           </div>
         </div>
 
-        {/* Reset countdown banner */}
-        {!lockedFeature && (
-          <div style={{
-            margin: "0 auto 18px", maxWidth: 360,
-            padding: "10px 14px", borderRadius: 12,
-            background: "hsla(var(--glamora-gold) / 0.08)",
-            border: "1px solid hsla(var(--glamora-gold) / 0.18)",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            fontSize: 12, color: "hsl(var(--glamora-char2))", textAlign: "center",
-          }}>
-            <Clock size={13} color="hsl(var(--glamora-gold))" />
-            <span>Or wait <strong style={{ color: "hsl(var(--glamora-char))" }}>{resetLong}</strong> for your free looks to reset</span>
-          </div>
-        )}
+
+
 
         {/* Monthly plan card */}
         <div style={{
@@ -192,8 +179,8 @@ const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) 
             fontSize: 13, textDecoration: "underline",
           }}>
             {remainingGenerations > 0
-              ? `Continue with Free (${remainingGenerations} left today)`
-              : "Continue with Free (resets at midnight)"}
+              ? `Continue with Free (${remainingGenerations} left)`
+              : "Continue with Free (trial used up)"}
           </button>
         </div>
 
