@@ -13,16 +13,14 @@ import type { SubscriptionTier } from "./types";
 
 // These product IDs must be created in App Store Connect
 export const IAP_PRODUCT_IDS: Record<Exclude<SubscriptionTier, "free">, {
-  weekly?: string;
   monthly: string;
 }> = {
   premium: {
-    weekly: "com.glosseti.premium.weekly",
     monthly: "com.glosseti.premium.monthly",
   },
 };
 
-type BillingCycle = "weekly" | "monthly" | "yearly";
+type BillingCycle = "monthly" | "yearly";
 
 let storeInstance: any = null;
 let CdvPurchase: any = null;

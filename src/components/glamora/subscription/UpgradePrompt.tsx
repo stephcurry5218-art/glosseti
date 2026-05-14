@@ -102,7 +102,7 @@ const UpgradePrompt = ({ feature, featureDescription, onClose, onUpgrade }: Prop
             boxShadow: "0 6px 24px hsla(28 40% 52% / 0.3)",
           }}
         >
-          {purchasing ? "Processing…" : "Upgrade — $14.99/mo"}
+          {purchasing ? "Processing…" : "Upgrade — $4.99/mo"}
         </button>
 
         <button onClick={onClose} style={{

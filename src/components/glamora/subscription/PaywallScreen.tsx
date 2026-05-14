@@ -12,10 +12,8 @@ interface Props {
   lockedFeature?: string | null;
 }
 
-type Cycle = "weekly" | "monthly";
-
 const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) => {
-  const [purchasing, setPurchasing] = useState<Cycle | null>(null);
+  const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const { long: resetLong } = useResetCountdown();
 
@@ -35,88 +33,20 @@ const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) 
     }
   };
 
-  const handlePurchase = async (cycle: Cycle) => {
+  const handlePurchase = async () => {
     if (!isIAPAvailable()) {
       alert("Subscriptions are available in the Glosseti app. Download from the App Store to subscribe.");
       return;
     }
-    setPurchasing(cycle);
+    setPurchasing(true);
     try {
-      await purchaseSubscription("premium", cycle);
+      await purchaseSubscription("premium", "monthly");
     } catch (err) {
       console.error("Purchase error:", err);
     } finally {
-      setPurchasing(null);
+      setPurchasing(false);
     }
   };
-
-  const PlanCard = ({ cycle, price, period, billingNote, highlighted, badge }: {
-    cycle: Cycle; price: number; period: string; billingNote: string;
-    highlighted?: boolean; badge?: string;
-  }) => (
-    <div style={{
-      borderRadius: 20, padding: highlighted ? 3 : 0,
-      background: highlighted
-        ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold-light)))"
-        : "transparent",
-    }}>
-      <div style={{
-        borderRadius: highlighted ? 18 : 20,
-        padding: 18,
-        background: "hsl(var(--card))",
-        border: highlighted ? "none" : "1.5px solid hsla(var(--glamora-gold) / 0.18)",
-        position: "relative",
-      }}>
-        {badge && (
-          <div style={{
-            position: "absolute", top: -10, right: 16,
-            padding: "4px 12px", borderRadius: 100,
-            background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
-            fontSize: 10, fontWeight: 700, color: "white",
-            textTransform: "uppercase", letterSpacing: 1,
-          }}>
-            {badge}
-          </div>
-        )}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <div>
-            <div style={{ fontSize: 17, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
-              {cycle === "weekly" ? "Glosseti Weekly" : "Glosseti Monthly"}
-            </div>
-            <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>{billingNote}</div>
-          </div>
-          <div style={{ marginLeft: "auto", textAlign: "right" }}>
-            <div style={{ fontSize: 24, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
-              ${price}
-              <span style={{ fontSize: 12, fontWeight: 400, color: "hsl(var(--glamora-gray))" }}>
-                /{period}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <button
-          onClick={() => handlePurchase(cycle)}
-          disabled={purchasing !== null}
-          style={{
-            marginTop: 12,
-            width: "100%", padding: "13px", borderRadius: 14, border: "none",
-            cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
-            fontSize: 14, fontWeight: 700,
-            opacity: purchasing && purchasing !== cycle ? 0.5 : 1,
-            background: highlighted
-              ? "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))"
-              : "hsla(var(--glamora-gold) / 0.12)",
-            color: highlighted ? "white" : "hsl(var(--glamora-gold))",
-            boxShadow: highlighted ? "0 6px 24px hsla(28 40% 52% / 0.3)" : "none",
-            transition: "all 0.2s",
-          }}
-        >
-          {purchasing === cycle ? "Processing…" : highlighted ? "Start Monthly Plan" : "Start Weekly Plan"}
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div style={{
@@ -178,22 +108,59 @@ const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) 
           </div>
         )}
 
-        {/* Plan cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 420, margin: "0 auto" }}>
-          <PlanCard
-            cycle="monthly"
-            price={14.99}
-            period="mo"
-            billingNote="Billed monthly · Cancel anytime"
-            highlighted
-            badge="Best Value"
-          />
-          <PlanCard
-            cycle="weekly"
-            price={4.99}
-            period="wk"
-            billingNote="Billed weekly · Cancel anytime"
-          />
+        {/* Monthly plan card */}
+        <div style={{
+          borderRadius: 20, padding: 3,
+          background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-rose-dark)), hsl(var(--glamora-gold-light)))",
+          maxWidth: 420, margin: "0 auto",
+        }}>
+          <div style={{
+            borderRadius: 18,
+            padding: 18,
+            background: "hsl(var(--card))",
+            position: "relative",
+          }}>
+            <div style={{
+              position: "absolute", top: -10, right: 16,
+              padding: "4px 12px", borderRadius: 100,
+              background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+              fontSize: 10, fontWeight: 700, color: "white",
+              textTransform: "uppercase", letterSpacing: 1,
+            }}>
+              Best Value
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+              <div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
+                  Glosseti Premium
+                </div>
+                <div style={{ fontSize: 11, color: "hsl(var(--glamora-gray))" }}>Billed monthly · Cancel anytime</div>
+              </div>
+              <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                <div style={{ fontSize: 24, fontWeight: 700, color: "hsl(var(--glamora-char))" }}>
+                  $4.99
+                  <span style={{ fontSize: 12, fontWeight: 400, color: "hsl(var(--glamora-gray))" }}>/mo</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handlePurchase}
+              disabled={purchasing}
+              style={{
+                marginTop: 12,
+                width: "100%", padding: "13px", borderRadius: 14, border: "none",
+                cursor: purchasing ? "not-allowed" : "pointer", fontFamily: "'Jost', sans-serif",
+                fontSize: 14, fontWeight: 700,
+                background: "linear-gradient(135deg, hsl(var(--glamora-gold)), hsl(var(--glamora-gold-light)))",
+                color: "white",
+                boxShadow: "0 6px 24px hsla(28 40% 52% / 0.3)",
+                transition: "all 0.2s",
+              }}
+            >
+              {purchasing ? "Processing…" : "Start Monthly Plan"}
+            </button>
+          </div>
         </div>
 
         {/* Premium feature list */}

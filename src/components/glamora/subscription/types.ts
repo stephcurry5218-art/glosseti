@@ -45,8 +45,7 @@ export const PLANS: SubscriptionPlan[] = [
   {
     tier: "premium",
     name: "Premium",
-    monthlyPrice: 14.99,
-    weeklyPrice: 4.99,
+    monthlyPrice: 4.99,
     yearlyPrice: null,
     highlighted: true,
     badge: "Best Value",
