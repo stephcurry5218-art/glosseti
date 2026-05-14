@@ -262,8 +262,8 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
                   color: isEmpty || isWarning ? accentColor : "hsla(0 0% 100% / 0.85)",
                 }}>
                   {isEmpty
-                    ? "0 looks remaining today"
-                    : `${remainingGenerations} look${remainingGenerations === 1 ? "" : "s"} remaining ${isFree ? "today" : "this month"}`}
+                    ? (isFree ? "Free trial used up" : "0 looks remaining today")
+                    : `${remainingGenerations} look${remainingGenerations === 1 ? "" : "s"} remaining ${isFree ? "(free trial)" : "this month"}`}
                 </span>
               </div>
               {isFree && (

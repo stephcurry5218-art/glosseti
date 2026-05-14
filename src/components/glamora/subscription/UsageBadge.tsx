@@ -42,8 +42,8 @@ const UsageBadge = ({ tier, remaining, onUpgrade }: Props) => {
       : "hsla(var(--glamora-gold) / 0.15)";
 
   const label = isEmpty
-    ? "0 looks left — upgrade"
-    : `${remaining} look${remaining === 1 ? "" : "s"} remaining today`;
+    ? "Free trial used — upgrade"
+    : `${remaining} free look${remaining === 1 ? "" : "s"} left`;
 
   return (
     <button onClick={onUpgrade} style={{

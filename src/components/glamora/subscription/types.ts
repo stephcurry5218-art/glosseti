@@ -36,7 +36,7 @@ export const PLANS: SubscriptionPlan[] = [
     yearlyPrice: null,
     monthlyGenerationCap: 3,
     features: [
-      "3 AI looks per day",
+      "10 free AI looks",
       "Basic outfit & makeup suggestions",
       "Watermarked images",
       "Limited customization",
