@@ -14,7 +14,7 @@ interface Props {
 const PaywallScreen = ({ onClose, remainingGenerations, lockedFeature }: Props) => {
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
-  const { long: resetLong } = useResetCountdown();
+  
 
   const handleRestore = async () => {
     if (!isIAPAvailable()) {
