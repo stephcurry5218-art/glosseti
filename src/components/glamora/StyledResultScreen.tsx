@@ -440,13 +440,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           </div>
         )}
 
-        {/* Shop This Look — 3 price tiers (Luxury / Mid / Budget) with deep-links */}
-        {hasStyled && looks[0] && <LookPriceCard lookName={looks[0].name} />}
-
-        {backViewError && (
-          <div style={{ fontSize: 12, color: "hsl(var(--glamora-rose-dark))", marginBottom: 12, textAlign: "center" }}>
-            {backViewError}
-          </div>
+        {/* Shop This Look — AI-driven precise price breakdown for THIS look */}
+        {hasStyled && lookShopItems && lookShopItems.length > 0 && (
+          <DynamicPriceCard items={lookShopItems} />
         )}
 
         {/* View mode toggle */}
@@ -468,42 +464,20 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
-        {/* Before/After Compare with overlaid Back View + Download buttons */}
+        {/* Before/After Compare with Download button */}
         {viewMode === "compare" && hasOriginal && hasStyled && (
           <>
             <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22, position: "relative" }}>
-              {showBackView && backViewUrl ? (
-                <img src={backViewUrl} alt="Back view of styled look" style={{ width: "100%", display: "block" }} />
-              ) : (
-                <BeforeAfterSlider
-                  beforeSrc={prefs.photoBase64!}
-                  afterSrc={styledImageUrl!}
-                />
-              )}
+              <BeforeAfterSlider
+                beforeSrc={prefs.photoBase64!}
+                afterSrc={styledImageUrl!}
+              />
               {prefs.photoBase64 && (
                 <div style={{
                   position: "absolute", top: 10, right: 10, display: "flex", flexDirection: "column", gap: 8, zIndex: 5,
                 }}>
                   <button
-                    onClick={() => { if (backViewUrl) setShowBackView(v => !v); else generateBackView(); }}
-                    disabled={backViewLoading}
-                    aria-label="Toggle back view"
-                    style={{
-                      padding: "8px 12px", borderRadius: 999,
-                      background: "hsla(var(--glamora-char) / 0.85)",
-                      color: "hsl(var(--glamora-cream))", fontSize: 12, fontWeight: 600,
-                      border: "1.5px solid hsla(var(--glamora-gold) / 0.45)",
-                      cursor: backViewLoading ? "wait" : "pointer", fontFamily: "'Jost', sans-serif",
-                      display: "flex", alignItems: "center", gap: 6,
-                      backdropFilter: "blur(8px)",
-                      boxShadow: "0 4px 14px hsla(0 0% 0% / 0.35)",
-                    }}
-                  >
-                    <RotateCw size={14} />
-                    {backViewLoading ? "Generating…" : showBackView ? "Front" : "Back View"}
-                  </button>
-                  <button
-                    onClick={() => handleDownload(showBackView && backViewUrl ? backViewUrl : styledImageUrl!)}
+                    onClick={() => handleDownload(styledImageUrl!)}
                     aria-label="Download image"
                     style={{
                       padding: "8px 12px", borderRadius: 999,
@@ -522,7 +496,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               )}
             </div>
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 10 }}>
-              {showBackView ? "AI-generated back view — tap Front to compare again" : "Drag the slider to compare your original with the AI-styled version"}
+              Drag the slider to compare your original with the AI-styled version
             </div>
           </>
         )}
