@@ -12,8 +12,6 @@ interface Props {
     category: StyleCategory,
     subcategory: string,
     vibeLabel: string,
-    inspirationImageUrl?: string,
-    recreateMode?: "exact" | "inspired",
     customPrompt?: string,
   ) => void;
 }
@@ -597,7 +595,6 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [page, setPage] = useState(1);
   const [shuffleNonce, setShuffleNonce] = useState(0);
-  const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const [customPrompt, setCustomPrompt] = useState("");
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
@@ -660,22 +657,15 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     setTimeout(() => setStage("vibe"), 180);
   };
 
-  const handleVibe = (v: Vibe, image: string) => {
-    setPendingVibe({ vibe: v, image });
-  };
-
-  const confirmChoice = (mode: "exact" | "inspired") => {
-    if (!pendingVibe) return;
-    const { vibe, image } = pendingVibe;
-    setPendingVibe(null);
-    onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
+  const handleVibe = (v: Vibe) => {
+    onNext(v.category, v.subcategory, v.label);
   };
 
   const submitCustomPrompt = () => {
     const text = customPrompt.trim();
     if (text.length < 4) return;
     // Use a generic full-style category; the AI will follow the user's description.
-    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), undefined, undefined, text);
+    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), text);
   };
 
   const photoFor = (v: Vibe, i: number): string => {
@@ -886,7 +876,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
             {visibleVibes.map((v, i) => (
               <button
                 key={v.id}
-                onClick={() => handleVibe(v, photoFor(v, i))}
+                onClick={() => handleVibe(v)}
                 className="anim-scaleIn"
                 style={{
                   animationDelay: `${i * 40}ms`,
@@ -976,106 +966,6 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
         </div>
       )}
 
-      {/* ── Recreate vs Inspired modal ── */}
-      {pendingVibe && (
-        <div
-          onClick={() => setPendingVibe(null)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 60,
-            background: "hsla(0 0% 0% / 0.72)",
-            backdropFilter: "blur(8px)",
-            display: "flex", alignItems: "flex-end", justifyContent: "center",
-            padding: 16,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="anim-slideUp"
-            style={{
-              width: "100%", maxWidth: 460,
-              background: "hsl(var(--card))",
-              border: "1px solid hsla(0 0% 100% / 0.08)",
-              borderRadius: 24,
-              padding: 20,
-              boxShadow: "0 -10px 40px hsla(0 0% 0% / 0.5)",
-              marginBottom: "env(safe-area-inset-bottom, 0px)",
-            }}
-          >
-            <div style={{ display: "flex", gap: 14, marginBottom: 16 }}>
-              <img
-                src={pendingVibe.image}
-                alt={pendingVibe.vibe.label}
-                style={{
-                  width: 84, height: 112, borderRadius: 12,
-                  objectFit: "cover", flexShrink: 0,
-                  border: `1px solid hsla(var(${accent}) / 0.35)`,
-                }}
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))", lineHeight: 1.15 }}>
-                  {pendingVibe.vibe.label}
-                </div>
-                <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", marginTop: 4 }}>
-                  How should we style you?
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => confirmChoice("exact")}
-              style={{
-                width: "100%", textAlign: "left",
-                padding: "14px 16px", marginBottom: 10,
-                borderRadius: 16,
-                border: `1.5px solid hsla(var(${accent}) / 0.55)`,
-                background: `linear-gradient(135deg, hsla(var(${accent}) / 0.18), hsla(var(--glamora-gold) / 0.08))`,
-                color: "hsl(var(--glamora-char))",
-                cursor: "pointer",
-                boxShadow: `0 0 18px hsla(var(${accent}) / 0.3)`,
-              }}
-            >
-              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Recreate this exact look</div>
-              <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))" }}>
-                Put this exact outfit on me — same pieces, colors, and details.
-              </div>
-            </button>
-
-            <button
-              onClick={() => confirmChoice("inspired")}
-              style={{
-                width: "100%", textAlign: "left",
-                padding: "14px 16px",
-                borderRadius: 16,
-                border: "1.5px solid hsla(0 0% 100% / 0.12)",
-                background: "hsla(0 0% 100% / 0.04)",
-                color: "hsl(var(--glamora-char))",
-                cursor: "pointer",
-              }}
-            >
-              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Inspired by this vibe</div>
-              <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))" }}>
-                Create a similar but original look tailored to me.
-              </div>
-            </button>
-
-            <button
-              onClick={() => setPendingVibe(null)}
-              style={{
-                width: "100%", marginTop: 10,
-                padding: "10px",
-                borderRadius: 12,
-                border: "none",
-                background: "transparent",
-                color: "hsl(var(--glamora-gray))",
-                fontSize: 13,
-                cursor: "pointer",
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
