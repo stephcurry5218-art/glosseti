@@ -137,7 +137,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
         )}
 
         {/* Dual photo upload for parent-child */}
-        {isDualPhotoCategory && !isMannequin ? (
+        {isDualPhotoCategory ? (
           <>
             {/* Family mode banner */}
             <div className="anim-fadeUp" style={{
@@ -238,7 +238,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               </div>
             </div>
           </>
-        ) : !isMannequin ? (
+        ) : (
           <>
             <div
               className="glamora-card anim-fadeUp d1"
@@ -274,27 +274,6 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </>
-        ) : (
-          /* Mannequin preview card */
-          <div className="glamora-card anim-fadeUp d1" style={{
-            minHeight: 200, display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center", gap: 16,
-            padding: "32px 24px", textAlign: "center",
-          }}>
-            <div style={{
-              width: 80, height: 80, borderRadius: 20,
-              background: `linear-gradient(135deg, hsl(${accent}), hsl(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"}))`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <ShirtIcon size={40} color="white" />
-            </div>
-            <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))" }}>
-              No Photo Needed
-            </div>
-            <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", lineHeight: 1.6, maxWidth: 280 }}>
-              We'll generate your selected style on a professional mannequin so you can see the full outfit, accessories, and details.
-            </p>
-          </div>
         )}
 
         <div className="anim-fadeUp d2" style={{
