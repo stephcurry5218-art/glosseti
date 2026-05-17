@@ -61,7 +61,7 @@ const NotificationToggle = () => {
       toast.error("Enable notifications in your device settings");
       return;
     }
-    let perm = Notification.permission;
+    let perm: NotificationPermission = Notification.permission;
     if (perm !== "granted") {
       perm = await Notification.requestPermission();
     }
