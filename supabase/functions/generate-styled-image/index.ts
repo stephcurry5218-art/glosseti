@@ -206,7 +206,8 @@ serve(async (req) => {
     const styleDesc = stylePrompts[styleCategory]?.[isMale ? "male" : "female"] || stylePrompts["full-style"][isMale ? "male" : "female"];
     const genderWord = isMale ? "man" : "woman";
 
-    const isMannequin = generationMode === "mannequin";
+    // Mannequin mode has been removed — always restyle the user's photo.
+    const isMannequin = false;
 
     const normalizeRefinementContext = (input: string) => {
       let normalized = input.slice(0, 800);
@@ -637,7 +638,9 @@ serve(async (req) => {
       const isHatsCategory = styleSubcategory === "hats-headwear" || styleCategory === "hats-headwear";
       const noHatNote = (!styleMentionsHat && !isHatsCategory)
         ? " DO NOT add any hat, cap, beanie, beret, fascinator, visor, headband, or any other headwear of any kind. The head must be bare unless the outfit description above explicitly mentions headwear. Preserve the person's natural hair as the only thing on their head."
-        : "";
+        : isHatsCategory
+          ? " HAIR-AWARE HEADWEAR: First, study the person's actual hair in the uploaded photo — its exact length, color, texture, density, parting, hairline, and how it falls around the ears, forehead, and shoulders. The hat or headpiece MUST sit naturally ON TOP of that real hair, not replace or hide it. Render their hair visibly flowing out from under and around the hat (front fringe/bangs if present, sides framing the face, length cascading at the back or shoulders) so the result looks like THIS person actually wearing the hat. Do NOT shave, slick away, tuck under, recolor, or restyle the hair. Do NOT generate a bald or hairless head. The hat brim and crown must conform to the real volume and shape of their hair underneath."
+          : "";
 
       const keepNote = isSwimwear
         ? `${facePreservation} Keep the person's exact body shape and proportions.${poseAnglePreservation} Restyle ONLY their clothing to match the described swimwear and resort fashion. Change the background to a beautiful beach or pool resort setting that matches the original camera angle. Professional fashion editorial style.`
