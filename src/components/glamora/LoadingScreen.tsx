@@ -171,7 +171,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
   useEffect(() => {
     if (aiCalledRef.current) return;
-    if (prefs.generationMode !== "mannequin" && !prefs.photoBase64) return;
+    if (!prefs.photoBase64) return;
     aiCalledRef.current = true;
 
     const generateImage = async () => {
@@ -189,7 +189,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         let faceReferenceUrls: string[] = [];
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user && prefs.generationMode !== "mannequin") {
+          if (session?.user) {
             const { data: refs } = await supabase
               .from("face_references")
               .select("storage_path")
