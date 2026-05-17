@@ -55,10 +55,6 @@ export interface UserPrefs {
   generationMode: GenerationMode;
   
   makeupPreference?: "natural" | "glam";
-  /** URL of the inspiration photo the user picked from the vibe grid. */
-  inspirationImageUrl?: string;
-  /** "exact" = recreate the inspiration outfit on the user; "inspired" = similar but authentic. */
-  recreateMode?: "exact" | "inspired";
   /** Human-readable vibe label chosen from the grid (e.g. "String Bikini"). */
   vibeLabel?: string;
   /** Free-form user description of the desired look. */

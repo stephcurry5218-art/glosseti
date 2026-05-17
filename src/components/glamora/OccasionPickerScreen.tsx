@@ -12,8 +12,6 @@ interface Props {
     category: StyleCategory,
     subcategory: string,
     vibeLabel: string,
-    inspirationImageUrl?: string,
-    recreateMode?: "exact" | "inspired",
     customPrompt?: string,
   ) => void;
 }
