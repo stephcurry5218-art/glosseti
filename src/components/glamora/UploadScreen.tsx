@@ -80,8 +80,8 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
   const isMakeup = prefs.styleCategory === "makeup-only" || prefs.styleCategory === "grooming";
   const isHairOnly = false;
   const isFaceCategory = isMakeup || isHairOnly;
-  const isMannequin = mode === "mannequin";
-  const canProceed = isMannequin || (isDualPhotoCategory ? !!file : !!file);
+  const isMannequin = false;
+  const canProceed = isDualPhotoCategory ? !!file : !!file;
   const showMakeupPref = !isMale && !isMakeup && !isHairOnly;
 
   return (
@@ -90,61 +90,20 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
         <button className="back-btn" onClick={onBack}>←</button>
         <div>
           <div className="header-title">
-            {isDualPhotoCategory ? "Family Photo Mode" : isMannequin ? "Mannequin Preview" : "Upload Photo"}
+            {isDualPhotoCategory ? "Family Photo Mode" : "Upload Photo"}
           </div>
           <div className="header-sub">
             {isDualPhotoCategory
               ? "Upload photos of both people for coordinated styling"
-              : isMannequin
-                ? "See the outfit on a mannequin — no photo needed"
-                : isFaceCategory
-                  ? "Upload a face photo — selfie, portrait, or any clear shot"
-                  : "Selfie or full body for best styling"}
+              : isFaceCategory
+                ? "Upload a face photo — selfie, portrait, or any clear shot"
+                : "Selfie or full body for best styling"}
           </div>
         </div>
       </div>
       <FlowStepper current="photo" gender={prefs.gender} />
 
       <div style={{ padding: "0 22px", marginTop: 12 }}>
-        {/* Mode toggle: On Me vs Mannequin — hide for dual photo categories */}
-        {!isFaceCategory && !isDualPhotoCategory && (
-          <div className="anim-fadeUp" style={{
-            display: "flex", gap: 6, marginBottom: 16,
-            background: "hsl(var(--card))",
-            borderRadius: 16, padding: 4,
-            border: "1px solid hsla(var(--glamora-gold) / 0.1)",
-          }}>
-            {([
-              { id: "on-me" as GenerationMode, label: "On Me", Icon: UserRound, desc: "Restyle your photo" },
-              { id: "mannequin" as GenerationMode, label: "Mannequin", Icon: ShirtIcon, desc: "See the outfit" },
-            ]).map(opt => (
-              <button
-                key={opt.id}
-                onClick={() => setMode(opt.id)}
-                style={{
-                  flex: 1, padding: "10px 8px", borderRadius: 12,
-                  border: "none",
-                  background: mode === opt.id
-                    ? `linear-gradient(135deg, hsl(${accent}), hsl(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"}))`
-                    : "transparent",
-                  cursor: "pointer", fontFamily: "'Jost', sans-serif",
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-                  transition: "all 0.25s ease",
-                }}
-              >
-                <opt.Icon size={20} color={mode === opt.id ? "white" : `hsl(var(--glamora-gray))`} />
-                <span style={{
-                  fontSize: 12, fontWeight: 600,
-                  color: mode === opt.id ? "white" : "hsl(var(--glamora-char))",
-                }}>{opt.label}</span>
-                <span style={{
-                  fontSize: 10,
-                  color: mode === opt.id ? "hsla(0 0% 100% / 0.75)" : "hsl(var(--glamora-gray))",
-                }}>{opt.desc}</span>
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* Photo type selector — only for "on-me" mode, non-dual */}
         {!isFaceCategory && !isMannequin && !isDualPhotoCategory && (
@@ -178,7 +137,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
         )}
 
         {/* Dual photo upload for parent-child */}
-        {isDualPhotoCategory && !isMannequin ? (
+        {isDualPhotoCategory ? (
           <>
             {/* Family mode banner */}
             <div className="anim-fadeUp" style={{
@@ -279,7 +238,7 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
               </div>
             </div>
           </>
-        ) : !isMannequin ? (
+        ) : (
           <>
             <div
               className="glamora-card anim-fadeUp d1"
@@ -315,27 +274,6 @@ const UploadScreen = ({ prefs, onBack, onAnalyze }: Props) => {
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </>
-        ) : (
-          /* Mannequin preview card */
-          <div className="glamora-card anim-fadeUp d1" style={{
-            minHeight: 200, display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center", gap: 16,
-            padding: "32px 24px", textAlign: "center",
-          }}>
-            <div style={{
-              width: 80, height: 80, borderRadius: 20,
-              background: `linear-gradient(135deg, hsl(${accent}), hsl(${isMale ? "var(--glamora-gold-light)" : "var(--glamora-gold)"}))`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <ShirtIcon size={40} color="white" />
-            </div>
-            <div className="serif" style={{ fontSize: 20, color: "hsl(var(--glamora-char))" }}>
-              No Photo Needed
-            </div>
-            <p style={{ fontSize: 13, color: "hsl(var(--glamora-gray))", lineHeight: 1.6, maxWidth: 280 }}>
-              We'll generate your selected style on a professional mannequin so you can see the full outfit, accessories, and details.
-            </p>
-          </div>
         )}
 
         <div className="anim-fadeUp d2" style={{

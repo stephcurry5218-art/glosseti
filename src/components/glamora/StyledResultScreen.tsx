@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { maybeRequestFirstSessionReview } from "./requestAppReview";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, AlertTriangle, Camera, Sun, Lightbulb, ShoppingBag, RotateCw } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, AlertTriangle, Camera, Sun, Lightbulb, ShoppingBag } from "lucide-react";
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -8,7 +8,7 @@ import { getShopUrl, detectStoreFromText } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
-import LookPriceCard from "./LookPriceCard";
+import DynamicPriceCard from "./DynamicPriceCard";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
@@ -150,46 +150,34 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
 
-  // Back-view preview (e.g. for swimwear, dresses) — generated on demand
-  const [backViewUrl, setBackViewUrl] = useState<string | null>(null);
-  const [backViewLoading, setBackViewLoading] = useState(false);
-  const [backViewError, setBackViewError] = useState<string | null>(null);
-  const [showBackView, setShowBackView] = useState(false);
+  // AI-driven full-look price breakdown (replaces static lookData totals)
+  const [lookShopItems, setLookShopItems] = useState<ShopItem[] | null>(null);
   const [showRetailerPicker, setShowRetailerPicker] = useState(false);
 
-  const generateBackView = async () => {
-    if (backViewUrl || backViewLoading || !prefs.photoBase64) return;
-    setBackViewLoading(true);
-    setBackViewError(null);
-    try {
-      const localMidnight = new Date(); localMidnight.setHours(0, 0, 0, 0);
-      const devMode = (() => { try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; } })();
-      const { data, error } = await supabase.functions.invoke("generate-styled-image", {
-        body: {
-          imageBase64: prefs.photoBase64,
-          styleCategory: prefs.styleCategory,
-          styleSubcategory: prefs.styleSubcategory || undefined,
-          photoType: prefs.photoType,
-          gender: prefs.gender,
-          generationMode: prefs.generationMode,
-          clientLocalMidnight: localMidnight.toISOString(),
-          devMode,
-          viewAngle: "back",
-          frontViewImageUrl: styledImageUrl || undefined,
-        },
-      });
-      if (error || data?.error || !data?.imageUrl) {
-        setBackViewError("Couldn't generate the back view. Try again.");
-      } else {
-        setBackViewUrl(data.imageUrl);
-        setShowBackView(true);
+  // Fetch a precise per-look price breakdown from AI based on the actual styled image
+  useEffect(() => {
+    if (!styledImageUrl) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+          body: {
+            styleCategory: prefs.styleCategory,
+            styleSubcategory: prefs.styleSubcategory,
+            lookName: (styleLooks[prefs.styleCategory] || styleLooks["full-style"])[0]?.name,
+            gender: prefs.gender,
+            styledImageUrl,
+          },
+        });
+        if (!cancelled && !error && Array.isArray(data?.items) && data.items.length > 0) {
+          setLookShopItems(data.items);
+        }
+      } catch (err) {
+        console.warn("Look price breakdown failed", err);
       }
-    } catch {
-      setBackViewError("Couldn't generate the back view. Try again.");
-    } finally {
-      setBackViewLoading(false);
-    }
-  };
+    })();
+    return () => { cancelled = true; };
+  }, [styledImageUrl, prefs.styleCategory, prefs.styleSubcategory, prefs.gender]);
 
   const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
     const key = `${lookName}|${hotspot}`;
@@ -353,7 +341,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 {[
                   { Icon: Camera, text: "Use a clear, well-lit photo with your face visible" },
                   { Icon: Sun, text: "Avoid heavy filters, sunglasses, or busy backgrounds" },
-                  { Icon: Lightbulb, text: "Try a different style category or switch to Mannequin mode" },
+                  { Icon: Lightbulb, text: "Try a different style category or sub-style" },
                 ].map(tip => (
                   <div key={tip.text} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "hsl(var(--glamora-char))" }}>
                     <tip.Icon size={14} color="hsl(var(--glamora-gold))" style={{ flexShrink: 0 }} />
@@ -452,13 +440,9 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           </div>
         )}
 
-        {/* Shop This Look — 3 price tiers (Luxury / Mid / Budget) with deep-links */}
-        {hasStyled && looks[0] && <LookPriceCard lookName={looks[0].name} />}
-
-        {backViewError && (
-          <div style={{ fontSize: 12, color: "hsl(var(--glamora-rose-dark))", marginBottom: 12, textAlign: "center" }}>
-            {backViewError}
-          </div>
+        {/* Shop This Look — AI-driven precise price breakdown for THIS look */}
+        {hasStyled && lookShopItems && lookShopItems.length > 0 && (
+          <DynamicPriceCard items={lookShopItems} />
         )}
 
         {/* View mode toggle */}
@@ -480,42 +464,20 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
           ))}
         </div>
 
-        {/* Before/After Compare with overlaid Back View + Download buttons */}
+        {/* Before/After Compare with Download button */}
         {viewMode === "compare" && hasOriginal && hasStyled && (
           <>
             <div className="glamora-card anim-fadeUp d2" style={{ overflow: "hidden", borderRadius: 22, position: "relative" }}>
-              {showBackView && backViewUrl ? (
-                <img src={backViewUrl} alt="Back view of styled look" style={{ width: "100%", display: "block" }} />
-              ) : (
-                <BeforeAfterSlider
-                  beforeSrc={prefs.photoBase64!}
-                  afterSrc={styledImageUrl!}
-                />
-              )}
+              <BeforeAfterSlider
+                beforeSrc={prefs.photoBase64!}
+                afterSrc={styledImageUrl!}
+              />
               {prefs.photoBase64 && (
                 <div style={{
                   position: "absolute", top: 10, right: 10, display: "flex", flexDirection: "column", gap: 8, zIndex: 5,
                 }}>
                   <button
-                    onClick={() => { if (backViewUrl) setShowBackView(v => !v); else generateBackView(); }}
-                    disabled={backViewLoading}
-                    aria-label="Toggle back view"
-                    style={{
-                      padding: "8px 12px", borderRadius: 999,
-                      background: "hsla(var(--glamora-char) / 0.85)",
-                      color: "hsl(var(--glamora-cream))", fontSize: 12, fontWeight: 600,
-                      border: "1.5px solid hsla(var(--glamora-gold) / 0.45)",
-                      cursor: backViewLoading ? "wait" : "pointer", fontFamily: "'Jost', sans-serif",
-                      display: "flex", alignItems: "center", gap: 6,
-                      backdropFilter: "blur(8px)",
-                      boxShadow: "0 4px 14px hsla(0 0% 0% / 0.35)",
-                    }}
-                  >
-                    <RotateCw size={14} />
-                    {backViewLoading ? "Generating…" : showBackView ? "Front" : "Back View"}
-                  </button>
-                  <button
-                    onClick={() => handleDownload(showBackView && backViewUrl ? backViewUrl : styledImageUrl!)}
+                    onClick={() => handleDownload(styledImageUrl!)}
                     aria-label="Download image"
                     style={{
                       padding: "8px 12px", borderRadius: 999,
@@ -534,7 +496,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
               )}
             </div>
             <div style={{ fontSize: 12, color: "hsl(var(--glamora-gray))", textAlign: "center", marginTop: 10 }}>
-              {showBackView ? "AI-generated back view — tap Front to compare again" : "Drag the slider to compare your original with the AI-styled version"}
+              Drag the slider to compare your original with the AI-styled version
             </div>
           </>
         )}

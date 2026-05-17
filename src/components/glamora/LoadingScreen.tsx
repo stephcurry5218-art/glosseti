@@ -12,14 +12,6 @@ interface Props {
 }
 
 const getSteps = (prefs: UserPrefs): { label: string; Icon: LucideIcon }[] => {
-  if (prefs.generationMode === "mannequin") {
-    return [
-      { label: "Selecting style elements...", Icon: Shirt },
-      { label: "Matching color palette...", Icon: Palette },
-      { label: "Styling the mannequin...", Icon: Sparkles },
-      { label: "Finalizing the look...", Icon: ShoppingBag },
-    ];
-  }
   if (prefs.styleCategory === "makeup-only") {
     return [
       { label: "Analyzing facial features...", Icon: Search },
@@ -171,7 +163,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
 
   useEffect(() => {
     if (aiCalledRef.current) return;
-    if (prefs.generationMode !== "mannequin" && !prefs.photoBase64) return;
+    if (!prefs.photoBase64) return;
     aiCalledRef.current = true;
 
     const generateImage = async () => {
@@ -189,7 +181,7 @@ const LoadingScreen = ({ prefs, onDone }: Props) => {
         let faceReferenceUrls: string[] = [];
         try {
           const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user && prefs.generationMode !== "mannequin") {
+          if (session?.user) {
             const { data: refs } = await supabase
               .from("face_references")
               .select("storage_path")
