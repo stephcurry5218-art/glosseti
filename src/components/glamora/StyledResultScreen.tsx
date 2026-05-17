@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { maybeRequestFirstSessionReview } from "./requestAppReview";
-import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, AlertTriangle, Camera, Sun, Lightbulb, ShoppingBag, RotateCw } from "lucide-react";
+import { Sparkles, Shirt, Watch, CircleDot, Footprints, Palette, Bookmark, Image, List, Ruler, Diamond, Download, ChevronUp, ChevronDown, ExternalLink, Share2, BookOpen, RefreshCw, AlertTriangle, Camera, Sun, Lightbulb, ShoppingBag } from "lucide-react";
 import type { UserPrefs, StyleCategory } from "./GlamoraApp";
 import { styleLooks, lookData, categoryOrder, type Category, type PriceTier } from "./lookData";
 import BeforeAfterSlider from "./BeforeAfterSlider";
@@ -8,7 +8,7 @@ import { getShopUrl, detectStoreFromText } from "./affiliateUrls";
 import ShareMenu from "./ShareMenu";
 import Watermark from "./subscription/Watermark";
 import ShopPanel, { type ShopItem } from "./ShopPanel";
-import LookPriceCard from "./LookPriceCard";
+import DynamicPriceCard from "./DynamicPriceCard";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { LucideIcon } from "lucide-react";
@@ -150,46 +150,34 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
   const [aiShopLoading, setAiShopLoading] = useState<Record<string, boolean>>({});
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
 
-  // Back-view preview (e.g. for swimwear, dresses) — generated on demand
-  const [backViewUrl, setBackViewUrl] = useState<string | null>(null);
-  const [backViewLoading, setBackViewLoading] = useState(false);
-  const [backViewError, setBackViewError] = useState<string | null>(null);
-  const [showBackView, setShowBackView] = useState(false);
+  // AI-driven full-look price breakdown (replaces static lookData totals)
+  const [lookShopItems, setLookShopItems] = useState<ShopItem[] | null>(null);
   const [showRetailerPicker, setShowRetailerPicker] = useState(false);
 
-  const generateBackView = async () => {
-    if (backViewUrl || backViewLoading || !prefs.photoBase64) return;
-    setBackViewLoading(true);
-    setBackViewError(null);
-    try {
-      const localMidnight = new Date(); localMidnight.setHours(0, 0, 0, 0);
-      const devMode = (() => { try { return localStorage.getItem("glamora_dev_mode") === "unlocked"; } catch { return false; } })();
-      const { data, error } = await supabase.functions.invoke("generate-styled-image", {
-        body: {
-          imageBase64: prefs.photoBase64,
-          styleCategory: prefs.styleCategory,
-          styleSubcategory: prefs.styleSubcategory || undefined,
-          photoType: prefs.photoType,
-          gender: prefs.gender,
-          generationMode: prefs.generationMode,
-          clientLocalMidnight: localMidnight.toISOString(),
-          devMode,
-          viewAngle: "back",
-          frontViewImageUrl: styledImageUrl || undefined,
-        },
-      });
-      if (error || data?.error || !data?.imageUrl) {
-        setBackViewError("Couldn't generate the back view. Try again.");
-      } else {
-        setBackViewUrl(data.imageUrl);
-        setShowBackView(true);
+  // Fetch a precise per-look price breakdown from AI based on the actual styled image
+  useEffect(() => {
+    if (!styledImageUrl) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("style-shop-suggestions", {
+          body: {
+            styleCategory: prefs.styleCategory,
+            styleSubcategory: prefs.styleSubcategory,
+            lookName: (styleLooks[prefs.styleCategory] || styleLooks["full-style"])[0]?.name,
+            gender: prefs.gender,
+            styledImageUrl,
+          },
+        });
+        if (!cancelled && !error && Array.isArray(data?.items) && data.items.length > 0) {
+          setLookShopItems(data.items);
+        }
+      } catch (err) {
+        console.warn("Look price breakdown failed", err);
       }
-    } catch {
-      setBackViewError("Couldn't generate the back view. Try again.");
-    } finally {
-      setBackViewLoading(false);
-    }
-  };
+    })();
+    return () => { cancelled = true; };
+  }, [styledImageUrl, prefs.styleCategory, prefs.styleSubcategory, prefs.gender]);
 
   const fetchAiShopItems = async (lookName: string, hotspot: HotspotId) => {
     const key = `${lookName}|${hotspot}`;
