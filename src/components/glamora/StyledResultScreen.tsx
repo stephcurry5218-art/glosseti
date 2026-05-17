@@ -341,7 +341,7 @@ const StyledResultScreen = ({ prefs, styledImageUrl, onBack, onHome, onSave, onL
                 {[
                   { Icon: Camera, text: "Use a clear, well-lit photo with your face visible" },
                   { Icon: Sun, text: "Avoid heavy filters, sunglasses, or busy backgrounds" },
-                  { Icon: Lightbulb, text: "Try a different style category or switch to Mannequin mode" },
+                  { Icon: Lightbulb, text: "Try a different style category or sub-style" },
                 ].map(tip => (
                   <div key={tip.text} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "hsl(var(--glamora-char))" }}>
                     <tip.Icon size={14} color="hsl(var(--glamora-gold))" style={{ flexShrink: 0 }} />
