@@ -658,22 +658,15 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
     setTimeout(() => setStage("vibe"), 180);
   };
 
-  const handleVibe = (v: Vibe, image: string) => {
-    setPendingVibe({ vibe: v, image });
-  };
-
-  const confirmChoice = (mode: "exact" | "inspired") => {
-    if (!pendingVibe) return;
-    const { vibe, image } = pendingVibe;
-    setPendingVibe(null);
-    onNext(vibe.category, vibe.subcategory, vibe.label, image, mode);
+  const handleVibe = (v: Vibe) => {
+    onNext(v.category, v.subcategory, v.label);
   };
 
   const submitCustomPrompt = () => {
     const text = customPrompt.trim();
     if (text.length < 4) return;
     // Use a generic full-style category; the AI will follow the user's description.
-    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), undefined, undefined, text);
+    onNext("full-style" as StyleCategory, "custom-look", text.slice(0, 80), text);
   };
 
   const photoFor = (v: Vibe, i: number): string => {
