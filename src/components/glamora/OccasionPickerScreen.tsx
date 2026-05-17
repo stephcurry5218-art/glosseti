@@ -877,7 +877,7 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
             {visibleVibes.map((v, i) => (
               <button
                 key={v.id}
-                onClick={() => handleVibe(v, photoFor(v, i))}
+                onClick={() => handleVibe(v)}
                 className="anim-scaleIn"
                 style={{
                   animationDelay: `${i * 40}ms`,
