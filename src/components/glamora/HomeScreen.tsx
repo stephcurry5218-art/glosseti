@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Home, Scissors, Bookmark, User, ArrowRight, TrendingUp, Zap, Eye, Crown, Palette, Camera, Star, Sparkles, Shirt, Lock, Clock } from "lucide-react";
 import DynamicVisual from "./DynamicVisual";
 import StyleSuggestions from "./StyleSuggestions";
+import NotificationToggle from "./NotificationToggle";
 import DailyLookCard from "./DailyLookCard";
 import SeasonalBanner from "./SeasonalBanner";
 import EventPromos from "./EventPromos";
@@ -200,6 +201,7 @@ const HomeScreen = ({ onGetStyled, onHolidayPick, onDirectPick, onDailyLook, onP
                 );
               })}
             </div>
+            <NotificationToggle />
             <button onClick={onProfile} style={{
               width: 34, height: 34, borderRadius: "50%",
               background: `linear-gradient(135deg, hsl(${accentLight}), hsl(${accent}))`,
