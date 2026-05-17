@@ -595,7 +595,6 @@ const OccasionPickerScreen = ({ gender, onBack, onNext }: Props) => {
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [page, setPage] = useState(1);
   const [shuffleNonce, setShuffleNonce] = useState(0);
-  const [pendingVibe, setPendingVibe] = useState<{ vibe: Vibe; image: string } | null>(null);
   const [customPrompt, setCustomPrompt] = useState("");
   const isMale = gender === "male";
   const accent = isMale ? "--glamora-gold" : "--glamora-rose-dark";
