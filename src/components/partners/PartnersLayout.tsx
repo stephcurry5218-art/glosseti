@@ -2,7 +2,15 @@ import { Link } from "react-router-dom";
 
 export function PartnersLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="partners-theme h-dvh w-full bg-[#0a0a0a] text-[#e8e2d4] overflow-y-auto">
+    <div
+      className="partners-theme fixed inset-0 w-full bg-[#0a0a0a] text-[#e8e2d4] overflow-y-auto overflow-x-hidden"
+      style={{
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain",
+        touchAction: "pan-y",
+      }}
+    >
+
       <header className="sticky top-0 z-30 w-full backdrop-blur-md bg-[#0a0a0a]/80 border-b border-[#1a1a1a]">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link to="/partners" className="flex items-center gap-2">
