@@ -248,6 +248,161 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_applications: {
+        Row: {
+          business_name: string
+          business_type: string
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          instagram: string | null
+          message: string | null
+          website: string | null
+        }
+        Insert: {
+          business_name: string
+          business_type: string
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          instagram?: string | null
+          message?: string | null
+          website?: string | null
+        }
+        Update: {
+          business_name?: string
+          business_type?: string
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          instagram?: string | null
+          message?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      partner_contact_requests: {
+        Row: {
+          business: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          tier_interest: string | null
+        }
+        Insert: {
+          business?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          tier_interest?: string | null
+        }
+        Update: {
+          business?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          tier_interest?: string | null
+        }
+        Relationships: []
+      }
+      partner_onboarding: {
+        Row: {
+          brand_color_primary: string | null
+          brand_color_secondary: string | null
+          business_name: string
+          catalog_url: string | null
+          created_at: string
+          id: string
+          instagram: string | null
+          logo_url: string | null
+          notes: string | null
+          preferred_slug: string | null
+          signup_id: string | null
+          website: string | null
+        }
+        Insert: {
+          brand_color_primary?: string | null
+          brand_color_secondary?: string | null
+          business_name: string
+          catalog_url?: string | null
+          created_at?: string
+          id?: string
+          instagram?: string | null
+          logo_url?: string | null
+          notes?: string | null
+          preferred_slug?: string | null
+          signup_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          brand_color_primary?: string | null
+          brand_color_secondary?: string | null
+          business_name?: string
+          catalog_url?: string | null
+          created_at?: string
+          id?: string
+          instagram?: string | null
+          logo_url?: string | null
+          notes?: string | null
+          preferred_slug?: string | null
+          signup_id?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_onboarding_signup_id_fkey"
+            columns: ["signup_id"]
+            isOneToOne: false
+            referencedRelation: "partner_signups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_signups: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_session_id: string | null
+          stripe_subscription_id: string | null
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
