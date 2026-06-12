@@ -8,6 +8,10 @@ import Support from "./pages/Support.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import Terms from "./pages/Terms.tsx";
+import Partners from "./pages/Partners.tsx";
+import PartnersPricing from "./pages/PartnersPricing.tsx";
+import PartnersOnboarding from "./pages/PartnersOnboarding.tsx";
+import { HelmetProvider } from "react-helmet-async";
 
 import NotFound from "./pages/NotFound.tsx";
 
@@ -15,6 +19,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <HelmetProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -25,6 +30,9 @@ const App = () => (
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/partners/pricing" element={<PartnersPricing />} />
+          <Route path="/partners/onboarding" element={<PartnersOnboarding />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
