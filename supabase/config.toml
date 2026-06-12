@@ -5,3 +5,13 @@ project_id = "pofebyqmvocrmhhnrhma"
     verify_jwt = false
   [functions.process-email-queue]
     verify_jwt = true
+  [functions.partner-apply]
+    verify_jwt = false
+  [functions.create-partner-checkout]
+    verify_jwt = false
+  [functions.verify-partner-session]
+    verify_jwt = false
+  [functions.partner-onboarding]
+    verify_jwt = false
+  [functions.partner-contact]
+    verify_jwt = false
