@@ -5,6 +5,19 @@
   --gold-soft: #d8bd6c;
   --ink: #0a0a0a;
 }
+.partners-scroll-root {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  isolation: isolate;
+  scrollbar-width: thin;
+}
+.partners-scroll-root > main {
+  min-height: 100dvh;
+}
 .partners-theme h1,
 .partners-theme h2,
 .partners-theme h3,
