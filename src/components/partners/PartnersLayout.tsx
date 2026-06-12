@@ -1,35 +1,12 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export function PartnersLayout({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const htmlOverflow = document.documentElement.style.overflow;
-    const htmlHeight = document.documentElement.style.height;
-    const bodyOverflow = document.body.style.overflow;
-    const bodyHeight = document.body.style.height;
-    const root = document.getElementById("root");
-    const rootHeight = root?.style.height ?? "";
-
-    document.documentElement.style.overflow = "auto";
-    document.documentElement.style.height = "auto";
-    document.body.style.overflow = "auto";
-    document.body.style.height = "auto";
-    if (root) root.style.height = "auto";
-
-    return () => {
-      document.documentElement.style.overflow = htmlOverflow;
-      document.documentElement.style.height = htmlHeight;
-      document.body.style.overflow = bodyOverflow;
-      document.body.style.height = bodyHeight;
-      if (root) root.style.height = rootHeight;
-    };
-  }, []);
-
   return (
     <div
-      className="partners-theme min-h-dvh w-full bg-[#0a0a0a] text-[#e8e2d4] overflow-x-hidden"
+      className="partners-theme partners-scroll-root fixed inset-0 w-full bg-[#0a0a0a] text-[#e8e2d4] overflow-x-hidden overflow-y-scroll"
       style={{
         WebkitOverflowScrolling: "touch",
+        overscrollBehaviorY: "contain",
         touchAction: "pan-y",
       }}
     >
